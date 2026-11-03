@@ -1,3 +1,5 @@
+import {uiMessage,uiError,localized} from '../modules/module-localization.ts';
+import {tr} from '../i18n/index.ts';
 import type {RecordingPort} from './recording.ts';
 import type {ResearchContext} from './research.ts';
 import type {Config,Project,Take,Task,Device,Preview,Meter,Spectrum} from '../modules/recording/types.ts';
@@ -17,7 +19,7 @@ export function recordingMeter(blocks:Float32Array[][],gain:number,all=false):Me
 /** Browser device adapter for the same RecordingPage. No native file grants. */
 export function browserRecordingPort(research:ResearchContext):RecordingPort {
  const project:Project={schema_version:'ptb-recording/1',id:crypto.randomUUID(),revision:0,label:research.label,tasks:[],takes:[],selected:{},recoveries:[]};
- if(!research.files.recording)throw Error('录音文件接口不可用，请重新登录。');
+ if(!research.files.recording)throw uiError(uiMessage('platform.the_recording_file_service_is_unavailable_log_in_again'));
  const manager=new BrowserRecordingProject(project,research.files.recording);
  let importFiles:Map<string,File>|undefined;
  let disposed=false,stream:MediaStream|undefined,audio:AudioContext|undefined,node:AudioWorkletNode|undefined,input:MediaStreamAudioSourceNode|undefined;
@@ -42,7 +44,7 @@ export function browserRecordingPort(research:ResearchContext):RecordingPort {
  async function release(){input?.disconnect();node?.disconnect();stream?.getTracks().forEach(t=>{t.onended=null;t.stop();});input=undefined;node=undefined;stream=undefined;const current=audio;audio=undefined;if(current&&current.state!=='closed')await current.close().catch(()=>{});}
  async function devices():Promise<Device[]>{
   const list=await navigator.mediaDevices?.enumerateDevices()??[];
-  return [{id:'default',index:0,name:'系统默认麦克风 / 扬声器',hostapi:'浏览器',inputs:8,outputs:2,default_rate:48000},...list.filter(d=>d.kind!=='videoinput'&&d.deviceId&&d.deviceId!=='default').map((d,i)=>({id:d.deviceId,index:i+1,name:d.label||(d.kind==='audioinput'?'麦克风':'扬声器'),hostapi:'浏览器',inputs:d.kind==='audioinput'?8:0,outputs:d.kind==='audiooutput'?2:0,default_rate:48000}))];
+  return [{id:'default',index:0,name:tr('platform.system_default_microphone_speaker'),hostapi:tr('platform.browser'),inputs:8,outputs:2,default_rate:48000},...list.filter(d=>d.kind!=='videoinput'&&d.deviceId&&d.deviceId!=='default').map((d,i)=>({id:d.deviceId,index:i+1,name:d.label||(d.kind==='audioinput'?tr('platform.microphone'):tr('platform.speaker')),hostapi:tr('platform.browser'),inputs:d.kind==='audioinput'?8:0,outputs:d.kind==='audiooutput'?2:0,default_rate:48000}))];
  }
  function preview(source:Float32Array[][],rate:number,channel:number,start:number,end:number,width=900):Preview{
   const total=source.reduce((n,b)=>n+b[0].length,0);start=Math.max(0,Math.min(total,Math.round(start)));end=Math.max(start,Math.min(total,Math.round(end)));
@@ -56,29 +58,29 @@ export function browserRecordingPort(research:ResearchContext):RecordingPort {
   return recordingMeter(blocks,gain,all);
  }
  async function start(body:Record<string,unknown>){
-  if(recording||probing)throw Error('请先停止当前采集。');
-  if(!window.isSecureContext||!navigator.mediaDevices?.getUserMedia)throw Error('请通过 HTTPS 或本机测试入口录音，并允许麦克风权限。');
+  if(recording||probing)throw uiError(uiMessage('platform.stop_the_current_capture_first'));
+  if(!window.isSecureContext||!navigator.mediaDevices?.getUserMedia)throw uiError(uiMessage('platform.record_over_https_or_a_local_test_entry_point'));
   const requested=clone(body.config as Config);
-  if(!Number.isInteger(requested.channels)||requested.channels<1||requested.channels>8||requested.roles.length!==requested.channels)throw Error('请设置1–8个通道及对应角色。');
+  if(!Number.isInteger(requested.channels)||requested.channels<1||requested.channels>8||requested.roles.length!==requested.channels)throw uiError(uiMessage('platform.set_1_8_channels_and_their_roles'));
   for(const id of manager.cache.keys())if(!manager.pending.has(id))manager.cache.delete(id);
   const used=[...manager.cache.values()].reduce((n,s)=>n+s.file.size,0),remaining=100_000_000-used;
-  if(remaining<requested.sample_rate*requested.channels*4)throw Error('本页录音已达 100 MB。请先保存或导出，再关闭并重新打开录音页。');
+  if(remaining<requested.sample_rate*requested.channels*4)throw uiError(uiMessage('platform.recordings_on_this_page_have_reached_100_mb_save'));
   stopPlay();problem='';ended=false;
   try{
    stream=await navigator.mediaDevices.getUserMedia({audio:{deviceId:requested.device==='default'?undefined:{exact:requested.device},channelCount:{exact:requested.channels},echoCancellation:false,noiseSuppression:false,autoGainControl:false},video:false});
-   if(disposed)throw Error('录音页已关闭。');
+   if(disposed)throw uiError(uiMessage('platform.the_recording_page_is_closed_91'));
    const settings=stream.getAudioTracks()[0].getSettings();
    browserInput=Object.fromEntries(['channelCount','sampleRate','echoCancellation','noiseSuppression','autoGainControl','latency'].filter(k=>k in settings).map(k=>[k,(settings as Record<string,unknown>)[k]]));
-   if(settings.channelCount&&settings.channelCount!==requested.channels)throw Error('浏览器未提供指定通道数，请调整设备设置后重试。');
+   if(settings.channelCount&&settings.channelCount!==requested.channels)throw uiError(uiMessage('platform.the_browser_did_not_provide_the_requested_channel_count'));
    audio=new AudioContext({sampleRate:requested.sample_rate});await audio.resume();await audio.audioWorklet.addModule(new URL('recording-capture.js',document.baseURI).href);
-   if(disposed)throw Error('录音页已关闭。');
-   resetLive();config={...requested,sample_rate:audio.sampleRate,device_name:stream.getAudioTracks()[0].label,hostapi:'浏览器 AudioWorklet'};task=clone(project.tasks.find(t=>t.id===body.task_id)??null);blocks=[];frames=0;captureId=crypto.randomUUID();checkpointBlock=checkpointIndex=0;recoveryError='';recoveryQueue=Promise.resolve();
+   if(disposed)throw uiError(uiMessage('platform.the_recording_page_is_closed_91'));
+   resetLive();config={...requested,sample_rate:audio.sampleRate,device_name:stream.getAudioTracks()[0].label,hostapi:tr('platform.browser_audioworklet')};task=clone(project.tasks.find(t=>t.id===body.task_id)??null);blocks=[];frames=0;captureId=crypto.randomUUID();checkpointBlock=checkpointIndex=0;recoveryError='';recoveryQueue=Promise.resolve();
    if(body.op!=='probe_start')manager.beginCapture(captureId,config,task);
    ack=new Promise(resolve=>resolveAck=resolve);
    node=new AudioWorkletNode(audio,'ptb-recorder',{numberOfInputs:1,numberOfOutputs:1,channelCount:config.channels,channelCountMode:'explicit',outputChannelCount:[1],processorOptions:{limit:Math.floor((remaining-44)/(config.channels*4))}});
-   node.port.onmessage=event=>{if(disposed||ended)return;if(event.data.done){ended=true;resolveAck?.();problem=problem||(event.data.limit?'已达到本页录音容量上限，采集自动停止。':'');void release();return;}const block=event.data.block as Float32Array[];if(block.length!==config.channels){problem='输入通道发生变化，已停止采集。';ended=true;resolveAck?.();void release();return;}frames+=block[0].length;blocks.push(block);checkpoint();};
-   node.onprocessorerror=()=>{problem='采集发生错误，已保留此前收到的采样。';ended=true;resolveAck?.();void release();};
-   stream.getAudioTracks().forEach(t=>{t.onended=()=>{problem='麦克风已断开，已保留此前采样。';ended=true;resolveAck?.();void release();};});
+   node.port.onmessage=event=>{if(disposed||ended)return;if(event.data.done){ended=true;resolveAck?.();problem=problem||(event.data.limit?tr('platform.the_recording_capacity_for_this_page_was_reached_capture'):'');void release();return;}const block=event.data.block as Float32Array[];if(block.length!==config.channels){problem=tr('platform.the_input_channel_count_changed_capture_stopped');ended=true;resolveAck?.();void release();return;}frames+=block[0].length;blocks.push(block);checkpoint();};
+   node.onprocessorerror=()=>{problem=tr('platform.a_capture_error_occurred_previously_received_samples_are_preserved');ended=true;resolveAck?.();void release();};
+   stream.getAudioTracks().forEach(t=>{t.onended=()=>{problem=tr('platform.the_microphone_disconnected_previously_received_samples_are_preserved');ended=true;resolveAck?.();void release();};});
    input=audio.createMediaStreamSource(stream);input.connect(node);node.connect(audio.destination);probing=body.op==='probe_start';recording=!probing;
   }catch(e){await release();throw e;}
  }
@@ -86,30 +88,30 @@ export function browserRecordingPort(research:ResearchContext):RecordingPort {
  async function stop(){
   resetLive();
   const probe=probing;if(!recording&&!probing)return {project:clone(project),probe,error:''};
-  if(!ended){node?.port.postMessage('stop');let timer:ReturnType<typeof setTimeout>|undefined;await Promise.race([ack,new Promise<void>(resolve=>timer=setTimeout(()=>{problem='停止确认超时，保留此前收到的采样。';resolve();},2000))]);clearTimeout(timer);}
+  if(!ended){node?.port.postMessage('stop');let timer:ReturnType<typeof setTimeout>|undefined;await Promise.race([ack,new Promise<void>(resolve=>timer=setTimeout(()=>{problem=tr('platform.stop_confirmation_timed_out_previously_received_samples_are_preserved');resolve();},2000))]);clearTimeout(timer);}
   await release();checkpoint(true);await recoveryQueue;recording=probing=false;
   let error=problem;
   if(!probe&&frames){const bytes=floatWave(blocks,config.sample_rate,config.channels),id=captureId,now=new Date().toISOString();
-   const name=(task?.filename_stem||'录音').replace(/[\\/:*?"<>|]/g,'_')+'-'+id.slice(0,8)+'.wav';
+   const name=(task?.filename_stem||tr('platform.recording')).replace(/[\\/:*?"<>|]/g,'_')+'-'+id.slice(0,8)+'.wav';
    const m=meter(0,true),take:Take={id,started_at:now,config:clone(config),task_snapshot:clone(task),versions:[{id:crypto.randomUUID(),kind:'raw',frames,created_at:now,metadata:{sample_rate_origin:'AudioContext; hardware resampling may occur',browser_input:browserInput}}],head:0,undo:[],redo:[],status:problem?'interrupted':'complete',error:problem,quality:{raw_clip:m.raw_clip,near_full_scale:m.near_full_scale,peak:m.peak,rms:m.rms},frames};
    manager.add(take,new File([bytes],name,{type:'audio/wav'}),blocks);
-   try{await upload();}catch(e){error='保存未完成，录音仍保留在本页。可重试保存或导出 WAV。'+(e instanceof Error?e.message:'');}
+   try{await upload();}catch(e){error=tr('platform.saving_did_not_finish_the_recording_is_still_on')+(e instanceof Error?e.message:'');}
   }
-  if(!probe&&!frames){error=error||'未采集到有效音频，未创建空录音条目。';delete manager.captures[captureId];}
+  if(!probe&&!frames){error=error||tr('platform.no_valid_audio_was_captured_no_empty_recording_was');delete manager.captures[captureId];}
   blocks=[];problem='';return {project:clone(project),probe,error,frames};
  }
  function download(file:File){const url=URL.createObjectURL(file),a=document.createElement('a');a.href=url;a.download=file.name;a.click();setTimeout(()=>URL.revokeObjectURL(url),10000);}
  async function request(body:Record<string,unknown>):Promise<unknown>{
-  if(disposed)throw Error('录音页已关闭。');const op=body.op;
+  if(disposed)throw uiError(uiMessage('platform.the_recording_page_is_closed_91'));const op=body.op;
   if(op==='capabilities'){await manager.load();return {available:true,devices:await devices(),device_error:'',project:clone(project),local_only:false};}
   if(op==='devices')return devices();
   if(op==='open'){if(importFiles){await manager.import(importFiles);importFiles=undefined;}return clone(project);}
   if(op==='backup'){await manager.backup();return {};}
   if(op==='tasks'){project.tasks=clone(body.tasks as Task[]);project.revision++;await manager.save();return clone(project);}
-  if(op==='start'||op==='probe_start'){if(body.task_id&&!project.tasks.some(t=>t.id===body.task_id))throw Error('所选录音任务不存在，请重新选择任务。');await start(body);return {config:clone(config)};}
+  if(op==='start'||op==='probe_start'){if(body.task_id&&!project.tasks.some(t=>t.id===body.task_id))throw uiError(uiMessage('platform.the_selected_recording_task_does_not_exist_select_another'));await start(body);return {config:clone(config)};}
   if(op==='stop')return stop();
   if(op==='save'){await upload();return clone(project);}
-  if(op==='select_take'){const take=project.takes.find(t=>t.id===body.id);if(!take)throw Error('录音不存在。');project.selected[take.task_snapshot?.id||'__free__']=take.id;await manager.save();return clone(project);}
+  if(op==='select_take'){const take=project.takes.find(t=>t.id===body.id);if(!take)throw uiError(uiMessage('platform.the_recording_does_not_exist'));project.selected[take.task_snapshot?.id||'__free__']=take.id;await manager.save();return clone(project);}
   if(op==='job_cancel'){await manager.cancel();return {state:'cancelling'};}
   if(op==='recover'){await manager.recover(String(body.id));return clone(project);}
   if(op==='status'){
@@ -126,7 +128,7 @@ export function browserRecordingPort(research:ResearchContext):RecordingPort {
   if(op==='play_stop'){stopPlay();return {};}
   const take=project.takes.find(t=>t.id===body.id);
   if(op==='export_start')return manager.export(body,take);
-  if(!take)throw Error('请先选择一段录音。');
+  if(!take)throw uiError(uiMessage('platform.select_a_recording_first'));
   if(['undo','redo','restore','version'].includes(String(op))){stopPlay();await manager.navigate(take,String(op),Number(body.index));return clone(project);}
   if(op==='edit'){stopPlay();await manager.edit(take,String(body.action),Number(body.start),Number(body.end));return clone(project);}
   if(op==='noise')return manager.setNoise(take,Number(body.start),Number(body.end),Number(body.channel));
@@ -137,12 +139,12 @@ export function browserRecordingPort(research:ResearchContext):RecordingPort {
   if(op==='play'){
    stopPlay();playback=new AudioContext({sampleRate:take.config.sample_rate});
    try{const version=take.versions[index],source=body.variant==='raw'?await manager.data(take,0):value,selected=Math.max(0,Math.min(take.config.channels-1,Number(body.channel)||0)),count=source.blocks.reduce((n,b)=>n+b[0].length,0),buffer=playback.createBuffer(1,count,take.config.sample_rate);let at=0;for(const b of source.blocks){buffer.getChannelData(0).set(b[selected],at);at+=b[selected].length;}
-    if(body.variant==='residual'){const parent=take.versions.findIndex(v=>v.id===version.metadata.parent);if(!['denoised','gain'].includes(version.kind)||parent<0||take.versions[parent].frames!==version.frames)throw Error('差分试听仅支持等帧长的降噪/增益版本与其直接来源。');const reference=await manager.data(take,parent);let at=0;for(const b of reference.blocks){for(let i=0;i<b[selected].length;i++)buffer.getChannelData(0)[at+i]=b[selected][i]-buffer.getChannelData(0)[at+i];at+=b[selected].length;}}
-    if(body.device&&body.device!=='default'){const setSink=(playback as AudioContext&{setSinkId?:(id:string)=>Promise<void>}).setSinkId;if(!setSink)throw Error('当前浏览器不支持切换输出设备，请选系统默认输出。');await setSink.call(playback,String(body.device));}
+    if(body.variant==='residual'){const parent=take.versions.findIndex(v=>v.id===version.metadata.parent);if(!['denoised','gain'].includes(version.kind)||parent<0||take.versions[parent].frames!==version.frames)throw uiError(uiMessage('platform.difference_playback_supports_only_denoised_gain_versions_and_their'));const reference=await manager.data(take,parent);let at=0;for(const b of reference.blocks){for(let i=0;i<b[selected].length;i++)buffer.getChannelData(0)[at+i]=b[selected][i]-buffer.getChannelData(0)[at+i];at+=b[selected].length;}}
+    if(body.device&&body.device!=='default'){const setSink=(playback as AudioContext&{setSinkId?:(id:string)=>Promise<void>}).setSinkId;if(!setSink)throw uiError(uiMessage('platform.this_browser_cannot_switch_output_devices_select_the_system'));await setSink.call(playback,String(body.device));}
     await playback.resume();player=playback.createBufferSource();player.buffer=buffer;const gain=playback.createGain();gain.gain.value=Number(body.volume)*peakGain(bufferPeak(buffer),body.auto_gain!==false);player.connect(gain);gain.connect(playback.destination);playStart=playback.currentTime;playOffset=Math.min(Number(body.start)||0,count);playRate=take.config.sample_rate;const active=player;player.onended=()=>{if(player===active){player=undefined;void playback?.close();playback=undefined;}};player.start(0,playOffset/playRate,(Math.min(Number(body.end)||count,count)-playOffset)/playRate);return {};
    }catch(e){stopPlay();throw e;}
   }
-  throw Error('此操作的网页接口暂未接通，请使用桌面版。');
+  throw uiError(uiMessage('platform.this_operation_is_not_available_on_the_web_yet'));
  }
  const queued=serialRequests(async<T>(body:unknown)=>await request(body as Record<string,unknown>) as T);
  return {kind:'browser',request:<T>(body:Record<string,unknown>)=>{
@@ -150,5 +152,5 @@ export function browserRecordingPort(research:ResearchContext):RecordingPort {
   // occupies the serial queue. Project finalization still retains its order.
   if(body.op==='stop'&&!ended)node?.port.postMessage('stop');
   return queued<T>(body);
- },choose:async purpose=>{if(purpose!=='open')return {grant:project.id,label:research.label};const files=await new Promise<File[]|null>(resolve=>{const input=document.createElement('input');input.type='file';input.webkitdirectory=true;input.multiple=true;input.onchange=()=>resolve(input.files?Array.from(input.files):null);input.addEventListener('cancel',()=>resolve(null),{once:true});input.click();});if(!files?.length)return null;importFiles=new Map(files.map(f=>[f.webkitRelativePath||f.name,f]));return {grant:project.id,label:'导入录音工程'};},dispose(){disposed=true;resetLive();stopPlay();void release();resolveAck?.();blocks=[];manager.close();}};
+ },choose:async purpose=>{if(purpose!=='open')return {grant:project.id,label:research.label};const files=await new Promise<File[]|null>(resolve=>{const input=document.createElement('input');input.type='file';input.webkitdirectory=true;input.multiple=true;input.onchange=()=>resolve(input.files?Array.from(input.files):null);input.addEventListener('cancel',()=>resolve(null),{once:true});input.click();});if(!files?.length)return null;importFiles=new Map(files.map(f=>[f.webkitRelativePath||f.name,f]));return {grant:project.id,label:tr('platform.import_recording_project')};},dispose(){disposed=true;resetLive();stopPlay();void release();resolveAck?.();blocks=[];manager.close();}};
 }

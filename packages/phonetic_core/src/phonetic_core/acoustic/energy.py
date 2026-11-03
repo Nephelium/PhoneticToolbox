@@ -11,9 +11,10 @@ def compute_energy(
     Nperiods_EC: float = 5.0, # Not used in Energy calculation but usually part of config
 ) -> np.ndarray:
     """
-    Compute frame-based Energy (Intensity similar to Praat).
-    Praat calibration: a sine wave with amplitude 1 has an intensity of 96 dB.
-    10*log10(0.5) + C = 96  => C ~= 99.01
+    Compute rectangular-window intensity relative to 20 micropascals.
+    Samples are interpreted as pressure in Pa, as in Praat. This retains the
+    existing window/time grid, not Praat's full weighted-window algorithm.
+    An uncalibrated recording does not establish physical sound pressure.
 
     Args:
         y: Audio signal.
@@ -23,7 +24,7 @@ def compute_energy(
         energy_window_ms: Window size in ms.
 
     Returns:
-        Intensity array in dB (positive values).
+        Intensity array in dB; zero-power/empty windows are missing (NaN).
     """
     # Praat uses a minimum pitch to determine window size if not specified,
     # but here we use energy_window_ms (default 20ms is standard for energy).
@@ -33,11 +34,7 @@ def compute_energy(
     nf = len(F0)
     Ewin = np.full(nf, np.nan, dtype=float)
 
-    # Pre-calculate constant for Praat-like scaling
-    # 10 * log10(1/P0) where P0 = 4e-10 is the reference pressure squared?
-    # Praat: 10 * log10(mean_power) + 96 + 10*log10(2) ?
-    # Let's use the simple calibration: 10*log10(mean_sq) + 96 + 3.0103
-    calibration_db = 96.0 + 10 * np.log10(2.0) # ~ 99.01
+    calibration_db = -10 * np.log10((20e-6) ** 2)
 
     for k in range(nf):
         # Using centered window for better alignment with F0
@@ -53,7 +50,7 @@ def compute_energy(
                 val_db = 10.0 * np.log10(mean_sq) + calibration_db
                 Ewin[k] = val_db
             else:
-                Ewin[k] = 0.0 # Silence
+                Ewin[k] = np.nan
         else:
             Ewin[k] = np.nan
 

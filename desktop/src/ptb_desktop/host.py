@@ -18,6 +18,7 @@ from PyQt6.QtWebEngineWidgets import QWebEngineView
 from phonetic_core.textgrid import parse_textgrid
 from .file_provider import FileProvider,FileAccessError
 from .local_service import LocalService
+from .native_i18n import NativeLocale,native_text,native_error_payload
 
 
 from .web_assets import Assets,LocalOnly,register_scheme,permitted_url
@@ -36,9 +37,10 @@ class Bridge(QObject):
         self.task_lock=threading.Lock()
         self.m11_component_lock=threading.Lock()
         self.recording_lock=threading.Lock()
+        self.manual_slots=threading.BoundedSemaphore(4)
         self._recording_bridge=None
         from .task_bridge import TaskBridge
-        self.tasks=TaskBridge(provider,service)
+        self.tasks=TaskBridge(provider,service,cache_context=getattr(window,'cache_context',None),manual_pack_root=getattr(window,'manual_pack_root',None))
         self.vocal_slots=threading.BoundedSemaphore(12)
         from .vocal_tract.files import VocalFiles
         self.vocal_files=VocalFiles()
@@ -83,14 +85,14 @@ class Bridge(QObject):
         # QWebChannel invokes this on the GUI thread. Keep clipboard permission
         # narrowly scoped to plain-text writes; never return existing contents.
         try:
-            if len(text)>2_000_000:raise ValueError('复制文字过长，请保存为文本文件。')
+            if len(text)>2_000_000:raise ValueError(native_text(self.window,'clipboard.tooLong'))
             clipboard=QApplication.clipboard()
             if clipboard is None:raise RuntimeError('clipboard unavailable')
             clipboard.setText(text)
             if clipboard.text()!=text:raise RuntimeError('clipboard write failed')
             return json.dumps({'ok':True},ensure_ascii=False)
         except ValueError as exc:return json.dumps({'ok':False,'error':str(exc)},ensure_ascii=False)
-        except Exception:return json.dumps({'ok':False,'error':'系统剪贴板暂不可用，请重试。'},ensure_ascii=False)
+        except Exception:return json.dumps({'ok':False,'error':native_text(self.window,'clipboard.unavailable')},ensure_ascii=False)
 
     @pyqtSlot(str,result=str)
     def pickColor(self, initial):
@@ -115,7 +117,7 @@ class Bridge(QObject):
             self.recordingReady.emit(request_id,json.dumps({'ok':False,'error':'录音操作正在收尾，请稍后重试。'},ensure_ascii=False));return
         def work():
             try:result={'ok':True,'value':recording.dispatch(body)}
-            except Exception as exc:result={'ok':False,'error':str(exc)}
+            except Exception as exc:result=native_error_payload(exc)
             finally:self.recording_lock.release()
             try:self.recordingReady.emit(request_id,json.dumps(result,ensure_ascii=False,allow_nan=False))
             except RuntimeError:pass
@@ -133,10 +135,10 @@ class Bridge(QObject):
                     selected=self.test_vocal_picker(op)
                 elif op in ('document/open','preset-pack/open'):
                     pack=op.startswith('preset-pack/')
-                    selected=QFileDialog.getOpenFileName(self.window,'导入声道构型包' if pack else '导入声道关键帧','','声道构型包 (*.ptb-poses.json *.json)' if pack else '声道关键帧 (*.ptb-vocal.json *.json)')[0]
+                    selected=QFileDialog.getOpenFileName(self.window,native_text(self.window,'vocal.importPack') if pack else native_text(self.window,'vocal.importFrames'),'',native_text(self.window,'vocal.packFilter') if pack else native_text(self.window,'vocal.framesFilter'))[0]
                 else:
                     video=op=='video/begin';pack=op.startswith('preset-pack/')
-                    selected=QFileDialog.getSaveFileName(self.window,'保存动作视频' if video else '导出声道构型包' if pack else '导出声道关键帧','声道动作.mp4' if video else '声道构型包.ptb-poses.json' if pack else '声道关键帧.ptb-vocal.json','MP4 视频 (*.mp4)' if video else '声道构型包 (*.ptb-poses.json)' if pack else '声道关键帧 (*.ptb-vocal.json)')[0]
+                    selected=QFileDialog.getSaveFileName(self.window,native_text(self.window,'vocal.saveVideo') if video else native_text(self.window,'vocal.exportPack') if pack else native_text(self.window,'vocal.exportFrames'),'声道动作.mp4' if video else '声道构型包.ptb-poses.json' if pack else '声道关键帧.ptb-vocal.json',native_text(self.window,'files.mp4Filter') if video else native_text(self.window,'vocal.packSaveFilter') if pack else native_text(self.window,'vocal.framesSaveFilter'))[0]
                     if video and selected and not Path(selected).suffix:selected+='.mp4'
         except Exception as exc:
             self.vocal_slots.release();self.vocalReady.emit(request_id,json.dumps({'ok':False,'error':str(exc)}));return
@@ -164,13 +166,17 @@ class Bridge(QObject):
             self.taskReady.emit(request_id,json.dumps({'ok':False,'error':'请求结构或大小不正确。'}));return
         # Component transfer can take minutes. Keep catalogue/progress reads and
         # unrelated task operations responsive while serializing installations.
-        task_lock=self.m11_component_lock if decoded.get('op') in ('m11_component','m09_vocoder_download') else self.task_lock
+        manual=decoded.get('op')=='manual_packs'
+        task_lock=self.manual_slots if manual else self.m11_component_lock if decoded.get('op') in ('m11_component','m09_vocoder_download') else self.task_lock
         if not task_lock.acquire(False):
-            self.taskReady.emit(request_id,json.dumps({'ok':False,'error':'任务操作正在进行，请稍候。'}));return
+            self.taskReady.emit(request_id,json.dumps({'ok':False,'error':'manual.pack.installBusy' if manual else '任务操作正在进行，请稍候。'}));return
         def work():
             try:result={'ok':True,'value':self.tasks.invoke(decoded)}
-            except FileAccessError as exc:result={'ok':False,'error':str(exc)}
-            except Exception:result={'ok':False,'error':'任务操作失败，请检查文件关联、目录权限或任务服务。'}
+            except FileAccessError as exc:result=native_error_payload(exc)
+            except Exception as exc:
+                import logging
+                logging.getLogger(__name__).error('desktop_task_failed type=%s',type(exc).__name__)
+                result={'ok':False,'error':'任务操作失败，请检查文件关联、目录权限或任务服务。'}
             finally:task_lock.release()
             try:self.taskReady.emit(request_id,json.dumps(result,ensure_ascii=False,allow_nan=False))
             except RuntimeError:pass
@@ -217,27 +223,34 @@ class Bridge(QObject):
             op=body.get('op')
             if op=='hello':
                 health=self.service.get('/api/v1/health')
-                value={'kind':'desktop','session':self.provider.session,'api_version':health['api_version'],'tasks':bool(self.service.local_files_root),'integrated_titlebar':getattr(self.window,'integrated_chrome',False),'window_maximized':getattr(self.window,'isMaximized',lambda:False)()}
+                value={'kind':'desktop','session':self.provider.session,'api_version':health['api_version'],'tasks':bool(self.service.local_files_root),'integrated_titlebar':getattr(self.window,'integrated_chrome',False),'window_maximized':getattr(self.window,'isMaximized',lambda:False)(),'ui_locale':getattr(getattr(self.window,'native_locale',None),'locale','zh-CN')}
+            elif op=='locale':
+                code=body.get('purpose')
+                if not isinstance(code,str) or code not in NativeLocale.supported:raise FileAccessError('unsupported_locale')
+                if not hasattr(self.window,'native_locale'):self.window.native_locale=NativeLocale()
+                value=self.window.native_locale.select(code)
             elif op=='clear_all_caches':
                 if body.get('purpose')!='confirmed':raise FileAccessError('请先确认清除缓存及退出。')
+                if getattr(self.window,'cache_context',None) is not None:raise FileAccessError('native.cache.qaExitCleanupUnavailable')
                 from .updates import UpdateError
                 try:value=self.window.update_coordinator.clear_caches()
                 except UpdateError as exc:raise FileAccessError(str(exc)) from None
             elif op=='cache_location':
-                from .cache_location import location_status
-                try:value=location_status()
+                from .legacy_cache import cache_location
+                try:value=cache_location(getattr(self.window,'cache_context',None))
                 except (OSError,ValueError) as exc:raise FileAccessError(str(exc)) from None
             elif op=='open_cache_directory':
                 if body.get('purpose') not in ('current','legacy'):raise FileAccessError('不支持的缓存目录。')
-                from .cache_location import open_directory
-                try:value=open_directory(legacy=body['purpose']=='legacy')
+                from .legacy_cache import open_cache_directory
+                try:value=open_cache_directory(legacy=body['purpose']=='legacy',context=getattr(self.window,'cache_context',None))
                 except (OSError,ValueError) as exc:raise FileAccessError(str(exc)) from None
             elif op=='open_cache_candidate':
                 from .legacy_cache import open_candidate
-                try:value=open_candidate(body.get('id'))
+                try:value=open_candidate(body.get('id'),getattr(self.window,'cache_context',None))
                 except (OSError,ValueError) as exc:raise FileAccessError(str(exc)) from None
             elif op=='clear_graphics_cache':
                 if body.get('purpose')!='confirmed':raise FileAccessError('请先亲自核对目录，再确认清理。')
+                if getattr(self.window,'cache_context',None) is not None:raise FileAccessError('native.cache.qaExitCleanupUnavailable')
                 if not isinstance(body.get('id'),str):raise FileAccessError('请选择需要核对的图形缓存目录。')
                 from .updates import UpdateError
                 try:value=self.window.update_coordinator.clear_caches(graphics_key=body.get('id'))
@@ -264,15 +277,15 @@ class Bridge(QObject):
                     if not pixmap.save(buffer,'PNG'):raise FileAccessError('截图失败。')
                     value={**self.provider.capture(bytes(buffer.data())),'corners':corners}
             elif op=='m09_pick_python':
-                path,_=QFileDialog.getOpenFileName(self.window,'选择已有 GPU Python 环境的 python.exe','','Python (python.exe)')
+                path,_=QFileDialog.getOpenFileName(self.window,native_text(self.window,'files.pythonPicker'),'','Python (python.exe)')
                 value=self.tasks.m09.grant(path) if path else None
             elif op=='m11_pick':
                 purpose=body.get('purpose')
                 if purpose in ('runtime','corpus'):
-                    path=QFileDialog.getExistingDirectory(self.window,'选择 MFA '+purpose+' 目录','')
+                    path=QFileDialog.getExistingDirectory(self.window,native_text(self.window,'mfa.directory',purpose=native_text(self.window,'mfa.'+purpose)),'')
                 elif purpose in ('model','dictionary','archive','manifest'):
                     filters={'model':'MFA model (*.zip)','dictionary':'Dictionary (*.dict *.txt)','archive':'Component (*.zip)','manifest':'Manifest (*.json)'}
-                    path,_=QFileDialog.getOpenFileName(self.window,'选择 MFA '+purpose,'',filters[purpose])
+                    path,_=QFileDialog.getOpenFileName(self.window,native_text(self.window,'mfa.file',purpose=native_text(self.window,'mfa.'+purpose)),'',filters[purpose])
                 else:raise FileAccessError('不支持的 MFA 资源。')
                 value=self.tasks.m11.grant(purpose,path) if path else None
             elif op=='choose':
@@ -280,7 +293,7 @@ class Bridge(QObject):
                 def picker():
                     options=QFileDialog.Option.ShowDirsOnly
                     if self.test_dialog:options|=QFileDialog.Option.DontUseNativeDialog
-                    return QFileDialog.getExistingDirectory(self.window,'选择'+{'input':'音频','output':'结果','association':'关联文件'}.get(purpose,'')+'目录','',options)
+                    return QFileDialog.getExistingDirectory(self.window,native_text(self.window,'files.directory',purpose=native_text(self.window,{'input':'files.audio','output':'files.results','association':'files.association'}.get(purpose,''))),'',options)
                 value=self.provider.choose(purpose,picker)
             elif op=='list':value=self.provider.list(body.get('id'))
             elif op in ('read','textgrid'):
@@ -291,7 +304,7 @@ class Bridge(QObject):
                     value={'sha256':sha,'tiers':[asdict(t) for t in parse_textgrid(text)]}
             else:raise FileAccessError('不支持的操作。')
             return json.dumps({'ok':True,'value':value},ensure_ascii=False,allow_nan=False)
-        except FileAccessError as exc:return json.dumps({'ok':False,'error':str(exc)},ensure_ascii=False)
+        except FileAccessError as exc:return json.dumps(native_error_payload(exc),ensure_ascii=False)
         except Exception:return json.dumps({'ok':False,'error':'读取失败，请检查文件格式或重新选择目录。'},ensure_ascii=False)
 
 
@@ -315,15 +328,24 @@ class Page(QWebEnginePage):
             QDesktopServices.openUrl(url);return False
         return url.scheme()=='ptbapp' and url.host()=='app'
     def javaScriptConfirm(self,origin,message):
-        allowed=QMessageBox.question(self.parent(),'未保存的草稿','关闭窗口将放弃未保存的编辑。是否关闭？',QMessageBox.StandardButton.Yes|QMessageBox.StandardButton.No)==QMessageBox.StandardButton.Yes
+        allowed=QMessageBox.question(self.parent(),native_text(self.parent().window(),'close.unsavedTitle'),native_text(self.parent().window(),'close.unsavedBody'),QMessageBox.StandardButton.Yes|QMessageBox.StandardButton.No)==QMessageBox.StandardButton.Yes
         window=self.parent().window()
         if not allowed and hasattr(window,'update_coordinator'):window.update_coordinator.cancel()
         return allowed
 
 
 class Workbench(QMainWindow):
-    def __init__(self,dist,*,test=False,jobs_path=None,local_files_root=None,reaper_binary=None,vocal_resources=None,vocal_profile=None,start_module=None):
+    def __init__(self,dist,*,test=False,jobs_path=None,local_files_root=None,reaper_binary=None,vocal_resources=None,vocal_profile=None,start_module=None,cache_context=None):
         super().__init__();self.setWindowTitle('PhoneticToolbox 3.0');self.resize(1440,900)
+        self.cache_context=cache_context
+        if test and self.cache_context is None:
+            import tempfile
+            from .legacy_cache import isolated_context
+            self._cache_test_directory=tempfile.TemporaryDirectory(prefix='ptb-cache-qa-')
+            self.cache_context=isolated_context(self._cache_test_directory.name)
+        self.manual_pack_root=self.cache_context.checked(self.cache_context.owned_root/'manual-packs') if self.cache_context is not None else None
+        from .platform_paths import user_data_root
+        self.native_locale=NativeLocale(None if test else user_data_root()/'language.json')
         self.integrated_chrome=sys.platform=='win32'
         if self.integrated_chrome:self.setWindowFlag(Qt.WindowType.FramelessWindowHint,True)
         self._caption_colors=('#f9f9f9','#34404a')
@@ -393,13 +415,14 @@ class Workbench(QMainWindow):
         from . import __version__
         update_version=json.loads(version_file.read_text('utf8'))['frontend_version'] if version_file.is_file() else __version__
         from .cache_location import update_directory
-        updates_root=update_directory()
-        updates_state_root=user_data_root()/'updates'
         if test:
             import tempfile
             self._updates_test_directory=tempfile.TemporaryDirectory(prefix='ptb-updates-qa-')
             updates_root=Path(self._updates_test_directory.name)
             updates_state_root=updates_root
+        else:
+            updates_root=update_directory()
+            updates_state_root=user_data_root()/'updates'
         from .icon_preferences import IconPreferences
         icon_root = updates_root / 'icons-qa' if test else user_data_root() / 'icons'
         self.icon_preferences = IconPreferences(icon_root, self.windowIcon(), self, dist)
@@ -555,21 +578,38 @@ class Workbench(QMainWindow):
                 else:
                     self.showNormal()
                     if geometry is not None:self.restoreGeometry(geometry)
-                self._reader_return_active=False
+                if sys.platform=='win32':
+                    # Chromium may apply its own showNormal after our first
+                    # restore. Confirm the target state across event turns,
+                    # and only repair it while this fullscreen exit owns it.
+                    target_geometry=self.geometry()
+                    def confirm(attempt=0,stable=0):
+                        if self.closing or generation!=self._reader_fullscreen_generation:return
+                        maximized=bool(previous & Qt.WindowState.WindowMaximized)
+                        matches=not self.isFullScreen() and self.isMaximized()==maximized
+                        if matches and not maximized:matches=self.geometry()==target_geometry
+                        if not matches:
+                            if maximized:self.showMaximized()
+                            else:self.showNormal();self.setGeometry(target_geometry)
+                        stable=stable+1 if matches else 0
+                        if stable<2 and attempt<20:QTimer.singleShot(50,lambda:confirm(attempt+1,stable))
+                        else:self._reader_return_active=False
+                    QTimer.singleShot(50,confirm)
+                else:self._reader_return_active=False
             if sys.platform=='darwin':self.showNormal()
             QTimer.singleShot(0,restore)
 
     def pick_paper_export(self,name):
         options=QFileDialog.Option.DontUseNativeDialog if self.bridge.test_dialog else QFileDialog.Option(0)
-        return QFileDialog.getSaveFileName(self,'导出论文 PDF',name,'PDF 文档 (*.pdf)',options=options)[0]
+        return QFileDialog.getSaveFileName(self,native_text(self,'papers.export'),name,native_text(self,'files.pdfFilter'),options=options)[0]
 
     def pick_paper_library(self):
         options=QFileDialog.Option.DontUseNativeDialog if self.bridge.test_dialog else QFileDialog.Option(0)
-        return QFileDialog.getExistingDirectory(self,'选择本地论文文件夹',options=options)
+        return QFileDialog.getExistingDirectory(self,native_text(self,'papers.library'),options=options)
 
     def pick_local_papers(self):
         options=QFileDialog.Option.DontUseNativeDialog if self.bridge.test_dialog else QFileDialog.Option(0)
-        return QFileDialog.getOpenFileNames(self,'导入 PDF 到本地论文库','','PDF 文档 (*.pdf)',options=options)[0]
+        return QFileDialog.getOpenFileNames(self,native_text(self,'papers.import'),'',native_text(self,'files.pdfFilter'),options=options)[0]
 
     def save_download(self,download):
         # Only renderer-generated supported artifacts from this owned page.
@@ -577,7 +617,7 @@ class Workbench(QMainWindow):
         if download.page()!=self.page or download.url().scheme()!='blob' or not name.lower().endswith(('.svg','.png','.textgrid','.lip.json','.json','.csv','.xlsx','.docx','.txt')):
             download.cancel();return
         options=QFileDialog.Option.DontUseNativeDialog if self.bridge.test_dialog else QFileDialog.Option(0)
-        title,filter=('保存文本','UTF-8 文本 (*.txt)') if name.lower().endswith('.txt') else ('保存标注','Praat 标注 (*.TextGrid)') if name.lower().endswith('.textgrid') else ('保存安全唇形','安全唇形 (*.lip.json)') if name.lower().endswith('.lip.json') else ('保存归纳文档','Word 文档 (*.docx)') if name.lower().endswith('.docx') else ('保存实验文件','实验文件 (*.json *.csv *.xlsx)') if name.lower().endswith(('.json','.csv','.xlsx')) else ('保存图像','图像 (*.svg *.png)')
+        title,filter=(native_text(self,'download.text'),native_text(self,'download.textFilter')) if name.lower().endswith('.txt') else (native_text(self,'download.annotation'),native_text(self,'download.annotationFilter')) if name.lower().endswith('.textgrid') else (native_text(self,'download.lip'),native_text(self,'download.lipFilter')) if name.lower().endswith('.lip.json') else (native_text(self,'download.document'),native_text(self,'download.documentFilter')) if name.lower().endswith('.docx') else (native_text(self,'download.experiment'),native_text(self,'download.experimentFilter')) if name.lower().endswith(('.json','.csv','.xlsx')) else (native_text(self,'download.image'),native_text(self,'download.imageFilter'))
         selected=QFileDialog.getSaveFileName(self,title,name,filter,options=options)[0]
         if not selected:download.cancel();return
         target=Path(selected);download.setDownloadDirectory(str(target.parent));download.setDownloadFileName(target.name);download.accept()
@@ -591,19 +631,20 @@ class Workbench(QMainWindow):
             event.ignore();self.page.triggerAction(QWebEnginePage.WebAction.RequestClose);return
         if not self.bridge.close_recording():
             self.closing=False;event.ignore()
-            self.update_coordinator.cancel('录音尚未安全保存，已取消更新。')
-            QMessageBox.warning(self,'录音尚未安全保存','录音收尾或工程保存失败。窗口继续保留，请回到录音页处理后再关闭。')
+            self.update_coordinator.cancel(native_text(self,'close.recordingUpdateCancelled'))
+            QMessageBox.warning(self,native_text(self,'close.recordingTitle'),native_text(self,'close.recordingBody'))
             return
         try:self.update_coordinator.closed()
         except Exception:
-            self.closing=False;event.ignore();self.update_coordinator.cancel('退出操作未完成，窗口保留。')
-            QMessageBox.warning(self,'退出操作未完成','更新或缓存清理未能完成。窗口保留，请检查占用后重试。')
+            self.closing=False;event.ignore();self.update_coordinator.cancel(native_text(self,'close.incompleteUpdateCancelled'))
+            QMessageBox.warning(self,native_text(self,'close.incompleteTitle'),native_text(self,'close.incompleteBody'))
             return
         self._first_maximize.dispose()
         if self._startup_presentation:self._startup_presentation.cancel()
         if hasattr(self,'updates_bridge'):self.updates_bridge.close()
         self.papers_bridge.close()
         self.feedback_bridge.close()
+        self.bridge.tasks.close()
         self.bridge.vocal_files.close();self.vocal.close();self.provider.close();self.service.close();event.accept()
 
 
@@ -614,6 +655,7 @@ def run(dist,**options):
     app.aboutToQuit.connect(window.service.close);app.aboutToQuit.connect(window.provider.close)
     app.aboutToQuit.connect(window.vocal.close)
     app.aboutToQuit.connect(window.bridge.close_recording)
+    app.aboutToQuit.connect(window.bridge.tasks.close)
     window.show();code=app.exec();window.page.deleteLater();app.processEvents()
     window.profile.deleteLater();app.sendPostedEvents(None,QEvent.Type.DeferredDelete);app.processEvents()
     if not getattr(sys,'frozen',False):

@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "audit_status": "initial-audit-with-open-items",
-  "checked_on": "2026-10-24",
-  "total_records": 461,
+  "checked_on": "2026-10-30",
+  "total_records": 463,
   "sources": [
     {
       "id": "PTB-BROWSER-SCIENCE-RUNTIME",
@@ -16220,6 +16220,57 @@
       "acknowledgement_group": "software",
       "show_in_acknowledgements": true,
       "distribution_status": "Independent study-use data review passed; adopted into isolated frozen trial for real UI, manual and three-platform validation. Public activation and final release-note approval pending."
+    },
+    {
+      "id": "LIB-VUE-I18N",
+      "title": "Vue I18n and Intlify runtime dependencies",
+      "kind": "software-library",
+      "modules": [],
+      "authors": "kazuya kawaguchi and Intlify contributors",
+      "urls": {
+        "repository": "https://github.com/intlify/vue-i18n",
+        "documentation": "https://vue-i18n.intlify.dev/"
+      },
+      "actual_included_version": "vue-i18n 11.4.16; @intlify/core-base 11.4.16, @intlify/devtools-types 11.4.16, @intlify/message-compiler 11.4.16, @intlify/shared 11.4.16, @vue/devtools-api 6.6.4",
+      "used_at": [
+        "frontend/src/i18n/index.ts",
+        "frontend/src/components/LanguageSwitch.vue"
+      ],
+      "relationship": "UI localization runtime; no scientific algorithms or source data transformed",
+      "license": "MIT",
+      "license_file": "third_party/licenses/vue-i18n-11.4.16.txt",
+      "verification_date": "2026-10-30",
+      "distribution_status": "local development and candidates only; no public release in this task",
+      "modifications": "Unmodified npm packages; named-text message functions and lazy catalogue integration are project code",
+      "notes": "Exact versions and integrity in frontend/package-lock.json. License texts of all six added dependencies retained. No global dependency or system configuration changed.",
+      "acknowledgement_group": "software"
+    },
+    {
+      "id": "PTB-UPDATE-CRYPTOGRAPHY",
+      "title": "cryptography",
+      "kind": "optional-runtime-dependency",
+      "modules": [
+        "P06"
+      ],
+      "authors": "The Python Cryptographic Authority and individual contributors",
+      "actual_included_version": "50.0.2 (optional update-signing extra; isolated test installation only)",
+      "license": "Apache-2.0 OR BSD-3-Clause",
+      "urls": {
+        "package": "https://pypi.org/project/cryptography/50.0.2/",
+        "documentation": "https://cryptography.io/en/latest/hazmat/primitives/asymmetric/ed25519/",
+        "source_code": "https://github.com/pyca/cryptography"
+      },
+      "verification_date": "2026-11-02",
+      "distribution_status": "not-bundled; activation and wheel bundled-license audit required before signed update release",
+      "relationship": "Optional Ed25519 verification and offline signing using existing keys; no upstream code copied. Test runtime uses cffi 2.1.1 and pycparser 3.12; existing application environments unchanged.",
+      "acknowledgement_group": "software",
+      "used_at": [
+        "desktop/pyproject.toml",
+        "desktop/src/ptb_desktop/update_signatures.py",
+        "release/sign_update_manifest.py"
+      ],
+      "show_in_acknowledgements": false,
+      "show_in_license_notice": false
     }
   ]
 }

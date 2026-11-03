@@ -1,5 +1,6 @@
 """Qt-facing M16 capability, separate from server jobs and existing databases."""
 from .recording.service import RecordingService
+from .native_i18n import native_text
 
 
 class M16Bridge:
@@ -15,7 +16,7 @@ class M16Bridge:
     def choose(self,purpose):
         if purpose not in ('new','open','export'):raise ValueError('不支持的目录选择用途')
         from PyQt6.QtWidgets import QFileDialog
-        title={'new':'选择空目录建立本地录音工程','open':'打开本地录音工程目录','export':'选择录音导出目录'}[purpose]
+        title=native_text(self.parent,{'new':'recording.newFolder','open':'recording.openFolder','export':'recording.exportFolder'}[purpose])
         selected=QFileDialog.getExistingDirectory(self.parent,title,'')
         return self.service.grant(selected,purpose) if selected else None
 

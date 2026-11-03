@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import {messageRef} from '../i18n/index.ts';
+import {uiMessage,uiError,uiErrorMessage,localized,joinMessages} from '../modules/module-localization.ts';
+import {tr} from '../i18n/index.ts';
 import {computed,ref,watch} from 'vue';
 import {applicationIcon,builtinIcons,iconPreferences,iconBusy,iconError,changeIcon,prepareIconSource,homeIconScale,setHomeIconScale,loadBuiltinIcons} from '../state/app-icon.ts';
 import {nativeIcons} from '../platform/icons.ts';
@@ -8,51 +11,51 @@ import IconCropDialog from './IconCropDialog.vue';
 import {onUnmounted} from 'vue';
 const props=withDefaults(defineProps<{active?:boolean}>(),{active:true});
 watch(()=>props.active,active=>{if(active)void loadBuiltinIcons();},{immediate:true});
-const input=ref<HTMLInputElement>(),loading=ref(false),message=ref(''),importError=ref('');
+const input=ref<HTMLInputElement>(),loading=ref(false),message=messageRef(),importError=messageRef();
 const draft=ref<{url:string;name:string;source:Blob;id?:string}>();
 const dockDraft=ref(100);
 watch(()=>[iconPreferences.value.selected,iconPreferences.value.dockSize?.value],()=>{dockDraft.value=iconPreferences.value.dockSize?.value??100;},{immediate:true});
 const dockPreviewStyle=computed(()=>nativeIcons()&&iconPreferences.value.dockSize?{transform:`scale(${dockDraft.value/100})`}:undefined);
-async function resizeDock(size:number){message.value='';const ok=await changeIcon({action:'resize',id:iconPreferences.value.selected,size});if(ok)message.value='Dock 图标大小已保存。';else dockDraft.value=iconPreferences.value.dockSize?.value??100;}
+async function resizeDock(size:number){message.value='';const ok=await changeIcon({action:'resize',id:iconPreferences.value.selected,size});if(ok)message.value=uiMessage('components.dock_icon_size_saved');else dockDraft.value=iconPreferences.value.dockSize?.value??100;}
 function closeCrop(){if(loading.value||iconBusy.value)return;if(draft.value)URL.revokeObjectURL(draft.value.url);draft.value=undefined;importError.value='';iconError.value='';}
 onUnmounted(()=>{if(draft.value)URL.revokeObjectURL(draft.value.url);});
 async function upload(event:Event){
  const field=event.target as HTMLInputElement,file=field.files?.[0];if(!file)return;
  loading.value=true;message.value='';importError.value='';
  try{const url=await prepareIconSource(file,file.name,true),id=draft.value?.id;if(draft.value)URL.revokeObjectURL(draft.value.url);draft.value={url,name:file.name,source:file,id};}
- catch(error){importError.value=error instanceof Error?error.message:'图片导入失败。';}
+ catch(error){importError.value=error instanceof Error?uiErrorMessage(error):uiMessage('components.image_import_failed');}
  finally{loading.value=false;field.value='';}
 }
-async function recrop(item:CustomIcon){loading.value=true;message.value='';importError.value='';iconError.value='';try{const source=await originalIconSource(item.id,item.dataUrl),url=await prepareIconSource(source,item.name);draft.value={url,name:item.name,source,id:item.id};}catch(error){importError.value=error instanceof Error?error.message:'原图无法读取。';}finally{loading.value=false;}}
+async function recrop(item:CustomIcon){loading.value=true;message.value='';importError.value='';iconError.value='';try{const source=await originalIconSource(item.id,item.dataUrl),url=await prepareIconSource(source,item.name);draft.value={url,name:item.name,source,id:item.id};}catch(error){importError.value=error instanceof Error?uiErrorMessage(error):uiMessage('components.the_original_image_could_not_be_read');}finally{loading.value=false;}}
 async function applyCrop(dataUrl:string){const current=draft.value;if(!current)return;loading.value=true;importError.value='';
  try{if(!await changeIcon({action:current.id?'replace':'import',id:current.id,name:current.name,dataUrl}))return;
   let sourceSaved=true;try{await saveIconSource(iconPreferences.value.selected,current.source);if(current.id&&current.id!==iconPreferences.value.selected)await removeIconSource(current.id);}catch{sourceSaved=false;}
-  URL.revokeObjectURL(current.url);draft.value=undefined;message.value=sourceSaved?'裁剪已应用并设为当前图标，原图保存在本机。':'图标已保存，原图未能保存；重新裁剪时可重新选择图片。';
+  URL.revokeObjectURL(current.url);draft.value=undefined;message.value=sourceSaved?uiMessage('components.the_crop_was_applied_and_selected_as_the_current'):uiMessage('components.the_icon_was_saved_but_the_original_image_could');
  }finally{loading.value=false;}
 }
-async function choose(id:string){message.value='';importError.value='';if(await changeIcon({action:'select',id}))message.value=id==='default'?'已恢复默认图标。':'图标已切换。';}
-async function remove(id:string){message.value='';if(await changeIcon({action:'remove',id})){message.value='已移除这张自定义图标，原始图片文件保留。';try{await removeIconSource(id);}catch{message.value+=' 本机原图副本未能清理。';}}}
+async function choose(id:string){message.value='';importError.value='';if(await changeIcon({action:'select',id}))message.value=id==='default'?uiMessage('components.default_icon_restored'):uiMessage('components.icon_changed');}
+async function remove(id:string){message.value='';if(await changeIcon({action:'remove',id})){message.value=uiMessage('components.the_custom_icon_was_removed_the_original_image_file');try{await removeIconSource(id);}catch{message.value=joinMessages(uiMessage('components.the_custom_icon_was_removed_the_original_image_file'),uiMessage('components.the_local_copy_of_the_original_image_could_not'));}}}
 </script>
-<template><section class="icon-settings settings-card" aria-label="应用图标设置">
- <div class="settings-heading"><h3>应用图标</h3><span class="muted">选择后生效</span></div>
+<template><section class="icon-settings settings-card" :aria-label="tr('components.application_icon_settings')">
+ <div class="settings-heading"><h3>{{tr('components.application_icon')}}</h3><span class="muted">{{tr('components.applied_when_selected')}}</span></div>
  <div class="settings-columns">
   <div class="settings-column icon-library">
-   <div class="icon-options builtin-icon-options" aria-label="内置图标"><button v-for="item in builtinIcons" :key="item.id" class="icon-choice" :data-icon-id="item.id" :data-icon-group="item.group" :aria-label="'应用图标 '+item.number+(item.id==='default'?'（默认）':'')" :aria-pressed="iconPreferences.selected===item.id" :disabled="iconBusy||loading" @click="choose(item.id)"><img :src="item.url" alt=""/></button></div>
-   <div class="settings-heading"><h4>自己的图片</h4><button :disabled="loading||iconBusy||iconPreferences.custom.length>=8" @click="input?.click()">{{loading?'处理图片…':'导入图片'}}</button></div>
-   <input ref="input" class="icon-file-input" type="file" accept=".png,.jpg,.jpeg,.webp,.ico" aria-label="导入自定义图标" :disabled="loading||iconBusy" @change="upload"/>
-   <p class="settings-note">支持 PNG、JPG、WebP、ICO，单张不超过 10 MB。导入后先裁剪，默认方形，也可选择其他比例、移除纯色背景。原图保存在本机，最多保存 8 张图标。</p>
-   <div v-if="iconPreferences.custom.length" class="icon-options"><div v-for="item in iconPreferences.custom" :key="item.id" class="custom-icon-item"><button class="icon-choice" :aria-label="item.name" :aria-pressed="iconPreferences.selected===item.id" :disabled="iconBusy||loading" @click="choose(item.id)"><img :src="item.dataUrl" alt=""/></button><button class="remove-icon" :aria-label="'重新裁剪图标 '+item.name" :disabled="iconBusy||loading" @click="recrop(item)">重新裁剪</button><button class="remove-icon" :aria-label="'移除图标 '+item.name" :disabled="iconBusy||loading" @click="remove(item.id)">移除</button></div></div>
-   <p v-else class="settings-note icon-empty">导入喜欢的图片，做成自己的应用图标。</p>
+   <div class="icon-options builtin-icon-options" :aria-label="tr('components.built_in_icons')"><button v-for="item in builtinIcons" :key="item.id" class="icon-choice" :data-icon-id="item.id" :data-icon-group="item.group" :aria-label="tr('components.application_icon_273')+item.number+(item.id==='default'?tr('components.default'):'')" :aria-pressed="iconPreferences.selected===item.id" :disabled="iconBusy||loading" @click="choose(item.id)"><img :src="item.url" alt=""/></button></div>
+   <div class="settings-heading"><h4>{{tr('components.your_own_images')}}</h4><button :disabled="loading||iconBusy||iconPreferences.custom.length>=8" @click="input?.click()">{{loading?tr('components.processing_image'):tr('components.import_image')}}</button></div>
+   <input ref="input" class="icon-file-input" type="file" accept=".png,.jpg,.jpeg,.webp,.ico" :aria-label="tr('components.import_custom_icon')" :disabled="loading||iconBusy" @change="upload"/>
+   <p class="settings-note">{{tr('components.png_jpg_webp_and_ico_are_supported_up_to')}}</p>
+   <div v-if="iconPreferences.custom.length" class="icon-options"><div v-for="item in iconPreferences.custom" :key="item.id" class="custom-icon-item"><button class="icon-choice" :aria-label="item.name" :aria-pressed="iconPreferences.selected===item.id" :disabled="iconBusy||loading" @click="choose(item.id)"><img :src="item.dataUrl" alt=""/></button><button class="remove-icon" :aria-label="tr('components.recrop_icon')+item.name" :disabled="iconBusy||loading" @click="recrop(item)">{{tr('components.recrop')}}</button><button class="remove-icon" :aria-label="tr('components.remove_icon')+item.name" :disabled="iconBusy||loading" @click="remove(item.id)">{{tr('components.remove')}}</button></div></div>
+   <p v-else class="settings-note icon-empty">{{tr('components.import_an_image_you_like_to_make_your_own')}}</p>
   </div>
   <div class="settings-column icon-preview-column">
-   <h4>效果预览</h4>
-   <div v-if="nativeIcons()&&iconPreferences.dockSize" class="dock-icon-size-setting"><label for="dock-icon-size">Dock 图标大小 <output>{{dockDraft}}%</output></label><input id="dock-icon-size" v-model.number="dockDraft" type="range" min="60" max="100" step="1" :disabled="iconBusy||loading" @change="resizeDock(dockDraft)"/><button :disabled="iconBusy||loading||dockDraft===iconPreferences.dockSize.default" @click="resizeDock(iconPreferences.dockSize.default)">恢复默认大小</button><p class="settings-note">松开后应用到 Dock，每张图标的大小分别保存在本机。</p></div>
-   <div class="home-icon-size-setting"><label for="home-icon-size">首页图标大小 <output>{{homeIconScale}}%</output></label><input id="home-icon-size" type="range" min="50" max="300" step="5" :value="homeIconScale" @input="setHomeIconScale(Number(($event.target as HTMLInputElement).value))"/><button :disabled="homeIconScale===100" @click="setHomeIconScale(100)">恢复默认大小</button><p class="settings-note">调整首页左上角的图标，拖动后即时生效。</p></div>
-   <div class="icon-preview-pair"><div class="icon-stage stage-light"><img :src="applicationIcon" :style="dockPreviewStyle" alt="浅色背景图标预览"/><span>浅色背景</span></div><div class="icon-stage stage-dark"><img :src="applicationIcon" :style="dockPreviewStyle" alt="深色背景图标预览"/><span>深色背景</span></div></div>
-   <div class="icon-size-preview"><img v-for="size in [16,24,32,48]" :key="size" :src="applicationIcon" :width="size" :height="size" :alt="size+' 像素图标'"/></div>
-   <p class="settings-note">{{nativeIcons()?'应用内与窗口图标同步更新，选择保存在本机，升级后继续保留。':'图标用于当前浏览器中的工作台，选择保存在此浏览器。'}}</p>
-   <p v-if="nativeIcons()&&!iconPreferences.dockSize" class="settings-note">Windows 已固定的任务栏入口与桌面快捷方式使用独立图标。</p>
-   <button class="icon-reset" :disabled="iconBusy||loading||iconPreferences.selected==='default'" @click="choose('default')">恢复默认图标</button>
+   <h4>{{tr('components.appearance_preview')}}</h4>
+   <div v-if="nativeIcons()&&iconPreferences.dockSize" class="dock-icon-size-setting"><label for="dock-icon-size">{{tr('components.dock_icon_size')}} <output>{{dockDraft}}%</output></label><input id="dock-icon-size" v-model.number="dockDraft" type="range" min="60" max="100" step="1" :disabled="iconBusy||loading" @change="resizeDock(dockDraft)"/><button :disabled="iconBusy||loading||dockDraft===iconPreferences.dockSize.default" @click="resizeDock(iconPreferences.dockSize.default)">{{tr('components.restore_default_size')}}</button><p class="settings-note">{{tr('components.applied_to_the_dock_when_you_release_the_slider')}}</p></div>
+   <div class="home-icon-size-setting"><label for="home-icon-size">{{tr('components.home_icon_size')}} <output>{{homeIconScale}}%</output></label><input id="home-icon-size" type="range" min="50" max="300" step="5" :value="homeIconScale" @input="setHomeIconScale(Number(($event.target as HTMLInputElement).value))"/><button :disabled="homeIconScale===100" @click="setHomeIconScale(100)">{{tr('components.restore_default_size')}}</button><p class="settings-note">{{tr('components.adjust_the_icon_in_the_top_left_corner_of')}}</p></div>
+   <div class="icon-preview-pair"><div class="icon-stage stage-light"><img :src="applicationIcon" :style="dockPreviewStyle" :alt="tr('components.icon_preview_on_a_light_background')"/><span>{{tr('components.light_background')}}</span></div><div class="icon-stage stage-dark"><img :src="applicationIcon" :style="dockPreviewStyle" :alt="tr('components.icon_preview_on_a_dark_background')"/><span>{{tr('components.dark_background')}}</span></div></div>
+   <div class="icon-size-preview"><img v-for="size in [16,24,32,48]" :key="size" :src="applicationIcon" :width="size" :height="size" :alt="size+tr('components.pixel_icon')"/></div>
+   <p class="settings-note">{{nativeIcons()?tr('components.the_in_app_and_window_icons_update_together_your'):tr('components.the_icon_is_used_for_the_workspace_in_this')}}</p>
+   <p v-if="nativeIcons()&&!iconPreferences.dockSize" class="settings-note">{{tr('components.pinned_windows_taskbar_entries_and_desktop_shortcuts_use_separate')}}</p>
+   <button class="icon-reset" :disabled="iconBusy||loading||iconPreferences.selected==='default'" @click="choose('default')">{{tr('components.restore_default_icon')}}</button>
   </div>
  </div>
  <p v-if="message" class="settings-note" role="status">{{message}}</p>

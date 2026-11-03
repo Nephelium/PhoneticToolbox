@@ -1,0 +1,562 @@
+{
+  "schemaVersion": "ptb-manual-localization/1",
+  "locale": "en",
+  "entries": {
+    "d1b5a6307a12b9b788c62755828a0a79bfa98f3389711aac51582e28e4e4b661": {
+      "source": "开始使用与共同操作",
+      "translation": "Getting started and shared operations"
+    },
+    "0079a2e2e94e56ee5fef5ffe7b28eedcd7e7ac9268aa46224b7ed5e75569fa61": {
+      "source": "工具箱介绍：<s id=\"0\">观看介绍视频</s>。",
+      "translation": "Introducing the toolbox: <s id=\"0\">watch the introduction video</s>."
+    },
+    "14bbda97227b0b6f304b90839b54fcb8d3ed390adf64d7ee389cafd7191e4c2a": {
+      "source": "这本手册怎样使用",
+      "translation": "How to use this manual"
+    },
+    "d8f6530a97bba587f7e42eef1e268f70884c39fcdfd33a4bc88a836e0341331e": {
+      "source": "从首页选择工具，就可以开始录音、分析、合成、标注或实验。需要读论文时，打开语音学论文精读。先按对应章节准备材料，处理后核对结果，再保存正式文件。",
+      "translation": "Choose a tool on the home page to start recording, analysis, synthesis, annotation, or an experiment. To read a paper, open Phonetics Paper Reader. Prepare your materials as described in the relevant chapter, check the processed results, and save your final files."
+    },
+    "160f2c017258984e52badc4e5a1158067fbbf7dfd195adf0c1d7b9ea22edb241": {
+      "source": "第一次使用，先认清左侧工具导航、顶部标签和左下角的设置、使用说明。说明书左侧可以选章节、找小节和搜索操作词。",
+      "translation": "On your first visit, locate the tool navigation on the left, the tabs at the top, and Settings and User manual at the bottom left. The manual sidebar lets you choose chapters, find sections, and search for operations."
+    },
+    "81141206d69c9d5c5ebc8bca8fec69e87cfb9f17fd1fb84f5c5593b41a6489e2": {
+      "source": "支持的系统与架构",
+      "translation": "Supported systems and architectures"
+    },
+    "f74dff96142b6eb14ea1dee24cfeb56391b408629af0b84c92f96cc71f0a60c5": {
+      "source": "Windows 版支持 Windows 10 1809 及以上版本和 Windows 11，使用 64 位 x64 的 Intel 或 AMD 处理器。x64 也称 AMD64 或 x86_64。macOS 版另有 Apple Silicon（M 系列芯片）测试版，最低系统目标为 macOS 14。请从官网下载对应系统的当前正式版或测试版。暂不提供 x86 32 位、Windows ARM64 或 Linux 程序包。",
+      "translation": "The Windows app supports Windows 10 version 1809 or later and Windows 11 on a 64-bit x64 Intel or AMD processor. The x64 architecture is also called AMD64 or x86_64. A separate macOS preview is available for Apple Silicon (M-series chips), targeting macOS 14 or later. Download the current release or preview for your system from the official website. Packages for x86 32-bit Windows, Windows ARM64, and Linux are not currently provided."
+    },
+    "4a9919d9b7985f26e1d5d8262e185cc30d6ced9c34b9feadfae97f8914a3ea3f": {
+      "source": "打开 Windows 的“设置 → 系统 → 关于”，查看“系统类型”。确认电脑使用 64 位操作系统和基于 x64 的处理器，再下载对应的 Windows x64 程序包。",
+      "translation": "Open Settings → System → About in Windows and check System type. Confirm that your computer has a 64-bit operating system and an x64-based processor, then download the Windows x64 package."
+    },
+    "4dfab24f55594e692e5ce564478785fe2a5310e4095fe016ad3ab7921dcfbc4b": {
+      "source": "第一次打开工作台",
+      "translation": "Opening the workbench for the first time"
+    },
+    "48c72df351cc23320f23cedab0acd97fea379c00d3ff2c5d9102c4f4d1e68ff7": {
+      "source": "在 Windows 中启动免安装 <s id=\"0\">PhoneticToolbox-windows-x64.exe</s>，或从安装后的开始菜单快捷方式打开。单文件程序首次启动可能需要等待资源展开与校验；看到“从这里开始”的首页后再选工具。",
+      "translation": "In Windows, launch the portable <s id=\"0\">PhoneticToolbox-windows-x64.exe</s>, or use the Start menu shortcut after installation. The single-file app may take a little time to unpack and verify its resources on first launch. Wait for the Start here home page before choosing a tool."
+    },
+    "3ef512f6971ec3786b90dd5a2e41093ee0665543223b9e1229d7e15a7924bd8c": {
+      "source": "浏览首页工具分类和“最近使用”。已知名称时，在左侧“搜索工具…”输入工具名；若无匹配，界面会显示“没有匹配的工具”。",
+      "translation": "Browse the tool categories and Recently used on the home page. If you know the tool name, enter it in Search tools… on the left. If nothing matches, the interface displays No matching tools."
+    },
+    "66da6527eca9bef5f5d7e734e816761ec1a87c3b7ac8c71bc793b3e6f24be96a": {
+      "source": "点击首页卡片或左侧导航里的工具。顶部出现同名标签；回到“首页”不会关闭工具。Windows 的品牌与标签放在同一顶行，开源与学术致谢入口位于首页内容区右上角。",
+      "translation": "Click a tool card on the home page or a tool in the left navigation. A tab with the same name appears at the top. Returning to Home keeps the tool open. On Windows, the branding and tabs share the top row. Open-source and academic acknowledgments are at the top right of the home page content."
+    },
+    "deaccf5c9131aecf8ab83c12b1c2bc4b0ec53291cdb4c7be7943dd409d26113f": {
+      "source": "在模块页面内点击“帮助”，先核对输入要求与保存步骤，返回模块后再导入自己的材料。",
+      "translation": "Click Help within the tool page to check the input requirements and saving procedure, then return to the tool and import your own materials."
+    },
+    "a40538d0ed969bb99ebc33dc15f30dcbe8631b8b28337cbcece8049a6ddd92c5": {
+      "source": "Windows 顶边集中了品牌、标签与窗口按钮，开源与学术致谢在首页内容区右上角。首页与导航按工具分类提供入口。",
+      "translation": "On Windows, the top bar contains the branding, tabs, and window controls. Open-source and academic acknowledgments are at the top right of the home page content. The home page and navigation organize tools by category."
+    },
+    "53a1bdff92b296eac24eb30ae98aacab838fc307f643d96e56f0bd41c2a8bdc1": {
+      "source": "从工具进入帮助",
+      "translation": "Opening help from a tool"
+    },
+    "8e14a2aa11570619ed455ccfdd057eb4a1d3e0c2b14a2d91337131d927ac45a5": {
+      "source": "从首页卡片、左侧导航或“最近使用”打开目标模块。",
+      "translation": "Open a tool from a home page card, the left navigation, or Recently used."
+    },
+    "704ad35609f858b28c916581f9241eb50ab0059cfdcece2756633f32525eeadc": {
+      "source": "在<s id=\"0\">模块页面内</s>点击“帮助”。工作台切换到“使用说明”标签并打开对应章节；生理参数合成的模型页在参数面板操作区提供入口。",
+      "translation": "Click Help <s id=\"0\">within the tool page</s>. The workbench switches to the User manual tab and opens the corresponding chapter. In Physiological Parameter Synthesis, the model page provides help in the parameter panel action area."
+    },
+    "e49e315eb4ce1d91ab91a30ec69ace03053e77445bf99c18b4e65f20699224e7": {
+      "source": "在说明书左侧点章节或小节，正文滚动到目标位置，标题文字短暂变色；目录当前项以底色和文字颜色提示。拖动目录与正文之间的边界可调整宽度，切换标签后保留。也可用“搜索说明书”输入控件名或操作词；窄窗先点“目录与搜索”。",
+      "translation": "Click a chapter or section in the manual sidebar. The text scrolls to its destination and the heading briefly changes color. Background and text colors identify the current contents item. Drag the divider between the contents and text to adjust their widths; this width is retained when switching tabs. You can also enter a control name or operation in Search the manual. In a narrow window, first click Contents and search."
+    },
+    "ebaae2fad7ccbe3f039b4576c20f5d4248b5beed31331c30466080eb0231a5b3": {
+      "source": "若从模块进入说明书，点击阅读区上方的“返回＋模块名”回到工具，也可直接点顶部原模块标签。",
+      "translation": "If you opened the manual from a tool, click Return to followed by the tool name above the reading area, or click the original tool tab at the top."
+    },
+    "4796d9496e1a18efde78e69fa05f18a30de59dfb59b80cf1ab359a214e212655": {
+      "source": "从首页横幅“第一次使用？了解工作台的基本操作”进入本章。左下角“使用说明”在当前模块打开对应章节，在首页打开本章。",
+      "translation": "Open this chapter from the home page banner First time here? Learn the basic workbench operations. User manual at the bottom left opens the relevant chapter for the current tool, or this chapter when you are on the home page."
+    },
+    "08d179d74af08a522a9ef6d9fc0c9a12b58e3fcd82b575ab314540133b0ea5ce": {
+      "source": "各模块都有页内帮助入口。章节加载失败时点重新加载，再试一次。",
+      "translation": "Every tool has a help link within its page. If a chapter fails to load, click Reload to try again."
+    },
+    "c2d29596402589d872b03c88a74bd064aa689047e1dbafd51bb50cfbd54338e8": {
+      "source": "使用说明的目录选中项以颜色提示，正文定位标题不显示框线。目录与正文之间的边界可以左右拖动。",
+      "translation": "The selected contents item is marked by color. The destination heading in the text has no border. You can drag the divider between the contents and text horizontally."
+    },
+    "2d49821896f6b6532f6bb5b8bca9dc6a096e10d8f57eb4f14b6ed6e49314f3be": {
+      "source": "图、音频与表格",
+      "translation": "Figures, audio, and tables"
+    },
+    "9154e548f3fd0605b73f11eeec085043439373acc1e03be19dbbcbb8dcc369a0": {
+      "source": "图片放在对应步骤旁，点击可放大。截图默认浅色，重点位置用局部图或红圈、红框标出。切换阅读主题后，截图仍保留拍摄时的颜色。",
+      "translation": "Figures appear beside the corresponding steps. Click an image to enlarge it. Screenshots use light mode by default; details or red circles and boxes highlight key areas. Screenshots retain their original colors when you change the reading theme."
+    },
+    "b4d1fc48bb7ef4b14404bc2627e139b81c0ed107c437730e9235dc43f64a9509": {
+      "source": "例音只在需要比较原音和实际处理结果时出现，点击播放器才加载。播放另一段会暂停上一段；切换章节或离开说明书会停止播放。录音或采集时先结束采集，再试听例音。部分自然录音只随软件版提供，缺素材时播放器会显示提示。",
+      "translation": "Audio examples appear where comparing the original recording with a processed result is useful. They load only when you use the player. Starting another example pauses the previous one; switching chapters or leaving the manual stops playback. Finish recording or capture before listening to examples. Some natural recordings are included only with the software distribution. A message appears if media are missing."
+    },
+    "42a70c8595cb94d8547e79955802ac1dc1682dfac6f9ec69c4280d7b4c1c4b28": {
+      "source": "工作台的共同操作",
+      "translation": "Shared workbench operations"
+    },
+    "aab71174fd1f9ebb502e4953e3531ca3ecaf1540cab6d139ef8bab72c619ea58": {
+      "source": "首页用于选择工具，左侧导航用于随时切换，顶部标签承载已打开页面。多数模块在页面上方提供文件与任务操作、帮助及“方法与引用”。采用分栏布局的模块通常有独立滚动的输入栏、工作区和任务记录栏。",
+      "translation": "Use Home to choose a tool, the left navigation to switch tools, and the top tabs to revisit open pages. Most tools provide file and task actions, Help, and Methods and references near the top of the page. Tools with a multi-pane layout generally have independently scrolling input, workspace, and task-history panes."
+    },
+    "82fe904fdd5ce8ce4428edd73572aae7a9eead157ad49e32ecf9332e4ab54f14": {
+      "source": "打开、切换与关闭标签",
+      "translation": "Opening, switching, and closing tabs"
+    },
+    "c363436e3b0bb19dfb34ab1f81438520a4d1a6ecbb9f6cf1b952d129c793c731": {
+      "source": "点击工具名称打开模块；再次点击同一工具会切换到已有标签。顶部“首页”“设置”“使用说明”和模块标签可直接切换。切换时正在播放的声音会停止。",
+      "translation": "Click a tool name to open it. Clicking the same tool again switches to its existing tab. You can switch directly between Home, Settings, User manual, and tool tabs at the top. Switching tabs stops any audio that is playing."
+    },
+    "3d85930fdc9099cee6ea43edb654e50cb0b1f7db7028ebafad28ccac858f7389": {
+      "source": "编辑后留意标签名旁的圆点，它表示当前页有未保存内容。要长期保留时，先按该页的保存或导出按钮，确认保存对象。",
+      "translation": "After editing, look for a dot beside the tab name. It indicates unsaved content on that page. To keep the work, use the page’s Save or Export action and check what is being saved."
+    },
+    "8dbc4d6dbf447982c987d7ea0080b522802615ce2e801bffadda91c367978797": {
+      "source": "点击标签关闭按钮；如果有未保存编辑，按对话框选择保存、放弃或取消。取消会保留页面，保存失败也会留在页面并提示原因。录音、TextGrid、感知实验及未生成的绘图笔迹有特殊关闭保护，以当前提示为准。",
+      "translation": "Click the tab’s close button. If there are unsaved edits, choose Save, Discard, or Cancel in the dialog. Cancel keeps the page open. If saving fails, the page also stays open and explains why. Recording, TextGrid, perception experiments, and drawing strokes that have not yet been generated have additional close protection. Follow the current prompt."
+    },
+    "6e2e22a61f25780c08ce7a94624d54eef8fb5dce16e24f7a2d5bad9e06776bb0": {
+      "source": "重开模块后可查看草稿与已提交任务的处理记录。尚未导出的内部结果受缓存保留期限约束，需要长期保留时及时导出。",
+      "translation": "When you reopen a tool, you can review drafts and records of submitted tasks. Internal results that have not been exported are subject to cache retention limits. Export them promptly if you need to keep them."
+    },
+    "823f2ad7e0767d60f36fa23c9c06e28b9943a115a9c5c50040626d419e84a869": {
+      "source": "调整布局",
+      "translation": "Adjusting the layout"
+    },
+    "7c00ef487e180d1595451f9245092e41cebd6d4e5c04966398e752bc8e9a9281": {
+      "source": "点击左侧搜索框旁的“收起侧栏”，可给工作区让出空间；再次点击“展开侧栏”恢复。工具导航与主区之间的分界线也可拖动，使用说明目录和语音学论文精读的论文库同样支持，各自保存宽度。",
+      "translation": "Click Collapse sidebar beside the search box on the left to give the workspace more room; click Expand sidebar to restore it. You can also drag the divider between tool navigation and the main area. The manual contents and the paper library in Phonetics Paper Reader support the same adjustment and save their widths separately."
+    },
+    "4676a926937dab416e1a5231157ba3917d2ec71a7344802be4f3ddc0eaf78eb6": {
+      "source": "在采用分栏布局的模块，拖动文件栏或记录栏与中央工作区的分界线调整宽度。若右栏有收起按钮，可暂时收起该模块的记录栏。",
+      "translation": "In tools with a multi-pane layout, drag the divider between the file or history pane and the central workspace to adjust widths. If the right pane has a collapse button, use it to hide that tool’s history pane temporarily."
+    },
+    "04872a045265808a37c2f383712f4dcacfff1a91aeae0ac86b4c568a1236e3bc": {
+      "source": "窗口较窄时在所在内容栏滚动，必要时扩大窗口或收起侧栏。栏宽偏好会记忆；可拖范围和折叠方式依模块而异。",
+      "translation": "In a narrow window, scroll within the relevant pane. Enlarge the window or collapse the sidebar if needed. Pane widths are remembered. The available drag range and collapse behavior vary by tool."
+    },
+    "f57a3f0e5dac84cf378af64777a39a19372b8f3a854a6eb0526de0a29c2e9b21": {
+      "source": "选区、时间窗与试听",
+      "translation": "Selections, time windows, and playback"
+    },
+    "4a52fcb74ca699c20f5441885bb226f819b8cca9e1a4c2e01ed006a8b786b2be": {
+      "source": "时间窗决定图上看到哪段，选区决定本次试听或处理哪段。拖选后核对起止时间，再看按钮写的是播放选区、当前视野，还是整段。",
+      "translation": "The time window determines which portion of a plot is visible. The selection determines which portion is played or processed. After dragging a selection, check its start and end times, then check whether the button plays the selection, current view, or entire recording."
+    },
+    "c5bc9de88a86378a37cf88e92dfc4e758a62465f68ea28c352ace4ab64dcec07": {
+      "source": "加载音频后先确认文件、时长和声道。在支持选区的波形上拖动选择片段；有起止时间输入时可用数值精确设定。",
+      "translation": "After loading audio, check the file, duration, and channel. Drag on a waveform that supports selection to choose a segment. Where start and end fields are available, enter exact times."
+    },
+    "2ba39e6d81d75f1bc30a7fbc03dd7975ce15e937e8f91706ba94bb95bccf8aff": {
+      "source": "按该页的缩放、平移或适合窗口控件查看细节。不同图窗手势不完全相同，合成曲线与 EGG 图以各自章节说明为准。",
+      "translation": "Use the page’s zoom, pan, or fit-to-window controls to examine details. Gestures vary between plots. See the respective chapters for synthesis curves and EGG plots."
+    },
+    "cd3460427af462a62931047b6bedfd82c95d1c118c08c9c008e8a0fa34131c2e": {
+      "source": "点击播放或停止按钮核对声音。换文件或标签会停止旧声音。按钮被禁用时先检查输入是否载入、任务是否仍在运行、选区是否有效。",
+      "translation": "Use Play and Stop to check the sound. Changing files or tabs stops the previous audio. If a button is disabled, first check whether the input has loaded, whether a task is still running, and whether the selection is valid."
+    },
+    "346f63dd58e7b4b53401ac6affb541ac56f8b2364590290a9d71776d4cde6169": {
+      "source": "主题、字号与字体",
+      "translation": "Themes, text size, and fonts"
+    },
+    "e0b7af25cde07ce6dc5404ebcf6b678353f4203c7da595496b2928bedf5de578": {
+      "source": "使用“页面缩放”的加减按钮以 10% 步长调整整个界面，或点“恢复 100%”。“按钮高亮”改变按钮外观，“波形线颜色”影响支持该偏好的波形。 外观页也可上传全局背景图并调整高斯模糊与不透明度，用色盘、吸管或 HEX 代码设定自定义色系。上传背景图后自动启用磨砂玻璃按钮，玻璃不透明度和模糊强度可分别调整。",
+      "translation": "Use the plus and minus buttons under Page zoom to adjust the entire interface in 10% steps, or click Restore 100%. Button highlight changes button appearance. Waveform line color affects waveforms that support this preference. On the Appearance page you can also upload a global background image and adjust Gaussian blur and opacity, or define custom colors using the palette, eyedropper, or HEX codes. Uploading a background image automatically enables frosted-glass buttons. Their opacity and blur can be adjusted separately."
+    },
+    "06d3e0139f491564830dfd119fd75dc9538f93d7579ae9a594c3153783ae9514": {
+      "source": "点击设置页顶部“字体”，设置“中文字体”“英文与数字字体”“代码与等宽字体”“正文基础字号（px）”。看预览后点“应用字体”；所有 IPA 音标固定使用 Doulos SIL。图表与导出可跟随全局字体或单独设置。分类切换保留未应用的字体编辑。",
+      "translation": "Click Fonts at the top of Settings to set Chinese font, English and number font, Code and monospace font, and Base body size (px). Check the preview and click Apply fonts. All IPA symbols always use Doulos SIL. Charts and exports can follow the global fonts or use separate settings. Switching settings categories retains unapplied font edits."
+    },
+    "6dd0459f891c45a2fb808c287a8515b8cb580d348364208359f8bc270c00a116": {
+      "source": "返回模块检查表单与图窗。主题、页面缩放即时保存；字体要点击“应用字体”才生效。关闭设置时若有字体编辑，可应用、放弃或取消关闭。",
+      "translation": "Return to a tool and check its forms and plots. Theme and page-zoom changes are saved immediately. Font changes take effect only after you click Apply fonts. If there are font edits when you close Settings, you can apply them, discard them, or cancel closing."
+    },
+    "8e07fe4bf79e9c3248f8116558cfc1d46174abc6226075c5858cbaf6bd0da3de": {
+      "source": "显示模式切换浅色和深色；页面缩放调整整个界面，恢复 100% 可回到默认比例。",
+      "translation": "Display mode switches between light and dark appearances. Page zoom scales the entire interface; Restore 100% returns to the default scale."
+    },
+    "7ed06a612393f2dcb510b30367f3a913c5d25aa4d5c0e84ae2f0c4cefb6c013a": {
+      "source": "选择正确的工具",
+      "translation": "Choosing the right tool"
+    },
+    "fe62808ce490c4c366af6d0234935973ccfa2922fd84ff1de36c3deeb5e89f3e": {
+      "source": "首页按用途组织工具。想计算参数，从“参数估计”开始；已有参数表需要对照显示时，进入“参数显示”。下表按研究目标列出入口，进入后阅读对应章节的准备条件。",
+      "translation": "The home page organizes tools by purpose. Start with Parameter Estimation to calculate parameters, or Parameter Display to compare an existing parameter table in plots. The table below lists tools by research goal. Read the preparation requirements in the relevant chapter before starting."
+    },
+    "4e67e308111dd75e20c2a7fba7522c9378c3ae20473efe26c2468e8f9f302eff": {
+      "source": "从研究目标选择工具",
+      "translation": "Choosing a tool for your research goal"
+    },
+    "306db2349a38703a209b78aac2c67b9670639a0d3074b1a25d7930602e7f1566": {
+      "source": "研究目标",
+      "translation": "Research goal"
+    },
+    "e7bfaddd410ba54588f2b564f3dc9d7f36700a26d0327a69c3a14b09dc297340": {
+      "source": "建议模块",
+      "translation": "Suggested tool"
+    },
+    "402026e62f0ee2a1904d96bf5605418a147214ed9124aa42574b089bc966f986": {
+      "source": "继续阅读",
+      "translation": "Read next"
+    },
+    "0dd1246f6b276db731d7938369abbd555cde20f81cee2fbdad38fd428166f224": {
+      "source": "录制并整理语料",
+      "translation": "Record and organize speech materials"
+    },
+    "1965b11ef6079750fde8d8cc64b92d624d56c982877c1bf417fab05845e59ded": {
+      "source": "录音",
+      "translation": "Recording"
+    },
+    "26c8a3b93f8781c9304ec833d77b6b47c3f9f95521ab599eccd9b68dc725c02e": {
+      "source": "输入设备、任务清单、工程与导出",
+      "translation": "Input devices, task lists, projects, and export"
+    },
+    "1a5090c1f0638c91779e4fd72cf66276c6239528cd24c218de2b7ba9fd066678": {
+      "source": "从音视频提取唇形",
+      "translation": "Extract lip movements from audio and video"
+    },
+    "42da9f2e1662e0c711670dbefd88e9d1b5775d044a16e9aa58e55ae6b3cbab29": {
+      "source": "唇形提取",
+      "translation": "Lip tracking"
+    },
+    "771bb9345a702e8c9b4c3ccd7fb862750210c51eb6afd3ecd58ee8689948713c": {
+      "source": "视频导入、录制与同步偏移",
+      "translation": "Video import, recording, and synchronization offsets"
+    },
+    "804e3ea122ce6e0ab5dfd92775ae52c2ed359e3f79397911515cb9d8501d8fb0": {
+      "source": "计算声学参数与EGG联合结果",
+      "translation": "Calculate acoustic parameters and joint EGG results"
+    },
+    "f731808cfe4c49a46e2f53721857ee2b7830d3f6a07731772dbef67dc2077a27": {
+      "source": "参数估计",
+      "translation": "Parameter estimation"
+    },
+    "2dfd361d909877ffd6e87925136f8dbbb2e173648733915fbe0d3ec1ce05a8da": {
+      "source": "文件、分析设置、联合 EGG 与批次",
+      "translation": "Files, analysis settings, joint EGG analysis, and batches"
+    },
+    "2f95e363728d6cb468399ba3325f4cf7d55680efb262a5c55cb96836ed1ec8ac": {
+      "source": "查看已有参数并排作图",
+      "translation": "Plot and compare existing parameters"
+    },
+    "0be25deeedd7044e96947c89791b35f8f5f8d89e726521eaa8f366d077888bcd": {
+      "source": "参数显示",
+      "translation": "Parameter display"
+    },
+    "194a391a2f8abef313289fd6a89f4b25b92b617d8fac6732c62480342655f1d0": {
+      "source": "曲线分配、时间轴与导图",
+      "translation": "Curve assignment, time axes, and figure export"
+    },
+    "0bcd4db76b029d7f2d939e221f5045e07336bbcd487a0bb840516927e57463d4": {
+      "source": "观察EGG周期、CQ/SQ和事件",
+      "translation": "Inspect EGG cycles, CQ/SQ, and events"
+    },
+    "cbab62b3a710899b903d83a886254c0d723e9c31fa1e38f7d376d9b21313b3e5": {
+      "source": "EGG信号分析",
+      "translation": "EGG Signal Analysis"
+    },
+    "f29465acb3bdc429711cf35ee294d0adcb5edd76b335c92b0dc2c7705d56c56a": {
+      "source": "声道角色、四图、批次与逆滤波",
+      "translation": "Channel roles, four plots, batches, and inverse filtering"
+    },
+    "e3aca7390e5254ad4f42dfca701924b98595619ab1add3bb05cd1e82bfb013f0": {
+      "source": "短时谱包络分析",
+      "translation": "Analyze short-time spectral envelopes"
+    },
+    "b87f2f98732c872971e1a7050f583f0904e92c46c5bacd94c02a0f4aafd1be9e": {
+      "source": "LPC谱图",
+      "translation": "LPC Spectrum"
+    },
+    "a11da9d09a1a3c937db2e62f0bd7cb02b41b3b7e85807227c8b39544d98990a4": {
+      "source": "选区、阶数与导出",
+      "translation": "Selections, LPC order, and export"
+    },
+    "cb09b561bff939d67a0c2ed1ec996ce9f73dfbb249d698e86f784809eded7332": {
+      "source": "编辑声学参数合成音频",
+      "translation": "Synthesize audio by editing acoustic parameters"
+    },
+    "01b63b905c6970d1cc6f39724f926804b587da7ccc131740d2f542b13e1434db": {
+      "source": "声学参数合成",
+      "translation": "Acoustic synthesis"
+    },
+    "256c6a974898213a7ab127d5b27d138ccdd55066c055183c2d6237520538100f": {
+      "source": "Klatt参数曲线、元音及参数提取",
+      "translation": "Klatt parameter curves, vowels, and parameter extraction"
+    },
+    "40705da95862d2a3fdc960a4585ac758c9b8ec2039ef600c685a172a6a130494": {
+      "source": "调整生理构形并试听",
+      "translation": "Adjust physiological configurations and listen to the result"
+    },
+    "de46fbb44baac6d68054312af988ea46bf1252fb79a63509e6925c9c0eb35a62": {
+      "source": "生理参数合成",
+      "translation": "Articulatory synthesis"
+    },
+    "fa9930a2b6c44c06f5a1d359c884bfaa0eeb7f6b4ad4fecf0cb688013560ee09": {
+      "source": "构形、声源、关键帧与同步视频导出",
+      "translation": "Configuration, voice source, keyframes, and synchronized video export"
+    },
+    "c326a4620f5e785bccb99334e979069252e2ac5d8264df16aa330e2b000b13b8": {
+      "source": "构造发声连续统",
+      "translation": "Create a phonation continuum"
+    },
+    "a832a7b027faceeecb7a7adf24aceeaf9a5d64e9feb1a0421b8c86d06449e16f": {
+      "source": "发声类型合成",
+      "translation": "Phonation synthesis"
+    },
+    "e3767d29f492e75edd2939f5057ba38a3c38d5caa484110b2c483053e6b8ce0c": {
+      "source": "源/目标、处理步数与逐版本试听",
+      "translation": "Source and target, processing steps, and auditioning each version"
+    },
+    "89b23ab61e35ff23f9a7222311282a4c2ad5c7c87bb89c0bedec0ab616180370": {
+      "source": "操控时长和音高",
+      "translation": "Manipulate duration and pitch"
+    },
+    "cfef8c909796e1ef77258174abc61684de495728014999f86b0e320d735ccc50": {
+      "source": "变速变调",
+      "translation": "Time and pitch manipulation"
+    },
+    "76730c955c5dd7c0eb9e85f497666492f482db5072359224cc6a2b398adb5056": {
+      "source": "手绘F0、拐点连接与批量处理",
+      "translation": "Freehand F0, breakpoint connections, and batch processing"
+    },
+    "6d0d3492f14ee8055a6bfe5ec21387877db0fc795db5037c594a5968abeef06a": {
+      "source": "从语谱图或绘制频谱生成声音",
+      "translation": "Generate sound from a spectrogram or a drawn spectrum"
+    },
+    "c8365288ee5d96d2d2727e27e6ce98196b20c661ef453e376ab22d3eb293c163": {
+      "source": "语谱图转音频",
+      "translation": "Spectrogram to audio"
+    },
+    "167e0d844ed56a9f6e99b3ba5582aedfa2a3fa2607ca294da136f036c964d394": {
+      "source": "标定、原相位编辑与图片重建",
+      "translation": "Calibration, editing with original phase, and image reconstruction"
+    },
+    "51a68b57ffbc007bd34fca7e9fbdb88ebf495f36f6b7463238aadc8574a9907d": {
+      "source": "输入和认识音标",
+      "translation": "Enter and explore phonetic symbols"
+    },
+    "4189afbddc3b5aec7bfe8122f9c6a6e38db621dcda93a463cb510e3f98aefc56": {
+      "source": "国际音标表Plus",
+      "translation": "IPA Chart Plus"
+    },
+    "d9a5df2de77d745954288a195393d5f931c7056ee67803e2906a9221709551e9": {
+      "source": "IPA/extIPA/VoQS及文本导出",
+      "translation": "IPA/extIPA/VoQS and text export"
+    },
+    "06f77bc961adee4a2e05d71ff9bb68ed3e7b42152c0af5eb9bd4c78dcb397abe": {
+      "source": "汉字转写音标",
+      "translation": "Transcribe Chinese characters in phonetic symbols"
+    },
+    "1553895b21b3441f034cda1914cd77ff4db039beb78f55b3cfa88bf83041abcd": {
+      "source": "汉字转国际音标",
+      "translation": "Chinese Characters to IPA"
+    },
+    "c1c3eb85517c0df787f616cd15c0c260009cd37db1d06543c9c61159d739a483": {
+      "source": "逐字读音、标准、布局与图片",
+      "translation": "Character readings, standards, layout, and images"
+    },
+    "6ac423e22d3ef0fb54ee0c01c141dcf3353c7dfde76a353d8a545928e074d18f": {
+      "source": "已有文本自动对齐音频",
+      "translation": "Align existing text automatically with audio"
+    },
+    "850f15bbcb9abf702e85a10c82a2e0ca3fc0cdc0baa8d5aa7df4733d99e61fbc": {
+      "source": "MFA自动标注",
+      "translation": "MFA Forced Alignment"
+    },
+    "0069c44c2a4634e979c2c88518f628bf04320363ad914567ee40b98bdd85f9a6": {
+      "source": "模型词典、检查与TextGrid输出",
+      "translation": "Models and dictionaries, validation, and TextGrid output"
+    },
+    "fb4aa00dc02b8b9f65af52600e9d0b8b58478f05541a5518420b33504ff9f034": {
+      "source": "编辑标注与同步唇形",
+      "translation": "Edit annotations and synchronize lip movements"
+    },
+    "abcefc328bea35c8e1d0a776245e171b44108fe92dc5e42eb4623fe032d1e968": {
+      "source": "TextGrid标注",
+      "translation": "TextGrid Annotation"
+    },
+    "553ab9f6b15ba8791a9a3346315e6f3236396ec119532613f4cd5d49d9d85cf3": {
+      "source": "层、区间、边界和偏移",
+      "translation": "Tiers, intervals, boundaries, and offsets"
+    },
+    "3dfe52d3c2b394129ca5e6b69634eefe0ba11f842efa54afbcf10743b4d05d68": {
+      "source": "整理音系及合并分析",
+      "translation": "Organize a phonological system and merge analyses"
+    },
+    "6b0e7c0b1fd5bf267b9f8c466df356450d3db71fc4fb15de81847c74c155c264": {
+      "source": "音系归纳",
+      "translation": "Phonological Analysis"
+    },
+    "7e9274de7732a289541a416c4171ff8c0fc0cd0fdd201f8172c2309784b7f28e": {
+      "source": "字表、归并和三文件导出",
+      "translation": "Word lists, merging, and three-file export"
+    },
+    "af2d3054c651748bdec65f2f89a69a68748199e568094f9e124c8cd0d2458547": {
+      "source": "运行听辨与反应实验",
+      "translation": "Run listening and response experiments"
+    },
+    "22c6cb7b1499ce3549f3fff95855136000e5861a1c5544783ea0d87245374db2": {
+      "source": "感知实验",
+      "translation": "Perception Experiments"
+    },
+    "993d9ede51eaec1a775efaf0c43ec03e8f53f9a74a6da88b00873383a6ff1f57": {
+      "source": "刺激、预检、被试流程与结果导出",
+      "translation": "Stimuli, preflight checks, participant workflow, and result export"
+    },
+    "8dbca0d46e16af1800dab2a433a3d5573b4d73e2dcce7250dd2bde4c20237a95": {
+      "source": "操作前查阅对应章节，确认输入材料、参数设置和保存方式。",
+      "translation": "Before using a tool, read its chapter to check input materials, parameter settings, and how to save your work."
+    },
+    "69667a1b49c6c0e09ed9db5bb7df2591993bc506ede494729f26bb70c30b0324": {
+      "source": "文件、保存与研究复现",
+      "translation": "Files, saving, and reproducible research"
+    },
+    "faf0ad7ca9820c8991c65893d29420522f819e8cca26a93182a8c8a29717d421": {
+      "source": "文件进入模块、任务生成内部结果、显式导出正式文件，是三个不同步骤。开始前准备输入副本和可写结果位置，核对模块接受的格式和声道；计算后检查处理记录与导出提示。",
+      "translation": "Importing a file into a tool, generating internal task results, and explicitly exporting final files are three separate steps. Before starting, prepare input copies and a writable output location. Check accepted formats and channels, then inspect the processing records and export messages after computation."
+    },
+    "92fd3ed2046fca0dcd9c32d8abd610d44142f0046020801fb8eb2b600bbd2e00": {
+      "source": "桌面文件与网页项目",
+      "translation": "Desktop files and web projects"
+    },
+    "a312a88e15f29a5dfd9785c33a0000bd30c03befab5af096cf257b76ba637c34": {
+      "source": "在桌面版按模块显示的“打开音频目录”“导入音频”“选择图片目录”等按钮选输入，核对文件列表、时长或预览后再提交计算。",
+      "translation": "In the desktop app, select inputs using the actions available in each tool, such as Open audio folder, Import audio, or Select image folder. Check the file list, durations, or previews before submitting a task."
+    },
+    "728fa9497b8f6cf9402ec65697910ed8cd5531a843785fc31c6b7848dfb03728": {
+      "source": "若模块有“输出位置”或“选择结果目录”，提交任务前检查位置和文件名规则。按钮不可用时，先完成文件载入、预检或参数填写。",
+      "translation": "If a tool provides Output location or Select results folder, check the location and filename rules before submitting a task. If an action is disabled, finish loading files, running preflight checks, or entering parameters first."
+    },
+    "3b9b9737024e3059aadf7f9775c945886a783d5d0ac05a1b8b9c9a7b63c7ba35": {
+      "source": "浏览器项目按当前账号的项目资源与权限工作，文件入口和原生能力可能不同。以网页当前显示的“添加文件”“导入”等按钮及该模块网页说明为准。",
+      "translation": "Browser projects use the current account’s project resources and permissions. File actions and native capabilities may differ. Follow the Add files or Import actions shown on the web page and the web instructions for that tool."
+    },
+    "89b8469f3bddcd60905377d8bd9a5ac056c0a3186482ac567bb7f61e79fe385f": {
+      "source": "草稿、任务结果和导出文件",
+      "translation": "Drafts, task results, and exported files"
+    },
+    "85b62e7121c86cbaab4d8a96c6ccaaaaf606102974ac90d13e8d6fd75e73dd32": {
+      "source": "“保存草稿”保存该模块声明的编辑状态；“处理记录”保存已提交任务的状态和内部结果；“保存结果”或“导出”才产生应在目标目录核对的正式研究文件。音频与标注原文件的覆盖规则依模块而异。",
+      "translation": "Save draft saves the editing state supported by the tool. Processing history records submitted tasks and internal results. Save results or Export creates final research files that you should verify in the destination folder. Rules for overwriting original audio and annotation files vary by tool."
+    },
+    "976734074c637963c8ecb8c329012c28855cf240d97ece1f2ad27ec24fd218a3": {
+      "source": "任务前记下输入、算法、参数与输出位置。草稿保存不会自动生成音频、图片或表格。",
+      "translation": "Before submitting a task, record its inputs, algorithm, parameters, and output location. Saving a draft does not automatically generate audio, images, or tables."
+    },
+    "6ca637c443cb0b8f760b0956ced9d336171ac06c91a000daa5049e40dd794502": {
+      "source": "任务结束后在“处理记录”“历史”等对应区域核对状态、参数快照与结果。失败时保留错误文字，修正输入后按模块说明重试。",
+      "translation": "When a task finishes, check its status, parameter snapshot, and results under Processing history, History, or the equivalent area. If it fails, keep the error message, correct the input, and retry as described in the tool’s chapter."
+    },
+    "6bbf06a971f2e7ac8bbcd96ab8af57af8366f856ee61d39207e57d0b8a4539b9": {
+      "source": "需要长期保留时显式导出并在目标目录检查文件名、格式和内容。比较研究批次时保留源录音、TextGrid、模型或词典标识、实际设置与软件版本。",
+      "translation": "To keep results long term, explicitly export them and check their filenames, formats, and contents in the destination folder. When comparing research batches, retain the source recordings, TextGrid files, model or dictionary identifiers, actual settings, and software version."
+    },
+    "88358a5e2ac092f5f65eb776556e59015686546d855e04ecfa1e6e47f5c1c167": {
+      "source": "方法、引用与问题处理",
+      "translation": "Methods, references, and troubleshooting"
+    },
+    "e543bda06a5caf74bc37a7a03f78e0d65f806a042ac04c2e44d69833567d5716": {
+      "source": "模块操作栏的“方法与引用”列出论文、实现和依赖来源。学术文献按 GB/T 7714—2015 整理，点击“复制引用”可复制完整书目信息，多份资料保留各自引用与换行。方法出处、代码来源与软件许可分别列示。研究中应结合自己的语料评估结果准确率、自然度及设备时延。",
+      "translation": "Methods and references in a tool’s action bar lists papers, implementations, and dependency sources. Academic references follow GB/T 7714—2015. Click Copy citation to copy the complete bibliographic information. Multiple references retain their individual citations and line breaks. Method references, code sources, and software licenses are listed separately. Evaluate accuracy, naturalness, and device latency with your own research materials."
+    },
+    "5267abe9ad177f96b38ae8724906bf81ea886de6cc14f011596d8f415dce7e4f": {
+      "source": "出现问题时记下模块名、输入类型、点击按钮、参数和原样错误提示。",
+      "translation": "If a problem occurs, record the tool name, input type, button clicked, parameters, and the exact error message."
+    },
+    "a37af092343f7c28da199752a5049c527bf26385fba05f656ed150d3e23b3809": {
+      "source": "检查文件能否预览、所需模型或设备是否可用、输出位置是否可写，再按模块章节的恢复步骤操作。",
+      "translation": "Check that the files can be previewed, required models or devices are available, and the output location is writable. Then follow the recovery steps in the tool’s chapter."
+    },
+    "bd0bf31a3d4518246fbc86cdb772bc00aaa543869ebf1e5a957dfef57e79bc96": {
+      "source": "如果已产生部分结果，先查看处理记录与导出文件，再决定是否重试。录音、唇形与感知实验的中断恢复以各自章节为准。",
+      "translation": "If some results already exist, inspect the processing history and exported files before deciding whether to retry. Follow the respective chapters for recovery after interruptions to recording, lip capture, and perception experiments."
+    },
+    "ae693c262d3a2150a33de9741f08ae079c7835f9c15253c970e23a730bd91752": {
+      "source": "安装、更新与设置保留",
+      "translation": "Installation, updates, and retained settings"
+    },
+    "0e0bac0c90d0ccb4b8e980918073387642ae7a9d1ee300198bfc712af529fec4": {
+      "source": "Windows 免安装版 <s id=\"0\">PhoneticToolbox-windows-x64.exe</s> 是单个可双击启动的应用。安装版将同一应用安装到当前用户目录，通常不需要管理员权限。请从官网下载当前版本的免安装版或安装版，文件名中的版本号以下载页为准。安装完成后，从开始菜单打开 PhoneticToolbox；若选择创建桌面快捷方式，也可从桌面打开。单文件首次启动需展开并校验运行文件，请等待首页出现。macOS 测试版下载后，将应用拖入“应用程序”，首次打开按官网对应安装说明操作。MFA 独立环境、声学模型和词典需按 MFA 自动标注章节另行准备。",
+      "translation": "The Windows portable app <s id=\"0\">PhoneticToolbox-windows-x64.exe</s> is a single file that you can launch by double-clicking. The installer places the same app in the current user’s directory and normally does not require administrator rights. Download the current portable app or installer from the official website; use the version number shown on the download page. After installation, open PhoneticToolbox from the Start menu, or from the desktop if you chose to create a shortcut. On first launch, the single-file app must unpack and verify its runtime files. Wait for the home page. For the macOS preview, drag the downloaded app into Applications and follow the installation instructions on the official website for its first launch. Prepare the separate MFA environment, acoustic models, and dictionaries as described in the MFA Forced Alignment chapter."
+    },
+    "33882dedaf0596a1303473856211af7dd361e8a0c14f8652b650dcbb43522d65": {
+      "source": "免安装版首次启动时选择缓存位置，在所选位置创建 PhoneticToolbox-cache 文件夹；替换 EXE 更新后沿用，可在设置中查看路径并打开目录。设置和研究资料与缓存分开保存。两种程序包的任务与研究资料位于 <s id=\"0\">%LOCALAPPDATA%\\PhoneticToolbox\\v3</s>，界面设置与本机草稿位于 <s id=\"1\">%LOCALAPPDATA%\\PhoneticToolbox-v3\\workbench</s>。换版前先保存、导出工作，重新打开后核对设置、草稿、工程和结果。",
+      "translation": "On the first launch of the portable app, choose a cache location. A PhoneticToolbox-cache folder is created there and reused after you update by replacing the EXE. You can view the path and open the folder in Settings. Settings and research materials are stored separately from the cache. Both package types store tasks and research materials in <s id=\"0\">%LOCALAPPDATA%\\PhoneticToolbox\\v3</s>, and interface settings and local drafts in <s id=\"1\">%LOCALAPPDATA%\\PhoneticToolbox-v3\\workbench</s>. Save and export your work before updating, then check settings, drafts, projects, and results after reopening."
+    },
+    "9b71e558a69449db635051ca6e76a4c998eea75a07dd5f1aa60f8d1607bdfd8a": {
+      "source": "在桌面版检查更新",
+      "translation": "Checking for updates in the desktop app"
+    },
+    "b167bae3f973c54e356e0701d38a69fba1ac071a2b78764acaf5582bc07351f7": {
+      "source": "点击左下角“检查更新”。需要时设置“下载来源”（自动选择、国内服务器、GitHub）、“版本通道”（Preview 或稳定版）和“启动时检查更新”。网页端会提示在线更新仅在桌面版提供。",
+      "translation": "Click Check for updates at the bottom left. If needed, choose a Download source (Automatic, Domestic server, or GitHub), a Release channel (Preview or Stable), and whether to Check for updates at startup. The web app explains that online updating is available only in the desktop app."
+    },
+    "8648695170eaba483597b0f8261af92ccd7dc3e0993435042b5fd92431191866": {
+      "source": "点击面板的“检查更新”，阅读当前版本、两个来源的状态和候选版本说明。若显示无可用发布或来源错误，稍后重试。",
+      "translation": "Click Check for updates in the panel and read the current version, the status of both sources, and the release notes for the candidate version. If no release is available or a source error appears, try again later."
+    },
+    "43725959aa465d46e73b58fd0c664c390576cb402b37eda06c8af46c06a035df": {
+      "source": "只有出现适用于当前包类型的新版本时，才点击“下载更新”并确认。等待大小与 SHA-256 校验完成；下载失败可在网络恢复后重试。",
+      "translation": "Click Download update and confirm only when a new version for your package type is available. Wait for size and SHA-256 verification to finish. If the download fails, retry after the network connection recovers."
+    },
+    "cf268f48fd0bdee7b3c9ca5c568676e6bda9ef71849588478029bf09d992304a": {
+      "source": "仅在界面显示“退出并更新”时，先停止录音或实验、保存草稿并导出重要结果，再确认退出。若要求处理未保存标签，完成保存或取消换版。重新打开后核对版本、设置、项目和结果。",
+      "translation": "When Exit and update appears, stop recording or experiments, save drafts, and export important results before confirming exit. If prompted about unsaved tabs, finish saving or cancel the update. After reopening, check the version, settings, projects, and results."
+    },
+    "2509f70d5be56f11965810b48dc5f38c63afbcf420f463ac6f593d704648c73e": {
+      "source": "处理结果保留期限",
+      "translation": "Processing-result retention"
+    },
+    "2cef08d3410ba79206f0829f2dffbe7047b97e92d94932b9571df1c4f77ee214": {
+      "source": "点击“设置”，再点顶部“本机存储与自动清理”，查看处理结果缓存的大小和数量。",
+      "translation": "Open Settings, then Local storage and automatic cleanup at the top, to view the size and number of cached processing results."
+    },
+    "2b870328b915cfd4baae6ea377a4d07b0978babda758b70b1b27f8ef9cb04393": {
+      "source": "按需关闭“自动清理过期的处理结果缓存”，或调整“未导出结果保留”“已导出副本的缓存保留”；两项都填写 1–3650 天整数。",
+      "translation": "If needed, disable Automatically clean expired processing-result caches, or adjust Retain unexported results and Cache retention for exported copies. Both settings accept whole numbers from 1–3650 days."
+    },
+    "6607df959b3287bb2d269e1a627fb6eb2e3c88655cac2334f53f5888065e2b82": {
+      "source": "点击“保存清理设置”并确认成功提示。用“刷新占用”查看最新用量；如需立刻执行到期缓存清理，可点“清理已到期缓存”并阅读结果。",
+      "translation": "Click Save cleanup settings and check the success message. Use Refresh usage to see current storage usage. To clean expired caches immediately, click Clean expired caches and read the result."
+    },
+    "dd0a2d21a6ed6586d4cf8aea0572b025c1a429cdc087b2ae4058ff72be82fa3f": {
+      "source": "长期成果应先在模块中显式导出并检查正式文件。原始输入、正式导出、录音工程、感知实验项目和 TextGrid 标注不属于自动结果缓存清理。",
+      "translation": "For long-term work, explicitly export results from the tool and check the final files. Original inputs, final exports, recording projects, perception experiment projects, and TextGrid annotations are outside automatic result-cache cleanup."
+    },
+    "8a77535c2c69d651a5dc63af576c9b3543bf67746fb20fbff56464c28e228a9f": {
+      "source": "查看清理设置与更新选项",
+      "translation": "View cleanup settings and update options"
+    },
+    "dc65bf25316aad1b6be0e8878cb9bb4c27887852a1c1a77bb2d48fb3a9950dd6": {
+      "source": "查看公告",
+      "translation": "Viewing announcements"
+    },
+    "ebd8c4e590fdbc3514e9beaf9c04c4df94562ff5cb2f99da0e68948762f95def": {
+      "source": "点击侧栏底部的公告，可以查看工具箱的新消息。同一条公告在当前设备只自动提醒一次，关闭后仍可从这里重新查看。自动提示会避开录音、感知实验和其他对话框。",
+      "translation": "Click Announcements at the bottom of the sidebar to see news about the toolbox. Each announcement automatically appears only once on the current device. You can reopen it here after dismissing it. Automatic announcements wait until recording, perception experiments, and other dialogs are no longer active."
+    },
+    "ea8f451fa7a8e0a4899d4b6dd21d8a9b0d618fe5faae6cb5b9f4f3f52a40645e": {
+      "source": "从3.1.0起，应用支持独立公告。后续通知会在联网打开工作台时读取，无需为每条通知重新安装软件。带有官网下载入口的公告，可以点击前往官网查看下载与安装说明。",
+      "translation": "The app supports independent announcements from version 3.1.0. Later notices are retrieved when you open the workbench online, without reinstalling the software for each notice. If an announcement includes a link to the official download page, follow it for download and installation instructions."
+    },
+    "64d0bfe32ddaab6b01e3c113eff8caa5532f9a6030acfece0801385acd706b50": {
+      "source": "桌面版“设置”中的“本机存储与自动清理”默认清理超过 3 天的未导出处理结果缓存；已导出的应用内部副本默认保留 1 天。期限按生成、最近读取或成功导出等可用记录计算；旧结果缺可靠时间时从首次登记开始。活动任务及依赖项会保留，唇形录制结果有额外保护。",
+      "translation": "Under Local storage and automatic cleanup in the desktop Settings, unexported processing-result caches older than 3 days are cleaned by default. Internal copies of exported results are retained for 1 day by default. Retention uses available records such as creation, most recent access, or successful export times. For older results without reliable timestamps, the period begins at first registration. Active tasks and their dependencies are retained, and lip-capture results have additional protection."
+    },
+    "b2fd83e9d95a34f6854d0d73a7f77591a3970b156b182209c2c59b014d63121f": {
+      "source": "点击左下角“设置”，再点顶部“外观”。设置页顶部按“语言”“外观”“字体”“图标”“音频”“本机存储与自动清理”分为六类，宽窗口分左右栏。默认配色是 Absolutely，已有配色选择保留。在“图标”页选择内置图标或导入自己的图片，默认使用黄底、雾紫声波与深蓝末端的 W1 波形。在“配色方案”中选配色，再直接点击“显示模式”的“跟随系统”“浅色”“深色”卡片切换明暗；页面即时变化。",
+      "translation": "Click Settings at the bottom left, then Appearance at the top. The top categories are Language, Appearance, Fonts, Icons, Audio, and Local storage and automatic cleanup. Wide windows use two columns. Absolutely is the default palette; an existing palette selection is retained. On the Icons page, choose a built-in icon or import an image. The default is the W1 waveform with a yellow background, mist-purple wave, and dark-blue end. Choose a palette under Color scheme, then switch brightness using the Follow system, Light, or Dark cards under Display mode. Changes appear immediately."
+    }
+  }
+}

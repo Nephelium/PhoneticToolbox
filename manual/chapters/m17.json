@@ -3786,8 +3786,8 @@
         "attrs": {
           "id": "m17-figure-playback-unavailable-r2-light",
           "assetId": "m17-playback-unavailable-r2-light-scaled-r20261007",
-          "caption": "早期演示界面。当前点击播放暂不可用，悬停按钮可查看创作进度提示。",
-          "alt": "早期演示界面。当前点击播放暂不可用，悬停按钮可查看创作进度提示。",
+          "caption": "点击播放按钮当前禁用，悬停可查看演示内容正在创作中的提示；点击符号继续用于输入文字。",
+          "alt": "点击播放按钮当前禁用，悬停可查看演示内容正在创作中的提示；点击符号继续用于输入文字。",
           "width": "100%",
           "align": "center"
         }

@@ -1,0 +1,202 @@
+{
+  "schemaVersion": "ptb-manual-localization/1",
+  "locale": "en",
+  "entries": {
+    "bc1f0b541610eab2481ec4c94dfbaa6fe0a81b1fed34725bb6c65fd5361b0ab9": {
+      "source": "语言地图",
+      "translation": "Language Maps"
+    },
+    "cb93e892f798da3a0add8af6cb6fa72642bd44c3005b06b4474b0b88172bdec1": {
+      "source": "载入语言地理资料，按大类或细类浏览地图，比较地点，编辑并导出研究工程。",
+      "translation": "Load linguistic geography data, browse maps by broad or detailed categories, compare locations, and edit and export research projects."
+    },
+    "324b2548050af9ff988d5a0b0106dec22b3a2ae77007f17a9a2e339b0a934ae1": {
+      "source": "视频教程：<s id=\"0\">观看本章视频</s>。",
+      "translation": "Video tutorial: <s id=\"0\">watch this chapter’s video</s>."
+    },
+    "ee32fab59b034cc973c6c96848086794e8834c23d9197851bc09c0f358b729ff": {
+      "source": "载入资料与打开工程",
+      "translation": "Loading data and opening a project"
+    },
+    "f78dccfe4b9216851a0edfbab2a40fb6c0970e7d16ae6a86bb9ac536c34318a3": {
+      "source": "从侧栏打开语言地图。上方提供方言分布、方言相似性、语言现象、我的研究地图四个入口，地图与表格随选择更新。",
+      "translation": "Open Language Maps from the sidebar. The top provides Dialect distribution, Dialect similarity, Linguistic phenomena, and My research map. Maps and tables update with your selection."
+    },
+    "2952af1bf9b91de853beb6b4f22647ec46dc4910c9d2d5f4623d7393d7f7bbd1": {
+      "source": "首次使用点击下载资料，下载并校验后会自动显示地图。下载时可查看进度或取消，重新打开会复用本机资料，支持离线使用。载入后可点击顶部的更新资料重新下载。",
+      "translation": "On first use, click Download dataset. The map appears automatically after downloading and verification. You can monitor progress or cancel. Later launches reuse the local data and support offline use. After loading, click Update dataset at the top to download it again."
+    },
+    "60f38f10464cde2ac981d0d473a207ce789c5349e5d5bb3165cc63bbd02912c1": {
+      "source": "已有资料时，点击选择资料夹，选择含 data-manifest.json 的完整资料目录。Windows 免安装版可把 geolinguistics-data 放在 EXE 旁自动读取。Windows、macOS 与网页共用同一份资料，地图与编辑在本机处理。若提示文件缺失或校验不符，请重新下载，或重新选择完整资料夹。",
+      "translation": "If you already have the data, click Select data folder and select a complete directory containing data-manifest.json. The Windows portable app can automatically read geolinguistics-data beside the EXE. Windows, macOS, and the web app share the same data; maps and edits are processed locally. If a file is missing or verification fails, download the data again or select a complete folder."
+    },
+    "2e2ca91498fee544b7690db20769a551e8dc74803912a916d68a925f7c2208ec": {
+      "source": "资料夹保存调查数据和底图；研究工程保存筛选、个人校订、自建点和绘图。导出工程生成 .ptb-map.json，换电脑时同时保留资料夹，再通过打开工程恢复。工程不会包含原书扫描页。",
+      "translation": "The data folder stores survey data and basemaps. A research project stores filters, personal corrections, custom points, and drawings. Export project creates a .ptb-map.json file. Keep the data folder as well when moving to another computer, then restore your work with Open project. Projects do not include scanned book pages."
+    },
+    "549589249d097ec289c1300ca5ad994b3878e698e3d0c8d40013ff8524abe148": {
+      "source": "首次打开语言地图，点击下载资料取得地图资料。已有完整资料时可选择资料夹；完成载入后，资料保存在本机，重新打开可离线使用。",
+      "translation": "On the first visit to Language Maps, click Download dataset to obtain the map data. If you already have a complete copy, choose its folder. Loaded data are stored locally and can be reused offline."
+    },
+    "e6341eb6451a68772a670ec2a337b96239b50f2efcff16aa4c17745b22b75338": {
+      "source": "按大类浏览语言现象",
+      "translation": "Browsing linguistic features by broad category"
+    },
+    "a6ef5535c36a49063265424b78e9bc34ac005738a7e12f2ac4c2346c4e2881ff": {
+      "source": "新工程进入语言现象时，显示层级默认为大类；已有旧工程保留原来的细类筛选。浏览范围默认列出已有大类释义的项目，先选择语音、词汇或语法，再按标题、例字、音标或图号搜索。切到全部特征 · 编码探索可查看全部 510 项。收藏本图后可勾选仅看收藏，快速回到常看的现象。",
+      "translation": "New projects open Linguistic phenomena at the broad-category display level. Existing projects keep their previous detailed-category filters. By default, browsing lists items with an established broad-category interpretation. Choose Phonetics, Vocabulary, or Grammar, then search by title, example character, phonetic symbol, or map number. All features · Explore codes shows all 510 features. After favoriting a map, enable Favourites only to return to frequently viewed features."
+    },
+    "4f6fb830fd7bd420c5e84badb41aa1445a54788ad28fed8d3768a151088ec4cb": {
+      "source": "每张图的大类都独立对应到原书的类型。论文数据用大写字母区分大类，数字区分细类；相同字母在不同图中不代表相同含义或固定颜色。大类名称采用原书标题，或概括已核实的共同特征。词汇图例中，字右上角的等号是原书的同音字记写标记；界面用同音字记写说明，保留这层含义。右侧显示已对应的大类数。展开图号与释义可查看原始编码覆盖数；地点记录与原图的差异单独标记。",
+      "translation": "Broad categories are mapped independently to the original types in each map. The paper’s data use capital letters for broad categories and numbers for detailed categories. The same letter in different maps does not imply the same meaning or a fixed color. Category names use the book’s headings or summarize verified shared features. In vocabulary legends, an equals sign at the upper right of a character marks the original book’s homophone-based notation. The interface explains this as homophone notation, preserving its meaning. The right side shows the number of mapped broad categories. Expand Map number and interpretation to view coverage of the original codes. Discrepancies between point records and original maps are marked separately."
+    },
+    "9bdadfda7a7ff27b0eed45f4c66e0dcfc6575934636bb4887bbfafe35e1d7777": {
+      "source": "点击图例只保留相应地点，再点一次或选择全部类别恢复。大类视图只列大类含义，原始编码可在调查点记录中展开查看，或切换到细类。大类图例统计地点数：某地点有两个属于同一大类的编码，只计一次；兼有两个大类时分别计入两类，所以各类地点数之和可能超过调查点总数。",
+      "translation": "Click a legend item to keep only matching locations. Click it again or choose All categories to restore the full view. Broad-category view lists broad meanings only. Expand survey-point records to see original codes, or switch to detailed categories. Legend counts are location counts: a location with two codes in the same broad category counts once, while a location belonging to two broad categories counts in each. Their sum can therefore exceed the total number of survey points."
+    },
+    "eb7dbee72694ea15afb6f15185abc4825ec9481a9ef3465c06e20f7c9d7b9fb5": {
+      "source": "图例只列已建立对应关系的大类。尚待核对的地点保留为空心点；同点已有部分大类、还有部分记录待对应时，用虚线边框提示。点击查看待核地点可筛选这些记录，逐点查看原值和原书页码。图表有差异的记录标明原图对应待核。待核地点不合并成一个语言类别，已确认的大类仍按地点正常计数。",
+      "translation": "The legend lists only broad categories with established mappings. Locations awaiting verification remain hollow points. If some records at a location have broad-category mappings while others still need matching, a dashed outline indicates this. Click View locations to verify to filter these records and inspect each original value and book page. Records that differ from the original map are marked Original-map correspondence to verify. Unverified locations are not merged into a linguistic category. Confirmed broad categories are still counted normally by location."
+    },
+    "a9eedf067240719b2a389ff1ccc9a60bc131020fbb631039becdff456f791be1": {
+      "source": "切到细类可查看已核实的具体释义及音标。细类有自己的核对进度，不会因为大类已确定就自动填入。个人填写的类别释义只用于对应细类，不会改变已经核实的大类对应。",
+      "translation": "Switch to detailed categories to see verified specific meanings and phonetic symbols. Detailed categories have their own verification progress; confirming a broad category does not automatically fill them in. Personal category descriptions apply only to the corresponding detailed category and do not change verified broad-category mappings."
+    },
+    "dc829775df633c1ce7025bcd759c9f27bc373589d8738a3d0c81f0700744a5a0": {
+      "source": "练习筛选：点击语言现象，显示层级选择大类，再点击语音。",
+      "translation": "Filtering exercise: click Linguistic phenomena, select Broad categories as the display level, then click Phonetics."
+    },
+    "2dd23ed14e5d82c68f5a984b6831e3389097ff21f5bee0ea226a295efe90d698": {
+      "source": "在检索框输入阳声韵尾，选择阳声韵尾的演变，右侧会显示这一现象的大类图例。",
+      "translation": "Enter 阳声韵尾 in the search box and select 阳声韵尾的演变 (development of nasal codas). Its broad-category legend appears on the right."
+    },
+    "267b389556893a117720bcee11cccdf79c1a220be6160c0b6b2244ad573bab7e": {
+      "source": "点击有[-m]，地图与表格只显示这一类地点。点击全部类别恢复完整分布。",
+      "translation": "Click 有[-m]. The map and table show only locations in this category. Click All categories to restore the complete distribution."
+    },
+    "629b7a9bcd69d711ecfff09790d3c4b08d97d76aeddded7fbc4db70ce3db73a1": {
+      "source": "阳声韵尾的演变按大类显示。点击图例中的有[-m]，地图和表格只保留这一类地点，再点全部类别恢复。",
+      "translation": "The development of nasal codas is shown by broad category. Clicking 有[-m] in the legend keeps only that category’s locations in the map and table. All categories restores the full view."
+    },
+    "8c826d0737d065e14be306c36a2642dcb066ae7ee5a9be693c1b252864ffc2cf": {
+      "source": "缩放、筛选与多图比较",
+      "translation": "Zooming, filtering, and comparing maps"
+    },
+    "e09d3401c44ebdd1af5c97a78134d8b90e740426b5ec9738d277b3a60707cf73": {
+      "source": "点击中国回到全国总览，使用省、市、县选择器定位和筛选；在省级地区选择全国也可复位。滚轮缩放，拖动平移；Shift 拖动可框选调查点。勾选地名后才显示地图及导出图上的地点文字。选中点保持原有大小并加细边，地点详情在右侧查看。边界可随缩放自动切换，也可固定到省、市或县。地图边界用于定位，调查点坐标保留数据中的原值。",
+      "translation": "Click China to return to the nationwide overview. Use the province, city, and county selectors to locate and filter areas; selecting Nationwide under province-level regions also resets the view. Scroll to zoom, drag to pan, and Shift-drag to select survey points in a rectangle. Location names appear on the map and exported figure only when Place names is enabled. Selected points retain their size with a thin outline; view their details on the right. Boundaries can change automatically with zoom or stay at the province, city, or county level. Boundaries provide geographic context; survey coordinates retain their original data values."
+    },
+    "16649c448559645ee05463df9c5ac03c856832b4eff9ab447e93ea06ee13861e": {
+      "source": "直接缩放只改变视野。勾选当前视野后，表格和图例跟随当前范围。地点搜索、所选地点和图例筛选可以组合使用；导出前核对当前范围。双图或四图对照共享视野，可为各幅图选择不同项目，输出时各自保留图例。",
+      "translation": "Zooming alone changes only the view. Enable Current view to make the table and legend follow the visible area. You can combine location search, selected points, and legend filters. Check the current scope before exporting. Two-map and four-map comparisons share a view, while each map can display a different feature and keeps its own legend on export."
+    },
+    "39938a2b7fb9106cc602ba960dbf772805ede63a0a518d0f8fac1ebcde344b44": {
+      "source": "可以先打开调类的数目，在图窗上方的对照中选择双图，再将第二幅图设为阳声韵尾的演变。切到四图后，在各幅图的标题栏分别选择撮口呼韵母、阳声韵尾的演变和太阳的说法。拖动或缩放任一幅图，其余图会同步移动，便于在同一地理范围内比较。",
+      "translation": "First open 调类的数目 (number of tone categories), choose Two maps under Comparison above the map, and set the second map to 阳声韵尾的演变. Switch to Four maps and use each map’s title bar to select 撮口呼韵母, 阳声韵尾的演变, and 太阳的说法. Panning or zooming any map moves the others together, so you can compare the same geographic area."
+    },
+    "fd2c613144909f15f970a6ee2c851c7be877b64401b2bbdfffe9a8e3e0c961af": {
+      "source": "双图比较调类的数目与阳声韵尾的演变。两幅图共享视野，第二幅图从标题栏选择项目。",
+      "translation": "Two maps compare the number of tone categories and the development of nasal codas. They share the same view; choose the second feature from its title bar."
+    },
+    "78a796e4495fda1213a8969c03a50004bb39f274d853ae36838ab2cfe04bd241": {
+      "source": "四图同时比较调类的数目、撮口呼韵母、阳声韵尾的演变与太阳的说法。每幅图可独立选择项目，拖动和缩放时保持同一视野。",
+      "translation": "Four maps compare the number of tone categories, 撮口呼韵母, the development of nasal codas, and expressions for the sun. Each map has an independent feature selection and shares the same view when panning and zooming."
+    },
+    "159715dd4907661c8a611c0a337c0c8d0441094e6c58a29be07b88d7702d6a16": {
+      "source": "查看井韶子整理的方言分布",
+      "translation": "Viewing the dialect distribution compiled by Jing Shaozi"
+    },
+    "335d68781d27caf133d9f7448fd75f50fabf385495ee29d0376335975deaf1fd": {
+      "source": "在方言分布选择原始工作表，再按方言大区、区、片、小片逐层筛选。表格保留原始行号，点击记录可查看完整分类、定位或做个人校订。同一县兼有多类时以兼有标记显示。",
+      "translation": "In Dialect distribution, choose an original worksheet, then filter through the successive dialect classification levels. The table retains original row numbers. Click a record to view its full classification, locate it, or add a personal correction. Counties with multiple classifications show a coexistence marker."
+    },
+    "ef4ffb3cf1b3d6560457386311ed1ccd6d63a9336efad2f5abc8c314d480cdf7": {
+      "source": "方言区与方言岛的工作表分别保留。分类数量按完整父级路径计数，不能把同名小片在不同父级下直接合并，也不能将几个工作表的行数直接相加。查看计入的分类可以展开实际分类清单，比较各省分类数量可查看同一统计层级的结果。",
+      "translation": "Dialect-area and dialect-island worksheets are kept separately. Classification counts use complete parent paths. Identically named subgroups under different parents cannot be merged directly, and row counts from different worksheets cannot simply be added. Expand Included classifications to view the actual list. Compare provincial classification counts at the same classification level."
+    },
+    "c574ca5fbb9e1592b1ca1c7a851cade877c4124642d86af2477b0a9416bb9352": {
+      "source": "例如，在省级地区选择广东，可同时查看广东的地图与整理记录。点击表格中的一条记录，右侧会显示它的完整方言分类和原始行号。需要进一步缩小时，再选择市县或左侧的方言分类；回到全国可清除地域筛选。",
+      "translation": "For example, choose 广东 under province-level regions to view the Guangdong map and compiled records together. Click a table row to display its full dialect classification and original row number on the right. To narrow the scope, select a city or county, or use the dialect classification on the left. Return to Nationwide to clear geographic filters."
+    },
+    "6ac6c6d4737d4af098eb49239e3a55ef06f3716107dcc67c90c65bdc7ca82912": {
+      "source": "在省级地区选择广东后，点击潮安区的整理记录，地图定位到当地，右侧显示完整方言分类和原始行号。",
+      "translation": "After selecting 广东, click the compiled record for 潮安区. The map locates the area and the right side shows its full dialect classification and original row number."
+    },
+    "55b094675ae2e07574d2b6fa4c3e6c55d698663aebe938779feb4fbd0c1b6ac0": {
+      "source": "比较地点与论文结果",
+      "translation": "Comparing locations and published results"
+    },
+    "4f4fe1af7c0783db616566f3a3713326bc2ecefe70fa8078754ddc69a3a6f43f": {
+      "source": "方言相似性直接展示论文已有的 MDS、聚类及五套距离矩阵。选择图层和聚类数后地图随之变化。选择调查点可查看它的原始结果与相近地点，点击对比打开地点对照。",
+      "translation": "Dialect similarity displays the paper’s existing MDS results, clustering, and five distance matrices directly. The map changes with the layer and cluster count. Select a survey point to view its original results and nearby locations, then click Compare to open the location comparison."
+    },
+    "9f1afcb74b8c77fd55d92001a0640415c469a6f0b58b1bcb88bae10cf81ec9e7": {
+      "source": "地点对照可更换调查点，按语音、词汇、语法筛选记录相同、不同或含缺值的项目。结果每页显示60项，导出对照表包含当前筛选范围的全部记录。相同与不同按完整原始编码记录比较，保留多变体顺序；它与大类名称相同、论文距离为零并非同一个判断。点击某项可跳回其特征地图。",
+      "translation": "In location comparison, change the survey points and filter phonetic, lexical, or grammatical features by identical records, different records, or missing values. Results show 60 features per page. Export comparison table includes all records in the current filtered scope. Equality and difference are determined from complete original codes, preserving the order of multiple variants. These decisions differ from having the same broad-category name or a zero distance in the paper. Click a feature to return to its map."
+    },
+    "ef9ea0c44071432d74e46b6fa8166b4d4ab16c9148c05cbfdcea4ad5c916de47": {
+      "source": "这些资料反映图集所依据的调查与论文分析。地点分布不均，图例地点数不代表说话人口。地图上的颜色是当前图层的显示方式，使用结果时同时报告资料来源、项目和筛选范围。",
+      "translation": "These materials reflect the surveys and analyses underlying the atlas and paper. Survey locations are unevenly distributed; legend counts do not represent speaker populations. Map colors encode the currently selected layer. Report the data source, feature, and filter scope when using the results."
+    },
+    "b139486172af5026385a90e55ca46da5b755b9e4918dd35070dd740dcad17efd": {
+      "source": "练习两地比较：点击方言相似性，在调查点检索框输入北京，勾选表格首列的北京；再检索广州并勾选。清空检索文字后，右侧保留这两个选点。",
+      "translation": "Two-location comparison exercise: open Dialect similarity, enter 北京 in survey-point search, and select 北京 in the first table column. Then search for 广州 and select it. Clear the search text; both selected locations remain on the right."
+    },
+    "42a98ff77cf9639524df52bb072d41a5d4c8bd9154319253c53dd0d6b7b05f81": {
+      "source": "点击比较2–8个地点，在弹窗中将项目范围设为语音，记录关系设为记录不同。可以逐项查看两地记录，也可以改为记录相同或含缺值。",
+      "translation": "Click Compare 2–8 locations. In the dialog, set the feature scope to Phonetics and the record relation to Different records. Inspect the two locations feature by feature, or switch to Identical records or Missing values."
+    },
+    "8d8c910ce6e515e659a0ae7cfa5bf995a0fa11905bdaaf2adac96a6450a59ff8": {
+      "source": "点击导出对照表保存当前筛选范围的全部记录。点击某个项目名称可回到它的分布地图。",
+      "translation": "Click Export comparison table to save every record in the current filtered scope. Click a feature name to return to its distribution map."
+    },
+    "d43c6ee27bd94c5e6a3d54d56accd4d7aa338b171af2e6d62eee30a1aa5b4dac": {
+      "source": "北京与广州的地点对照。项目范围选择语音，记录关系选择记录不同；导出对照表会保存当前筛选范围的全部记录。",
+      "translation": "Comparison of 北京 and 广州. Choose Phonetics for the feature scope and Different records for the relation. Export comparison table saves every record in the current filtered scope."
+    },
+    "c4d9dd5fc095d8ca2623df4545b290b7b0666f0253c1bc97d5491c8c28a12f02": {
+      "source": "编辑与导出研究成果",
+      "translation": "Editing and exporting research results"
+    },
+    "da960377f28d243bd45506172bd0accfbf3d698654e4070bcead29e6dfb6f473": {
+      "source": "我的研究地图可输入地点坐标、类别或 IPA、备注，也可导入地点表并选择对应列。支持在地图上添加地点、画区域与标注线。编辑会自动保存在本机，Ctrl+S 可重试保存，Ctrl+Z 撤销，Ctrl+Shift+Z 重做；macOS 可使用 Command 对应快捷键。",
+      "translation": "In My research map, enter coordinates, categories or IPA, and notes, or import a location table and select its corresponding columns. You can add points and draw regions and annotation lines on the map. Edits are saved locally automatically. Ctrl+S retries saving, Ctrl+Z undoes, and Ctrl+Shift+Z redoes. On macOS, use the corresponding Command shortcuts."
+    },
+    "d069ac7f1fe72106b060758f140caab9fd8a4fadd78a6bf6c0d66f739646cd3d": {
+      "source": "先给工程起一个便于辨认的名称，再点击输入地点坐标，填写地点、WGS84经纬度、类别或IPA与备注，点击保存地点。表格出现新地点后，可以继续添加、编辑，或按地图上的位置绘制研究区域。下图的地点和IPA只用于演示填写方式，实际研究请使用自己的调查资料。",
+      "translation": "First give the project an identifiable name. Click Enter site coordinates, fill in the place name, WGS84 longitude and latitude, category or IPA, and notes, then click Save site. Once the new point appears in the table, continue adding or editing points, or draw research regions by their map positions. The locations and IPA in the figure demonstrate data entry only; use your own survey data for research."
+    },
+    "490c61a01d513115d6efd543711b99fac0277a67beba609b243b1fcb25c3db08": {
+      "source": "语言现象中的编辑当前特征保存个人覆盖值，多个变体使用 # 分隔，恢复原值可撤销该地点的个人覆盖。填写类别释义保存个人细类文字和 IPA。原始调查表保持不变。",
+      "translation": "In Linguistic phenomena, Edit current feature saves personal override values. Separate multiple variants with #. Restore original value removes that location’s personal override. Enter category interpretation saves personal detailed-category text and IPA. The original survey table is unchanged."
+    },
+    "5935f6e64e36d4b722d82a17200c44758d3f3d64a2acd9e71dbcfe3a01690c93": {
+      "source": "SVG 与 PNG 按当前显示层级输出地图、可读图例、地点数、卷、图号和 PDF 页码。SVG 保留矢量图与随图嵌入的音标字体，PNG 是位图。CSV 同时保留编码、显示含义、原始值和来源，便于复核；大类汇总不会把底层细类编码改写。双图与四图导出使用各自的图例。",
+      "translation": "SVG and PNG exports use the current category level and include the map, readable legends, location counts, volume, map number, and PDF page number. SVG retains vector graphics and embedded phonetic fonts; PNG is a bitmap. CSV preserves codes, display meanings, original values, and sources for verification. Broad-category summaries do not rewrite underlying detailed codes. Two-map and four-map exports keep each map’s own legend."
+    },
+    "e106b5df4090fa8a21d1c6074cf77d803a67ff9eeae4ae69e381b9f248673626": {
+      "source": "输入地点名称、WGS84经纬度、类别或IPA与备注，再保存地点。图中珠海示例点及aː˧仅演示填写方式，研究时请替换为实测资料。",
+      "translation": "Enter the place name, WGS84 longitude and latitude, category or IPA, and notes, then save the point. The 珠海 point and aː˧ in this figure demonstrate entry only. Replace them with measured survey data in research."
+    },
+    "e79e97c7b2732ede9e740c8f0c844fd41c632bce52c23eae6e57a544558eaef1": {
+      "source": "自建的珠海、广州示例点保存在当前工程中。可导出工程继续编辑，或用SVG、PNG和导出表格保存研究成果；两点IPA为填写演示。",
+      "translation": "The custom example points 珠海 and 广州 are stored in the current project. Export the project to continue editing, or save research results with SVG, PNG, and Export table. The IPA at both points is an entry demonstration."
+    },
+    "717bffa8f5c3f3a433ac3c4193fffb6144d9390a323fbdef911a9226ae7560c9": {
+      "source": "学术引用与资料来源",
+      "translation": "Academic citations and data sources"
+    },
+    "1c90fb9531cad440e4e091231f45719fcc22f8f54dafc6956313481e15b60811": {
+      "source": "本章操作图由当前应用生成，语言数据来自 <s id=\"0\">Huang、Grieve 与 Jiao（2024）</s>及<s id=\"1\">井韶子整理数据</s>，两份数据均按 <s id=\"2\">CC BY 4.0</s>使用。图中显示方式、筛选结果和自建演示地点由本应用生成。底图：<s id=\"3\">DataV GeoAtlas／高德开放平台</s>（areas_v3，页面标注2021.5，仅供学习和交流）；<s id=\"4\">内政部国土测绘中心</s>（TOWN_MOI_1120317，<s id=\"5\">政府资料开放授权条款第1版</s>）；<s id=\"6\">Natural Earth</s>（公共领域）。各来源分别适用其用途告知或许可。",
+      "translation": "This chapter’s operation figures were generated by the current app. Linguistic data come from <s id=\"0\">Huang, Grieve, and Jiao (2024)</s> and <s id=\"1\">data compiled by Jing Shaozi</s>, both used under <s id=\"2\">CC BY 4.0</s>. Display choices, filtered views, and custom demonstration locations are generated by this app. Basemaps: <s id=\"3\">DataV GeoAtlas / Amap Open Platform</s> (areas_v3, page marked 2021.5, for learning and exchange only); <s id=\"4\">National Land Surveying and Mapping Center</s> (TOWN_MOI_1120317, <s id=\"5\">Open Government Data License, version 1</s>); <s id=\"6\">Natural Earth</s> (public domain). Each source is subject to its own stated use conditions or license."
+    },
+    "bb64798db35627daaa829ded11a3e12b2843d4a82906f59df0eb0b19a5a8d318": {
+      "source": "语言特征及论文结果引用 Huang 等（2024）的论文与 Zenodo 数据集，同时注明曹志耘主编的《汉语方言地图集》。大类与细类的编码方法见论文第 2.2 节；具体释义按各图原书图例核对。",
+      "translation": "For linguistic features and published results, cite Huang et al. (2024) and their Zenodo dataset, and acknowledge the Linguistic Atlas of Chinese Dialects edited by Cao Zhiyun. Section 2.2 of the paper explains broad- and detailed-category coding. Check specific interpretations against each original map’s legend."
+    },
+    "040db5787c5a70ae918c3190af274b66cd239c9d758d30b6ceecdee45c4239e6": {
+      "source": "县级方言分布引用井韶子整理的数据集（Zenodo 15897647），并注明其所依据的《中国语言地图集（第2版）：汉语方言卷》。它与提供 510 项特征的《汉语方言地图集》是不同来源。点击工具上方来源可复制学术引用，并查看底图与软件的署名、版本和许可。",
+      "translation": "For county-level dialect distribution, cite the dataset compiled by Jing Shaozi (Zenodo 15897647) and acknowledge its source, the Language Atlas of China (2nd edition): Chinese Dialects volume. This is separate from the Linguistic Atlas of Chinese Dialects that supplies the 510 features. Click Sources above the tool to copy academic citations and view basemap and software attribution, versions, and licenses."
+    }
+  }
+}

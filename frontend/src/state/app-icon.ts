@@ -1,3 +1,6 @@
+import {messageRef} from '../i18n/index.ts';
+import {uiMessage,uiError,uiErrorMessage,localized,ModuleDisplayError} from '../modules/module-localization.ts';
+import {tr} from '../i18n/index.ts';
 import {computed,ref} from 'vue';
 import defaultLogo from '../assets/k2.png';
 import {emptyIcons,iconRequest,nativeIcons,type IconRequest} from '../platform/icons.ts';
@@ -7,10 +10,10 @@ export const homeIconScale=ref(100);
 export function setHomeIconScale(percent:number){
  if(!Number.isFinite(percent))return false;
  const value=Math.max(50,Math.min(300,Math.round(percent)));
- if(!projects.write('homeIconScale',value)){iconError.value='图标大小未能保存，请重试。';return false;}
+ if(!projects.write('homeIconScale',value)){iconError.value=uiMessage('state.the_icon_size_could_not_be_saved_try_again');return false;}
  homeIconScale.value=value;iconError.value='';return true;
 }
-export const iconPreferences=ref(emptyIcons()),iconError=ref(''),iconBusy=ref(false);
+export const iconPreferences=ref(emptyIcons()),iconError=messageRef(),iconBusy=ref(false);
 export const builtinIcons=ref(iconCatalog.icons.map(item=>({...item,url:''})));
 export const iconGroups=iconCatalog.groups;
 export const applicationIcon=computed(()=>iconPreferences.value.custom.find(icon=>icon.id===iconPreferences.value.selected)?.dataUrl||builtinIcons.value.find(icon=>icon.id===iconPreferences.value.selected)?.url||defaultLogo);
@@ -23,10 +26,10 @@ export async function changeIcon(request:IconRequest){
   if(request.action==='select'&&request.id)await loadBuiltinIcon(request.id);
   iconPreferences.value=await iconRequest(request);favicon();
   const selected=iconPreferences.value.selected;
-  void loadBuiltinIcon(selected).then(()=>{if(iconPreferences.value.selected===selected)favicon();}).catch(error=>{iconError.value=error instanceof Error?error.message:'内置图标加载失败。';});
+  void loadBuiltinIcon(selected).then(()=>{if(iconPreferences.value.selected===selected)favicon();}).catch(error=>{iconError.value=error instanceof Error?uiErrorMessage(error):uiMessage('state.the_built_in_icons_could_not_be_loaded');});
   return true;
  }
- catch(error){iconError.value=error instanceof Error?error.message:'图标更新失败，原选择保留。';return false;}
+ catch(error){iconError.value=error instanceof Error?uiErrorMessage(error):uiMessage('state.the_icon_could_not_be_updated_your_previous_choice');return false;}
  finally{iconBusy.value=false;}
 }
 const sheets=new Map<string,Promise<HTMLImageElement>>(),rendering=new Map<string,Promise<void>>();
@@ -37,9 +40,9 @@ function loadBuiltinIcon(id:string):Promise<void>{
   let promise=sheets.get(item.sheet);
   if(!promise){const image=new Image();image.src=import.meta.env.BASE_URL+'app-icons/sheets/'+item.sheet;promise=image.decode().then(()=>image);sheets.set(item.sheet,promise);}
   const image=await promise,[x,y,w,h]=item.rect as [number,number,number,number];
-  if(x<0||y<0||x+w>image.naturalWidth||y+h>image.naturalHeight)throw Error('内置图标素材无法读取。');
+  if(x<0||y<0||x+w>image.naturalWidth||y+h>image.naturalHeight)throw uiError(uiMessage('state.the_built_in_icon_image_could_not_be_read'));
   const canvas=document.createElement('canvas');canvas.width=canvas.height=256;
-  const context=canvas.getContext('2d');if(!context)throw Error('当前环境无法读取内置图标。');
+  const context=canvas.getContext('2d');if(!context)throw uiError(uiMessage('state.built_in_icons_cannot_be_read_in_this_environment'));
   const scale=256/Math.max(w,h),width=w*scale,height=h*scale,dx=(256-width)/2,dy=(256-height)/2;
   context.beginPath();context.roundRect(dx,dy,width,height,Math.min(width,height)*item.radius);context.clip();
   context.drawImage(image,x,y,w,h,dx,dy,width,height);
@@ -49,7 +52,7 @@ function loadBuiltinIcon(id:string):Promise<void>{
 let catalogLoading:Promise<void>|undefined;
 export function loadBuiltinIcons(){return catalogLoading??=(async()=>{
  let next=0;await Promise.all(Array.from({length:2},async()=>{while(next<builtinIcons.value.length)await loadBuiltinIcon(builtinIcons.value[next++]!.id);}));
-})().catch(error=>{catalogLoading=undefined;iconError.value=error instanceof Error?error.message:'内置图标加载失败。';});}
+})().catch(error=>{catalogLoading=undefined;iconError.value=error instanceof Error?uiErrorMessage(error):uiMessage('state.the_built_in_icons_could_not_be_loaded');});}
 export function initializeIcons(){return initialized??=(async()=>{
  const saved=projects.read<unknown>('homeIconScale',100);
  homeIconScale.value=typeof saved==='number'&&Number.isFinite(saved)?Math.max(50,Math.min(300,Math.round(saved))):100;
@@ -57,27 +60,27 @@ export function initializeIcons(){return initialized??=(async()=>{
  // settings tab opens. Keep the existing native startup behavior unchanged.
  if(nativeIcons())await loadBuiltinIcons();
  await changeIcon({action:'status'});
-})().catch(error=>{iconError.value=error instanceof Error?error.message:'内置图标加载失败。';});}
+})().catch(error=>{iconError.value=error instanceof Error?uiErrorMessage(error):uiMessage('state.the_built_in_icons_could_not_be_loaded');});}
 
 export async function prepareIcon(file:File):Promise<string>{
- if(file.size>10*1024*1024)throw Error('请选择不超过 10 MB 的图片。');
- if(!/\.(png|jpe?g|webp|ico)$/i.test(file.name))throw Error('支持 PNG、JPG、WebP 和 ICO 图片。');
+ if(file.size>10*1024*1024)throw uiError(uiMessage('state.choose_an_image_no_larger_than_10_mb'));
+ if(!/\.(png|jpe?g|webp|ico)$/i.test(file.name))throw uiError(uiMessage('state.png_jpg_webp_and_ico_images_are_supported'));
  const url=URL.createObjectURL(file),image=new Image();
  try{
   image.src=url;await image.decode();
-  if(!image.naturalWidth||!image.naturalHeight||image.naturalWidth*image.naturalHeight>16_777_216||Math.max(image.naturalWidth,image.naturalHeight)>8192)throw Error('图片尺寸过大，请选择不超过 1600 万像素的图片。');
+  if(!image.naturalWidth||!image.naturalHeight||image.naturalWidth*image.naturalHeight>16_777_216||Math.max(image.naturalWidth,image.naturalHeight)>8192)throw uiError(uiMessage('state.the_image_is_too_large_choose_one_with_no'));
   const canvas=document.createElement('canvas');canvas.width=canvas.height=256;
-  const context=canvas.getContext('2d');if(!context)throw Error('当前环境无法处理图片。');
+  const context=canvas.getContext('2d');if(!context)throw uiError(uiMessage('state.images_cannot_be_processed_in_this_environment'));
   const scale=256/Math.max(image.naturalWidth,image.naturalHeight),w=image.naturalWidth*scale,h=image.naturalHeight*scale;
   context.drawImage(image,(256-w)/2,(256-h)/2,w,h);
   return canvas.toDataURL('image/png');
- }catch(error){if(error instanceof Error&&error.message.startsWith('图片尺寸'))throw error;throw Error('无法读取这张图片，请选择有效的 PNG、JPG、WebP 或 ICO 文件。');}
+ }catch(error){if(error instanceof ModuleDisplayError)throw error;throw uiError(uiMessage('state.this_image_could_not_be_read_choose_a_valid'));}
  finally{URL.revokeObjectURL(url);}
 }
 export async function prepareIconSource(blob:Blob,name:string,checkExtension=false){
- if(blob.size>10*1024*1024)throw Error('请选择不超过 10 MB 的图片。');
- if(checkExtension&&!/\.(png|jpe?g|webp|ico)$/i.test(name))throw Error('支持 PNG、JPG、WebP 和 ICO 图片。');
+ if(blob.size>10*1024*1024)throw uiError(uiMessage('state.choose_an_image_no_larger_than_10_mb'));
+ if(checkExtension&&!/\.(png|jpe?g|webp|ico)$/i.test(name))throw uiError(uiMessage('state.png_jpg_webp_and_ico_images_are_supported'));
  const url=URL.createObjectURL(blob),image=new Image();
- try{image.src=url;await image.decode();if(!image.naturalWidth||!image.naturalHeight||image.naturalWidth*image.naturalHeight>16_777_216||Math.max(image.naturalWidth,image.naturalHeight)>8192)throw Error('图片尺寸过大，请选择不超过 1600 万像素的图片。');return url;}
- catch(error){URL.revokeObjectURL(url);if(error instanceof Error&&error.message.startsWith('图片尺寸'))throw error;throw Error('无法读取这张图片，请选择有效的 PNG、JPG、WebP 或 ICO 文件。');}
+ try{image.src=url;await image.decode();if(!image.naturalWidth||!image.naturalHeight||image.naturalWidth*image.naturalHeight>16_777_216||Math.max(image.naturalWidth,image.naturalHeight)>8192)throw uiError(uiMessage('state.the_image_is_too_large_choose_one_with_no'));return url;}
+ catch(error){URL.revokeObjectURL(url);if(error instanceof ModuleDisplayError)throw error;throw uiError(uiMessage('state.this_image_could_not_be_read_choose_a_valid'));}
 }

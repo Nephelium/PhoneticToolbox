@@ -62,8 +62,11 @@
   "screenshots": "screens/provenance.json",
   "hero_lettering": {
     "file": "hero-lettering.svg",
-    "source": "Six original hand-authored Chinese stroke drawings; no typeface contours",
-    "sha256": "32f1692e5cebf6c8c99e24930d9833078e6cc2bb8705ed07043ac44f6741e3d7"
+    "source": "User-selected generated wordmark I, preserved original pixels; native SVG hand-drawn yellow wave with variable pen pressure across the first row; no font software embedded",
+    "source_image": "hero-handwritten-i.png",
+    "source_sha256": "8120f6c0eefb53f71c20270fd5aaa66f739eefec1ebedfe95c63eeeeb5be48f9",
+    "recipe": "hero-lettering-source.json",
+    "sha256": "3df7b589e9df3358f5583284f9f70116c3481f7fa17474c5a84f123466e6f531"
   },
   "more_lettering": {
     "file": "more-lettering.svg",

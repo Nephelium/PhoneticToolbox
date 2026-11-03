@@ -83,7 +83,7 @@
       "target": "frontend/public/vocal-tract/app.js",
       "source_sha256": "4068a0de83984149304fc20cb34fb28526ccd973e4894baa79830c6838ee8300",
       "migration_sha256": "4068a0de83984149304fc20cb34fb28526ccd973e4894baa79830c6838ee8300",
-      "current_sha256": "8c913acb9fb59e7cfbe9c1ed4328c3b48dce82b9245522c7e169952d3a20b4e0"
+      "current_sha256": "396085973fc126731019d001b09a4bd5e2c533a89e1aee2bba08277f7ce6343a"
     },
     {
       "source": "phonetic_toolbox/gui/resources/vocal_tract/controls.mjs",
@@ -111,14 +111,14 @@
       "target": "frontend/public/vocal-tract/index.html",
       "source_sha256": "bcd5d4cdb43df745c50f5b99e674ec5479f2da1373a71242a900651c973ca658",
       "migration_sha256": "bcd5d4cdb43df745c50f5b99e674ec5479f2da1373a71242a900651c973ca658",
-      "current_sha256": "02c4d02d828705c5eb4c5445908178e66a3621a8e874a9c3439de315683eb021"
+      "current_sha256": "134e33b0ca6a3a24bb7bc237b58925a5479d0f157016baf10866ee472f4b16c1"
     },
     {
       "source": "phonetic_toolbox/gui/resources/vocal_tract/keyframes.js",
       "target": "frontend/public/vocal-tract/keyframes.js",
       "source_sha256": "0a6521d8995d7c46ba735bf3887d537afb958e318f7cde9bafbc15d83bf49ff6",
       "migration_sha256": "0a6521d8995d7c46ba735bf3887d537afb958e318f7cde9bafbc15d83bf49ff6",
-      "current_sha256": "419d0e5508dcbcd1daa95db18d9f4e31e3281ce89a8764d23a346a672b72af66"
+      "current_sha256": "3249f76ba7f0c0f66f7d80cc713fa61ab2216c82e1276d6a33f56f558bde65db"
     },
     {
       "source": "phonetic_toolbox/gui/resources/vocal_tract/layout.js",
@@ -132,21 +132,21 @@
       "target": "frontend/public/vocal-tract/monitor.js",
       "source_sha256": "f88dcf8438bda63d583d881b5c27e55b96de6d552ff78ed1e7784f32249768d4",
       "migration_sha256": "f88dcf8438bda63d583d881b5c27e55b96de6d552ff78ed1e7784f32249768d4",
-      "current_sha256": "fe758e391fb36ce414a8e61d820e43f72462e1a185080188ab3a6d8675002248"
+      "current_sha256": "3026842c349ec92a6c5ab14da64b1a73510c8ca4737f4d5723ab1adcb9a6368b"
     },
     {
       "source": "phonetic_toolbox/gui/resources/vocal_tract/pitch.js",
       "target": "frontend/public/vocal-tract/pitch.js",
       "source_sha256": "6446152cb323fa921bc4ed7ebf9e47f45f6152ed9516e20fa52d63344629a197",
       "migration_sha256": "6446152cb323fa921bc4ed7ebf9e47f45f6152ed9516e20fa52d63344629a197",
-      "current_sha256": "149e6bf43c90b8ff7a95edf246cddfe5a778995bbe627c5fc76eb2a7ddaf0d18"
+      "current_sha256": "6ca227d53f129fb78328aa253bdd455f2597d663145b9c6acc3773b6c42dcf7b"
     },
     {
       "source": "phonetic_toolbox/gui/resources/vocal_tract/scene.js",
       "target": "frontend/public/vocal-tract/scene.js",
       "source_sha256": "ceedff892e9071680753a0fe01d14e87401365648a8d3e726eac682a426fea53",
       "migration_sha256": "ceedff892e9071680753a0fe01d14e87401365648a8d3e726eac682a426fea53",
-      "current_sha256": "ad1c8e559f298fdb9e12a81e2fdde4c630d29d24766ffb41dc4d5731002717e9"
+      "current_sha256": "c3b149755fca84a4ad9568e6bc1dbc310e31b4ea14d419d4bd441100ae367606"
     },
     {
       "source": "phonetic_toolbox/gui/resources/vocal_tract/styles.css",
@@ -209,7 +209,7 @@
       "target": "resources/vocal_tract/bundle-manifest.json",
       "source_sha256": "8b6296438c031b60a9e85746614d5965361d49ac96bf39ffed9405e187cee7b9",
       "migration_sha256": "8b6296438c031b60a9e85746614d5965361d49ac96bf39ffed9405e187cee7b9",
-      "current_sha256": "066f8cc006283a38190423dd8814ea2e86b8af44a09f640e595c2a0887838dd2"
+      "current_sha256": "f08378da7efb2fb5560903021d452da4b9a54b3ad13c5bce7c9c7f4c3de7e7d1"
     },
     {
       "source": "phonetic_toolbox/resources/vocal_tract/sources.lock.json",

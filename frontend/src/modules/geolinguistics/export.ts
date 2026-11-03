@@ -1,3 +1,5 @@
+import {uiError,uiErrorMessage,uiMessage,joinMessages} from '../module-localization.ts';
+import {tr} from '../../i18n/index.ts';
 /** Assemble the actual map panels without losing their individual legends. */
 export function wrapMapText(text:string,width:number,measure:(text:string)=>number):string[]{
  const lines:string[]=[];let line='';
@@ -14,9 +16,9 @@ export function wrapMapText(text:string,width:number,measure:(text:string)=>numb
 }
 
 export function composeMapSvgs(panels:string[]):string{
- if(!panels.length||panels.length>4)throw Error('请选择一到四幅地图。');
+ if(!panels.length||panels.length>4)throw uiError(uiMessage("modules.geolinguistics.select_one_to_four_maps"));
  if(panels.length===1)return panels[0];
- const sizes=panels.map(svg=>{const size=svg.match(/<svg[^>]+width="([\d.]+)" height="([\d.]+)"/);if(!size)throw Error('地图尺寸无效。');return [+size[1],+size[2]];});
+ const sizes=panels.map(svg=>{const size=svg.match(/<svg[^>]+width="([\d.]+)" height="([\d.]+)"/);if(!size)throw uiError(uiMessage("modules.geolinguistics.invalid_map_dimensions"));return [+size[1],+size[2]];});
  const cellWidth=Math.max(...sizes.map(v=>v[0])),cellHeight=Math.max(...sizes.map(v=>v[1])),cols=2,rows=Math.ceil(panels.length/cols),gap=20;
  return `<svg xmlns="http://www.w3.org/2000/svg" width="${cols*cellWidth+gap}" height="${rows*cellHeight+(rows-1)*gap}"><rect width="100%" height="100%" fill="white"/>`+panels.map((svg,i)=>svg.replace(/<svg\b([^>]*)>/,(_,attributes:string)=>{
   // Pad the panel viewport rather than scaling its map to a longer neighbour's footer.

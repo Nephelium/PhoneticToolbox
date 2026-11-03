@@ -15,6 +15,7 @@ from .storage import Project,uid,now,read_range,iter_audio,atomic_json,read_json
 from .capture import Capture
 from .devices import devices,validate_config,Playback,PlaybackStartError
 from .jobs import process_audio,export_audio,export_items
+from ..native_i18n import native_error
 
 MAX_PREVIEW_CACHE_BYTES=4_000_000
 
@@ -99,9 +100,10 @@ class RecordingService:
         op=b.get('op')
         if op=='capabilities':
             if sys.platform not in ('win32','darwin') and self.backend is None:return {'available':False,'schema':'ptb-recording/1','devices':[],'device_error':'当前平台尚未通过原生录音准入，Windows 桌面为首版开发目标','project':self.view(),'local_only':True}
+            display=None
             try:found=devices(self.backend);reason=''
-            except Exception as exc:found=[];reason='原生设备库不可用：'+str(exc)
-            return {'available':True,'schema':'ptb-recording/1','devices':found,'device_error':reason,'project':self.view(),'local_only':True}
+            except Exception as exc:found=[];reason='原生设备库不可用：'+str(exc);display=native_error(RuntimeError(reason),'errors.recording.deviceUnavailable',reason=str(exc)).display
+            return {'available':True,'schema':'ptb-recording/1','devices':found,'device_error':reason,'device_error_display':display,'project':self.view(),'local_only':True}
         if op=='devices':
             if self.capture:raise ValueError('请先停止录音或录前检测，再刷新设备')
             return devices(self.backend)
@@ -144,7 +146,7 @@ class RecordingService:
             return {'id':capture.id,'config':config}
         if op in ('stop','probe_stop'):return self.stop_capture()
         if op=='status':
-            status={'recording':False,'probing':False,'project_revision':self.project.data['revision'] if self.project else None,'playback':{'playing':bool(self.player and not self.player.finished.is_set()),'frame':self.player.position if self.player else 0,'error':self.player.error if self.player else ''},'job':self.poll_job()}
+            status={'recording':False,'probing':False,'project_revision':self.project.data['revision'] if self.project else None,'playback':{'playing':bool(self.player and not self.player.finished.is_set()),'frame':self.player.position if self.player else 0,'error':self.player.error if self.player else '','display':getattr(self.player,'error_display',None) if self.player else None},'job':self.poll_job()}
             if self.capture:
                 channel=int(b.get('channel',0))
                 status.update(self.capture.preview(bool(b.get('spectrum')),channel,b.get('gain_preview_db')))

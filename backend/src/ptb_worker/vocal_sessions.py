@@ -17,7 +17,7 @@ OPS=frozenset(('library/load','library/save','library/edit','library/import','pr
 
 
 class VocalError(Exception):
-    def __init__(self,code,status=422):self.code=code;self.status=status;super().__init__(code)
+    def __init__(self,code,status=422,display=None):self.code=code;self.status=status;self.display=display;super().__init__(code)
 
 
 class Session:
@@ -69,7 +69,7 @@ class Session:
             except queue.Empty:
                 self.close();raise VocalError('vocal_timeout',503) from None
             if result.get('unavailable'):self.close();raise VocalError('vocal_runtime_unavailable',503)
-            if not result['ok']:raise VocalError(result['error'])
+            if not result['ok']:raise VocalError(result['error'],display=result.get('display'))
             return result['value']
         except (OSError,ValueError):self.close();raise VocalError('vocal_runtime_unavailable',503) from None
         finally:
@@ -96,11 +96,12 @@ class VocalSessions:
         threading.Thread(target=self._maintain,daemon=True).start();atexit.register(self.close)
 
     def open(self,identity):
+        self.sweep()
+        if not self.valid(identity):raise VocalError('vocal_session_expired',410)
         with self.lock:
-            self.sweep()
+            if self.stop.is_set():raise VocalError('vocal_session_expired',410)
             # One native state per browser account/project; no unrelated user's state is evicted.
             if sum(s.identity==identity for s in self.sessions.values())>=2 or len(self.sessions)>=self.max_sessions:raise VocalError('vocal_capacity_full',429)
-            if not self.valid(identity):raise VocalError('vocal_session_expired',410)
             session=Session(self.resources,identity);self.sessions[session.id]=session
             return {'id':session.id,'idle_seconds':self.idle_seconds}
 
@@ -108,9 +109,14 @@ class VocalSessions:
         with self.lock:
             s=self.sessions.get(sid)
             if s is None or s.identity!=identity:raise VocalError('vocal_session_not_found',404)
-            if s.closed or time.monotonic()-s.touched>=self.idle_seconds or not self.valid(identity):
-                self.sessions.pop(sid);s.close();raise VocalError('vocal_session_expired',410)
-            s.touched=time.monotonic();return s
+        valid=self.valid(identity)
+        with self.lock:
+            if self.sessions.get(sid) is not s:raise VocalError('vocal_session_not_found',404)
+            if s.closed or time.monotonic()-s.touched>=self.idle_seconds or not valid:
+                self.sessions.pop(sid)
+            else:
+                s.touched=time.monotonic();return s
+        s.close();raise VocalError('vocal_session_expired',410)
 
     def invoke(self,sid,identity,op,body):
         s=self.get(sid,identity)
@@ -135,10 +141,14 @@ class VocalSessions:
         s.close();return {'closed':True}
 
     def sweep(self):
-        with self.lock:
-            for sid,s in list(self.sessions.items()):
-                if s.closed or time.monotonic()-s.touched>=self.idle_seconds or not self.valid(s.identity):
-                    self.sessions.pop(sid);s.close()
+        with self.lock:snapshot=list(self.sessions.items())
+        for sid,s in snapshot:
+            valid=self.valid(s.identity)
+            removed=False
+            with self.lock:
+                if self.sessions.get(sid) is s and (s.closed or time.monotonic()-s.touched>=self.idle_seconds or not valid):
+                    self.sessions.pop(sid);removed=True
+            if removed:s.close()
 
     def _maintain(self):
         while not self.stop.wait(5):
@@ -148,5 +158,6 @@ class VocalSessions:
     def close(self):
         self.stop.set()
         with self.lock:
-            for s in self.sessions.values():s.close()
+            sessions=list(self.sessions.values())
             self.sessions.clear()
+        for s in sessions:s.close()

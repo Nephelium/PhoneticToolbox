@@ -24,6 +24,19 @@ from urllib.request import Request, build_opener, HTTPRedirectHandler
 import uuid
 
 from .platform_paths import user_data_root
+from .native_messages_data import NATIVE_MESSAGES
+
+_UPDATE_DISPLAY_KEYS = {text: 'native.' + key for key, text in NATIVE_MESSAGES['zh-CN'].items()
+                        if key.startswith('errors.updates.') and '{' not in text}
+
+
+def update_error_fields(code, message):
+    """Preserve the updater's raw contract plus an optional known display key."""
+    result = {'code': code, 'message': message}
+    key = _UPDATE_DISPLAY_KEYS.get(message)
+    if key:
+        result['display'] = {'key': key}
+    return result
 
 SERVER_MANIFEST = 'https://www.phonetictoolbox.com/releases/windows-x64/preview/latest.json'
 GITHUB_RELEASES = 'https://api.github.com/repos/Nephelium/PhoneticToolbox/releases'
@@ -190,7 +203,9 @@ class Release:
 class UpdateService:
     def __init__(self, *, current_version=None, data_root=None, state_root=None, transport=None,
                  clock=time.time, monotonic=time.monotonic, system_country=_system_country,
-                 check_interval=CHECK_INTERVAL, package_kind='portable', apply_handler=None):
+                 check_interval=CHECK_INTERVAL, package_kind='portable', apply_handler=None, trusted_keys=None):
+        from .update_signatures import TRUSTED_UPDATE_KEYS
+        self.trusted_keys=dict(TRUSTED_UPDATE_KEYS if trusted_keys is None else trusted_keys)
         if current_version is None:
             from . import __version__
             current_version = __version__
@@ -326,6 +341,12 @@ class UpdateService:
         if not isinstance(obj, dict) or obj.get('schemaVersion') != 'ptb-release/1':
             raise UpdateError('MANIFEST_INVALID', '发布清单版本无法识别。')
         version = SemVer(obj.get('version'))
+        if self.trusted_keys:
+            if version<=self.current:return None
+            from .update_signatures import verify_manifest,SignatureError
+            try:verify_manifest(obj,self.trusted_keys)
+            except SignatureError as exc:
+                raise UpdateError('MANIFEST_SIGNATURE', '更新清单签名校验失败，未采用此更新。') from exc
         if channel == 'stable' and version.pre:
             return None
         if obj.get('channel', 'preview' if version.pre else 'stable') not in ('preview', 'stable'):
@@ -377,6 +398,7 @@ class UpdateService:
                 # cannot update this app and must not invalidate newer assets.
                 if version < self.current:
                     continue
+                if self.trusted_keys and version<=self.current:continue
                 assets = item.get('assets', [])
                 if not isinstance(assets, list):
                     raise UpdateError('MANIFEST_INVALID', 'GitHub 发布资源无效。')
@@ -389,6 +411,8 @@ class UpdateService:
                     if release:
                         releases.append(release)
                     continue
+                if self.trusted_keys:
+                    raise UpdateError('MANIFEST_SIGNATURE','此更新缺少已签名发布清单。')
                 parsed = []
                 for asset in assets:
                     if not isinstance(asset, dict):
@@ -416,12 +440,13 @@ class UpdateService:
     @staticmethod
     def _failure(error):
         if isinstance(error, UpdateError):
-            return {'status': 'error', 'code': error.code, 'message': str(error)}
+            return {'status': 'error', **update_error_fields(error.code, str(error))}
         if isinstance(error, HTTPError):
-            return {'status': 'error', 'code': 'HTTP_ERROR', 'message': f'发布来源返回 HTTP {error.code}。'}
+            return {'status': 'error', 'code': 'HTTP_ERROR', 'message': f'发布来源返回 HTTP {error.code}。',
+                    'display': {'key': 'native.errors.updates.sourceHttp', 'values': {'status': error.code}}}
         if isinstance(error, (TimeoutError, OSError, URLError)):
-            return {'status': 'error', 'code': 'NETWORK_ERROR', 'message': '连接失败或超时，请稍后重试。'}
-        return {'status': 'error', 'code': 'CHECK_FAILED', 'message': '更新检查失败，请稍后重试。'}
+            return {'status': 'error', **update_error_fields('NETWORK_ERROR', '连接失败或超时，请稍后重试。')}
+        return {'status': 'error', **update_error_fields('CHECK_FAILED', '更新检查失败，请稍后重试。')}
 
     def check(self, *, manual=False, source=None, channel=None, cancel=None):
         if not isinstance(manual, bool) or source not in (None, 'auto', 'server', 'github') or channel not in (None, 'stable', 'preview'):
@@ -465,7 +490,7 @@ class UpdateService:
                     other = {(p.kind, p.size, p.sha256) for p in alternate.packages if p.kind == self.package_kind}
                     if alternate.version == best.version and selected and other and selected != other:
                         conflict = True
-                        results[alternate.source] = {'status': 'error', 'code': 'PACKAGE_CONFLICT', 'message': '同版本两来源的更新包摘要不一致，已阻止换版。'}
+                        results[alternate.source] = {'status': 'error', **update_error_fields('PACKAGE_CONFLICT', '同版本两来源的更新包摘要不一致，已阻止换版。')}
             if best and best.version > self.current and not unavailable and not conflict:
                 release_id = uuid.uuid4().hex
                 packages = list(best.packages)

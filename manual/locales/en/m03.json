@@ -1,0 +1,1750 @@
+{
+  "schemaVersion": "ptb-manual-localization/1",
+  "locale": "en",
+  "entries": {
+    "9bf1d362241de24daa6ef3b187ced3d15ff464a9ddaab815f400ab2a1ee7154d": {
+      "source": "EGG 信号分析",
+      "translation": "EGG signal analysis"
+    },
+    "72bb4fb56528c704424e14774279bea1a737023b5add0df16535452a27da42af": {
+      "source": "视频教程：<s id=\"0\">观看本章视频</s>。",
+      "translation": "Video tutorial: <s id=\"0\">watch this chapter's video</s>."
+    },
+    "d44a724053d5470f99f6e6eca4f8031ae1c84f69e83cc65976331ac4e942c550": {
+      "source": "加载同步 EGG 与音频",
+      "translation": "Load synchronized EGG and audio"
+    },
+    "17cdace1108b1cfa618f09c43730d35d3d1e9feb663596738d93e6a151a55d83": {
+      "source": "先用总览找到发声片段，再放大检查 EGG 周期、GCI/GOI、CQ/SQ 与 F0，最后保存数据和图形。需要比较声源形状时，可对稳定元音做简化逆滤波 IF。",
+      "translation": "Find a phonation segment in the overview, then zoom to inspect EGG cycles, GCI/GOI, CQ/SQ, and F0 before saving data and figures. For source-shape comparison, use simplified inverse filtering IF on a stable vowel."
+    },
+    "8f44e6dbf53901798b6739490f6604627837c38b6b0ce9d24ecd2eef93a0e39b": {
+      "source": "文件、声道与预处理",
+      "translation": "Files, channels, and preprocessing"
+    },
+    "7ac18ab509859956784fe39d57599ef906af7522fff1c34b73b6b549a6285967": {
+      "source": "准备同步录制的双声道 WAV，默认左 EGG、右音频。两条声道须分别来自 EGG 设备和同步录音。",
+      "translation": "Prepare a synchronously recorded stereo WAV, with EGG on the left and audio on the right by default. The channels must come from the EGG device and synchronized audio recording respectively."
+    },
+    "0c5323519a68bc66312220c09168ee7c01b2a63895b43bd1d977ff7f05173b10": {
+      "source": "按设备接线记录核对声道及 EGG 极性。交换声道用于交换角色；极性和录制时延需分别核对。",
+      "translation": "Check channels and EGG polarity against the device connection record. Swap channels exchanges roles; polarity and recording delay require separate checks."
+    },
+    "0ebf7c06972bfc1491aa8885d3eaf965422e20c2ea5e037ef485aafaf10f4bd7": {
+      "source": "两声道分别按全文件峰值归一化至 ±0.7，再按设置处理 EGG。原 WAV 保持不变，归一化幅度没有声压或接触面积单位。",
+      "translation": "Each channel is independently normalized to a full-file peak of ±0.7, then EGG is processed as configured. Original WAV is unchanged; normalized amplitude has no sound-pressure or contact-area unit."
+    },
+    "676f33d15a684a8d506560dfa5e8e7365f4904ad3ad6bab15d152192a78fc995": {
+      "source": "总览默认显示音频声道，底栏试听播放归一化分析音频。屏幕波形的自适应缩放只影响显示。",
+      "translation": "The overview shows the audio channel by default; bottom playback uses normalized analysis audio. Adaptive waveform scaling affects display only."
+    },
+    "5d25287b5161501d602cee2dc57ffec2a654fc69f1f16f483ec02d54702ac7cd": {
+      "source": "载入后的核对",
+      "translation": "Checks after loading"
+    },
+    "1f9332cfa5c8b9a469f3b45118aba4c1a115eedde9a1bcc2d4c181a014d06fa1": {
+      "source": "点击<s id=\"0\">打开音频目录</s>，在左栏 EGG 音频文件中选 WAV。等文件名、采样率、时长、声道角色和四图出现。",
+      "translation": "Click <s id=\"0\">Open audio folder</s> and select WAV from EGG audio files on the left. Wait for file name, sample rate, duration, channel roles, and four plots to appear."
+    },
+    "239e64ca1eb33c50a66d42be8f08a7fc3cab05a6c26928ce05dfb10bb614baf8": {
+      "source": "实际接线为左音频、右 EGG 时，点击交换声道，等预览更新后再核对角色提示和波形。",
+      "translation": "If actual wiring is left audio/right EGG, click Swap channels, wait for preview, then recheck role indicators and waveforms."
+    },
+    "9e227382c78fdfaa48bd69d6e862d0234a8263b89de8403d42de1f00b788b9c6": {
+      "source": "读入被拒绝时，核对格式、双声道、采样率和整文件限额。只缩短选区不会减小源文件，超限需先切分。",
+      "translation": "If loading is rejected, check format, stereo channels, sample rate, and whole-file limits. Shortening selection does not reduce the source file; split oversized files first."
+    },
+    "0cfac17bf99667ab9a47cab75590d09fd88d370ee11f83799615502e8515edef": {
+      "source": "同步 EGG 与音频的 40.00–40.50 s 分析选区，左图的半透明矩形与右图的 50 ms 微观窗对应。",
+      "translation": "A synchronized EGG/audio selection at 40.00–40.50 s. The translucent rectangle in the left plots matches the 50 ms microscopic window on the right."
+    },
+    "3b2f2d87d98f413c536bc0f0f7694df68fe73f9f16508ac517872ef31295b8b0": {
+      "source": "真实 3.wav 的当前 EGG 工作台，40至40.5秒选区、左图半透明微观范围、右图50毫秒总窗和红色0毫秒参考线可见",
+      "translation": "Current EGG workbench for real 3.wav, showing the 40–40.5-second selection, translucent microscopic range on the left, and total 50 ms window with a red 0 ms reference on the right."
+    },
+    "6aa684c31a56db5735945aece24f89a52e9893717edfd5796c7fb9d24f126e59": {
+      "source": "本例 3.wav 应为左 EGG、右音频。下图仅示范交换后的角色提示，看完请恢复正确接线。声道角色以接线记录和波形核对为准。",
+      "translation": "This 3.wav should be left EGG/right audio. The figure only demonstrates swapped-role indicators; restore correct wiring afterward. Verify roles against connection records and waveforms."
+    },
+    "d632a5c4e4778c812a40fe157fd0b7256f3a918112e8094781cc6482b4aa657a": {
+      "source": "交换后的角色提示，本例需再交换恢复左 EGG、右音频。",
+      "translation": "Swapped-role indicators; swap again to restore left EGG/right audio for this example."
+    },
+    "b6376e437239f2de29c85b3e8f90f9cff13876b77c426e1d929934c6639859e7": {
+      "source": "交换声道按钮操作后的角色提示与四图，显示同一3.wav被反向解释为左音频右EGG",
+      "translation": "Role indicators and four plots after Swap channels, interpreting the same 3.wav in reverse as left audio/right EGG."
+    },
+    "0f01115ab9f2eb4c116555fb958ed56c5f9d088585d05a53ee490b5e47192929": {
+      "source": "真实 EGG 示例的使用方式",
+      "translation": "Using the real EGG example"
+    },
+    "856f3e97e40bcbd7432f814c92266083f2e430ce2e758bd4bc71f169a18759c6": {
+      "source": "本章用真实双声道录音 3.wav 示范，采样率 44100 Hz，约 77.25 s。",
+      "translation": "This chapter uses real stereo recording 3.wav, sampled at 44100 Hz, approximately 77.25 s long."
+    },
+    "5a2afeebf7a2320ff04ef374a888af168f79f457e1f25c575bf25fd5f0cb01dd": {
+      "source": "Windows 本地输入须同时满足：双声道 WAV、8–96 kHz、<s id=\"0\">最长 30 分钟（1800 s）、最大 2,000,000,000 字节</s>。IF 选区另限 10 s、960,000 帧。超限文件先切分，服务器入口的限额请另行核对。",
+      "translation": "Windows local input must satisfy all limits: stereo WAV, 8–96 kHz, <s id=\"0\">up to 30 minutes (1800 s) and 2,000,000,000 bytes</s>. IF selections separately allow up to 10 s and 960,000 frames. Split oversized files first; check server-entry limits separately."
+    },
+    "06ac314bc3a6753281328e80ba610cdeba46f5255b7d55f7ccd07e4d0ab9efbf": {
+      "source": "长录音的<s id=\"0\">实时分析选区最多 60 s</s>。总览采用轻量显示数据，选区试听与分析保持原采样率。完整录音请用保存完整录音 CSV / 三图，操作见后文。",
+      "translation": "For long recordings, the <s id=\"0\">live analysis selection is limited to 60 s</s>. Overview data is lightweight; selection playback and analysis retain source sample rate. Use Save full recording CSV / three plots for complete recordings, as described below."
+    },
+    "62b4c47d6f8168347434efc61ff577498ee736d264795361fcc4dfed13f03031": {
+      "source": "快速完成一次分析",
+      "translation": "Complete an analysis quickly"
+    },
+    "5cc5064107e6a9c08824771752b129030af74359b06bf6b793d50f353cada1c2": {
+      "source": "打开音频目录并选择 WAV；支持导入的网页入口可先点击导入 WAV。",
+      "translation": "Open an audio folder and select WAV. Web entries with import support can use Import WAV first."
+    },
+    "b6f51743c7acb53d30411473abfc4dc28cfbda5068f12029cde6bac4a25bf4e3": {
+      "source": "核对声道角色，需要时交换声道。",
+      "translation": "Check channel roles and swap if necessary."
+    },
+    "9ed4fb19c5e3cc041650d887588ca705c5e9d2e4b18b747c74d2073fdc5f1dc1": {
+      "source": "在总览拖选，或填写底栏起点、终点。初始选区为 0–0.5 s，短文件到末尾。",
+      "translation": "Drag a selection in the overview or enter bottom start/end times. Initial selection is 0–0.5 s, or through the end for shorter files."
+    },
+    "6b3876e04994919221fa27d1208af3755292b072648e8f19f6ab5f8176fcba68": {
+      "source": "点击左上 CQ/SQ 或左下语谱图定位时间，右两图显示默认 50 ms 的周期细节。",
+      "translation": "Click upper-left CQ/SQ or lower-left spectrogram to locate time; the right plots show cycle details in the default 50 ms window."
+    },
+    "3006803e9b37f6f8ce7205d03b879890fc99157ad8c4087d2966fa12da363533": {
+      "source": "先用默认事件设置检查周期，随后一次改一个参数。",
+      "translation": "Inspect cycles with default event settings first, then change one parameter at a time."
+    },
+    "23dbcd0c2caf865f5bce4b0b0fbd850e9ed38190bffd6ef558d0d51a54a5bb95": {
+      "source": "按录音需要设置左栏 F0 下限 Hz、F0 上限 Hz，再开启 Praat F0、GCI F0、REAPER F0 作对照。",
+      "translation": "Set Minimum F0 Hz and Maximum F0 Hz on the left as needed, then enable Praat F0, GCI F0, and REAPER F0 for comparison."
+    },
+    "0330683d555f8a6d4282ca9cd95333d5dc81c7d474ee80dcae704fd3e305fa4f": {
+      "source": "等最新预览完成，播放选区试听，再点击<s id=\"0\">保存 CSV / 三图</s>提交任务。",
+      "translation": "Wait for the latest preview, listen to the selection, then click <s id=\"0\">Save CSV / three plots</s> to submit a task."
+    },
+    "bfc6793fd4890610ebadf6aac66bcb936715deaffb40f028ff8d9e11d0f1c1b2": {
+      "source": "任务完成后点击查看，再选择目录保存完整结果。网页入口可逐个下载。",
+      "translation": "When the task completes, click View and select a folder for complete results. Web entries allow individual downloads."
+    },
+    "1fba16e06243c7c2dc9fecfbd6b628dab0c179924e5caeb379704fc88b8428df": {
+      "source": "逆滤波另选稳定元音，LP 阶数可先留空。IF 图组、试听、保存及批量操作见对应小节。",
+      "translation": "For inverse filtering, choose a stable vowel separately; LP order can initially remain empty. See the relevant sections for IF layouts, playback, saving, and batch operations."
+    },
+    "3eb79d05ab38503836a048b7568ba076b0bf242a93ffecb13018a47a98e10d12": {
+      "source": "定位片段与查看四图",
+      "translation": "Locate segments and inspect the four plots"
+    },
+    "8e4f9f5467d5e2068377191ec8791d209f23e54a5dfa2f4c15876da9a4096ac1": {
+      "source": "顶部工具栏负责打开文件、批量、交换声道、提交导出和 IF。保存参数草稿、帮助、方法与引用位于操作区。",
+      "translation": "The top toolbar opens files, handles batches, swaps channels, and submits exports/IF. Save parameter draft, Help, and Methods and references are in the action area."
+    },
+    "b752a29608d579c88f89729b1c22434018ab04829369ddff9b01ad27c8ec38b1": {
+      "source": "左栏选择文件并调整滤波、时长、微观窗、事件与语谱/F0。上方状态提示当前读取或更新进度。",
+      "translation": "The left selects files and adjusts filtering, duration, microscopic window, events, and spectrum/F0. Status above shows reading or update progress."
+    },
+    "0aeec7cfb52161382971133be77aff1e3a1423e065cca1977c9f81d376443cf2": {
+      "source": "四图依次为左上 CQ/SQ、左下语谱/F0、右上音频微观、右下 EGG 微观。CQ/SQ 和两张微观图用图头与坐标轴标明内容，不另列图例小标题。窄窗口可滚动查看。",
+      "translation": "The plots are CQ/SQ upper left, spectrogram/F0 lower left, microscopic audio upper right, and microscopic EGG lower right. CQ/SQ and microscopic plots identify contents through headers/axes rather than extra legend headings. Scroll in narrow windows."
+    },
+    "8e4c63f9ee87613c1d69d3417eb2113c23674d5cb56e91c8b8ee6aef18472354": {
+      "source": "四图下方的音频总览用于选区和浏览长文件，可勾选显示两个声道。",
+      "translation": "The audio overview below the four plots selects intervals and browses long files; Show both channels is available."
+    },
+    "710a180a0b23aa5a89c2b5d7e2b2a9d3663ba8dda266c374bc3f3f9aa987aa57": {
+      "source": "处理记录显示正式任务的进度、取消、重试和结果。实时预览不会逐次生成记录。",
+      "translation": "Processing records show formal task progress, cancellation, retry, and results. Each live preview does not create a record."
+    },
+    "44c35896bb89d56c86d2ba5a90782ee97a92168c6399389172c669f6fd9c72db": {
+      "source": "底栏调整起终点、播放进度及音量，并提供全部、播放/暂停和停止。",
+      "translation": "The bottom adjusts start/end times, playback position, and volume, with All, play/pause, and Stop."
+    },
+    "e0e67de96327ec0ac28aabbb4559a3540231f8e1d1aaf362ba390bbc59b0822f": {
+      "source": "分清三个范围：宏观选区决定分析和选区导出，微观窗决定右图细节，总览可见窗只决定浏览位置。",
+      "translation": "Distinguish three ranges: macroscopic selection controls analysis and selection export; microscopic window controls right-hand detail; the overview's visible window controls browsing only."
+    },
+    "4bca01c68364160b38981b43c9ed4f014dce34d41baf40749b822ae8e87db2b3": {
+      "source": "宏观选区、微观中心与试听",
+      "translation": "Macroscopic selection, microscopic centre, and playback"
+    },
+    "866e2a831180744d7a5e464580575b80e810c6aebd898c4758a37b34d3cd6b7d": {
+      "source": "总览选区与四图联动",
+      "translation": "Overview selection linked to all four plots"
+    },
+    "29de56787d0ddef189d6c2c82b4e669fa2dc8d2f64f25f5e5b5fcd39340dda31": {
+      "source": "CQ 读左轴（0–1），SQ 读右轴（−1.1 至 1.1）。语谱频率读左轴（0–5000 Hz），F0 读右轴。音频 · 微观、EGG · 微观标题后的毫秒数表示总窗长，图头同时保留绝对中心时间。右图横轴为距中心的毫秒，红色 0 ms 参考线标出中心，GCI 实线、GOI 虚线。",
+      "translation": "Read CQ on the left axis (0–1) and SQ on the right (−1.1 to 1.1). Spectrogram frequency uses the left (0–5000 Hz) and F0 the right. Milliseconds after Audio · microscopic / EGG · microscopic titles denote total window length; headers also retain absolute centre time. Right-hand horizontal axes show milliseconds from centre, marked by red 0 ms. GCI is solid and GOI dashed."
+    },
+    "b1de9c68fcafe484f5c25047bfc72d314b41e5e3918c25e91b2dd5e024361752": {
+      "source": "总览单击移动选区并保留时长，末尾自动贴边。左键拖动重新选起终点，松开后更新。",
+      "translation": "Clicking the overview moves the selection while retaining duration, clamping at the end. Left-drag to choose new start/end times; updates occur on release."
+    },
+    "3d8d1c39456d6b2167937c9fc0fe3a031cf532ec9b79b3f8fb88836ff638d2db": {
+      "source": "底栏起点、终点用于精确选区；左栏时长保持起点、改变终点。范围须在文件内且非空。秒最多五位、毫秒最多两位小数。",
+      "translation": "Bottom start/end fields select precisely; left-side Duration retains start and changes end. Selection must be nonempty and inside the file. Seconds allow up to five decimal places and milliseconds two."
+    },
+    "c5d55390ce4c3e75b8abe062fdc8193411d0c237a2aae414150522ebe153d68b": {
+      "source": "点击左两图定位微观中心。左图红色竖线标出中心，主题半透明矩形覆盖中心前后各半个微观窗长，与右两图的范围对应。左图缩放/平移改变宏观选区，右图缩放/平移只改变微观范围。",
+      "translation": "Click either left plot to position the microscopic centre. A red vertical line marks it, with a translucent themed rectangle spanning half the microscopic window on either side, matching the right plots. Zoom/pan on the left changes macroscopic selection; on the right it changes only microscopic range."
+    },
+    "df441a521f6d63112dcf715bbd9cccf821d7e9c2adf6c391339043d3854c87e8": {
+      "source": "四图内滚轮缩放、左键拖动平移，图外滚轮滚动页面。聚焦图面后，左右键平移、加减键缩放。总览用 −、+ 或 Ctrl+滚轮缩放，用时间窗起点滑条平移。",
+      "translation": "Within the four plots, wheel zooms and left-drag pans; outside, wheel scrolls the page. After focusing a plot, left/right arrows pan and +/− zoom. In the overview use −, +, or Ctrl+wheel to zoom and Time window start to pan."
+    },
+    "78f247fbac06433fb16d2ef343a542d4fb3f27a2d47bd75e679833aaa5b7793a": {
+      "source": "微观窗为 5–5000 ms。宽窗会抽点显示，图头标明抽点间隔；完整样本仍用于事件检测及 CSV/WAV。",
+      "translation": "Microscopic windows span 5–5000 ms. Wide windows are subsampled for display, with stride in the header; complete samples still serve event detection and CSV/WAV."
+    },
+    "ae66e9d35535bebf9ddf9a989e6c5fdeaebdb1618cea10b697b24c167b17688b": {
+      "source": "预览完成后可播放、暂停、停止。焦点未在输入框、按钮或弹窗时，空格播放，再按空格停止。",
+      "translation": "After preview finishes, play, pause, or stop. Outside inputs, buttons, and dialogs, Space starts playback and a second Space stops it."
+    },
+    "f4265a881b6db78590d04d7b620e3306028c2e82d5b29f56f479896f9ab99fce": {
+      "source": "40.00–40.50 s 选区的四图与底栏起终点，微观中心为 40.25 s，右图总窗长 50 ms。",
+      "translation": "Four plots and bottom start/end for selection 40.00–40.50 s, with centre 40.25 s and a total 50 ms microscopic window."
+    },
+    "c0fed55bbae81d59a482c429ade666b2ce65b4656732afb1ea5a5ea85b643f5f": {
+      "source": "真实录音40至40.5秒选区下的四图与底栏，左图定位40.25秒中心及微观覆盖范围，右图显示50毫秒周期细节",
+      "translation": "Real recording at 40–40.5 seconds, showing four plots and bottom fields, centre 40.25 seconds and microscopic rectangle on the left, and 50 ms cycle detail on the right."
+    },
+    "129eb6ec7bb89747ac8a4bea6659bf425af61a8df36e860e9e103b33b1a44a19": {
+      "source": "把时间窗起点滑条移到末尾，可见约 17.25–77.25 s。分析选区仍为 40.00–40.50 s；在总览点击或拖选才会改选区。",
+      "translation": "Move Time window start to the end to view approximately 17.25–77.25 s. Analysis selection remains 40.00–40.50 s; only clicking/dragging in the overview changes it."
+    },
+    "4becc29bd7d39d2a04df02f7fe9d1527de22e9c61b7baeb6495b33428db15061": {
+      "source": "总览浏览到录音后段，分析选区仍为 40.00–40.50 s。",
+      "translation": "Browsing the recording's later part while analysis selection stays 40.00–40.50 s."
+    },
+    "c2c0dcb64cb45d53a5a97bc7ddffaa30b2ad6ab0b5636da5e854c4297815b130": {
+      "source": "77.249秒录音的总览时间窗移到后段，时间窗起点滑条、40至40.5秒选区和底栏输入可见",
+      "translation": "The overview window of a 77.249-second recording moved later, with its start slider, 40–40.5-second selection, and bottom inputs visible."
+    },
+    "9dbee1fa19d91d6a7286e77447b02698b4fe02f8235d9bd3b7ee22ac39e5420f": {
+      "source": "修改文件、参数或选区会停止试听并自动更新。更新中保留上一完整图，<s id=\"0\">等更新完成再播放或导出</s>。连续操作只采用最新设置。",
+      "translation": "Changing file, parameters, or selection stops playback and updates automatically. The previous complete plots remain while updating. <s id=\"0\">Wait until updating finishes before playback or export.</s> Continuous actions use only the latest settings."
+    },
+    "7bce6bb554067b48d385de61ecbad2a98c236f334ed0b15d0447a49e6721b4b9": {
+      "source": "滤波、峰谷与事件核对",
+      "translation": "Check filters, peaks/valleys, and events"
+    },
+    "2bb8055fd5901a1d5cd53693fca86ae7e180ce9a68cf9802bbd5976efb7b4284": {
+      "source": "下表为无已存草稿时的初始值。重开优先恢复草稿；重新选文件只把选区重置为 0–0.5 s 或短文件全段。",
+      "translation": "The table gives initial values without a saved draft. Reopening prefers the draft; choosing another file resets only the selection to 0–0.5 s or the whole short file."
+    },
+    "9a01ef1edccfb9eba42220259264469d869d823a8d053da65445d90db6f2a0fc": {
+      "source": "核对 GCI/GOI 与峰谷阈值",
+      "translation": "Check GCI/GOI and peak/valley thresholds"
+    },
+    "5354e9ad4d0a799a1e5f0bbe550b5086b2ba222949d9e69c5f0703bf65d23be0": {
+      "source": "从默认事件设置开始",
+      "translation": "Start from default event settings"
+    },
+    "e15f1c4e86b77dc76ad7ae665dd0695e4bdf52ab52fac0b8450ca1773a3696dc": {
+      "source": "把微观 ms 从 50 改为 10，并在稳定段定位。本例中心 40.25 s，前后各 5 ms，便于看清事件标线；改回 50 可检查多个周期。",
+      "translation": "Change Microscopic ms from 50 to 10 and position it in a stable segment. Here the centre is 40.25 s with 5 ms on each side, clarifying event lines. Return to 50 to inspect multiple cycles."
+    },
+    "fcf80f6475b024ef8ae0a856f06e1f530a9d2b32fac0f3518c0d294187146a52": {
+      "source": "10 ms 微观总窗中的红色 0 ms 中心参考线、GCI 实线与 GOI 虚线。",
+      "translation": "Red 0 ms centre reference, solid GCI, and dashed GOI within a total 10 ms microscopic window."
+    },
+    "ed09580c7555ab1f6dadfd4622a43d884acfc566900273d5ebaa941f96deaf7a": {
+      "source": "真实录音10毫秒音频与EGG微观波形，标题标明总窗长，红色0毫秒参考线与GCI实线、GOI虚线可见",
+      "translation": "Real 10 ms audio/EGG microscopic waveforms, with total window length in titles and visible red 0 ms reference, solid GCI, and dashed GOI."
+    },
+    "848ba894b113817654df665bb8d40c110398cb0c75323982cfacc9d68a232376": {
+      "source": "GCI/GOI 均可选斜率或尺度 0.25。斜率找候选段内的快速变化，尺度找局部谷峰幅度跨度的 0.25 交叉点。尺度值按局部周期计算。",
+      "translation": "Both GCI/GOI offer slope or scale 0.25. Slope finds rapid change within a candidate interval; scale finds the 0.25 crossing of the local valley-to-peak amplitude span. Scale values are computed per local cycle."
+    },
+    "daa44c848e75929f10cfd19557ec93046fcbf3ce562a08c2c87159f30df49e61": {
+      "source": "峰/谷显著度控制 EGG 峰谷检出，表示相对周围基线的突出高度，单位是归一化幅度差。",
+      "translation": "Peak/valley prominence controls EGG extrema detection and means height relative to the surrounding baseline, in normalized amplitude differences."
+    },
+    "bd381e74b7525365bf48ec5f234578caed284b67258ec28551ff6eb29be0f2b4": {
+      "source": "使用峰自动、谷 0.01，检查每周期 GCI 实线、GOI 虚线及 CQ/SQ。",
+      "translation": "Use automatic peaks and valley 0.01; inspect each cycle's solid GCI, dashed GOI, and CQ/SQ."
+    },
+    "78f31bcdb59d7c7f428ce1320600427ca0e181618840798fe33c17aecd345fe5": {
+      "source": "疑似多检可比较谷 0.02、0.03，疑似漏检可比较 0.005。一次只改一个参数，这些值供当前录音复查。",
+      "translation": "For suspected extra detections compare valley 0.02 and 0.03; for missed events compare 0.005. Change one parameter at a time; these values are for rechecking this recording."
+    },
+    "92a1f8ec18f216a8f1b09e9a2b97acfe91171aabee52e3fe409962463edc3c0f": {
+      "source": "峰自动漏掉弱周期时，关闭自动，从手动峰/谷 0.01 比较。自动开启时，手动峰值不参与计算。",
+      "translation": "If automatic peaks miss weak cycles, disable automatic mode and compare manual peak/valley 0.01. With automatic mode on, the manual peak value is unused."
+    },
+    "ee8bd008ea97faf4e9776d43ef0a813bb6d010792c88a5406cb76945cc7c8f75": {
+      "source": "按需比较四种 GCI/GOI 组合，核对事件和 CQ/SQ 对设置的敏感程度。定位准确性请结合周期波形和事件标线核对。",
+      "translation": "Compare the four GCI/GOI combinations as needed and examine event and CQ/SQ sensitivity. Check localization against cycle waveforms and event lines."
+    },
+    "f9f155e3d7b839c6c8e1510b792bf2f391f3b6bebb1d28e9b42658b70cc81452": {
+      "source": "CQ、微观波形及事件采用不同的局部滤波范围，边缘标记可能有差异。悬停四图区域可查来源；复核时保留选区与参数。",
+      "translation": "CQ, microscopic waveforms, and events use different local filtering ranges, so edge markers may differ. Hover over plots for provenance; retain selection and parameters during checks."
+    },
+    "0c24355525211772a94842db9aabbffd3b7648da31c11acc6817b3cd33d520d3": {
+      "source": "工作台控件与默认值",
+      "translation": "Workbench controls and defaults"
+    },
+    "099e7687ebbdec2e55d2b70e52d57b13c9b5f164e78675cde12beb5557d70c91": {
+      "source": "主工作台控件与默认值",
+      "translation": "Main workbench controls and defaults"
+    },
+    "dfeb0027273dfa74dbbbf6abe4f701cc8fe4c1b6bd63ff55d32000e7b742ed89": {
+      "source": "控件或参数",
+      "translation": "Control or parameter"
+    },
+    "6d9a6fe9460f7a0d7c3bd77a5d1403ad4f44bbad0d140b4f8758fcc889e941ee": {
+      "source": "位置/单位",
+      "translation": "Location / unit"
+    },
+    "d96b5f223f71d2e565ac20aefaa3a64a543420fb7b82fd54a93781cecf9e7a48": {
+      "source": "默认值",
+      "translation": "Default"
+    },
+    "65be762e1110940fb22750b73c8ae5d8aa83aa4ba7c0a13ae0c9e3bfb803e0cd": {
+      "source": "操作与影响",
+      "translation": "Action and effect"
+    },
+    "a7613b66fb58d637232294f64b3decf47050a34f3436cd233b800d671c683215": {
+      "source": "打开音频目录",
+      "translation": "Open audio folder"
+    },
+    "44db126be2b9d3edc392b120ad318d434356b785cecc426f125f4e8a5b84b1fa": {
+      "source": "顶部 / 目录",
+      "translation": "Top / folder"
+    },
+    "40b3ba334b3ee3cc703fde7afacec54303b0c7672c0710aa8f7e2a1a60a06182": {
+      "source": "未选择",
+      "translation": "Not selected"
+    },
+    "cea83416dd0aec77ae6cbba019d20baa5f3b17cd5acb5a10e9783a182bf7c5cd": {
+      "source": "读取目录中的文件列表，随后再选文件。",
+      "translation": "Reads the folder's file list; choose a file afterward."
+    },
+    "11a44309c5d68dba61e6f977121ae9a97c88bd167ba30d70a7c669c597f2358f": {
+      "source": "导入 WAV",
+      "translation": "Import WAV"
+    },
+    "6d9508c6fe5327c8a4d2c138404750a47bda774d62d2434758eee59702efad0b": {
+      "source": "顶部 / 文件",
+      "translation": "Top / file"
+    },
+    "26e577404f061bb719a8ef87579f2c4a35788cc76a4521166a85a957eb0177c4": {
+      "source": "未导入",
+      "translation": "Not imported"
+    },
+    "d35bc405e37d9ca3502771499d1b486985889d7f171cb4ce6ecb203f3a0f14ba": {
+      "source": "支持导入的入口可添加多个 WAV。",
+      "translation": "Import-enabled entries can add multiple WAVs."
+    },
+    "418f7463297c59757ed62a22a3b8d40352c9c4cf85526c522ae4eab388a55432": {
+      "source": "刷新文件",
+      "translation": "Refresh files"
+    },
+    "f5eb59f9f672a20e6aa4ad92e0c587c77ca081ca8c5eed1961f98be71f01ca72": {
+      "source": "顶部 / 按钮",
+      "translation": "Top / button"
+    },
+    "f9821bf85af5065d5ffd3689b56a6bfa27be3916bc2721ea0949ea70c5fca431": {
+      "source": "桌面未选目录时禁用",
+      "translation": "Disabled on desktop without a folder"
+    },
+    "aea4717900d3b1607289cb40f555651f11e1092811509db0f68507302974f398": {
+      "source": "目录内容变化后刷新列表。",
+      "translation": "Refreshes the list after folder contents change."
+    },
+    "cc92da8e2621343b8b910b113ff8ddb0605dc267b909b2fca3c32736a7236944": {
+      "source": "EGG 音频文件",
+      "translation": "EGG audio files"
+    },
+    "7a22e26077db104894665fd1fb2538b082429a4897ee045fd232fe22da6643bc": {
+      "source": "左栏顶部 / 下拉框",
+      "translation": "Upper left / selector"
+    },
+    "0bb9edd171bdcb1d58d91d90c612e28cbf8d0d1bef76df6458c17f8724958255": {
+      "source": "选文件后自动加载、分析。",
+      "translation": "Selecting a file loads and analyses it automatically."
+    },
+    "0223d74cbaf9815d8f1cd7208f5234b2f75d76d9f4e0b40fb5be82da1b587473": {
+      "source": "交换声道",
+      "translation": "Swap channels"
+    },
+    "125c9e057e99f91993178673512df1386c1f1581d01f5d3fc3246e3a63abd789": {
+      "source": "左 EGG、右音频",
+      "translation": "Left EGG, right audio"
+    },
+    "9e141e56132c225622f71490d7039f9e8d205da7d2db641ea8e9cabc059c8fd2": {
+      "source": "交换角色并更新，原 WAV 不变。",
+      "translation": "Swaps roles and updates without altering original WAV."
+    },
+    "2ba464b05b7c09c547fde6255a19caed00ec5df02ccce21f41e7481b8fa83e04": {
+      "source": "滤波",
+      "translation": "Filtering"
+    },
+    "b7c0528307f9cfaccc975a31f6b5c77c4fcd282f1614753ec1e8a0d37a0e6fb7": {
+      "source": "左栏 / 复选框",
+      "translation": "Left / checkbox"
+    },
+    "ea8b837edd202e0dac5363d8fa880906542231fc009bfa7a7da45860a821ffef": {
+      "source": "勾选",
+      "translation": "Checked"
+    },
+    "ff0bb6d6e24fda4b20f1bdf04dccfa5a67b9faec9140df04a566613391abcd09": {
+      "source": "切换原始/滤波 EGG，批次始终滤波。",
+      "translation": "Switches raw/filtered EGG; batches always filter."
+    },
+    "597221129f13fea188f2ae56c0d0a03214ebe5fd9aacfd5a20cc6ad6a62933bd": {
+      "source": "高通 Hz",
+      "translation": "High-pass Hz"
+    },
+    "13327d6f5c4361119703b75cba4e37499280f23ac7533ee6b14207a674e1ec64": {
+      "source": "左栏 / Hz",
+      "translation": "Left / Hz"
+    },
+    "1d809ee7d305905629e9ae447a249a85d8a474107d75c79c2c566bca6b206649": {
+      "source": "0 &lt; 高通 &lt; 低通，改后复查事件。",
+      "translation": "0 &lt; high-pass &lt; low-pass; recheck events after changes."
+    },
+    "c11b3073a7c6f01c3e5dd513e993aef34c9b6325b59889436e80664dde413df7": {
+      "source": "低通 Hz",
+      "translation": "Low-pass Hz"
+    },
+    "a1fb0e371b45a846b5f85bf046bbc8168ad102ed3360e6c63f8ec9fde366fc46": {
+      "source": "须小于采样率/2，改后复查事件。",
+      "translation": "Must be below sample rate/2; recheck events after changes."
+    },
+    "65973dad5123b917536f88dd221b6e88483a4d70ec1500dc9adacaf9a025b156": {
+      "source": "时长 s",
+      "translation": "Duration s"
+    },
+    "1d51502ac789b0fd6f9ac52bafde691eabecc42c1b0844f1dd954faddfca8abe": {
+      "source": "左栏 / s",
+      "translation": "Left / s"
+    },
+    "96b458a76ae7f1127b00a2195a95cdaaf9cee26c607d5ea92cd698a7ee703f28": {
+      "source": "0.5，短文件按实际长度",
+      "translation": "0.5, or actual duration for shorter files"
+    },
+    "6a781b8545cee7c9ba8e91f8456af4edae3186348ede04d5dc887d3648cad984": {
+      "source": "保持起点、改变终点，长录音最多 60 s。",
+      "translation": "Retains start and changes end; long recordings allow up to 60 s."
+    },
+    "a5d8dc943fdb5801f97bb46a00f761745b499d21d53f1d4493739dd818b70597": {
+      "source": "微观 ms",
+      "translation": "Microscopic ms"
+    },
+    "1aa06270dac05f62c16afcd7c7a0269bd86aa32ed4b9a9f4f7e22740552df104": {
+      "source": "左栏 / ms",
+      "translation": "Left / ms"
+    },
+    "16c183ef74eb18a900339c23ad5a86de7c591f51f29b498bb7b1adf3ed022b43": {
+      "source": "总长 5–5000 ms。右图标题标总长，左图矩形标覆盖范围，文件边缘按实际样本。",
+      "translation": "Total 5–5000 ms. Right titles show total length; left rectangles show coverage. File edges use available samples."
+    },
+    "0b364ad8e476b03ba12fb7cfa27444b317194034896c817f69072b564794506b": {
+      "source": "峰自动",
+      "translation": "Automatic peaks"
+    },
+    "b2a1ef334013ffe14d1a6ac7c2e57e19fe9ad260362b66a229eb40811b07b3fa": {
+      "source": "事件检测 / 复选框",
+      "translation": "Event detection / checkbox"
+    },
+    "48ccbab3ef6b98605a5ffde7c0b36d6896118ae1280aea4b6eddd990b7f83603": {
+      "source": "200 ms 窗、100 ms 步长，阈值 max(0.01, 0.6×局部绝对峰值)，只作用于峰。",
+      "translation": "200 ms window, 100 ms step, threshold max(0.01, 0.6 × local absolute peak); peaks only."
+    },
+    "9f5967cc1afdcc8e912aca05d5b2b2d1a46e0cde953d8d0491fad42fbe9acbe5": {
+      "source": "峰显著度",
+      "translation": "Peak prominence"
+    },
+    "e48ec6b62f1d392b9f80fd500864e4477ee47d330bb31b5e845363ddefe867a9": {
+      "source": "事件检测 / 无量纲幅度差",
+      "translation": "Event detection / dimensionless amplitude difference"
+    },
+    "ea6695cfbae68052d13ee7ffef8b36d95bda3c1fc4c5c00e837e3d2841b465a0": {
+      "source": "0–10，关闭峰自动后参与检测。",
+      "translation": "0–10; used after disabling automatic peaks."
+    },
+    "b6f70b59d600573f316af9889caacd1d59eebe9828d3328c11feaa79c0f23e59": {
+      "source": "谷显著度",
+      "translation": "Valley prominence"
+    },
+    "3529325b057cbc2b055bca2378bdd67ce1f951f80f7a6b389e89e17456ea203e": {
+      "source": "0–10，始终手动，按误检/漏检调整。",
+      "translation": "0–10; always manual. Adjust for false/missed detections."
+    },
+    "f312f9831ded368ac7c4aa7438605c8cec1872841378bfde8aa77b5a87196baa": {
+      "source": "事件检测 / 下拉框",
+      "translation": "Event detection / selector"
+    },
+    "06590b475fdb4f0ed376d63e2e96afc29c47017cdc11493d784b5fbb71fcafe6": {
+      "source": "斜率",
+      "translation": "Slope"
+    },
+    "3ffca92f805733d1ae6394412c02766ef844baaa1828c096bdd1e4f9cb7194a0": {
+      "source": "斜率或尺度 0.25。",
+      "translation": "Slope or scale 0.25."
+    },
+    "b53cbb139d29a10a8a11ff14edaf7ad8c4214c7a330955927db60199184083c7": {
+      "source": "尺度 0.25",
+      "translation": "Scale 0.25"
+    },
+    "acfae4ea129b2716d5946ad97c93be61a03eeaed62323cd5ce6b6bd706bbe38e": {
+      "source": "尺度 0.25 或斜率。",
+      "translation": "Scale 0.25 or slope."
+    },
+    "86b4e2fa565c0ca4f18e52186cd4d0c90000f391c2f27bbef6bdaaa5916548e1": {
+      "source": "谱窗 ms",
+      "translation": "Spectral window ms"
+    },
+    "47c104ac1191eaf65fe6620f6edbaa61299b91c401050216593a448faf2fc2ea": {
+      "source": "语谱图与 F0 / ms",
+      "translation": "Spectrogram and F0 / ms"
+    },
+    "196a3cf1c7a3e28b27caf822da93be6a249f1f3e4a4cb14ea583abd3bd16c91b": {
+      "source": "5–50 ms，大窗频率细、小窗时间细。",
+      "translation": "5–50 ms; longer windows refine frequency, shorter refine time."
+    },
+    "28498b1000ed4c41e1ff212e05b40812580542d19218bba36efdeec063b74f2e": {
+      "source": "自动 dB",
+      "translation": "Automatic dB"
+    },
+    "d936f6dadf4ee705019685de9b592e0034b8f811a9f463591d6964753edb5f0f": {
+      "source": "语谱图与 F0，谱窗右侧 / 切换按钮",
+      "translation": "Spectrogram/F0, right of window length / toggle"
+    },
+    "08f8e7374cb1dd446e98d817d9cacf05aeeec3586942c9d00cd2afa0f0783cde": {
+      "source": "开启",
+      "translation": "Enabled"
+    },
+    "e95b3c30c19ecc64d2056e9725cc1517af77e9238f8f2c0e8606d6c8dd1333ef": {
+      "source": "随可见 PSD 更新 50 dB 范围，只改显示。",
+      "translation": "Updates a 50 dB range from visible PSD; display only."
+    },
+    "5962a13d539b19dda2964ccb15ec344b94f412b3482df9ad912a563e6c1bc839": {
+      "source": "dB 下限",
+      "translation": "Minimum dB"
+    },
+    "40fe5db6a69ef58bcf7d53ee5e05a0306bc3f6f041e57daa1be7665e3287f2fe": {
+      "source": "语谱图与 F0，谱窗下一行 / dB",
+      "translation": "Spectrogram/F0, row below window length / dB"
+    },
+    "a05b2760f4c016072b6886c6b7e75e552dacc185dfcb1e2714cfb9ffccff5b31": {
+      "source": "初始 −70，自动时更新",
+      "translation": "Initially −70, updated in automatic mode"
+    },
+    "a8ae8274c646e9a3c1b091b0762f6165d7a677428918f3461633aa31eee67dd7": {
+      "source": "−160 至 20，须小于上限，自动时禁用。",
+      "translation": "−160 to 20, below maximum; disabled in automatic mode."
+    },
+    "a5b47a87bdb281d647c269464cc06e47966b52c02b5f53ccc2e0935128fb72fb": {
+      "source": "dB 上限",
+      "translation": "Maximum dB"
+    },
+    "6532057e04959b26bb5c02919e2dad09bbfc0523443f7e4bad58fd8cd1d43045": {
+      "source": "初始 −10，自动时更新",
+      "translation": "Initially −10, updated in automatic mode"
+    },
+    "d4003b9f6e3d0264074830c9e86e8514a70b0abf5be0d52537b2ec116397b753": {
+      "source": "−160 至 20，须大于下限，未校准声压。",
+      "translation": "−160 to 20, above minimum; not sound-pressure calibrated."
+    },
+    "10f06b77e92dd6ce78b257d8ce0a39ac6d9fabfa915258aecd24d58c434c3016": {
+      "source": "F0 下限 Hz",
+      "translation": "Minimum F0 Hz"
+    },
+    "94ab0d39a65012de843f948bbec455181e7270ade34b50a3b2bae65608d6b5c8": {
+      "source": "语谱图与 F0 / Hz",
+      "translation": "Spectrogram and F0 / Hz"
+    },
+    "aecb44dc5ee0a90c502b004c47aaf505c69fbf120fa03ab0b20a44dec0c66f2e": {
+      "source": "10–2000，须小于上限。Praat AC 与 REAPER 共用，修改后更新检测和缓存，不改 GCI F0 或事件检测。",
+      "translation": "10–2000, below maximum. Shared by Praat AC and REAPER; changing it updates detection/cache without altering GCI F0 or event detection."
+    },
+    "719beef2312cf9bd0c45d190e83446e6448a351152568abd3d63fb5f532d7a00": {
+      "source": "F0 上限 Hz",
+      "translation": "Maximum F0 Hz"
+    },
+    "9d1a5150317be5d9cf8b86ef9cedff41848c311eaa96421e1d65d24466c017ad": {
+      "source": "10–2000，须大于下限。随单文件导出与参数草稿保存，批次使用独立配置。",
+      "translation": "10–2000, above minimum. Saved in single-file exports and drafts; batches use independent configuration."
+    },
+    "c9bce85909c602d6a1fcac116371f1d1f8f9e9d5eac2b66d30e58e46c565658e": {
+      "source": "语谱图与 F0 / 复选框",
+      "translation": "Spectrogram and F0 / checkbox"
+    },
+    "4f90971621aee2a5e446ac530b16fa7099c2e6378293f7f0c572968f1df7cdfc": {
+      "source": "关闭",
+      "translation": "Off"
+    },
+    "99e99bfc3bfbab0327f88fdfcdb15e824b43ec841c0ae8fde88cd8a59367a741": {
+      "source": "音频 AC，使用 F0 上下限，步长 10 ms，单文件 CSV 始终保留。",
+      "translation": "Audio AC, using F0 bounds and 10 ms steps; always retained in single-file CSV."
+    },
+    "6893e4df136b3c6a8f03118dfcfb28b748ecdc15eab567e36784b2994bc20692": {
+      "source": "EGG 事件周期，不受音频 F0 上下限影响，单文件 CSV 始终保留。",
+      "translation": "EGG event cycles, unaffected by audio F0 bounds; always retained in single-file CSV."
+    },
+    "2da8df551cce7b2fbd712f396b543236cab082713444af36781b56fbfe19bc34": {
+      "source": "音频估计，使用 F0 上下限，步长 10 ms，开启才导出此列。",
+      "translation": "Audio estimate with F0 bounds and 10 ms steps; column exported only when enabled."
+    },
+    "af3f091d4c5df4232acac2c666295679c4b76ccf3cf87b53ad9ac621d4a466d5": {
+      "source": "保存 CSV / 三图",
+      "translation": "Save CSV / three plots"
+    },
+    "92b47e2f0acb6092a07eb2fc9d34980aac500869b9a983a382c0c68a22986464": {
+      "source": "顶部 / 任务",
+      "translation": "Top / task"
+    },
+    "041aa5f51cb4e6f3a4754c9cd5eda6f4ae2b9f71f0a825548f97eca4c5a424df": {
+      "source": "无有效当前预览时禁用",
+      "translation": "Disabled without a valid current preview"
+    },
+    "03d10ae6c31d3e51507e3e5cbc18d3bf45279ac7d2b61b1a5bbc5f9baa6aba8b": {
+      "source": "提交当前选区，完成后查看并保存。",
+      "translation": "Submits current selection; view and save after completion."
+    },
+    "065db1718f31588a6e9dc6d9ec68cc1092d916e3047a929a2edf303e832eca52": {
+      "source": "LP 阶数",
+      "translation": "LP order"
+    },
+    "f1d19a0e20c24195dd3761d6f9ed14768c5e786692deb7102ab6a74888815ca5": {
+      "source": "顶部 / 整数",
+      "translation": "Top / integer"
+    },
+    "413be385e08bee53246a906ad2c0656ba55caa7c05842ee5b0d3316c88ee4598": {
+      "source": "留空，自动",
+      "translation": "Empty, automatic"
+    },
+    "4aa59a629c3b382db37542a1c7cff55c9035a1327f437accb9caf25c97a2fea6": {
+      "source": "只影响 IF，留空自动，手动限制见 IF 步骤。",
+      "translation": "Affects IF only; empty selects automatic. See IF steps for manual limits."
+    },
+    "89eb1096ff90253bcaa48cba76fe9bb1ed75a38f580e408533665de0c8a68353": {
+      "source": "逆滤波 IF",
+      "translation": "Inverse filtering IF"
+    },
+    "d1f0cb92d34eeb11ed7171d9ee399ec6d7010fd91cfc584dd740e1961e359595": {
+      "source": "10 s、960000 帧内，完成后自动打开。",
+      "translation": "Within 10 s and 960000 frames; opens results automatically."
+    },
+    "96b5e3693c18c65b944a9754d81857ef33ac48fdb9f1762ada6137aed99fbacb": {
+      "source": "起点、终点",
+      "translation": "Start, end"
+    },
+    "cba6d8c2a6f731d62efbcea93044ff5fae1a75e88dd06adebbd66b1a48ecbbca": {
+      "source": "固定底栏 / s",
+      "translation": "Fixed bottom bar / s"
+    },
+    "407ef4dbff9d43369c3d7cd8cdc2122508f868d0fe498b3e2d0b0418dcc8ca4c": {
+      "source": "0、0.5，短文件截至末尾",
+      "translation": "0, 0.5; through end for short files"
+    },
+    "a30ac4941304bcabcd9cd389360acbedd5814a2f850a56d303b24ec2fe663162": {
+      "source": "同步宏观范围和微观中心，修改停止试听。",
+      "translation": "Synchronizes macroscopic range and microscopic centre; changing it stops playback."
+    },
+    "468816d066bc12b4432c1ff43a84a92ccecf1de25b9cc9f1b88172bb1edb9650": {
+      "source": "全部",
+      "translation": "All"
+    },
+    "619c478091f5afe770324cd5f49e73f0ae00036c362467fc11a32e44576c0fe5": {
+      "source": "固定底栏 / 按钮",
+      "translation": "Fixed bottom bar / button"
+    },
+    "917c8445350c494b6dba98dd98f2b37fe1aa741fd1d29c7dc25ed4b53994333d": {
+      "source": "未点击",
+      "translation": "Not clicked"
+    },
+    "2160b3908a9d708a824dca5d602dc280befedcb1e28d9f101ff474a4a4be1b1f": {
+      "source": "短文件选全段；长录音仍限制实时选区为 60 s。",
+      "translation": "Selects entire short files; long recordings still limit live selection to 60 s."
+    },
+    "ae64cb225ebb7d26e39c414e9915a713c1b1465b49e3e8c69938af23a556e96f": {
+      "source": "播放选区 / 暂停",
+      "translation": "Play selection / pause"
+    },
+    "123b830077094953c7115835ce6231130a5d71047dd8f4acb1b667aec5637746": {
+      "source": "停止",
+      "translation": "Stop"
+    },
+    "d83aa75f9d5eba4ad0f658f425c04b5b2512e08c2e136cf8cb14583c15c3666a": {
+      "source": "播放归一化分析音频，暂停后可继续。",
+      "translation": "Plays normalized analysis audio; pause/resume is available."
+    },
+    "171177f1b1adf93e37ab61273da861786c8c3d4fe9d8231270fab37c9db96bf2": {
+      "source": "停止，再播放从选区起点开始。",
+      "translation": "Stops; subsequent playback starts at selection onset."
+    },
+    "ec275e9525506ff1ef0ae4501a0f33a8e9e3c9b9e031026b4221e875545b0922": {
+      "source": "播放进度",
+      "translation": "Playback position"
+    },
+    "cc665e212c621373ac5acd37fa6e79c23837c9ba453fba718801429bfc7b891c": {
+      "source": "固定底栏 / 滑条",
+      "translation": "Fixed bottom bar / slider"
+    },
+    "c7b19cd64b5c793242f5eb1a495dd2b84e9e6dfe82708dcb545f241951ecc4af": {
+      "source": "当前选区起点",
+      "translation": "Current selection start"
+    },
+    "723ee8ec0f85b54fcba3df53a838952458f7679883b3f9d86e3720be5e7eadfa": {
+      "source": "选区内定位，播放中拖动后继续。",
+      "translation": "Seeks within selection; dragging during playback resumes afterward."
+    },
+    "4b0a460dcb5bfc76195327491e0df13f5b8c43af2cd04be4edc0ade4f6c72f1b": {
+      "source": "播放音量",
+      "translation": "Playback volume"
+    },
+    "c6acdd9d3aa180d3a4c5ad73b31f547564a13a4089f74d8ab8d667086b05cc38": {
+      "source": "固定底栏 / 0–100%",
+      "translation": "Fixed bottom bar / 0–100%"
+    },
+    "45f3f56bac505883de84a63e6cd50ffdcfd1bb4febf0327d02590d9717088923": {
+      "source": "应用初始 70%",
+      "translation": "Application initial value 70%"
+    },
+    "372cf83c9961a6e416526287069aa9847dd4299c8be55f6446c19ab1fbc9e973": {
+      "source": "只改播放增益。",
+      "translation": "Changes playback gain only."
+    },
+    "21ea4d2c127d73d578bb663cd70a4de52983a10577d8165a76f448f3e04d34ca": {
+      "source": "显示两个声道",
+      "translation": "Show both channels"
+    },
+    "13862cc29be319e93957476d578410d9b004b3c86b40e271d0cad8291dd459ca": {
+      "source": "总览图下 / 复选框",
+      "translation": "Below overview / checkbox"
+    },
+    "3382d3d57476eb68ccf6366b92aec7ae994a186af6f25b715e8b387f5b49e8ed": {
+      "source": "未勾选",
+      "translation": "Unchecked"
+    },
+    "b7bd8604c1bc5a85eb9b85760573320cb3bd7c119ee45aee15774af14f9a9640": {
+      "source": "默认仅音频，勾选对照通道。",
+      "translation": "Audio only by default; check to compare channels."
+    },
+    "e2b4671fa3b3fd1569288c427641d29cb1050961db939c72f24142e497ed2a76": {
+      "source": "−、+、适合窗口",
+      "translation": "−, +, Fit window"
+    },
+    "e0e153e814a7bd4de3ded4b03fbab04cdc8dbad3bf5d7caa02ff2938c549c7f8": {
+      "source": "总览图下 / 按钮",
+      "translation": "Below overview / button"
+    },
+    "1ec557ba5e0cd6aea18b1fdeec8d4b0bd4a3694200b99e01ee81b931d6335361": {
+      "source": "首次最多显示 60 s",
+      "translation": "Initially displays up to 60 s"
+    },
+    "039674b50f7ae58e189122bb05c102da676614aa5f83256917624a22f6df0a50": {
+      "source": "缩放总览可见窗，最大 60 s。",
+      "translation": "Zooms the overview's visible window, up to 60 s."
+    },
+    "47a2a37aedc364f050524d6358269dcfc5579356b11991d5dd1e8d699a6b707a": {
+      "source": "时间窗起点",
+      "translation": "Time window start"
+    },
+    "12ac06674dc0b26ef225023f4cf4648aef554855a1fa0225d5fe5adb09795724": {
+      "source": "总览图下 / 滑条",
+      "translation": "Below overview / slider"
+    },
+    "2f42f29feaa68ef2b351b56ac07d6add1c80dbb3928ad6c1fd5c3d85ee7effb5": {
+      "source": "平移总览可见窗，不改分析选区。",
+      "translation": "Pans the overview without changing analysis selection."
+    },
+    "c72578f3fec2fdd6d0e03962203bf3d806bed3b2bed167210dbccb7facd97256": {
+      "source": "保存参数草稿",
+      "translation": "Save parameter draft"
+    },
+    "3058ac446e51aab1240bc65193c802ae69b551dbcaf2e6bcd2c5312414b3e018": {
+      "source": "顶部操作区 / 按钮",
+      "translation": "Top action area / button"
+    },
+    "95f7238590b4aef221d51f6d8e11e896fd6af64c19e5cd076c96bba788c9b50e": {
+      "source": "未修改",
+      "translation": "Unchanged"
+    },
+    "4abe4132a7765f595eb05d7dad66d3d024397555945d1c749f56f10a278b4f9f": {
+      "source": "存配置及 LP，包括音频 F0 上下限，不存音频和正式结果。",
+      "translation": "Saves configuration and LP, including audio F0 bounds, but not audio or formal results."
+    },
+    "93c165ce37d4d0395ae1247592c0e4f8a4158143fe17a8480846a4bffc928ecb": {
+      "source": "帮助",
+      "translation": "Help"
+    },
+    "6d7bbe07218093141b25dc22066a2ebcb0eac9c62368d3d8c57e998dbf7d348d": {
+      "source": "打开章节，返回 EGG 信号分析回工作台。",
+      "translation": "Opens this chapter; Back to EGG signal analysis returns to the workbench."
+    },
+    "98eb27e9a4ae14ac16b5aedc242916073cd92e421bf8a16ebdfbbf76b4376d21": {
+      "source": "方法与引用",
+      "translation": "Methods and references"
+    },
+    "cc893bdcb75a3844096beb8742a45c553ca80018984d7040cb995b5237df5962": {
+      "source": "查看来源，复制引用或打开外链。",
+      "translation": "View sources, copy citations, or open external links."
+    },
+    "fe61f5953be1f73ccb97f6fb7b9269680c5651a5745a202bf2c22ca84013d65e": {
+      "source": "比较语谱窗长、色阶与 F0",
+      "translation": "Compare spectrogram windows, grayscale, and F0"
+    },
+    "0c4545687698ffd089d8e682c067a1edbb78f161658538293c1bc585d30efdbc": {
+      "source": "PSD 灰度与基频右轴",
+      "translation": "PSD grayscale and the right fundamental-frequency axis"
+    },
+    "039a1523687beec0df8693511582febddb0a29711bdcfe55bb1e05e1e1213a1f": {
+      "source": "谱窗控制时间与频率细节：大窗更易分辨谐波，小窗更易看清快速变化。灰度显示功率谱密度 PSD，dB 没有声压校准。",
+      "translation": "Window length controls temporal/frequency detail: longer windows separate harmonics better, shorter windows show rapid changes. Grayscale displays power spectral density PSD; dB is not sound-pressure calibrated."
+    },
+    "15349fab8cee482dd49f377dd2452cc892c7705f7d0cc1ef6f27abf238969ebb": {
+      "source": "自动 dB 位于谱窗 ms 右侧，下一行并列显示 dB 下限、dB 上限。开启后随当前可见 PSD 更新 50 dB 灰度范围，静音时保留原范围。实时语谱图上方不显示色条，当前范围查看左栏上下限。自动 dB 只改显示，正式导图使用提交时范围。",
+      "translation": "Automatic dB sits to the right of Spectral window ms, with Minimum/Maximum dB together below. When enabled it updates a 50 dB grayscale range from visible PSD, retaining the previous range in silence. Live spectrograms have no colour bar above; read bounds on the left. Automatic dB affects display only; formal figures use bounds at submission."
+    },
+    "2ea8f6ca8f5f7b5ebd6fd62fe88f0628fd75a0a6535400d2aed3bdc8110cf69a": {
+      "source": "比较语谱窗长",
+      "translation": "Compare spectrogram window lengths"
+    },
+    "ef1727a7e0c58068290f7fc173c3505fa30dfc9aeaa82cb5d740d8e513304e18": {
+      "source": "固定 40.00–40.50 s 选区，保留其他参数，开启自动 dB。",
+      "translation": "Fix selection at 40.00–40.50 s, retain other parameters, and enable Automatic dB."
+    },
+    "09a5abba0b3bd474751b885503322ed74fc8f23c4d4222f8539750a1379f9cc6": {
+      "source": "将谱窗 ms 从 20 改为 50，等待更新，观察谐波细节和时间边缘。",
+      "translation": "Change Spectral window ms from 20 to 50, wait for the update, and inspect harmonics and temporal edges."
+    },
+    "13e2436d81e3614cd700643b2258775760c75e3b79767356d574e3753feb6a77": {
+      "source": "50 ms 谱窗下的谐波细节，自动 dB 范围为 −76 至 −26 dB，数值显示在左栏。",
+      "translation": "Harmonic detail with a 50 ms window; Automatic dB spans −76 to −26 dB, shown on the left."
+    },
+    "fe2502b1c863a4805832b1aa3f31878eca36048f742a3e38a25f2d7b1a39fbb6": {
+      "source": "真实录音40至40.5秒选区的50毫秒谱窗语谱图，左栏自动dB开启，上下限为负76和负26dB，图上方没有实时色条",
+      "translation": "Real recording at 40–40.5 seconds with a 50 ms spectrogram window. Automatic dB is on; left bounds are −76 and −26 dB, with no live colour bar above."
+    },
+    "5d40d8ad215b2e18fcc2b392143378af5e7211783530f6b9f05b7c5c3729f586": {
+      "source": "再改为 5 ms，对照快速变化与谐波细节，留意左栏 dB 上下限也会更新。",
+      "translation": "Then use 5 ms to compare rapid changes and harmonic detail; note that dB bounds on the left update too."
+    },
+    "be9cf0ea887ed2aba3827af4944aeed9d5ef3fb26bf14e2210c52addebd5d79e": {
+      "source": "同一选区改为 5 ms 谱窗，观察快速变化，左栏自动 dB 范围为 −86 至 −36 dB。",
+      "translation": "The same selection with a 5 ms window emphasizes rapid changes; Automatic dB spans −86 to −36 dB."
+    },
+    "c0e0029078499c09a4ac29590cb9f11e0c78b4849b2a9f6e3f61bcee1d67d8b1": {
+      "source": "相同真实录音选区改为5毫秒谱窗后的语谱图，左栏自动dB上下限为负86和负36dB",
+      "translation": "The same real-recording selection with a 5 ms window; automatic bounds on the left are −86 and −36 dB."
+    },
+    "a6f6a42a82bd1ed469d6d6f9f41691ca074e85c3b72cb6cdf27fa77ebc72cfd6": {
+      "source": "本例两种谱窗的自动范围分别为 −76 至 −26 dB 和 −86 至 −36 dB，数值查看左栏 dB 上下限。明暗变化同时受窗长和色阶影响，比较录音强度时请核对原信号与刻度。比较后可改回 20 ms。",
+      "translation": "These windows produce automatic ranges of −76 to −26 dB and −86 to −36 dB, shown on the left. Brightness depends on both window length and scale; check source signals/scales when comparing intensity. Return to 20 ms afterward if desired."
+    },
+    "ab39a5c6ca377d5e2ce1e8766b4f4dc5bbbef4025048caad7425505cd32342d0": {
+      "source": "灰度范围与 F0 开关",
+      "translation": "Grayscale range and F0 switches"
+    },
+    "8e0a9bfb9e33baef4852ae00c7f3ea7c78966f31a90d500e204fcf140035ca69": {
+      "source": "要用同一强弱标尺，关闭自动 dB，并为各片段设置相同上下限，导航时会保留。",
+      "translation": "For a shared intensity scale, disable Automatic dB and set identical bounds for each segment; navigation retains them."
+    },
+    "f8f0e3a01ec39b066f9f45719e90b2c507320f63ccd35103b003e1e855b6acfa": {
+      "source": "要看清局部结构，开启自动 dB，并核对左栏 dB 上下限。比较绝对强度时，请使用统一色阶并核对原信号。",
+      "translation": "For local detail, enable Automatic dB and check left-hand bounds. For absolute-intensity comparisons, use a common scale and check source signals."
+    },
+    "0950d694cdb7510686e7ced71c78e996b6a6c908a3190ba128013f0e64a91cb6": {
+      "source": "按需勾选 F0 来源，右轴随可见有效值调整，无有效值时隐藏。看 Hz 刻度比较，勿只看屏幕高度。",
+      "translation": "Enable F0 sources as needed. The right axis follows visible valid values and hides if none exist. Compare Hz scales rather than screen height alone."
+    },
+    "b552148d275fa66ab0713f90636198f394339577c5da2b80a424985e678fff82": {
+      "source": "三种 F0 的来源与对照",
+      "translation": "Sources and comparison of the three F0 measures"
+    },
+    "857f6a9e18710947ac6b92598004cc53da4aa6b8e22c99364afd30618cd86817": {
+      "source": "Praat（自相关）与 REAPER 从音频估计 F0，共同使用左栏 F0 下限 Hz、F0 上限 Hz，默认 30–800 Hz，步长固定 10 ms。修改上下限会按新范围重新估计，缓存也按检测范围区分。长录音首次开启新视野的 F0 可能需等待，相同范围下已算视野可复用缓存。下图将共用范围改为 80–350 Hz 作操作示范，三个 F0 开关均开启。",
+      "translation": "Praat autocorrelation and REAPER estimate F0 from audio, sharing Minimum F0 Hz and Maximum F0 Hz on the left. Defaults are 30–800 Hz at fixed 10 ms steps. Changing bounds re-estimates within the new range and separates caches by detection range. In long recordings, F0 for new views may initially take time; previously computed views under the same bounds reuse caches. The figure uses 80–350 Hz to demonstrate controls, with all three F0 switches enabled."
+    },
+    "552d6e60648a2a164843ffaff48cc75acb84228ed3c63ce271e35c3ffb947316": {
+      "source": "将音频 F0 搜索范围设为 80–350 Hz，Praat 与 REAPER 共用此范围，GCI 仍按 EGG 事件周期计算。三个 F0 开关均开启。",
+      "translation": "Audio F0 search range set to 80–350 Hz, shared by Praat/REAPER; GCI still uses EGG event cycles. All three F0 switches are enabled."
+    },
+    "06178e91b8efc16553940bfe839253caceb9cf0d3a5dd7b35cb14d9f13f319b9": {
+      "source": "真实录音共用F0范围设置为下限80Hz、上限350Hz，Praat、GCI与REAPER三个开关均开启，语谱右轴显示来源对照",
+      "translation": "Real recording with shared F0 bounds 80 Hz and 350 Hz; Praat, GCI, and REAPER enabled, comparing sources on the spectrogram's right axis."
+    },
+    "c00ced57453a12bc6679282629f460d1b7b2cc3139c483ddf35d2ba60742630d": {
+      "source": "先按录音需要设置 F0 下限 Hz、F0 上限 Hz，两值均须在 10–2000 Hz 内且下限小于上限。只勾选 Praat F0，等待紫色点与右轴出现。",
+      "translation": "Set Minimum F0 Hz and Maximum F0 Hz for the recording, both within 10–2000 Hz with minimum below maximum. Enable only Praat F0 and wait for purple points and the right axis."
+    },
+    "f5ff4526cd648246aa2f8434d80ebf6a2894cf83ad3b9a0cb5371029af6baab1": {
+      "source": "仅开启 Praat F0，音频搜索范围为 30–800 Hz，紫色点读语谱右轴。",
+      "translation": "Only Praat F0 enabled, with audio search range 30–800 Hz; purple points use the right axis."
+    },
+    "6de79647183e1930822d31e6518e522816fa25bbcc63994be53d735595e6d20f": {
+      "source": "真实录音仅开启Praat F0，左栏共用范围30至800Hz，语谱右轴显示紫色基频点",
+      "translation": "Real recording with only Praat F0 enabled, shared range 30–800 Hz on the left and purple fundamental-frequency points on the right."
+    },
+    "3ac568b6a71c5803726b36968b2807a4d3c3f4d3cbae4efd6b13eb9637555818": {
+      "source": "GCI F0 来自相邻 EGG 事件间隔的倒数，并作异常值筛选。它有自己的时间点和范围，不逐点修改 Praat。音频 F0 上下限不改变 GCI F0 或 GCI/GOI 事件检测范围。",
+      "translation": "GCI F0 is the reciprocal of adjacent EGG event intervals, with outlier filtering. It has its own times/range and does not edit Praat point by point. Audio F0 bounds do not change GCI F0 or GCI/GOI event-detection ranges."
+    },
+    "25b3a991948f4295bd7859fea37dc6e4df7f06b51cf9c404a49e8cf87c744822": {
+      "source": "关闭 Praat，只勾选 GCI F0，检查红色点、缺失处和右轴刻度。",
+      "translation": "Disable Praat and enable only GCI F0; inspect red points, missing values, and right-axis scale."
+    },
+    "11c0981ed602ad328ee999287ff7b53b133810916c7d5eb64f942123ffa668eb": {
+      "source": "仅开启 GCI F0，红点来自 EGG 事件周期，音频 F0 上下限不参与此来源的计算。",
+      "translation": "Only GCI F0 enabled. Red points come from EGG event cycles; audio F0 bounds do not enter this computation."
+    },
+    "2b458ea59705b4a05058dcef623a4dfb8abd7c7ad24de9566f1b2fa6d64e7c22": {
+      "source": "真实录音仅开启GCI F0，语谱右轴显示红色EGG事件周期基频点",
+      "translation": "Real recording with only GCI F0 enabled; red EGG-cycle fundamental-frequency points use the spectrogram's right axis."
+    },
+    "f3f8a5160295eb71684c71ff66624ce48df8d34f15aa563796373db2e6b2f925": {
+      "source": "再同时开启三个来源，在同一右轴检查分歧及缺失。某条曲线更连续，仍需回看音频与 EGG 周期。",
+      "translation": "Then enable all three sources to compare disagreements and gaps on the same right axis. A more continuous trajectory still needs checking against audio and EGG cycles."
+    },
+    "3aab837b97ab7964deb60a4d22e0ac489350e7fca8ab0faaa404e661b6b454a5": {
+      "source": "三个 F0 来源在同一右轴比较，Praat 与 REAPER 共用 30–800 Hz 音频搜索范围。",
+      "translation": "Three F0 sources on one right axis; Praat and REAPER share the 30–800 Hz audio search range."
+    },
+    "c980aba1f52e55062ed16eb123af00e9c10bd4337c750a10056cea3de33a28cf": {
+      "source": "真实录音三个F0开关均开启，左栏音频范围30至800Hz，语谱右轴比较Praat、GCI与REAPER基频点",
+      "translation": "Real recording with all three F0 sources enabled, audio range 30–800 Hz on the left, and Praat/GCI/REAPER points compared on the right."
+    },
+    "f53fc8a388cf26dd42959ba3491cef5e5f363c59f575dfedbadf029aa9fc1382": {
+      "source": "逆滤波、图组与结果波形",
+      "translation": "Inverse filtering, layouts, and result waveforms"
+    },
+    "2cc9f4bb94d7ba788f395b2aa8b75dca1c584025d397d77271a2a560720ebd61": {
+      "source": "提交短片段并查看图形",
+      "translation": "Submit a short segment and inspect plots"
+    },
+    "677c5611e35fd9a0261326ddd122160a4c311610e03aa9b9ee542c52e500ceea": {
+      "source": "选择稳定元音并核对 GCI。IF 选区须同时不超过 <s id=\"0\">10 s、960,000 帧</s>，96 kHz 下也可选完整 10 s。",
+      "translation": "Choose a stable vowel and check GCI. IF selection must be within both <s id=\"0\">10 s and 960,000 frames</s>; a full 10 s is permitted at 96 kHz."
+    },
+    "546098a4aadcdd330314d9c44be531ec6b13a45ce641337c60b658b4e710f1b7": {
+      "source": "LP 阶数留空为自动：floor(采样率/1000)+6，44.1 kHz 为 50 阶。手动填 1–256 的整数，且小于 floor(0.003×采样率)。",
+      "translation": "Empty LP order uses floor(sample rate/1000)+6, giving order 50 at 44.1 kHz. Manual order must be an integer 1–256 below floor(0.003 × sample rate)."
+    },
+    "19e2323844bfb6c008fd6a9b809f9005b3eb763ec77c1dc9e41a77fd27c1ba82": {
+      "source": "点击逆滤波 IF，完成后结果自动打开。先检查实际阶数和固定 3 ms 窗跨下一 GCI 的提示。",
+      "translation": "Click Inverse filtering IF. Results open automatically; first check actual order and the warning about fixed 3 ms windows crossing the next GCI."
+    },
+    "2cc5f0c023cbbfd66459b95526d5f5914352de4fde7d88ece7a9756e9606d0a9": {
+      "source": "IF 默认四图、实际 LP 阶数与固定取窗提示。",
+      "translation": "Default four-plot IF layout, actual LP order, and fixed-window warning."
+    },
+    "6744d55a9f86eb3abca1d1c31ec5af12ab59f518ae6ecf674d8bfd9e33a7cc78": {
+      "source": "逆滤波结果窗口显示四图组合按钮、音频与IF频谱和波形，以及225个取窗跨下一GCI的提示",
+      "translation": "Inverse-filter results with four-plot layout controls, audio/IF spectra and waveforms, and a warning for 225 windows crossing the next GCI."
+    },
+    "32b8cfa3749fa2d3076ea854a3721922875e91e84cbe6701c49f71f7a8896e9a": {
+      "source": "IF 用 GCI 后固定 3 ms 窗，<s id=\"0\">未按 GOI 确认闭相</s>。高 F0 时可能跨周期，闭相位置需结合 GOI 和周期波形另行核对。LP 阶数及跨周期计数用于检查计算条件。10 s 内使用同一组平均系数，声道变化时请缩短选区。",
+      "translation": "IF uses a fixed 3 ms window after GCI, <s id=\"0\">without verifying closed phase against GOI</s>. High F0 may cause crossing into another cycle; verify closed-phase position against GOI and cycle waveforms separately. LP order/crossing counts indicate computation conditions. One mean coefficient set covers up to 10 s; shorten selection when the vocal tract changes."
+    },
+    "1b2709239e6513e1c4e2336ca4cf79c1c24eb44932500aa1bdef1be34df42b2e": {
+      "source": "切换图组与比较形状",
+      "translation": "Switch layouts and compare shapes"
+    },
+    "f97f3f35af66c558a7533301d3098716d2dcdc8b21a2f774f6523632ad394201": {
+      "source": "选择全部分开 · 6 图、音频 + IF · 4 图、EGG + IF · 4 图或音频 + EGG + IF · 2 图。各组同时显示频谱与选区中心约 50 ms 波形。",
+      "translation": "Choose All separate · 6 plots, Audio + IF · 4 plots, EGG + IF · 4 plots, or Audio + EGG + IF · 2 plots. Each shows spectra and approximately 50 ms waveforms at the selection centre."
+    },
+    "c00cbcc397ff53bd3bca72b5e58558a9bdca0cf7b4498d74cb9a3cee5a8f64fb": {
+      "source": "音频实线、IF 虚线、EGG 点线。频谱保留各自幅度标尺并在谱峰下 80 dB 截底；归一化波形用于比较形状，绝对幅度请读取频谱刻度。",
+      "translation": "Audio is solid, IF dashed, and EGG dotted. Spectra retain independent amplitude scales, clipped 80 dB below their peaks. Normalized waveforms compare shape; read spectral scales for absolute amplitude."
+    },
+    "735ee68169bfd650f2d6f14abc537485efeb7e7efe246dfcc213c31b1b9159a4": {
+      "source": "EGG + IF · 4 图上排比较 EGG/IF，下排单独显示音频。双信号波形使用左右轴，先核对轴标签。",
+      "translation": "EGG + IF · 4 plots compares EGG/IF above and audio separately below. Dual-signal waveforms use left/right axes; check labels first."
+    },
+    "17978d0c6a2d53a56ecda2122c756477254b858dd69de38265d30395361b5162": {
+      "source": "EGG + IF 四图，上排叠加、下排音频单独显示。",
+      "translation": "EGG + IF four-plot layout: overlays above, audio alone below."
+    },
+    "b02bcebb00eff095afe31ba3feaee374974e042f040b727aaae66faeb35d2673": {
+      "source": "逆滤波图组选为EGG加IF四图，EGG和IF频谱及波形对比与取窗警告",
+      "translation": "EGG + IF four-plot inverse-filter layout, comparing spectra/waveforms with the window-selection warning."
+    },
+    "edc73884c1264d6feb1c3626ea1f3439bac94005dbe8e78af471e94479eb448e": {
+      "source": "音频 + EGG + IF · 2 图便于同时看三信号。波形各自归一化，仅比较形状。",
+      "translation": "Audio + EGG + IF · 2 plots shows all three signals together. Each waveform is normalized for shape comparison only."
+    },
+    "5ca839220fdafdebe9e13b6335dc11c470e12c01b2c4e38a3324267ddffd5fb3": {
+      "source": "三信号两图，波形各自归一化用于比较形状。",
+      "translation": "Three signals in two plots, with independently normalized waveforms for shape comparison."
+    },
+    "f77da421ac0aad31003dd879057f9e3fb5565717ec63932ed373b3abb10a6370": {
+      "source": "逆滤波结果的音频EGG与IF两图组合，以及实际50阶LPC和固定3毫秒窗跨周期警告",
+      "translation": "Audio/EGG/IF two-plot inverse-filter results, actual order-50 LPC, and fixed 3 ms windows crossing cycle boundaries."
+    },
+    "0206d437172851702439c41b412c42fa7f9dcb1a5cdaf7613edfc92ea8a0a8c9": {
+      "source": "查看全选区波形与试听",
+      "translation": "View and play full-selection waveforms"
+    },
+    "d611eafb231ae1ec01179019fb5c0bbe09756d281050e98236ddb037c297ca85": {
+      "source": "向下查看归一化分析音频和 IF 估计，各自拖选并播放，切换时前一条停止。勾选<s id=\"0\">显示 EGG 波形</s>查看同次任务的滤波 EGG，该图不能播放。",
+      "translation": "Scroll to normalized analysis audio and IF estimates. Select and play each; switching stops the previous one. Enable <s id=\"0\">Show EGG waveform</s> for the same task's filtered EGG; it cannot play."
+    },
+    "cb6b03c65c4b6a23cad0f180965118d3ef3983f9a6e5fc087f91936ad902d215": {
+      "source": "全选区滤波 EGG，横轴为相对时间，无播放按钮。",
+      "translation": "Filtered EGG across the whole selection, with relative-time axis and no playback button."
+    },
+    "788ab5096ffbac03799d5c4e7f5115ab1bb856c4ba3b6774cfdf6cd8fefe674d": {
+      "source": "逆滤波结果窗口下部显示0至0.5秒全段滤波EGG波形和相对时间轴，没有EGG播放按钮",
+      "translation": "Lower inverse-filter results showing filtered EGG over the full 0–0.5-second interval with relative time and no EGG playback button."
+    },
+    "64e6d9ffd25834fcabf37fe940ad2cc03deaa849808f35fd2ecdd2b945940672": {
+      "source": "试听和 WAV 覆盖完整 IF 选区，中心 50 ms 图只显示细节。旧任务缺少全选区 EGG 时开关禁用，需重新计算后查看。",
+      "translation": "Playback and WAV cover the complete IF selection; the central 50 ms plots show detail only. Old tasks without full-selection EGG disable the switch; recompute to view it."
+    },
+    "320aac656a570555be9b9d42769f58599dc0f672fdf724589a8ba472f5d2905a": {
+      "source": "保存图形与两份 WAV",
+      "translation": "Save plots and two WAVs"
+    },
+    "2cb9a13d8daa04aacc5aed2012cd449c381b46a69762a4659d547454df8951eb": {
+      "source": "切换所需图组，点击保存当前 N 图 PNG，或各图下的保存此图 PNG。组合 PNG 包含窗口下方的全部图，输出为 300 dpi。再点击选择目录保存完整结果，保存两份 FLOAT64 WAV 与来源 JSON。",
+      "translation": "Select a layout and click Save current N plots as PNG, or Save this plot as PNG below an individual plot. Combined PNG includes all plots below the window and uses 300 dpi. Then Select folder to save complete results saves two FLOAT64 WAVs and provenance JSON."
+    },
+    "0096474c458c7122b7fdb4f02fc7b7b2d46a632c998601253cfff05fd6bab70d": {
+      "source": "实际导出的六图 PNG，三信号各有频谱与中心波形。",
+      "translation": "Actual exported six-plot PNG, with spectrum and central waveform for each signal."
+    },
+    "46e287a734ff89cbbc000b2b79af5f059aa6bce8b73d7029acadd5dc702c2267": {
+      "source": "应用真实导出的六图组合PNG，完整显示音频EGG和IF各自的频谱与中心50毫秒波形",
+      "translation": "Six-plot PNG actually exported by the app, showing complete audio/EGG/IF spectra and central 50 ms waveforms."
+    },
+    "6f363b5ce2d69429361d6d650af8f7e0e3e61ba72c0d050edaab8de57bcee73c": {
+      "source": "同次 IF 的两份 WAV 与来源 JSON 保存成功。",
+      "translation": "Both WAVs and provenance JSON from the same IF task saved successfully."
+    },
+    "1ca70961e91205fffb09ab028f9e22d4a1612f634f0aee2aa0b2496db2792567": {
+      "source": "逆滤波结果窗口顶部显示已保存三份结果文件，图组和取窗警告仍可见",
+      "translation": "Inverse-filter result window reports three saved files at the top, with layout and window warnings still visible."
+    },
+    "38eef9b373622c442dcc9df709808ad157931dcdbf568b8813cdc284c20c3e91": {
+      "source": "任务与结果窗口控件",
+      "translation": "Task and result-window controls"
+    },
+    "e14146d7f4ed8e0edd82e76c34a94e842e3aee319e1482e0c34bf784fd5c2deb": {
+      "source": "处理记录及逆滤波结果控件",
+      "translation": "Processing-history and inverse-filter result controls"
+    },
+    "1a1507a5dfd9f7d03a5b15edb60a44f23055464db4bfadb3233e3fbcc4da626a": {
+      "source": "处理记录",
+      "translation": "Processing history"
+    },
+    "ac2536b2cee395225c3a3a38e4afe46370e28c4704f70a71aae0ed220b420421": {
+      "source": "参数与任务区 / 折叠区域",
+      "translation": "Parameters and tasks / collapsible section"
+    },
+    "6caa933be7eefbfad2af3ce3031081095b285f29984c680af0f0cf9ee0494b13": {
+      "source": "展开",
+      "translation": "Expanded"
+    },
+    "e6eed996658637eb965051616df5bf06335dd5a0d003ac1af26cc48485a4c768": {
+      "source": "查看正式任务，实时预览不计入。",
+      "translation": "View submitted tasks. Live previews are excluded."
+    },
+    "173d94b588510fe08250d950da56cadab04e1eb6333aab48ecd78b382ae44e80": {
+      "source": "刷新记录",
+      "translation": "Refresh history"
+    },
+    "fd083d86cddc58f36ba2eadd8bdb1df960a236b802e3fdcf72dbaaac209da030": {
+      "source": "处理记录 / 按钮",
+      "translation": "Processing history / button"
+    },
+    "0a425639416ef0569b1f5c6bd219864c03608b7583d1d282a2b563204cd8331f": {
+      "source": "自动轮询，也可手动",
+      "translation": "Automatic polling; manual refresh also available"
+    },
+    "77b4edac954b7a768e7ebe58739761c69528d37f7cc4132c1435a8b43454ec6f": {
+      "source": "只刷新状态。",
+      "translation": "Refreshes status only."
+    },
+    "7d8b4dc2afe56ed3479b8f307066eb77847e02855cb6746b8ead2e635c737288": {
+      "source": "取消此任务、重试此任务",
+      "translation": "Cancel this task; retry this task"
+    },
+    "3b4698ff31dbf6286d0c2d177f3ef83238d85c007814f043460d1f2ef5b01cfe": {
+      "source": "任务行 / 按钮",
+      "translation": "Task row / button"
+    },
+    "fc3f29b5c60a2514f7007fb811346926013b5ea0db50177b829b2dfc7f9db739": {
+      "source": "按任务状态显示",
+      "translation": "Shown according to task status"
+    },
+    "aeb6fa9fe457cdc6e793ee001a1cf00d7dc735bf69d548a18e43ec9370539f2f": {
+      "source": "取消未完成任务，重试生成新记录。",
+      "translation": "Cancel an unfinished task; retry creates a new record."
+    },
+    "a0cd5a4c635aeb4d7bd39c6b31afe63de85bba32053862e6535bfc4264c5eff5": {
+      "source": "查看已完成任务",
+      "translation": "View completed tasks"
+    },
+    "7f7670d52ab6c316c7101a52ba40277232738da87fb398e42b9eb90ec90deb26": {
+      "source": "成功后显示",
+      "translation": "Shown after success"
+    },
+    "9142a0d2d8e3ddd63fa4ad2b8463cd6b1846e29ce77030c3fc4f696d6afd0abe": {
+      "source": "查看同次快照与产物。",
+      "translation": "View the snapshot and outputs from the same task."
+    },
+    "cab8c82c4f245eb4bc74a13ec24989b36674f8a172c9ae0f240d285e48edeaca": {
+      "source": "取消本次批量任务",
+      "translation": "Cancel this batch"
+    },
+    "6ce2e2f4f72eea17084d3302e7b1ac63046fd01bd41c533d566d91ea0fbb4f70": {
+      "source": "有本批任务时显示",
+      "translation": "Shown when the current batch has tasks"
+    },
+    "9ae0e6dd89d2507ec5bb4034fad9fa6109086b0f8eb2d0339a7487351a107d99": {
+      "source": "取消未完成任务，保留成功结果。",
+      "translation": "Cancel unfinished tasks and retain successful results."
+    },
+    "d546f8b16970855b57796da4e21822f153dae6f6ed1561acc4286eb2538d5d5c": {
+      "source": "保存本次批量结果",
+      "translation": "Save this batch's results"
+    },
+    "5f95665ea814dd0686d6834d800510123bb207b115da5d35f3c7b1c248db7db5": {
+      "source": "桌面有本批成功任务时显示",
+      "translation": "Shown on desktop when the current batch has successful tasks"
+    },
+    "ed047c4cd4b5402b463777dad48190725f42f68e9c120d9c20f30269778a1a65": {
+      "source": "一次选目录保存所有成功任务。",
+      "translation": "Choose a directory once to save all successful tasks."
+    },
+    "d1184059ea1fdd568cc17bad0df1084fef29019fcd57d3076e22488ddaf22590": {
+      "source": "参数快照",
+      "translation": "Parameter snapshot"
+    },
+    "e85009c60a9cac4a51cec3602679f9ba366791cd5cad4a566446838b53e9c013": {
+      "source": "结果窗口 / 折叠区",
+      "translation": "Result window / collapsible section"
+    },
+    "67ed676974af055362aabeaca3b67e1d9d48ca93c2b97e7b7e3fe43004eecd02": {
+      "source": "折叠",
+      "translation": "Collapsed"
+    },
+    "565fe90b43bbf3249675cc643b9b1a1beb33f50d4d5e906c87ccc9c4c44c95d5": {
+      "source": "核对本任务的选区、方法及输出设置。",
+      "translation": "Check this task's selection, methods, and output settings."
+    },
+    "ca624c2cb907d6edf17f032ef2986aa30988df5d98b6ee900e6f49fb37477bbf": {
+      "source": "全部分开 · 6 图",
+      "translation": "All separate · 6 plots"
+    },
+    "be52a9b015c0fc09d2b52f5ad6f57d75e5405eeae3287e0c893e797047321865": {
+      "source": "IF 图形组合 / 按钮",
+      "translation": "IF plot layout / button"
+    },
+    "a5ed1f001a74884c43a5a10fdef97fd4267bd16b65338784878a294e9d581f55": {
+      "source": "未选",
+      "translation": "Not selected"
+    },
+    "5333c03c45897ab0ce560b7349c5725db53c851e35d81a8ec18546d9a02f9dd7": {
+      "source": "音频、EGG、IF 各有频谱/波形。",
+      "translation": "Separate spectrum and waveform for audio, EGG, and IF."
+    },
+    "0901ba64877d142b4d05d51bd3a5591cf5767955a714df96c7203c8081f9831f": {
+      "source": "音频 + IF · 4 图",
+      "translation": "Audio + IF · 4 plots"
+    },
+    "b327e2e7f56a3ec4529739d62113cd2e586c6ab9042cb8cc5b5e7a86175bc11f": {
+      "source": "默认组合",
+      "translation": "Default layout"
+    },
+    "fb4b4f1a8e559d9ca9834a7eef32a47ed28d02c6977cec520f6d55190e72ce85": {
+      "source": "音频/IF 叠加，EGG 单独。",
+      "translation": "Overlay audio/IF; show EGG separately."
+    },
+    "06ced6ad9a3bc6505510a62df50e5a1c9c474c0a69b2dbf52a0eaba0363b3ac1": {
+      "source": "EGG + IF · 4 图",
+      "translation": "EGG + IF · 4 plots"
+    },
+    "32576552fe559314608617eec5b47ef0f5f9d653e293dcb6367b0839cd997a35": {
+      "source": "EGG/IF 叠加，音频单独。",
+      "translation": "Overlay EGG/IF; show audio separately."
+    },
+    "45fc08978b28dec9e3ca49b9ac3be5443f52ceedd77ad9b3b508912f77fe82b0": {
+      "source": "音频 + EGG + IF · 2 图",
+      "translation": "Audio + EGG + IF · 2 plots"
+    },
+    "f7a0b368b2435b20a042ce1fe0755605eee8db7596f4780824d68da11e2cd4f5": {
+      "source": "三信号叠加，波形各自归一化。",
+      "translation": "Overlay all three signals; normalize each waveform separately."
+    },
+    "85f60f1f57d9bc4b66100ae435f6eded4aef1f6ffd8cfef049d398b9dba3c155": {
+      "source": "保存当前 N 图 PNG、保存此图 PNG",
+      "translation": "Save current N plots as PNG; save this plot as PNG"
+    },
+    "352d5e08490060970aed6723f6006c0d57e038e8a18aaf7e6dcaeea85fb788f5": {
+      "source": "IF 结果 / 按钮",
+      "translation": "IF results / button"
+    },
+    "968550f54bc803d4b9c79e82e717d8024caca7a072e637d725ba4bb72b49d9ea": {
+      "source": "无保存操作",
+      "translation": "No save operation"
+    },
+    "d040f805061979089dc4e6c6159b2d85c65edce429b211fdbb299f2c825205da": {
+      "source": "导出 300 dpi 组合图或单图。",
+      "translation": "Export a combined figure or individual plot at 300 dpi."
+    },
+    "ed0dca1147034181ffa8011e0f4e5c3b58ae8cb4d3029e474c4c3950475c5b87": {
+      "source": "显示 EGG 波形",
+      "translation": "Show EGG waveform"
+    },
+    "87488f4759c650b2d3c57e7ba83aa32ddc41ee752428277887833116a6ae6965": {
+      "source": "IF：全选区波形分析 / 复选框",
+      "translation": "IF: full-selection waveform analysis / checkbox"
+    },
+    "d0c54c2162cb05239ec13a3484f5b6e8e299c043e26e48a2a6f19f278d56650e": {
+      "source": "显示同次全选区 EGG，历史缺失时禁用。",
+      "translation": "Show EGG for the same full selection; disabled when missing from historical results."
+    },
+    "add12ee46236d4b64751d464af540789bc76ac1cac3b8af4eb8eb97ca681e2a4": {
+      "source": "归一化分析音频、IF 估计试听",
+      "translation": "Normalized analysis audio; IF estimate playback"
+    },
+    "3132e9e51873c516a36720864c14c5fe0c5018acd2b053d03a755dafc873cac2": {
+      "source": "IF 全选区波形区 / 播放",
+      "translation": "IF full-selection waveform area / playback"
+    },
+    "45457cc86f1b10a06d667b7d100fb9e0195ae5ac5725877e01ed0c8fd9fcc8cd": {
+      "source": "各自选区试听，切换停止前一条。",
+      "translation": "Play each signal's selection; switching stops the previous playback."
+    },
+    "0cda051c43f9827eb3bd88d90694c1a916d65b0f574a1de91d4e48dfd56618fb": {
+      "source": "选择目录保存完整结果",
+      "translation": "Choose directory to save complete results"
+    },
+    "72c681c5a478c13881efea59f02d92a24000b71f05d648e914867a4ff688f816": {
+      "source": "结果窗口顶部 / 按钮",
+      "translation": "Top of result window / button"
+    },
+    "aadcb565390df0c52dc9763a9ea3e77ff7863c0c834c904f9059ea07a37825df": {
+      "source": "读取完成后可用",
+      "translation": "Available after loading finishes"
+    },
+    "3ae2173b4314bc43a1b686deb12d1fb3f640960beba11c2a297312506d651862": {
+      "source": "保存整套产物，取消仍保留任务。",
+      "translation": "Save all outputs; cancelling retains the task."
+    },
+    "797633442857d2b2ed11c1cf9a45d26ff5424cf54a8d71aac2b6526c36d3779b": {
+      "source": "下载各结果文件",
+      "translation": "Download individual result files"
+    },
+    "42fa0798b8240ad1c0e9238f35367beb1617c5936ee34a2ddfec588f59ef6024": {
+      "source": "支持下载的入口显示",
+      "translation": "Shown in interfaces that support downloads"
+    },
+    "2816e4643f688eb93d096836cb9e6d516662193fc3e5ca7dcab7d8da3659df03": {
+      "source": "逐文件下载，读取中禁用。",
+      "translation": "Download files individually; disabled while loading."
+    },
+    "f571cd25cfbf6f8b4ec90f226d751b5c31ef34f4f6541defca081b9794672c52": {
+      "source": "重新读取结果",
+      "translation": "Reload results"
+    },
+    "fba453180373ee171b030d86b84297384664e465a2393f432c0b8f6137da59ad": {
+      "source": "读取失败时显示",
+      "translation": "Shown after a loading failure"
+    },
+    "1867ca6361da80ac272c926e725516066e57fbf35a1e2a458eabf29d33e3b1ec": {
+      "source": "重取文件，无需重算。",
+      "translation": "Fetch files again without recomputing."
+    },
+    "240a95f6ec66dfe184a1b293a81689ce58683fabaa9fc42fd8be1c15d8be181e": {
+      "source": "返回分析",
+      "translation": "Return to analysis"
+    },
+    "8e899c0ae6d8fec058c419ab03597b07de7911ddb475069fe6a434bfd62d77b9": {
+      "source": "可关闭窗口",
+      "translation": "Window can be closed"
+    },
+    "bab8095eac381c04c90152a0a42e5a2213985d5efd58121eb2a6f2a320709ced": {
+      "source": "关闭结果窗、停止试听，任务保留。",
+      "translation": "Close the result window and stop playback; retain the task."
+    },
+    "c9efb843d62046fab9e5352be18dad7a75a77ce1a085435284e6caee7bef6722": {
+      "source": "保存选区、完整录音与批次结果",
+      "translation": "Save selections, complete recordings, and batch results"
+    },
+    "794b47b54272656bee3f6b944896941523b39aac0f76a07a5f7ce1fec5b5ab26": {
+      "source": "保存当前选区的 CSV 与三图",
+      "translation": "Save the current selection's CSV and three plots"
+    },
+    "04d290b6e6ef848bf863137e932695b7b877645427493c56209671931d158d01": {
+      "source": "提交与保存正式结果",
+      "translation": "Submit and save results"
+    },
+    "b904c093b591a4fff25b4ae3b3b891ca52f3b2a6a4b4003020e447eede7b6935": {
+      "source": "等最新预览完成并核对选区、F0 上下限及显示来源，点击保存 CSV / 三图。更新中或没有有效源文件时按钮禁用。",
+      "translation": "Wait for the latest preview to finish and check the selection, F0 bounds, and displayed sources, then click Save CSV / three plots. The button is disabled while updating or when no valid source file is available."
+    },
+    "860d2a3c51f1ceebb4e69be964467f5bda56305ff040b8a9c0bed3c95bfa784e": {
+      "source": "在处理记录等任务完成，点击查看，核对参数快照及图像范围。",
+      "translation": "Wait for the task to finish in Processing history, click View, and check the parameter snapshot and figure ranges."
+    },
+    "366dcc502f298e42738165d773e3401b5066a5d76d3a73c1dd22bd0f90eef2e3": {
+      "source": "点击选择目录保存完整结果，选目录后核对成功提示。网页可按下载按钮逐个保存。",
+      "translation": "Click Choose directory to save complete results, select a directory, and check the success message. On the web, use the download buttons to save files individually."
+    },
+    "064872db10267aeec99c30add6cc94d75a5720d1f08c78485c6e682bf57c5494": {
+      "source": "保留 CSV、三张 PNG 和 .ptb.json。JSON 记录输入摘要、实际边界、声道、方法及参数，包含本次 Praat/REAPER 的 F0 检测上下限，便于复查。",
+      "translation": "Keep the CSV, three PNGs, and .ptb.json. The JSON records the input summary, actual boundaries, channels, methods, and parameters, including the F0 detection bounds used by Praat/REAPER for this task, for later review."
+    },
+    "7c63ee69636ee20bc5f7a73b88017c058c9e2d8b6c6ccf3164e23448db2418bb": {
+      "source": "单文件任务的 CSV、三图和来源 JSON 已保存。",
+      "translation": "The single-file task's CSV, three plots, and provenance JSON have been saved."
+    },
+    "9215789bdc06bff1bcb96d6545f0c312df9948ea69fcd0663a6d8643f8c459c6": {
+      "source": "单文件结果窗口显示已保存五份文件、参数快照与导出图入口",
+      "translation": "Single-file result window showing five saved files, the parameter snapshot, and export-figure controls"
+    },
+    "0d7acc7c8ac18f8b4722bbaa2af98844f706378f84a8edb26d9d63b214552321": {
+      "source": "核对 CSV 空值与三张静态图",
+      "translation": "Check CSV missing values and the three static figures"
+    },
+    "4f0e57e39af0b0f6c7ce90c792328ab0da307b7fbb6a43306124543ca7f7ef5c": {
+      "source": "单文件 CSV 始终有 CQ、SQ、F0_Praat (Hz)、F0_GCI (Hz)，勾选 REAPER 后另有 F0_REAPER (Hz)。语谱 PNG 只画勾选的来源。三图为 CQ/SQ、语谱/F0、音频/EGG 波形，单文件 150 dpi，批次 100 dpi。",
+      "translation": "Single-file CSVs always contain CQ, SQ, F0_Praat (Hz), and F0_GCI (Hz), with F0_REAPER (Hz) added when REAPER is selected. The spectrogram PNG plots only the selected sources. The three figures show CQ/SQ, spectrogram/F0, and audio/EGG waveforms, at 150 dpi for a single file and 100 dpi for a batch."
+    },
+    "6900b9ce4e68944a56141fbde21877952c1d317591a0189c56d351571b8d036e": {
+      "source": "单文件 CSV 保留各来源原时间点，按 Time (s) 合并排序。NaN 可能来自时间点不一致，也可能是无声或事件不足，<s id=\"0\">勿填成零或把各列逐行当同步测量</s>。采样边界以 JSON 为准，文件名两位小数只用于命名。",
+      "translation": "Single-file CSVs retain each source's original time points and merge and sort them by Time (s). NaN can result from mismatched time points, silence, or insufficient events. <s id=\"0\">Do not replace it with zero or treat columns on each row as synchronous measurements</s>. Use the JSON for sample boundaries; the two-decimal times in filenames serve only for naming."
+    },
+    "9495d098fb9a3cd18165a8f9e76a2f2c6a04c41cf852867c4d5e0e932f721e87": {
+      "source": "CQ 蓝点读左轴，SQ 绿色叉读右轴，结合 CSV 检查缺失周期。",
+      "translation": "Read blue CQ points against the left axis and green SQ crosses against the right axis; use the CSV to check missing cycles."
+    },
+    "2444e25e932fd4e20a022dd5c880a9c448f0e7b1903df832a6e3f4586c784b16": {
+      "source": "同次任务的 CQ/SQ 图，左右轴分别读取。",
+      "translation": "CQ/SQ figure from the same task; read the left and right axes separately."
+    },
+    "c0a2c399c9797f292ec7988cd3a02e9b0c66cd4ab4b3dda25efd54e320c35364": {
+      "source": "实际导出的CQ蓝点与SQ绿色叉双轴图，完整显示40至40.5秒时间轴",
+      "translation": "Actual exported dual-axis figure with blue CQ points and green SQ crosses, showing the complete time axis from 40 to 40.5 seconds"
+    },
+    "13fe74b1ae8698a19507ad71df2b1c1e5276e3606766c1ec7564206cb6d33b3a": {
+      "source": "静态语谱 PNG 保留色标、提交时的谱窗、色阶和已选 F0。Praat 黑点、GCI 红点、REAPER 青绿色点，Praat 颜色与工作台不同。频率读左轴，F0 读右轴。",
+      "translation": "The static spectrogram PNG retains the color bar, spectrum window, intensity range, and selected F0 sources at submission. Praat uses black points, GCI red points, and REAPER turquoise points; Praat's color differs from the workbench. Read frequency on the left axis and F0 on the right."
+    },
+    "4e8cb2957f0cf00b41e3437ab39ac44613a5e942626d9fea339321e6693212ba": {
+      "source": "同次任务的语谱/F0，核对双轴、色条与来源颜色。",
+      "translation": "Spectrogram/F0 from the same task; check both axes, the color bar, and source colors."
+    },
+    "ec18e9f9dea827ebdb1f0e8ba359c8cc375f86dcbf3ae2a4960a4746c4b07266": {
+      "source": "实际导出的完整语谱F0图，左轴0至5000Hz，右轴F0，黑色Praat红色GCI青绿色REAPER点与PSD灰度条",
+      "translation": "Actual complete exported spectrogram/F0 figure, with a left axis from 0 to 5000 Hz, F0 on the right, black Praat, red GCI and turquoise REAPER points, and a PSD grayscale bar"
+    },
+    "89c290a778ba2871ec42b95c6cd17fed58e98907e61ac434c12aa0c086bbbee3": {
+      "source": "静态波形上为音频、下为 EGG，横轴是文件绝对时间，范围与另外两图一致。",
+      "translation": "The static waveform figure shows audio above and EGG below. Its horizontal axis is absolute file time, with the same range as the other two figures."
+    },
+    "5fc159f5136810e55ac8070480b641733771f140c4c9e20d9f0d3d1b1004d5f4": {
+      "source": "音频与 EGG 波形，横轴为文件绝对时间。",
+      "translation": "Audio and EGG waveforms, with absolute file time on the horizontal axis."
+    },
+    "c06615463db2f96c557f207260bf5e4fdad4b2d38e95a342de5eb492c2d2a24c": {
+      "source": "实际导出的音频与EGG双行波形图，两条波形使用40至40.5秒文件时间",
+      "translation": "Actual exported two-row audio and EGG waveform figure, both using file times from 40 to 40.5 seconds"
+    },
+    "4479f7197ff2d844aa0870ebf5bb9ce54d250fbde2b42125e2d1084a4c5ceb06": {
+      "source": "保存名含源文件名和选区时间，批次加类型后缀。同内容可复用，不同内容另命名，过长名称附摘要。旧任务可保留旧名；成功图片沿用提交时的导出字体。",
+      "translation": "Saved names contain the source filename and selection times; batches add a type suffix. Identical content can be reused, different content receives another name, and long names receive a digest. Older tasks may retain older names. Successful images retain the export font used at submission."
+    },
+    "4bed2d5dfb30d1cd9cc70588c4fb68b76e77ddc6ccf1eeb954dce7e64f255750": {
+      "source": "保存完整长录音",
+      "translation": "Save a complete long recording"
+    },
+    "62cb06fad7ed4d96504e3ca3cc71a11f29d2bf5bb351dd71be695ec8e62e0771": {
+      "source": "长录音工具栏会增加<s id=\"0\">保存完整录音 CSV / 三图</s>。保持一个有效的 60 s 内预览，点击该按钮即可处理 0 s 到文件末尾，不必把实时选区扩到全段。完成后仍从处理记录查看、选择目录保存。",
+      "translation": "For long recordings, the toolbar adds <s id=\"0\">Save complete recording CSV / three plots</s>. Keep a valid preview of up to 60 s and click this button to process from 0 s to the end of the file, without extending the live selection over the entire recording. After completion, view the task in Processing history and choose a directory to save."
+    },
+    "5331eaa5e62322fa4d4af38358d4d812f4935739d84104bdc65e7d41d1071554": {
+      "source": "完整 CSV 保留全部来源的原时间点，完整三图压缩显示以便阅读。图像压缩不减少 CSV 数值。长录音的处理可耗时数分钟，CSV 可能超过 64 MB，导出内存和磁盘需求高于预览，保存时请预留空间并等成功提示。",
+      "translation": "The complete CSV retains original time points from every source. The three full-recording figures use compressed display for readability, which does not reduce CSV values. Long recordings may take several minutes to process, and CSVs may exceed 64 MB. Export requires more memory and disk space than preview; reserve space and wait for the success message."
+    },
+    "dc3a178eedd992ab9aad080e0b06202b58b913bde8e7276e5c504750f780883b": {
+      "source": "长录音实时 F0 在当前视野估计，完整导出使用全文件事件。边缘估计和 GCI 异常值筛选可能不同，比较前先核对任务范围与来源记录。",
+      "translation": "Live F0 for long recordings is estimated in the current view; complete export uses events from the entire file. Edge estimates and GCI outlier filtering may differ. Check task ranges and source records before comparing."
+    },
+    "622dc6dcdfb471de4558c7cc79427ba7a29e26de345c655bd625f263043876b5": {
+      "source": "批量分析完整文件",
+      "translation": "Batch analysis of complete files"
+    },
+    "d0d8a1dbfdf80a287a999f7ff1a0020426b1672e8f21fa7b09fb8baacae564a7": {
+      "source": "选择文件、设置参数并提交",
+      "translation": "Select files, set parameters, and submit"
+    },
+    "6fa0dd3f70d005c466bd47be8378c1c80dd35a01f9b6111ab0291584745c4e30": {
+      "source": "打开目录并刷新文件，点击<s id=\"0\">批量分析</s>。默认全选，可取消全选后逐项勾选。",
+      "translation": "Open a directory, refresh the file list, and click <s id=\"0\">Batch analysis</s>. All files are selected by default; you can clear all selections and then select files individually."
+    },
+    "a43e367462986e46cea9eff7c8dc1799aa2b7d63e9d8f23a8026a3390b2585b5": {
+      "source": "设置高通、低通、GCI、GOI。低通须小于每个文件采样率的一半，接线不同建议分批。",
+      "translation": "Set high-pass, low-pass, GCI, and GOI. Low-pass must be below half the sample rate of every file. Analyze different wiring configurations in separate batches."
+    },
+    "d84bca8f5d2dc2b8c466369a7f10d5aa1a60eada29ed71ddc60c6747bc93508c": {
+      "source": "设置交换声道、三图、F0 和静音阈值。静音阈值只遮罩 CSV，不改事件检测或图片。",
+      "translation": "Set channel swapping, three-figure export, F0, and the silence threshold. The silence threshold masks only the CSV; it does not change event detection or images."
+    },
+    "d25b76663dac2cd778ba986bcb691473db6af1095d10cfc6e052c4d995641f99": {
+      "source": "点击<s id=\"0\">提交所选文件</s>。批次按独立参数处理各文件全段，始终滤波，不继承单文件选区、F0 开关或音频 F0 上下限。",
+      "translation": "Click <s id=\"0\">Submit selected files</s>. The batch processes each complete file with independent parameters and always applies filtering. It does not inherit the single-file selection, F0 switches, or audio F0 bounds."
+    },
+    "16f71006b574d0f7f8468ea38dbc9ef0ff76c96df4969a603c6d6d3d077ee232": {
+      "source": "批次参数、输出选项与待处理文件。",
+      "translation": "Batch parameters, output options, and files to process."
+    },
+    "cc2125ab5d805b82783cb24af47d6232f0d7fc5d59dbeddac47e72e0fb8a1547": {
+      "source": "批量弹窗的滤波与事件、输出选项、待处理文件和提交入口均可见",
+      "translation": "Batch dialog showing filtering/events, output options, files to process, and submission controls"
+    },
+    "348e51cf1f9507c8090c541da5bc4ceeb368bd7ef5e034669ab58f81f4dff270": {
+      "source": "例如高通 2500 Hz、低通 2000 Hz 会被拒绝，文件选择仍保留。改回合法频率，核对各文件采样率后重新提交。",
+      "translation": "For example, a high-pass of 2500 Hz and low-pass of 2000 Hz will be rejected, while file selections are retained. Restore valid frequencies, check each file's sample rate, and resubmit."
+    },
+    "04f1001887828376f57c5aacfa390c87e2ed19fd259f970429e0ee96b51afffb": {
+      "source": "高通 2500 Hz、低通 2000 Hz 被拒绝，选择保留。",
+      "translation": "High-pass 2500 Hz and low-pass 2000 Hz rejected; selections retained."
+    },
+    "88c3a2591f995d59b47dfe9e93ad222bf0614b73f449a2e3c3bb2dbd4495d7ab": {
+      "source": "批次弹窗显示高通2500低通2000的不合法设置、明确错误和仍选中的3.wav",
+      "translation": "Batch dialog showing the invalid high-pass 2500/low-pass 2000 settings, a clear error, and 3.wav still selected"
+    },
+    "ce571cdde97a3018ddbdc0bf237b049d1cde25a126f13a0bc9949f3ad48b8fc4": {
+      "source": "批次控件与独立默认值",
+      "translation": "Batch controls and independent defaults"
+    },
+    "f0dd0e67a8ea8264bba8cf015b2b92a71caf2c35d7c644fa7b9ed2ba37166d45": {
+      "source": "批量分析的独立参数",
+      "translation": "Independent batch-analysis parameters"
+    },
+    "a8548281d2523bb119b203c2e2444959dd67ff1e70eb8acd2b471f6731718fcd": {
+      "source": "批量分析",
+      "translation": "Batch analysis"
+    },
+    "db84abb7312758392d6306b7f29d5c31185e603c7be658c796807f2e1c20b74c": {
+      "source": "未选择文件时禁用",
+      "translation": "Disabled when no files are selected"
+    },
+    "c1e245054f95be19f20a4715531b817ae7f45ff2ed0a941b375c02fdc48b6cd4": {
+      "source": "打开独立批次参数。",
+      "translation": "Open independent batch parameters."
+    },
+    "156e954638236653aa3d4a915e21b0ea90241c5110909d822bdc5f1b0e34f724": {
+      "source": "高通 Hz、低通 Hz",
+      "translation": "High-pass Hz; low-pass Hz"
+    },
+    "2b53c7e532a9142589de70ae92d35502ebf662a8159940f33e98439a76b49688": {
+      "source": "批量：滤波与事件 / Hz",
+      "translation": "Batch: filtering and events / Hz"
+    },
+    "94edb5a517232e8edfa329d11f451d6a17f5db393921abec97df1ea7a8500b59": {
+      "source": "处理全段，低通须小于各文件采样率/2。",
+      "translation": "Process complete files; low-pass must be below each file's sample rate/2."
+    },
+    "82a45704ffbb3d7aaa7432bc2ba7fb809e3fb72f0d2e48859232542005a1d6b1": {
+      "source": "批量：滤波与事件 / 下拉框",
+      "translation": "Batch: filtering and events / dropdown"
+    },
+    "d68ea78337f45f094693373ab2346ece5ac30504f3e0fb37618e1ab4c77d9182": {
+      "source": "斜率、尺度 0.25",
+      "translation": "Slope; scale 0.25"
+    },
+    "f6d781cf468d7a14a862efa69638e816ce8248f15e27d5c946395585dd78dba8": {
+      "source": "方法同单文件，参数独立。",
+      "translation": "Same methods as single-file analysis; independent parameters."
+    },
+    "90f0b6d294a2a3beb561a8be450b0615396a0339f27916f2711fc4d25d8057f9": {
+      "source": "交换 EGG / 音频声道",
+      "translation": "Swap EGG / audio channels"
+    },
+    "6d963fe297e60d092906fb2dbc6b9a293c2e31ac3d5c28d5363b539720b48ea0": {
+      "source": "批量：输出选项 / 复选框",
+      "translation": "Batch: output options / checkbox"
+    },
+    "0bbf234724499eb34620eaa68995da52c6ba7f3d370c047dfb265728350e4a2a": {
+      "source": "本批统一交换，混合接线需分批。",
+      "translation": "Swap channels for this entire batch; separate mixed wiring configurations into batches."
+    },
+    "d2405dc2a03ca55e764a3c36767a2f37987f177e2b0dd51c0df3bcadb4cdc22a": {
+      "source": "同时导出三张图片",
+      "translation": "Also export three images"
+    },
+    "86eda97900499895cb45295db3382954912180fd141e99c1e4cb919b377c99c5": {
+      "source": "额外生成 CQ/SQ、语谱/F0、波形 PNG。",
+      "translation": "Also generate CQ/SQ, spectrogram/F0, and waveform PNGs."
+    },
+    "2eef1f71ab1f21aa1695d8b3290b0b961c156c65e28ef6ba205559bcb5626563": {
+      "source": "均勾选",
+      "translation": "All selected"
+    },
+    "3fa0ed3d59fc9cf15dcb2d677d29c62173891d712ae632d3e83bdf0aeb660414": {
+      "source": "控制 CSV 列与 PNG 曲线。",
+      "translation": "Control CSV columns and PNG curves."
+    },
+    "962a46e692738a75b74702a84dd4e5c50c630fc2179aba9ce44cfcc481f3188d": {
+      "source": "单独估计并保存该列。",
+      "translation": "Estimate and save this column separately."
+    },
+    "1d96793bdd6b4478cc3e5e12d43225b283e6f1fb3e5e0de53d5b8aabff8dec49": {
+      "source": "静音阈值",
+      "translation": "Silence threshold"
+    },
+    "d8760ec0822d91ef0a97543b986ec23b994d00c5bce4ed6f22be40ab0f5159d5": {
+      "source": "批量：输出选项 / 无量纲幅度",
+      "translation": "Batch: output options / dimensionless amplitude"
+    },
+    "f94b092db43b9e35b5c49a89d64954d61c93a472a64a0f02c69a0dc45259fdb7": {
+      "source": "0–1，用 20 ms 平均绝对振幅遮罩 CSV。",
+      "translation": "0–1; mask the CSV using mean absolute amplitude over 20 ms."
+    },
+    "4c288d7fcf3337201f5e62c45ecc2a54aa1a96bee1448b1bc4c3d568df1ea7ea": {
+      "source": "全选、逐文件复选框",
+      "translation": "Select all; individual file checkboxes"
+    },
+    "f02d014655400c036f36641a85e960611d650ea87c5e3898be60b03c5886ffe7": {
+      "source": "批量：待处理文件 / 选择",
+      "translation": "Batch: files to process / selection"
+    },
+    "aa9cd0b63b0961b2fd47349d6fd340f80d75e738f95f7f8be3e02ea6add3c72e": {
+      "source": "打开时全选当前列表",
+      "translation": "Select all files in the current list on opening"
+    },
+    "f1f33e9124fd333502b3da0c077affbb0cf2259435a58f21c930a7416be06bb9": {
+      "source": "可逐项选择，空选禁用提交。",
+      "translation": "Select files individually; submission is disabled for an empty selection."
+    },
+    "93f95cea20095a27c184e60a6df80cb5065a809b53e018f14cb48d02da638246": {
+      "source": "提交所选文件",
+      "translation": "Submit selected files"
+    },
+    "a40d7732a48007a77020cc8de35bb6dc38e6fb4b2e73db2aedc9d1386c1ce210": {
+      "source": "批量底部 / 按钮",
+      "translation": "Bottom of batch dialog / button"
+    },
+    "63a0a06e409d2c46c13b21525b938fc7981d856289ecc337022402cba82bf1d3": {
+      "source": "可提交时启用",
+      "translation": "Enabled when ready to submit"
+    },
+    "8421a0f1f976e4a27763f394dad32a8ade4a2e5f9ec706d815106c6f88615e00": {
+      "source": "逐个提交完整滤波文件。",
+      "translation": "Submit complete filtered files one by one."
+    },
+    "6dcff25a59a065521c4e092f5b699ab46658e8c1d2a08dc2bb87afee79895c10": {
+      "source": "取消提交",
+      "translation": "Cancel submission"
+    },
+    "9e37fddcb39dd61eb3e3f0240888e7c342c8dc6ce40880714aa6b4cfb6be11d8": {
+      "source": "仅提交中显示",
+      "translation": "Shown only during submission"
+    },
+    "9c1c16adb7ec24d8fdbf41f60f2ab5581030d5ba6f046806255978417fd6dbe8": {
+      "source": "停后续提交，并请求取消已接收任务。",
+      "translation": "Stop subsequent submissions and request cancellation of accepted tasks."
+    },
+    "c66e7991ae4eaddd1c57d1171331fd1e4631bbdb7c357fa2a658a3ea11586deb": {
+      "source": "返回工作台",
+      "translation": "Return to workbench"
+    },
+    "026be770264a45b7d86f674978e70eb2d27e09a95f2421a270c83af6c426012d": {
+      "source": "未提交时可用",
+      "translation": "Available when not submitting"
+    },
+    "79c8bd9f6a2719531e84ba8499391f828ee1b8583c13de911238f9740da1eb39": {
+      "source": "关闭弹窗，提交中禁用。",
+      "translation": "Close the dialog; disabled during submission."
+    },
+    "8e054edc1a627a244677ece5a17d15afbfac4084e564f2c70eb45d053734c21a": {
+      "source": "弹窗未列出的设置独立保存：新批次峰自动开启，峰/谷 0.01，谱窗 20 ms，dB −70 至 −10，音频 F0 默认搜索 30–800 Hz、步长 10 ms。批次弹窗没有 F0 上下限控件，主页面的音频 F0 范围和自动 dB 不带入。首个任务接收后保存批次草稿，下次恢复。",
+      "translation": "Settings not listed in the dialog are saved independently: peaks are automatically enabled for new batches, peak/trough thresholds are 0.01, spectrum window is 20 ms, dB range is −70 to −10, and audio F0 defaults to a 30–800 Hz search with a 10 ms step. The batch dialog has no F0 bound controls; the main page's audio F0 range and automatic dB are not carried over. The batch draft is saved after the first task is accepted and restored next time."
+    },
+    "d2675c1048b3b6b00880bb51fdb7ba94e710581eaa6c9495ee36bf3a4d3a7743": {
+      "source": "逐文件检查与批次保存",
+      "translation": "Check individual files and save batch results"
+    },
+    "b9ece8a7e3a765eed1def51e49e90a27e1fdd02b03448acbce696f8dea0769e5": {
+      "source": "返回工作台逐文件看任务。一个失败不阻止其他文件，未提交原因会另行提示。",
+      "translation": "Return to the workbench to inspect each task. One failure does not stop other files; reasons for files not submitted are reported separately."
+    },
+    "ac461ef6faad3fb7445ed30b1645c6fa7a4d34e456ae8ff0cc11a1cc97364abf": {
+      "source": "有成功任务后点击保存本次批量结果，一次选目录保存。本次未保存的任务可再逐个查看并保存。",
+      "translation": "Once tasks succeed, click Save this batch's results and choose a directory once. Tasks not saved this way can still be viewed and saved individually."
+    },
+    "28039360160bc3529af5bd30947d660aba598bc9b9553372320ffcca4ae1337a": {
+      "source": "本批成功任务保存后，记录与再次保存入口仍保留。",
+      "translation": "After successful tasks in this batch are saved, records and controls for saving again remain available."
+    },
+    "07a2004abf980c6e93284375abdb1abec8bce7513274f999e1912fe7244cb9f0": {
+      "source": "3.wav批次任务完成后，工作台顶部显示已保存一个完整结果，左侧处理记录与保存本次批量结果按钮可见",
+      "translation": "After the 3.wav batch task finishes, the workbench reports one complete result saved at the top, with Processing history on the left and Save this batch's results visible"
+    },
+    "b47b1ef90ac19ab2248e270e8902a70477c31da8898296b524b732c92046cf70": {
+      "source": "批次 CSV 将所选 F0 插值到 GCI 周期时间点，行数与单文件可不同。20 ms 平均绝对音频振幅低于阈值时，该行参数置为 NaN，声带振动状态需结合 EGG 波形判断。勾选图片才生成三张 PNG。",
+      "translation": "Batch CSVs interpolate the selected F0 sources onto GCI cycle time points, so row counts may differ from single-file results. When the mean absolute audio amplitude over 20 ms falls below the threshold, that row's parameters are set to NaN. Assess vocal-fold vibration together with the EGG waveform. Three PNGs are generated only when image export is selected."
+    },
+    "d98a9074b2a66cab64d55fe807bc7c0549d91f887b07a219badfc1a99fe20c66": {
+      "source": "提交中参数和普通关闭禁用。取消提交停止后续提交，并请求取消已接收及迟到任务；取消本次批量任务停止未完成计算。完成产物保留，新批次全未提交时保留上一批保存入口。重开可查已提交任务，未提交选择不保存为队列。",
+      "translation": "Parameters and normal closing are disabled during submission. Cancel submission stops further submissions and requests cancellation of accepted and late-arriving tasks; Cancel this batch stops unfinished calculations. Completed outputs are retained. If no task in a new batch is submitted, the previous batch's save control remains. Reopening lets you inspect submitted tasks; unsubmitted selections are not saved as a queue."
+    },
+    "8843f00fe95a44d498219552a1b48439f8d3ec1a1d285bb470f001c6616a735b": {
+      "source": "保存草稿与恢复处理记录",
+      "translation": "Save parameter drafts and restore processing history"
+    },
+    "cb65ad70f19a6379324ef5544529e28292ebb50af97205f9998ed78c9bcc5d9b": {
+      "source": "保存参数草稿保留分析配置，包括 Praat/REAPER 共用的 F0 上下限，以及 LP 阶数，LP 空白为自动。只改 LP 不影响四图。自动 dB 单独记忆，批次配置独立保存。<s id=\"0\">草稿不含音频</s>，重开需重新选文件。",
+      "translation": "Saving a parameter draft retains the analysis configuration, including the F0 bounds shared by Praat/REAPER and the LP order; a blank LP order means automatic. Changing LP alone does not affect the four plots. Automatic dB is remembered separately, and batch configuration is saved independently. <s id=\"0\">Drafts contain no audio</s>; select files again after reopening."
+    },
+    "5449ff8e685c6750ac1e2f716cc6e0d04844b5fbda224cf44379e4d83f626f69": {
+      "source": "未存参数时关闭标签，可取消或按 Escape 留在页面，也可保存草稿并关闭，或放弃草稿并关闭。保存失败时页面保留，恢复本机存储后重试。历史任务用自身快照，旧 F0 范围保持原设置。新单文件任务使用当前左栏范围，新批次使用独立配置。",
+      "translation": "When closing a tab with unsaved parameters, you can cancel or press Escape to remain on the page, save the draft and close, or discard the draft and close. If saving fails, the page remains open; restore local storage access and retry. Historical tasks use their own snapshots, and older F0 ranges retain their original settings. New single-file tasks use the current left-panel range; new batches use independent configuration."
+    },
+    "a2985d26e1d2f05d80be96a5c08375a9f65ecc732f77303b003b60426850f845": {
+      "source": "错误恢复",
+      "translation": "Error recovery"
+    },
+    "7c3da402a1ba342e2fe8fbe6016212bd2a643cfa8c20ba0acae3178d159862fa": {
+      "source": "文件、参数与预览",
+      "translation": "Files, parameters, and preview"
+    },
+    "94f58c66060af33051fe8d8baab1dcd89f9e50b7ea1dc679ba128a5107432a02": {
+      "source": "需要双声道 WAV：重选同步 EGG/音频录音。复制单声道不能补出 EGG。",
+      "translation": "Stereo WAV required: reselect a synchronous EGG/audio recording. Duplicating a mono channel cannot supply EGG."
+    },
+    "94787b579edb3e0e33e021f077e038c88de413fa51efef928aa2309280f16375": {
+      "source": "参数无效或滤波失败：检查 0 &lt; 高通 &lt; 低通 &lt; 采样率/2、谱窗 5–50 ms、dB 下限 &lt; 上限，以及有效选区。F0 下限和上限均须在 10–2000 Hz 内，且下限小于上限。修正后等预览更新。",
+      "translation": "Invalid parameters or filtering failure: check 0 &lt; high-pass &lt; low-pass &lt; sample rate/2, a spectrum window of 5–50 ms, dB minimum &lt; maximum, and a valid selection. Both F0 bounds must lie within 10–2000 Hz, with the lower bound below the upper bound. After correction, wait for the preview to update."
+    },
+    "ae1098aa6fe30ef8a5756b300441fa1c4a1e6282755cf061c6cf4ec81a493b35": {
+      "source": "语谱过深/过淡：核对左栏 dB 下限、dB 上限，重新开启自动 dB。静音时保留色阶属正常行为。",
+      "translation": "Spectrogram too dark or pale: check the left-panel dB minimum and maximum and re-enable automatic dB. Retaining the intensity range during silence is expected."
+    },
+    "62f725631aa86b008b05aa0d52f3f2a60b5169043b6e79e3e69bbae545d18550": {
+      "source": "CQ/SQ 缺失或事件异常：核对声道、极性、滤波和峰谷阈值，缩小微观窗检查周期。空值不要补零。",
+      "translation": "Missing CQ/SQ or abnormal events: check channels, polarity, filtering, and peak/trough thresholds; narrow the microscopic window to inspect cycles. Do not fill missing values with zero."
+    },
+    "9125d54073271482a2309377d0f572640ad2866f7b9e6761d9fa4eeae9908ac6": {
+      "source": "REAPER 失败：取消该开关继续其他分析，再从已配置 REAPER 的桌面入口重试。",
+      "translation": "REAPER failure: turn it off to continue other analysis, then retry from a desktop entry with REAPER configured."
+    },
+    "9b2efaed985769508bf10bf2e0e71288416ee31f5b9f4214832088d0d2f9e505": {
+      "source": "预览超时：保留参数，点击重试预览。源文件失效或改变时重选，网页文件到期时重新导入。",
+      "translation": "Preview timeout: retain parameters and click Retry preview. Reselect the source file if it has become invalid or changed; reimport web files when they expire."
+    },
+    "ae001cefeebffbe658c6fc3ec2dcd89bc6a433dcf75cd9dabcdab32d45524ff3": {
+      "source": "文件超限先切分。长录音预览超限则缩到 60 s 内；需全段结果，用完整录音导出按钮。计算超预算时缩短文件或范围。",
+      "translation": "Split files that exceed limits. If a long-recording preview exceeds the limit, shorten it to within 60 s. For complete results, use the full-recording export button. Shorten the file or range if computation exceeds the budget."
+    },
+    "5fd44916023bb7abab961ee05dda6b2316ffd06604823b73b4d5a38ee4f79ceb": {
+      "source": "任务、保存与 IF",
+      "translation": "Tasks, saving, and IF"
+    },
+    "89fe2a0c10d6a571df8b2a12ed44c6f64e12bf73ba54449f76d3cd62c5315044": {
+      "source": "排队/运行中可取消，等状态结束。失败、中断或取消后可重试，原记录和产物保留。",
+      "translation": "Queued or running tasks can be cancelled; wait for the status to settle. Retry after failure, interruption, or cancellation; original records and outputs remain."
+    },
+    "732c9347ddd95c151e9a02416055ddf911c3d6ea533cd6f91d3525628ec7bdc9": {
+      "source": "批次参数错误在弹窗修正。部分成功时分别处理已提交文件和未提交原因。",
+      "translation": "Correct batch-parameter errors in the dialog. If only some tasks succeed, handle submitted files and reasons for unsubmitted files separately."
+    },
+    "b81d674adde1622b0e84d3f79ba6d5d968b027a0081d94a53e967d007f85a802": {
+      "source": "结果读取失败时点击重新读取结果，只重取文件。读取中暂禁保存/下载，结果到期需重算。",
+      "translation": "If result loading fails, click Reload results to fetch files again. Saving/downloading is temporarily disabled during loading. Expired results require recomputation."
+    },
+    "db7938168d0cbc4ebc7bee27458184f852d0058fdf49b0aaf0056806b8b3d242": {
+      "source": "导出字体不可用：在公共字体设置选可用字体后重新提交。已有成功结果可直接读取。",
+      "translation": "Export font unavailable: select an available font in the shared font settings and resubmit. Existing successful results can be loaded directly."
+    },
+    "d2406141924c545d8893bf2a3b732f2ac83176f968a9cdbe5be9d6a695cc0ca0": {
+      "source": "取消选目录仍保留任务。保存失败时恢复目录访问或空间再试，关闭窗口不会撤回已开始的保存。",
+      "translation": "Cancelling directory selection retains the task. If saving fails, restore directory access or free space and retry. Closing the window does not undo a save already started."
+    },
+    "ab171ea2a939cf9b586dcd4f5901983156dc47953af50bac9559bcf256c09b02": {
+      "source": "IF 有效周期不足：核对声道、GCI、稳定段与 LP。至少要有三个有效取窗片段。",
+      "translation": "Insufficient valid IF cycles: check channels, GCI, the stable segment, and LP. At least three valid windowed segments are required."
+    },
+    "746a91ca0ec08536fbed389f0a1d93184e05bb52b19d46e903450c5fae3d5a2b": {
+      "source": "IF 提示跨下一 GCI：回看周期，并结合 GOI 和波形核对闭相范围。",
+      "translation": "IF reports crossing the next GCI: revisit the cycle and check the closed-phase range against GOI and the waveform."
+    },
+    "8a230b179719f759893482703ae188929e3e4a84bf066387655390228c9ce0bd": {
+      "source": "播放失败：核对输出设备，再点播放。有波形不能证明实体声卡已播放成功。",
+      "translation": "Playback failure: check the output device and click Play again. A waveform does not establish that a physical sound card played successfully."
+    },
+    "ee18c25f74743f0a5a6f61a1b1202133d0a564c6b1bd3c41153dbfb50d619ae4": {
+      "source": "把选区时长改为 10.1 秒再点击 IF，会提示超出限制。缩到同时满足 10 秒、960000 帧后，等预览完成再提交。",
+      "translation": "Changing selection duration to 10.1 seconds and clicking IF displays a limit warning. Shorten the selection to satisfy both 10 seconds and 960000 frames, wait for preview completion, and resubmit."
+    },
+    "076bdc7eb00c47f96e5058a971c0ff9b752526b01562c94f677e884d841d4780": {
+      "source": "将选区时长设为 10.1 秒后点击 IF，工作台明确提示逆滤波选区限 10 秒、960000 帧；缩短选区并等待预览更新后可重新提交。",
+      "translation": "After setting selection duration to 10.1 seconds and clicking IF, the workbench explicitly reports the inverse-filter selection limits of 10 seconds and 960000 frames. Shorten the selection and wait for the preview to update before resubmitting."
+    },
+    "d0161d97275453865fbd4f3ccfc72c0e0ab2a7291210ccc99ae771478cb0b78e": {
+      "source": "方法来源与结果解释",
+      "translation": "Method sources and interpreting results"
+    },
+    "121c4b2f61b5c007e08b436c544abdfab9a68bc15ffd7e2c6bc7cba4870364d7": {
+      "source": "CQ 与程序定义的 SQ",
+      "translation": "CQ and the program-defined SQ"
+    },
+    "8ce19c2988fab6f95bb07d1bbdd34826cc12a8f1d5b0e587a714ae6565250a26": {
+      "source": "以下公式中，g0/g1 为相邻 GCI，o 为其间 GOI，p 为接触阶段唯一有效峰。",
+      "translation": "In the following formulas, g0/g1 are adjacent GCI events, o is the GOI between them, and p is the only valid peak in the contact phase."
+    },
+    "6b59d4e6897380c9b85d7d2e60ea2b39ef1a893d565f7255c5cad2c668aa58a5": {
+      "source": "CQ 只保留 0.05 &lt; CQ &lt; 0.95；CQ/SQ 各自可能缺失。此处 SQ 是归一化时长不对称量。它们描述 EGG 周期的时间关系，受极性、滤波、方法与阈值影响。接触面积或组织运动需采用相应测量方法。",
+      "translation": "CQ retains only 0.05 &lt; CQ &lt; 0.95; CQ and SQ can each be missing. SQ here is a normalized duration-asymmetry measure. They describe temporal relationships within EGG cycles and depend on polarity, filtering, methods, and thresholds. Contact area or tissue motion requires appropriate measurement methods."
+    },
+    "51dcaf7131515cf4ede04bb7c3dde235151ed5f40463b06f81abc632080e3ca6": {
+      "source": "简化 IF 计算链及局限",
+      "translation": "Simplified IF processing chain and limitations"
+    },
+    "47ee78f3538dcbbdb2ba6de842687f2a2044aaf92d74d2766fa0ff548e5d0b3c": {
+      "source": "简化 IF 由 GCI 后固定 3 ms 片段估计 LPC 并平均系数，再处理全选区音频。至少需要三个有效片段。",
+      "translation": "Simplified IF estimates LPC from fixed 3 ms segments after GCI, averages the coefficients, and then processes audio over the full selection. At least three valid segments are required."
+    },
+    "69a10ebd244d9f0fd348279402ed2d33309f542ccb68745d7ebb3726aee0bde1": {
+      "source": "IF 可用于当前算法下的声源形状比较。闭相、录制时延及流量单位需另行核对与校准。",
+      "translation": "IF can compare source shapes under the current algorithm. Closed phase, recording delay, and flow units require separate checks and calibration."
+    },
+    "233fb5cefce285a66ace7967aedddf93b4a50c342bf51ade9468e681e0d410e7": {
+      "source": "阅读来源与引用用途",
+      "translation": "Reading sources and citation purposes"
+    },
+    "418cade2fbd61de90dee7a6b28237c8b8850a3bfc618140739e19711f95d43af": {
+      "source": "峰谷显著度：<s id=\"0\">SciPy peak_prominences 官方说明</s>，可查数值含义。",
+      "translation": "Peak/trough prominence: <s id=\"0\">official SciPy peak_prominences documentation</s> explains the numerical meaning."
+    },
+    "cd646f2de24c5cacdb138be4b768417132f00c85e3cc73792624ff28c84e47b1": {
+      "source": "语谱背景：<s id=\"0\">Praat Spectrograms FAQ</s>，本模块的 PSD 标尺须按当前参数解释。",
+      "translation": "Spectrogram background: <s id=\"0\">Praat Spectrograms FAQ</s>. Interpret this module's PSD scale using the current parameters."
+    },
+    "58642cbe346c5244bff5dc33e2efdee4afeeb631baf73baa1738abe2998d637b": {
+      "source": "LPC 阶数背景：<s id=\"0\">Praat Sound: To LPC (covariance)</s>，自动阶数仍需结合当前采样率检查。",
+      "translation": "LPC-order background: <s id=\"0\">Praat Sound: To LPC (covariance)</s>. Check automatic order against the current sample rate."
+    },
+    "ef94b326e3040af0604257f4c37ff0d0b21cc365ca4052ded9bf935789ab8c94": {
+      "source": "REAPER：<s id=\"0\">REAPER 官方项目</s>，用于音频 F0 对照。",
+      "translation": "REAPER: <s id=\"0\">official REAPER project</s>, used for audio F0 comparison."
+    },
+    "22ce05f7e6782f423b7e3264f560bb83aa1dae8ee4939e9d343def2f10ee5090": {
+      "source": "Henrich 等（2004）：<s id=\"0\">DOI: 10.1121/1.1646401</s>，用于理解 EGG/DEGG 方法。本页尺度分支使用局部幅度跨度的 0.25 交叉点；DECOM 的完整方法见该论文。",
+      "translation": "Henrich et al. (2004): <s id=\"0\">DOI: 10.1121/1.1646401</s>, for understanding EGG/DEGG methods. This page's scale branch uses a 0.25 crossing of the local amplitude span; consult the paper for the complete DECOM method."
+    },
+    "48d403c5cd1fdee0917e7f831e53cc8c2f4e0cd057d87a884d86f6acb5fdcf84": {
+      "source": "Drugman 等的声门源估计比较：<s id=\"0\">作者公开稿 arXiv:2001.00840v1</s>，可查闭相取窗背景。",
+      "translation": "Drugman et al.'s comparison of glottal-source estimation: <s id=\"0\">authors' public manuscript arXiv:2001.00840v1</s>, for background on closed-phase windowing."
+    },
+    "42cb30421170c850e200b10a2b2ca5ff087cbea775491ea5dde189c1833f0736": {
+      "source": "方法与引用提供组件和阅读背景。结果用于研究时，仍需结合事件人工核对与独立验证。",
+      "translation": "Methods and citations provide component and reading background. Research use of results still requires manual event review and independent validation."
+    },
+    "89b11309772f9800e080a1841b300f36cdf8da5d47f92e944242262b0dd82905": {
+      "source": "参考资料",
+      "translation": "References"
+    },
+    "6591a81f35060c0cb0fe79653c6f3ad02f609a2b4b462453019e157a430900e4": {
+      "source": "论文与代码许可各有适用范围，使用结果时保留参数及来源记录。",
+      "translation": "Papers and code licenses each have their own scope. Retain parameter and source records when using results."
+    }
+  }
+}

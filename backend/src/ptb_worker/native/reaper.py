@@ -13,7 +13,7 @@ REAPER_SHA256='279fecc82ed0a49b0277b114270771d7670299068e849058b392672825981824'
 
 def collect_pipe(argv,pipe,cwd,limits,stop=lambda:False,on_started=None,on_chunk=None,evidence=None):
     from .windows import OwnedProcess
-    process=None;buffer=LimitedBuffer(limits.output_bytes);started=time.monotonic();received=0
+    process=None;buffer=LimitedBuffer(limits.output_bytes);started=time.monotonic();received=0;exit_observed=False
     try:
         if stop():raise Cancelled('cancelled')
         process=OwnedProcess(argv,cwd,limits.process_bytes)
@@ -29,7 +29,10 @@ def collect_pipe(argv,pipe,cwd,limits,stop=lambda:False,on_started=None,on_chunk
                 else:buffer.write(chunk)
             elif process.poll() is not None:
                 if process.poll()!=0:raise FormatError('native_exit_'+str(process.poll()))
-                return buffer.getvalue(),process.pid
+                # The writer may have produced its final bytes between read()
+                # and poll(). Drain once more after observing process exit.
+                if exit_observed:return buffer.getvalue(),process.pid
+                exit_observed=True
             # A ready pipe must drain at pipe speed. Sleeping after every 4 KiB
             # throttled a 77 s EGG preview WAV for tens of seconds. Keep the
             # cancellation/deadline/budget checks above on every iteration.

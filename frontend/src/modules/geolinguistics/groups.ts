@@ -1,3 +1,4 @@
+import {tr} from '../../i18n/index.ts';
 import {categoryText, featureColor, observationText, type AtlasFeature, type Project} from './model.ts';
 
 export type FeatureDetail='broad'|'fine';
@@ -18,17 +19,17 @@ export function displayCodes(value:string|null,feature:AtlasFeature,detail:Featu
  const conflicts=Array.isArray(exception)?exception:exception?[exception]:[];
  return [...new Set(value.split('#').map(code=>{if(conflicts.some(item=>item.code===code))return unresolvedMapping;const group=groupFor(code,feature);return group?groupKey(group.id):unmappedBroad;}))];
 }
-export function displayText(code:string,feature:AtlasFeature,project:Project,detail:FeatureDetail,includeCode=false){
- if(code===unresolvedMapping)return '原图对应待核';
- if(code===unmappedBroad)return '此记录的大类尚待对应';
- if(code==='待核')return '原值待核';
- if(detail==='fine')return categoryText(code,feature,project,includeCode);
+export function displayText(code:string,feature:AtlasFeature,project:Project,detail:FeatureDetail,includeCode=false,sourceLabels=false){
+ if(code===unresolvedMapping)return sourceLabels?'原图对应待核':tr("modules.geolinguistics.original_map_correspondence_pending_verification");
+ if(code===unmappedBroad)return sourceLabels?'此记录的大类尚待对应':tr("modules.geolinguistics.this_record_s_broad_category_is_not_yet_mapped");
+ if(code==='待核')return sourceLabels?'原值待核':tr("modules.geolinguistics.original_value_pending_verification");
+ if(detail==='fine')return categoryText(code,feature,project,includeCode,sourceLabels);
  const group=feature.groups?.find(g=>groupKey(g.id)===code);
- return group?group.label:'此记录的大类尚待对应';
+ return group?group.label:sourceLabels?'此记录的大类尚待对应':tr("modules.geolinguistics.this_record_s_broad_category_is_not_yet_mapped");
 }
-export function displayValue(value:string|null,feature:AtlasFeature,project:Project,detail:FeatureDetail,siteId?:string){
- if(detail==='fine')return observationText(value,feature,project);
- return displayCodes(value,feature,detail,siteId).map(code=>displayText(code,feature,project,detail)).join('；');
+export function displayValue(value:string|null,feature:AtlasFeature,project:Project,detail:FeatureDetail,siteId?:string,sourceLabels=false){
+ if(detail==='fine')return observationText(value,feature,project,false,sourceLabels);
+ return displayCodes(value,feature,detail,siteId).map(code=>displayText(code,feature,project,detail,false,sourceLabels)).join('；');
 }
 export function displayColor(code:string,feature:AtlasFeature,detail:FeatureDetail){
  if(detail==='fine')return featureColor(code==='待核'?null:code,feature);

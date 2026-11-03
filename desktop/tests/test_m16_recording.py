@@ -276,7 +276,27 @@ def test_output_close_failure_stays_owned_until_retry(tmp_path):
         def check_output_settings(self,**kwargs):pass
         def OutputStream(self,**kwargs):return self.stream
     p,c,x,r=recorded(tmp_path);backend=Backend();service=RecordingService(backend=backend);service.project=p;service.commit_capture(copy.deepcopy(r))
-    with pytest.raises(RuntimeError,match='尚未释放'):service.dispatch({'op':'play','id':r['id'],'device':devices(backend)[0]['id']})
+    with pytest.raises(RuntimeError,match='尚未释放') as caught:service.dispatch({'op':'play','id':r['id'],'device':devices(backend)[0]['id']})
+    assert caught.value.display == {'key':'native.errors.recording.playbackStartCleanup','values':{'reason':'输出流仍未释放，请重试停止'}}
     assert service.player is not None and service.player.stream is backend.stream
+    assert service.player.error == '输出流关闭失败：injected close'
+    assert service.dispatch({'op':'status'})['playback']['display'] == {'key':'native.errors.recording.playbackCloseFailed','values':{'reason':'injected close'}}
     with pytest.raises(RuntimeError,match='仍未释放'):service.dispatch({'op':'play_stop'})
     assert service.player is not None;backend.stream.fail=False;service.dispatch({'op':'play_stop'});assert service.player is None;assert service.close()
+
+
+def test_device_capability_failure_and_callback_keep_raw_driver_diagnostics():
+    from types import SimpleNamespace
+    from ptb_desktop.recording.devices import Playback
+    def fail():raise RuntimeError('driver-{reason} / device原名')
+    service=RecordingService(backend=SimpleNamespace(query_hostapis=fail))
+    result=service.dispatch({'op':'capabilities'})
+    assert result['device_error']=='原生设备库不可用：driver-{reason} / device原名'
+    assert result['device_error_display']=={'key':'native.errors.recording.deviceUnavailable','values':{'reason':'driver-{reason} / device原名'}}
+    player=Playback.__new__(Playback)
+    class Abort(RuntimeError):pass
+    player.backend=SimpleNamespace(CallbackAbort=Abort)
+    with pytest.raises(Abort):player._callback(np.ones((8,1),np.float32),8,None,'driver-underrun')
+    assert player.error=='播放设备发生欠载或中断：driver-underrun'
+    assert player.error_display=={'key':'native.errors.recording.playbackStreamStatus','values':{'reason':'driver-underrun'}}
+    assert service.close()

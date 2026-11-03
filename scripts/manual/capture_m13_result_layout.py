@@ -1,5 +1,5 @@
 """Owned hidden Qt screenshots at the formal manual's actual DPR and page zoom."""
-import hashlib,json,os,sqlite3,struct,sys,time,traceback
+import argparse,hashlib,json,os,struct,sys,time,traceback
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[2]
 for part in ('scripts','desktop/src','backend/src','packages/phonetic_core/src'):sys.path.insert(0,str(ROOT/part))
@@ -8,20 +8,28 @@ for key in ('QT_ENABLE_HIGHDPI_SCALING','QT_SCALE_FACTOR','QT_SCREEN_SCALE_FACTO
 os.environ['QT_QPA_PLATFORM']='windows'
 os.environ['QTWEBENGINE_CHROMIUM_FLAGS']='--mute-audio --autoplay-policy=no-user-gesture-required'
 
-def main():
+def main(args):
     from verification_artifacts import verification_run
     from PyQt6.QtCore import Qt,QEventLoop,QTimer
     from PyQt6.QtWidgets import QApplication,QFileDialog
+    from PyQt6 import sip
     from ptb_desktop.host import Workbench,register_scheme
-    from ptb_worker.local_acoustic_files import initialize_local_files
-    with verification_run('m13-result-layout','manual-qt','Hidden maximized Qt; existing test schema copy; only M13 text, actual DPR1.5/page100, no device or scientific job') as (out,scratch):
-        db=scratch/'jobs.sqlite3'
-        with sqlite3.connect((ROOT/'output/validation/p06/local-state.sqlite3').as_uri()+'?mode=ro',uri=True) as source,sqlite3.connect(db) as target:source.backup(target)
-        cache=scratch/'cache';cache.mkdir();initialize_local_files(cache);register_scheme();app=QApplication(['M13-owned-manual'])
-        window=Workbench(ROOT/'frontend/dist',test=True,jobs_path=db,local_files_root=cache,vocal_profile=scratch/'vocal')
+    from ptb_worker.local_workspace import prepare_workspace
+    from ptb_desktop.legacy_cache import isolated_context
+    from manual.capture_locale import CaptureLocale
+    from manual.localization import fingerprint
+    ui=CaptureLocale(args.locale,('mandarin-ipa','workbench','components','common'))
+    sources=[Path(__file__),ROOT/'scripts/manual/capture_locale.py',args.frontend_dist/'index.html',ROOT/'desktop/src/ptb_desktop/host.py',ROOT/'frontend/src/app/AppShell.vue',ROOT/'frontend/src/state/fonts.ts']
+    sources+=list((ROOT/'frontend/src/modules/mandarin-ipa').glob('*.vue'))
+    sources += [ROOT/'frontend/src/i18n/locales'/code/(namespace+'.json') for code in ('zh-CN',args.locale) for namespace in ('mandarin-ipa','workbench','components')]
+    snapshots={str(i):{'path':str(p.resolve()),'sha256':hashlib.sha256(p.read_bytes()).hexdigest()} for i,p in enumerate(dict.fromkeys(sources))}
+    with verification_run('m13-result-layout',args.locale,'Actual current hidden maximized Qt; fresh owned workspace; M13 text/PNG, native DPR1.5/page100; real selected UI locale and completed font phase; no physical device or compositor claim') as (out,scratch):
+        db,cache=prepare_workspace(scratch/'state',ROOT/'backend/migrations')
+        register_scheme();app=QApplication(['M13-owned-manual'])
+        window=Workbench(args.frontend_dist.resolve(),test=True,jobs_path=db,local_files_root=cache,vocal_profile=scratch/'vocal',cache_context=isolated_context(scratch/'qa-caches'))
         window.resize(window.screen().geometry().width(),window.screen().geometry().height());window.setAttribute(Qt.WidgetAttribute.WA_DontShowOnScreen);window.showMaximized();window.view.setZoomFactor(1);window.page.setAudioMuted(True)
-        report={'success':False,'captures':[],'checks':[],'errors':[]}
-        export_file=out/'m13-export-kaiti-independent-colors.png'
+        report={'success':False,'locale':args.locale,'sourceChapter':'m13','sources':snapshots,'captures':[],'checks':[],'errors':[],'physicalCompositorVerified':False}
+        export_file=scratch/'m13-export-kaiti-independent-colors.png'
         QFileDialog.getSaveFileName=lambda *args,**kwargs:(str(export_file),'PNG (*.png)')
         def pause(ms=100):
             loop=QEventLoop();QTimer.singleShot(ms,loop.quit);loop.exec()
@@ -38,14 +46,18 @@ def main():
                 pause()
             raise AssertionError(code+'\n'+str(js('document.body.innerText.slice(-4000)')))
         def click(label):
+            if label=='关闭 汉字转国际音标':
+                js('document.querySelector("#tab-M13").parentElement.querySelector(".tab-close").click()');pause(150);return
+            label='B '+ui.label('粗体') if label=='B 粗体' else ui.label(label)
             name=json.dumps(label)
             expr='[...document.querySelectorAll("button")].find(b=>b.offsetParent&&(b.getAttribute("aria-label")==='+name+'||b.getAttribute("title")==='+name+'||b.textContent.trim().replace(/\\s*\\*$/," ").trim()==='+name+'))'
             until('!!('+expr+')&&!('+expr+').disabled');js(expr+'.click()');pause(150)
         def input_text(text):
-            js('(()=>{const e=document.querySelector("textarea[aria-label=待转换汉字文本]");e.value='+json.dumps(text)+';e.dispatchEvent(new Event("input",{bubbles:true}));})()');pause(180)
+            js('(()=>{const e=document.querySelector(".m13-input-section textarea");e.value='+json.dumps(text)+';e.dispatchEvent(new Event("input",{bubbles:true}));})()');pause(180)
         def select(value):
-            js('(()=>{const e=document.querySelector("select[aria-label=转换标准]");e.value='+json.dumps(value)+';e.dispatchEvent(new Event("change",{bubbles:true}));})()');pause(180)
+            js('(()=>{const e=document.querySelector('+json.dumps('select[aria-label="'+ui.label('转换标准')+'"]')+');e.value='+json.dumps(value)+';e.dispatchEvent(new Event("change",{bubbles:true}));})()');pause(180)
         def range_value(label,value):
+            label=ui.label(label)
             js('(()=>{const e=document.querySelector('+json.dumps('input[aria-label="'+label+'"]')+');e.value='+json.dumps(str(value))+';e.dispatchEvent(new Event("input",{bubbles:true}));})()');pause(180)
         def radio(value):
             js('(()=>{const e=document.querySelector('+json.dumps('input[value="'+value+'"]')+');e.checked=true;e.dispatchEvent(new Event("change",{bubbles:true}));})()');pause(180)
@@ -55,16 +67,18 @@ def main():
             until('document.fonts.status==="loaded"');pause(350)
             if popup_index is not None:
                 open_token(popup_index)
-            image=window.view.grab().toImage();size=[image.width(),image.height()];dpr=image.devicePixelRatio()
+            if args.only_export:return
+            metrics=ui.metrics(js);image=window.view.grab().toImage();size=[image.width(),image.height()];dpr=image.devicePixelRatio()
             assert abs(dpr-1.5)<.01 and size in ([2560,1600],[2561,1601]),(size,dpr)
             assert window.isMaximized() and window.view.zoomFactor()==1,{'maximized':window.isMaximized(),'zoom':window.view.zoomFactor(),'state':int(window.windowState().value),'window':[window.width(),window.height()]}
             assert js('parseFloat(getComputedStyle(document.documentElement).zoom)||1')==1
             if size!=[2560,1600]:image=image.copy(0,0,2560,1600)
             path=out/(name+'.png');assert image.save(str(path))
-            report['captures'].append({'name':name,'file':str(path),'image':[2560,1600],'raw_image':size,'dpr':dpr,'pageZoom':1,'maximized':True,'sha256':hashlib.sha256(path.read_bytes()).hexdigest()});print('Captured',name,flush=True)
+            report['captures'].append({'name':name,'file':path.name,'image':[2560,1600],'raw_image':size,'maximized':True,'sha256':hashlib.sha256(path.read_bytes()).hexdigest(),**metrics});print('Captured',name,flush=True)
         try:
-            until('!!document.querySelector(".home-page")&&document.fonts.status==="loaded"');window.showMaximized();window.view.setZoomFactor(1);pause(350);click('设置');click('浅色');click('汉字转国际音标')
-            js('document.querySelector("[aria-label=收起侧栏]")?.click()');pause(180)
+            until('!!document.querySelector(".home-page")&&document.fonts.status==="loaded"');window.showMaximized();window.view.setZoomFactor(1);pause(350);ui.prepare_qt(js,until);click('设置');click('浅色')
+            js('document.querySelector(".nav-item[data-module-id=M13]").click()');until('!!document.querySelector(".m13-input-section")')
+            click('收起侧栏');pause(180)
             input_layout=js('(()=>{const section=document.querySelector(".m13-input-section"),input=section.querySelector("textarea").getBoundingClientRect(),result=document.querySelector(".m13-output").getBoundingClientRect();return {countInHeading:!!section.querySelector(".module-section-heading .m13-count"),bottomDifference:input.bottom-result.bottom,leftWidth:section.getBoundingClientRect().width,rightWidth:document.querySelector(".m13-result-section").getBoundingClientRect().width};})()')
             assert input_layout['countInHeading'] and abs(input_layout['bottomDifference'])<.1 and abs(input_layout['leftWidth']-input_layout['rightWidth'])<1,input_layout;report['input_layout']=input_layout
             capture('m13-overview-current-20261011')
@@ -78,7 +92,7 @@ def main():
             select('赵元任《汉语口语语法》');capture('m13-zhao-comparison-r2-light-scaled-r20261007')
             input_text('春江花月夜\n银行行走');select('UntPhesoca严');capture('m13-unt-current-20261011')
             input_text('花儿女儿门儿\n儿子 花 儿');click('自动组合儿化')
-            assert js('document.querySelector(".m13-erhua p").textContent.endsWith("自动组合后请核对独立的儿字。")')
+            assert js('document.querySelector(".m13-erhua p").textContent.includes('+json.dumps(ui.key('modules.mandarin-ipa.text.a9379054859c'))+')')
             js('document.querySelectorAll("[data-erhua=true]")[1].click()');pause(180);click('拆分儿化');capture('m13-erhua-current-20261011')
             js('document.querySelector("[data-erhua=true]").click()');pause(180);capture('m13-erhua-split-20261011');click('关闭读音选择')
             select('Standard Chinese (Beijing)');input_text('春江潮水连海平，海上明月共潮生。\n银行行走，花儿门儿。');range_value('汉字字号',26);range_value('音标字号',20);click('等宽排版')
@@ -87,23 +101,46 @@ def main():
             range_value('行距',18);capture('m13-equal-width-20261011')
             click('等宽排版');input_text('春江花月夜\n银行行走');select('Standard Chinese (Beijing)严');range_value('汉字字号',32);range_value('音标字号',22);range_value('字音间距',4);range_value('行距',22)
             js('(()=>{const e=document.querySelector("input[value=stacked]");e.checked=true;e.dispatchEvent(new Event("change",{bubbles:true}));})()');pause(180)
-            js('(()=>{const e=document.querySelector(".font-family-select select");e.value="KaiTi";e.dispatchEvent(new Event("change",{bubbles:true}));const b=[...document.querySelectorAll("button")].find(b=>b.textContent.trim()==="B 粗体");b?.click();for(const [label,color] of [["音标颜色","#2345ab"],["汉字颜色","#ab4523"]]){const c=document.querySelector("input[aria-label="+label+"]");c.value=color;c.dispatchEvent(new Event("input",{bubbles:true}));}})()');pause(250);capture('m13-layout-current-20261011')
-            js('window.qaPngPaint=[];(()=>{const original=CanvasRenderingContext2D.prototype.fillText;CanvasRenderingContext2D.prototype.fillText=function(text,...args){window.qaPngPaint.push(text);return original.call(this,text,...args);};})()');click('保存为 PNG');until('!!document.querySelector(".png-preview img")&&!document.querySelector("dialog .primary").disabled');click('导出 PNG')
+            js('(()=>{const e=document.querySelector(".font-family-select select");e.value="KaiTi";e.dispatchEvent(new Event("change",{bubbles:true}));})()');click('B 粗体')
+            for label,color in [('音标颜色','#2345ab'),('汉字颜色','#ab4523')]:
+                js('(()=>{const c=document.querySelector('+json.dumps('input[aria-label="'+ui.label(label)+'"]')+');c.value='+json.dumps(color)+';c.dispatchEvent(new Event("input",{bubbles:true}));})()')
+            pause(250);capture('m13-layout-current-20261011')
+            js('window.qaPngPaint=[];window.qaPngHeader=[];(()=>{const original=CanvasRenderingContext2D.prototype.fillText;CanvasRenderingContext2D.prototype.fillText=function(text,...args){window.qaPngPaint.push(text);if(this.textAlign==="left")window.qaPngHeader.push({text,x:args[0],y:args[1],width:this.measureText(text).width,font:this.font});return original.call(this,text,...args);};})()');click('保存为 PNG');until('!!document.querySelector(".png-preview img")&&!document.querySelector("dialog .primary").disabled');click('导出 PNG')
             deadline=time.monotonic()+30
             while not export_file.is_file() and time.monotonic()<deadline:pause()
             assert export_file.is_file(),js('document.body.innerText.slice(-1000)')
             assert '▼' not in js('window.qaPngPaint')
+            headings=js('window.qaPngHeader');assert len(headings)>=2,headings
+            for title,standard in zip(headings[::2],headings[1::2]):
+                assert title['x']+title['width']+15<=standard['x'] or standard['y']>=title['y']+20,headings
+            report['pngHeadingBounds']=headings
             data=export_file.read_bytes();assert data[1:4]==b'PNG'
             report['export']={'file':str(export_file),'image':list(struct.unpack('>II',data[16:24])),'sha256':hashlib.sha256(data).hexdigest(),'triangleAbsent':True}
-            js('(()=>{const e=document.querySelector("textarea[aria-label=待转换汉字文本]");e.focus();e.select();})()');capture('m13-input-selected-r2-light-scaled-r20261007')
-            click('保存本机草稿');click('关闭 汉字转国际音标');click('汉字转国际音标');capture('m13-draft-explicit-restore-r2-light-scaled-r20261007')
+            if args.only_export:
+                source_id='m13-export-kaiti-independent-colors'
+                project=json.loads((ROOT/'manual/project.json').read_text(encoding='utf-8'))
+                asset=next(a for a in project['assets'] if a['id']==source_id)
+                input_data={'text':'春江花月夜\n银行行走','standard':'Standard Chinese (Beijing)严'}
+                parameters={'mode':'paired','layout':'stacked','equalWidth':False,'hanziFont':'KaiTi','ipaFont':'PTB-Doulos (bundled Doulos SIL)','hanziSize':32,'ipaSize':22,'gap':4,'lineHeight':2.2,'bold':True,'ipaColor':'#2345ab','hanziColor':'#ab4523'}
+                actual={'text':js('document.querySelector(".m13-input-section textarea").value'),'standard':js('document.querySelector('+json.dumps('select[aria-label="'+ui.label('转换标准')+'"]')+').value')}
+                assert actual==input_data,actual
+                for label,expected in [('汉字字号','32'),('音标字号','22'),('字音间距','4'),('行距','22'),('音标颜色','#2345ab'),('汉字颜色','#ab4523')]:
+                    assert js('document.querySelector('+json.dumps('input[aria-label="'+ui.label(label)+'"]')+').value')==expected,label
+                assert js('document.querySelector("input[value=paired]").checked&&document.querySelector("input[value=stacked]").checked&&document.querySelector(".font-family-select select").value==="KaiTi"')
+                target=out/(source_id+'.png');target.write_bytes(data)
+                report['captures'].append({'name':source_id,'file':target.name,'captureKind':'scientific-export','image':report['export']['image'],'sha256':report['export']['sha256'],'maximized':True,**ui.metrics(js),'scientificExport':{'schemaVersion':'ptb-manual-scientific-export/1','sourceAssetId':source_id,'sourceImageSha256':hashlib.sha256((ROOT/'manual'/asset['path']).read_bytes()).hexdigest(),'input':input_data,'parameters':parameters,'inputSha256':fingerprint(input_data),'parametersSha256':fingerprint(parameters),'baseline':{'input':input_data,'parameters':parameters,'evidence':'git HEAD:scripts/manual/capture_m13_result_layout.py, main(): final paired/stacked KaiTi PNG recipe, checked 2026-10-30; source m13-export-kaiti-independent-colors'},'action':'modules.mandarin-ipa.text.da64ad7328e0 → modules.mandarin-ipa.text.8c52149aae45 (actual localized buttons)'}})
+            js('(()=>{const e=document.querySelector(".m13-input-section textarea");e.focus();e.select();})()');capture('m13-input-selected-r2-light-scaled-r20261007')
+            click('保存本机草稿');click('关闭 汉字转国际音标');js('document.querySelector(".nav-item[data-module-id=M13]").click()');until('!!document.querySelector(".m13-input-section")');capture('m13-draft-explicit-restore-r2-light-scaled-r20261007')
             click('恢复本机草稿');input_text('春江花月夜\n银行行走！');click('关闭 汉字转国际音标');capture('m13-unsaved-close-dialog-r2-light-scaled-r20261007');click('取消关闭')
             input_text('春江花月夜\n银行行走')
             js('(()=>{const e=document.querySelector(".font-family-select select");e.value="__custom__";e.dispatchEvent(new Event("change",{bubbles:true}));})()');pause(180)
-            js('(()=>{const e=document.querySelector(".font-family-select input");e.value="M13-Missing-Font-QA";e.dispatchEvent(new Event("input",{bubbles:true}));})()');pause(180);click('保存为 PNG');until('(()=>{const s=document.querySelector("dialog [role=alert]");return s?.textContent.includes("M13-Missing-Font-QA")&&s.textContent.includes("不可用");})()');capture('m13-unavailable-font-error-r2-light-scaled-r20261007')
-            report['checks']=['equal width in actual Qt','row spacing changes real row location','character count in heading and aligned input/result bottom','hidden Qt DPR1.5 page100 maximized','all M13 screenshots refreshed including draft and error states'];report['success']=True
+            js('(()=>{const e=document.querySelector(".font-family-select input");e.value="M13-Missing-Font-QA";e.dispatchEvent(new Event("input",{bubbles:true}));})()');pause(180);click('保存为 PNG');until('document.querySelector("dialog [role=alert]")?.textContent.includes('+json.dumps(ui.key('modules.mandarin-ipa.text.cb440c78d901',{'v0':'M13-Missing-Font-QA'}))+')');capture('m13-unavailable-font-error-r2-light-scaled-r20261007')
+            report['checks']=['equal width in actual Qt','row spacing changes real row location','character count in heading and aligned input/result bottom','hidden Qt DPR1.5 page100 maximized','actual scientific PNG with unchanged text, IPA standard, fonts, sizes, spacing and colors' if args.only_export else 'all M13 screenshots refreshed including draft and error states'];report['success']=True
         except Exception:report['errors'].append(traceback.format_exc());raise
         finally:
-            (out/'report.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n',encoding='utf-8');window.closing=True;window.close();pause(500);app.quit();print('Evidence:',out,flush=True)
+            report['sourceChangesDuringRun']=[p['path'] for p in snapshots.values() if hashlib.sha256(Path(p['path']).read_bytes()).hexdigest()!=p['sha256']]
+            (out/'report.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n',encoding='utf-8');window.closing=True;window.close();app.processEvents();sip.delete(window);app.processEvents();sip.delete(app);print('Evidence:',out,flush=True)
 
-if __name__=='__main__':main()
+if __name__=='__main__':
+    parser=argparse.ArgumentParser();parser.add_argument('--locale',choices=('zh-CN','en','ja'),default='zh-CN');parser.add_argument('--frontend-dist',type=Path,default=ROOT/'frontend/dist');parser.add_argument('--only-export',action='store_true',help='Keep the actual same-input scientific PNG; run all interactions without taking full UI screenshots')
+    main(parser.parse_args())

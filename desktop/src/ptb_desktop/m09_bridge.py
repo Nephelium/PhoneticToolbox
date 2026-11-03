@@ -2,6 +2,7 @@
 from pathlib import Path
 from uuid import uuid4
 from .file_provider import checked_path,FileAccessError
+from .native_i18n import native_error
 
 MESSAGES={
     'm09_python_invalid':'请选择已有环境中的 python.exe。',
@@ -12,6 +13,8 @@ MESSAGES={
     'm09_python_check_failed':'Python 环境检查未完成，请确认选择了可运行的 Python 环境。',
 }
 
+MESSAGE_KEYS={'m09_python_invalid': 'errors.m09.pythonInvalid', 'm09_gpu_unavailable': 'errors.m09.gpuUnavailable', 'm09_python_dependencies': 'errors.m09.pythonDependencies', 'm09_python_changed': 'errors.m09.pythonChanged', 'm09_vocoder_failed': 'errors.m09.vocoderTrialFailed', 'm09_python_check_failed': 'errors.m09.pythonCheckIncomplete'}
+
 
 class M09Bridge:
     def __init__(self):self.grants={}
@@ -20,7 +23,7 @@ class M09Bridge:
         path=Path(path).absolute();checked_path(path)
         from ptb_worker.m09_runtime import fingerprint
         try:identity=fingerprint(path)
-        except ValueError as exc:raise FileAccessError(MESSAGES.get(str(exc),MESSAGES['m09_python_invalid'])) from None
+        except ValueError as exc:raise native_error(FileAccessError(MESSAGES.get(str(exc),MESSAGES['m09_python_invalid'])),MESSAGE_KEYS.get(str(exc),MESSAGE_KEYS['m09_python_invalid'])) from None
         key=uuid4().hex;self.grants={key:identity}
         return dict(id=key,name=path.parent.name+' / '+path.name)
 
@@ -31,4 +34,4 @@ class M09Bridge:
         try:
             if fingerprint(identity['path'])!=identity:raise ValueError('m09_python_changed')
             return check_and_register(identity['path'])
-        except ValueError as exc:raise FileAccessError(MESSAGES.get(str(exc),MESSAGES['m09_python_check_failed'])) from None
+        except ValueError as exc:raise native_error(FileAccessError(MESSAGES.get(str(exc),MESSAGES['m09_python_check_failed'])),MESSAGE_KEYS.get(str(exc),MESSAGE_KEYS['m09_python_check_failed'])) from None

@@ -1,4 +1,5 @@
 """M05 local transport, streaming disk saves and explicit directory capabilities."""
+from .native_i18n import native_error
 import base64
 import hashlib
 import json
@@ -292,12 +293,15 @@ class M05Bridge:
             process=OwnedProcess([runtime,'-I','-B',str(Path(m05_media_export.__file__)),str(request)],root,1_073_741_824)
             while process.poll() is None:
                 if cancel is not None and cancel.is_set():raise FileAccessError('动画导出已取消，分析结果保留。')
-                if time.monotonic()-started>620:raise FileAccessError('音视频回放转换超时，请重试。' if action=='playback' else 'MP4 保存超时，原录制仍保留。')
+                if time.monotonic()-started>620:raise native_error(FileAccessError('音视频回放转换超时，请重试。' if action=='playback' else 'MP4 保存超时，原录制仍保留。'),'errors.m05.playbackTimeout' if action=='playback' else 'errors.m05.recordingSaveTimeout')
                 time.sleep(.05)
             response=root/'export-response.json'
-            if process.poll()!=0 or not response.is_file():raise FileAccessError('音视频回放转换未完成，请重试。' if action=='playback' else 'MP4 编码未完成，原录制仍保留。')
+            if process.poll()!=0 or not response.is_file():raise native_error(FileAccessError('音视频回放转换未完成，请重试。' if action=='playback' else 'MP4 编码未完成，原录制仍保留。'),'errors.m05.playbackIncomplete' if action=='playback' else 'errors.m05.recordingEncodingIncomplete')
             value=json.loads(response.read_text('utf8'))
-            if not value.get('ok'):raise FileAccessError(value.get('error','MP4 保存失败。'))
+            if not value.get('ok'):
+                error=FileAccessError(value.get('error','MP4 保存失败。'))
+                if not value.get('error'):native_error(error,'errors.m05.mp4SaveFailed')
+                raise error
             # Source is a uniquely created scratch file owned by this save operation.
             if action=='export':source.unlink()
             return value['value']

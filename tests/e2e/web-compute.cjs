@@ -4,10 +4,12 @@ const fs=require('node:fs/promises'),path=require('node:path'),os=require('node:
  const [out,scratch,origin,browser]=process.argv.slice(2);
  const {chromium}=require(path.join(os.homedir(),'.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright'));
  const executablePath=browser==='edge'?'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe':'C:/Program Files/Google/Chrome/Application/chrome.exe';
- const context=await chromium.launchPersistentContext(path.join(scratch,'profile'),{headless:false,executablePath,viewport:{width:1600,height:1100},downloadsPath:path.join(scratch,'downloads')});
+ const context=await chromium.launchPersistentContext(path.join(scratch,'profile'),{headless:process.env.PTB_BROWSER_HEADLESS==='1',executablePath,viewport:{width:1600,height:1100},downloadsPath:path.join(scratch,'downloads')});
+ await context.route('https://www.phonetictoolbox.com/announcements/v1.json',route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({schema:'ptb-announcements/1',items:[{id:'isolated-science-check',title:'Science QA notice',body:'合成公告原文保持。',publishedAt:'2026-10-01T00:00:00Z',platforms:['web']}]})}));
  const page=await context.newPage(),errors=[],checks=[],jobs=[],failures=[];
  page.on('pageerror',e=>errors.push(e.message));
- page.on('response',async r=>{if(r.status()>=400&&r.url().includes('/api/'))failures.push({path:new URL(r.url()).pathname,status:r.status()});});
+ page.on('response',async r=>{if(r.status()>=400&&r.url().includes('/api/')){const pathname=new URL(r.url()).pathname;failures.push({path:pathname,status:r.status(),...(pathname.startsWith('/api/v1/preferences/')?{request:r.request().postDataJSON(),response:await r.text()}:{} )});}});
+ page.on('requestfailed',r=>failures.push({path:new URL(r.url()).pathname,error:r.failure()?.errorText}));
  const wait=async(fn,ms=90000)=>{const start=Date.now();while(Date.now()-start<ms){if(await fn())return;await new Promise(r=>setTimeout(r,250));}throw Error('Condition timed out');};
  const download=async(button,name)=>{await button.waitFor();const [d]=await Promise.all([page.waitForEvent('download'),button.click()]);await d.saveAs(path.join(scratch,name));assert.equal(await d.failure(),null);};
  try{
@@ -18,15 +20,21 @@ const fs=require('node:fs/promises'),path=require('node:path'),os=require('node:
   await page.goto(origin+'/server/#verify='+await fs.readFile(path.join(scratch,'mail-token.txt'),'ascii'));
   await page.getByRole('button',{name:'确认验证',exact:true}).click();await page.getByText('邮箱验证成功，请登录。',{exact:true}).waitFor();
   await page.getByLabel('登录名').fill('browser_'+browser);await page.getByLabel('密码',{exact:true}).fill('synthetic-password-only');await page.getByRole('button',{name:'登录',exact:true}).click();
-  await page.locator('#tool-sidebar').waitFor();await page.getByRole('button',{name:'文件与空间',exact:true}).click();await page.getByText('补充上传文件',{exact:true}).click();
-  await page.getByLabel('选择上传文件').setInputFiles(path.join(scratch,'synthetic.wav'));
-  await page.getByRole('button',{name:'上传文件',exact:true}).click();await page.locator('.storage-files strong').filter({hasText:'synthetic.wav'}).waitFor();checks.push('register-verify-login-project-upload');
+  await page.locator('#tool-sidebar').waitFor();
+  await page.locator('dialog[open] .announcements-panel').waitFor({state:'visible'});
+  assert((await page.locator('dialog[open] .announcements-panel').innerText()).includes('合成公告原文保持。'));
+  await page.locator('dialog[open]').getByRole('button',{name:'知道了',exact:true}).click();
+  await page.getByRole('button',{name:'文件与空间',exact:true}).click();await page.getByText('导入本机文件',{exact:true}).click();
+  await page.getByLabel('选择本机文件').setInputFiles(path.join(scratch,'synthetic.wav'));
+  await page.getByRole('button',{name:'导入文件',exact:true}).click();await page.locator('.storage-files strong').filter({hasText:'synthetic.wav'}).waitFor();checks.push('register-verify-login-browser-local-file-import');
   const session=await (await context.request.get(origin+'/api/v1/auth/me')).json();
   const api=async url=>{const r=await context.request.get(origin+'/api/v1/'+url,{headers:{'X-PTB-Account':session.user.id}});assert.equal(r.status(),200,await r.text());return r.json();};
   const project=(await api('projects')).projects[0].id;
+  assert.equal((await api('assets?project_id='+project)).assets.length,0,'Import remains in browser until actual server computation needs its input');
   const waitJob=async operation=>{let found;await wait(async()=>{found=(await api('jobs?project_id='+project)).jobs.find(j=>j.operation===operation);if(found&&['failed','cancelled','interrupted'].includes(found.state))throw Error(operation+': '+found.error_code);return found?.state==='succeeded';});jobs.push(found);return found;};
   await page.getByRole('dialog',{name:'文件与空间',exact:true}).getByRole('button',{name:'关闭对话框',exact:true}).click();
   await page.getByRole('button',{name:'容量与扩容',exact:true}).click();
+  await page.getByLabel('申请总额度（MB）').fill('1400');
   await page.getByLabel('申请期限').selectOption('30d');
   await page.getByLabel('扩容用途').fill('浏览器合成夹具容量验证');
   await page.getByRole('button',{name:'提交扩容申请',exact:true}).click();
@@ -68,8 +76,13 @@ const fs=require('node:fs/promises'),path=require('node:path'),os=require('node:
   checks.push('queued-cancel-and-idempotent-replay');
   await fs.mkdir(path.join(scratch,'results'));
   for(const job of jobs)for(const f of job.result_manifest.files){const r=await context.request.get(origin+'/api/v1/assets/'+f.id+'/content',{headers:{'X-PTB-Account':session.user.id}});assert.equal(r.status(),200);await fs.writeFile(path.join(scratch,'results',f.id),await r.body());}
-  await context.setOffline(true);await page.evaluate(()=>window.dispatchEvent(new Event('online')));await page.getByText('连接暂时中断',{exact:false}).waitFor();
-  await context.setOffline(false);await page.evaluate(()=>window.dispatchEvent(new Event('online')));
+  assert.equal(failures.filter(f=>f.path==='/api/v1/preferences/M03'&&f.status===422).length,0,'M03 batch task must not stage rejected preference fields');
+  await context.setOffline(true);await page.evaluate(()=>window.dispatchEvent(new Event('online')));
+  // A heartbeat may already be in flight when the explicit online event arrives.
+  // The real periodic heartbeat is every 30 seconds; wait across that boundary.
+  await page.getByText('连接暂时中断',{exact:false}).waitFor({timeout:45000});
+  await context.setOffline(false);
+  await Promise.all([page.waitForResponse(r=>new URL(r.url()).pathname==='/api/v1/workspaces/heartbeat'&&r.request().method()==='POST'&&r.status()===200,{timeout:45000}),page.evaluate(()=>window.dispatchEvent(new Event('online')))]);
   await wait(async()=>await page.getByText('连接暂时中断',{exact:false}).count()===0);
   await page.reload();await page.locator('#tool-sidebar').waitFor();
   assert.equal((await api('projects')).projects[0].id,project);assert.equal((await api('jobs?project_id='+project)).jobs.filter(j=>j.state==='succeeded').length,3);checks.push('offline-reconnect-refresh-preserves-work');
@@ -77,6 +90,6 @@ const fs=require('node:fs/promises'),path=require('node:path'),os=require('node:
   assert.equal((await context.request.get(origin+'/api/v1/assets/'+jobs[0].result_manifest.files[0].id+'/content')).status(),401);checks.push('logout-revokes-results');
   assert.deepEqual(errors,[]);
   await fs.writeFile(path.join(out,'checks.json'),JSON.stringify({scope:'Windows visible '+browser+'; real loopback HTTP/PG/native workers; captured mail, no SMTP or Linux capacity claim',browserVersion:context.browser()?.version(),checks,errors,jobs},null,2));
- }catch(e){await page.screenshot({path:path.join(out,'failure.png')});await fs.writeFile(path.join(out,'failure.json'),JSON.stringify({message:String(e),errors,failures,body:await page.locator('body').innerText()},null,2));throw e;}
+ }catch(e){await page.screenshot({path:path.join(out,'failure.png')});await fs.writeFile(path.join(out,'failure.json'),JSON.stringify({message:String(e),checks,jobs,errors,failures,body:await page.locator('body').innerText()},null,2));throw e;}
  finally{await context.close();}
 })().catch(e=>{console.error(e);process.exitCode=1;});

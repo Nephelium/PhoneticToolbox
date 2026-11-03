@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import {tr} from '../../i18n/index.ts';
 import type {SymbolEntry} from './types.ts';
 import type {HoverTarget} from './hover-position.ts';
 const props=defineProps<{entry:SymbolEntry;selected?:boolean;named?:boolean;playOnClick?:boolean}>();
@@ -7,9 +8,9 @@ function hover(event:MouseEvent|FocusEvent){const target=event.currentTarget as 
 function pointerDown(event:PointerEvent){if(event.pointerType==='mouse')event.preventDefault();}
 </script>
 <template>
-  <button type="button" class="m17-symbol" :class="{'m17-example':entry.isExample,'m17-selected':selected,'m17-named':named}" :data-symbol-id="entry.id" :aria-label="`${entry.nameZh}：${entry.display}，点击${playOnClick?'播放':'输入'}；Alt＋Enter 查看介绍`" @pointerdown="pointerDown" @click="emit('insert',entry)" @mouseenter="hover" @mousemove="hover" @mouseleave="emit('hover',null)" @focus="hover" @blur="emit('hover',null)" @keydown.alt.enter.prevent.stop="emit('inspect',entry)" @contextmenu.prevent="emit('inspect',entry)">
+  <button type="button" class="m17-symbol" :class="{'m17-example':entry.isExample,'m17-selected':selected,'m17-named':named}" :data-symbol-id="entry.id" :aria-label="tr('modules.ipa-plus.text.3d3468a7b64d',{v0:entry.nameZh,v1:entry.display,v2:playOnClick?tr('modules.ipa-plus.text.c3396195e91c'):tr('modules.ipa-plus.text.2087c777c06f')})" @pointerdown="pointerDown" @click="emit('insert',entry)" @mouseenter="hover" @mousemove="hover" @mouseleave="emit('hover',null)" @focus="hover" @blur="emit('hover',null)" @keydown.alt.enter.prevent.stop="emit('inspect',entry)" @contextmenu.prevent="emit('inspect',entry)">
     <span class="m17-ipa">{{entry.display}}</span><span v-if="named" class="m17-symbol-name">{{entry.nameZh}}</span>
-    <span v-if="entry.isExample" class="visually-hidden">完整示例</span>
+    <span v-if="entry.isExample" class="visually-hidden">{{tr('modules.ipa-plus.text.8b31eba049a0')}}</span>
   </button>
 </template>
 <style scoped>

@@ -75,11 +75,11 @@ def create_job_router(ctx, store, *, local_token=None, local_origin=None):
         from ptb_worker.recording_preview import render
         if ctx.mode!='server' or ctx.workspaces is None:raise HTTPException(404,'recording_server_unavailable')
         if request.headers.get('content-type')!='application/octet-stream':raise HTTPException(415,'binary_audio_required')
+        data=bytearray()
+        async for block in request.stream():
+            if len(data)+len(block)>8_000_000:raise HTTPException(413,'preview_too_large')
+            data.extend(block)
         with preview_slot():
-            data=bytearray()
-            async for block in request.stream():
-                if len(data)+len(block)>8_000_000:raise HTTPException(413,'preview_too_large')
-                data.extend(block)
             value=await run_in_threadpool(render,bytes(data),start=start,end=end,channel=channel,width=320)
             ctx.session(request)
             return value

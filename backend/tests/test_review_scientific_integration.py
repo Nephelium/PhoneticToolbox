@@ -33,7 +33,7 @@ def test_actual_backends_produce_identified_roundtrippable_results(tmp_path,poli
         result=analyze_audio(audio,to_core_config(request.config),backends=AcousticBackends(reaper=backend))
         inputs=[AcousticInputSnapshot(**request.inputs.audio.model_dump(),role='audio',expires_at=200.)]
         wire=build_acoustic_result(result,audio,request,inputs,native_sha256=backend.native_sha256)
-    assert wire.metadata.computation_revision=='acoustic/2'
+    assert wire.metadata.computation_revision=='acoustic/3'
     assert AcousticResult.model_validate_json(wire.model_dump_json())==wire
     observed=next(item for item in wire.metadata.backends if item.stage=='reaper')
     assert observed.actual==('reaper_python' if policy=='python_only' else 'native_reaper')

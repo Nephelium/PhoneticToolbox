@@ -8,11 +8,14 @@ import * as model from '../src/modules/geolinguistics/model.ts';
 import * as groups from '../src/modules/geolinguistics/groups.ts';
 import * as attribution from '../src/modules/geolinguistics/attribution.ts';
 import * as mapOptions from '../src/modules/geolinguistics/map-options.ts';
+import * as moduleLocalization from '../src/modules/module-localization.ts';
+import * as i18n from '../src/i18n/index.ts';
 import {geoAtlasAdmins,geoAtlasResources} from './fixtures/geolinguistics-regions.ts';
 
 // Execute the full, actual SFC setup. Only storage, file transport and mounted
 // browser listeners are synthetic; this is not a physical-device/map audit.
 function page(stored?:model.Project){
+ let resourceLoads=0,persistentWrites=0;
  const source=readFileSync(new URL('../src/modules/geolinguistics/GeolinguisticsPage.vue',import.meta.url),'utf8');
  const compiled=compileScript(parse(source).descriptor,{id:'region-test',inlineTemplate:false});
  const js=ts.transpileModule(compiled.content,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText;
@@ -23,15 +26,31 @@ function page(stored?:model.Project){
   if(name==='./groups.ts')return groups;
   if(name==='./attribution.ts')return attribution;
   if(name==='./map-options.ts')return mapOptions;
-  if(name==='../../platform/local-assets.ts')return {LocalAssets:class{async value(){return stored?JSON.stringify(stored):null;}async compare(){}}};
-  if(name==='../../platform/geolinguistics.ts')return {createGeoPort:()=>({load:async()=>geoAtlasResources()})};
+  if(name==='../module-localization.ts')return moduleLocalization;
+  if(name==='../../i18n/index.ts')return i18n;
+  if(name==='../../platform/local-assets.ts')return {LocalAssets:class{async value(){return stored?JSON.stringify(stored):null;}async compare(){persistentWrites++;}}};
+  if(name==='../../platform/geolinguistics.ts')return {createGeoPort:()=>({load:async()=>{resourceLoads++;return geoAtlasResources();}})};
   return {default:{}};
  };
  new Function('require','module','exports','window','document',js)(require,module,module.exports,{addEventListener:noop,removeEventListener:noop},{addEventListener:noop,removeEventListener:noop,fonts:{load:async()=>[],ready:Promise.resolve()}});
  const m=scope.run(()=>module.exports.default.setup({active:true,stateKey:'owned-region-test'},{emit:noop,expose:noop}));
- return {m,async load(){assert.equal(await m.load(),true,m.error.value);},close(){for(const fn of cleanup)fn();scope.stop();}};
+ return {m,counts:()=>({resourceLoads,persistentWrites}),async load(){assert.equal(await m.load(),true,m.error.value);},close(){for(const fn of cleanup)fn();scope.stop();}};
 }
 const ids=(rows:model.Admin[])=>rows.map(a=>a.id);
+
+test('language changes update mounted labels without reloading resources, writing drafts, or rebuilding classification geometry',async()=>{
+ await i18n.setLocale('zh-CN');const f=page();
+ try{
+  await f.load();await vue.nextTick();await f.m.save();
+  const before=JSON.stringify(f.m.project.value),counts=f.counts(),markers=f.m.classMarkers.value;
+  for(const language of ['en','ja','zh-CN'] as const){
+   await i18n.setLocale(language);await vue.nextTick();
+   assert.equal(JSON.stringify(f.m.project.value),before);assert.deepEqual(f.counts(),counts);
+   assert.equal(f.m.classMarkers.value,markers,'locale does not rebuild classification geometry or colours');
+   assert.equal(mapOptions.boundaryNames.province,language==='en'?'Province boundaries':language==='ja'?'省界':'省界');
+  }
+ }finally{f.close();await i18n.setLocale('zh-CN');}
+});
 
 test('classification and custom map point selection supports export membership and clearing independently of active detail',async()=>{
  const f=page();try{await f.load();const m=f.m,first=m.classMarkers.value[0].id,second=m.classMarkers.value[1].id;

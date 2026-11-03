@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import {tr} from '../i18n/index.ts';
 import {ref,computed,nextTick,useId} from 'vue';
 import {useFloatingPicker} from './floating-picker.ts';
 const value=defineModel<string>({required:true});
@@ -6,7 +7,7 @@ const props=defineProps<{label:string;names:string[];labels?:Record<string,strin
 const anchor=ref<HTMLElement>(),panel=ref<HTMLElement>(),input=ref<HTMLInputElement>();
 const {open,position}=useFloatingPicker(anchor,panel),id=useId(),active=ref(0);
 const options=computed(()=>[...new Set(['',...props.names,...(value.value?[value.value]:[])])]);
-function optionLabel(name:string){return name?(props.labels?.[name]?name+' · '+props.labels[name]:name):'系统默认';}
+function optionLabel(name:string){return name?(props.labels?.[name]?name+' · '+props.labels[name]:name):tr('components.system_default');}
 async function show(){open.value=true;active.value=Math.max(0,options.value.indexOf(value.value));await nextTick();reveal();}
 function reveal(){panel.value?.querySelectorAll<HTMLElement>('[role=option]')[active.value]?.scrollIntoView({block:'nearest'});}
 function choose(name:string){value.value=name;open.value=false;input.value?.focus();}
@@ -19,9 +20,9 @@ async function keyboard(event:KeyboardEvent){
 }
 </script>
 <template><div class="font-family-field"><label :for="id">{{label}}</label><div ref="anchor" class="font-family-control">
- <input ref="input" :id="id" v-model="value" :aria-label="label" role="combobox" :aria-expanded="open" :aria-controls="id+'-list'" aria-autocomplete="none" :aria-activedescendant="open?id+'-'+active:undefined" placeholder="系统默认" @keydown="keyboard"/>
- <button type="button" :aria-label="'展开'+label+'列表'" :aria-expanded="open" :aria-controls="id+'-list'" @click="open?open=false:show()">⌄</button>
- </div><Teleport to="body"><div v-if="open" ref="panel" :id="id+'-list'" class="font-family-list" role="listbox" :aria-label="label+'完整列表'" :style="position" @keydown="keyboard">
+ <input ref="input" :id="id" v-model="value" :aria-label="label" role="combobox" :aria-expanded="open" :aria-controls="id+'-list'" aria-autocomplete="none" :aria-activedescendant="open?id+'-'+active:undefined" :placeholder="tr('components.system_default')" @keydown="keyboard"/>
+ <button type="button" :aria-label="tr('components.expand')+label+tr('components.list')" :aria-expanded="open" :aria-controls="id+'-list'" @click="open?open=false:show()">⌄</button>
+ </div><Teleport to="body"><div v-if="open" ref="panel" :id="id+'-list'" class="font-family-list" role="listbox" :aria-label="label+tr('components.full_list')" :style="position" @keydown="keyboard">
  <button v-for="(name,index) in options" :id="id+'-'+index" :key="name" type="button" role="option" :aria-selected="name===value" :class="{highlight:index===active}" @pointerenter="active=index" @pointerdown.prevent @click="choose(name)"><span>{{optionLabel(name)}}</span><span v-if="name===value" aria-hidden="true">✓</span></button>
  </div></Teleport></div></template>
 <style scoped>

@@ -2,6 +2,7 @@
 from typing import Any
 from uuid import UUID
 from fastapi import APIRouter,Depends,HTTPException,Request
+from fastapi.responses import JSONResponse
 from pydantic import Field
 from .models import WireModel
 from .account_store import hash_token
@@ -29,15 +30,21 @@ def create_vocal_router(ctx,service):
     @router.post('/sessions',response_model=VocalSessionView,operation_id='open_vocal_session')
     def open_session(project_id:UUID,request:Request,session=Depends(ctx.mutation)):
         try:return service.open(identity(request,session,project_id))
-        except VocalError as e:raise HTTPException(e.status,e.code) from None
+        except VocalError as e:
+            if e.display is not None:return JSONResponse(status_code=e.status,content={'detail':e.code,'display':e.display})
+            raise HTTPException(e.status,e.code) from None
 
     @router.post('/sessions/{session_id}',operation_id='invoke_vocal_session')
     def invoke(session_id:UUID,project_id:UUID,body:VocalCall,request:Request,session=Depends(ctx.mutation)):
         try:return service.invoke(str(session_id),identity(request,session,project_id),body.op,body.body)
-        except VocalError as e:raise HTTPException(e.status,e.code) from None
+        except VocalError as e:
+            if e.display is not None:return JSONResponse(status_code=e.status,content={'detail':e.code,'display':e.display})
+            raise HTTPException(e.status,e.code) from None
 
     @router.delete('/sessions/{session_id}',operation_id='close_vocal_session')
     def close(session_id:UUID,project_id:UUID,request:Request,session=Depends(ctx.mutation)):
         try:return service.release(str(session_id),identity(request,session,project_id))
-        except VocalError as e:raise HTTPException(e.status,e.code) from None
+        except VocalError as e:
+            if e.display is not None:return JSONResponse(status_code=e.status,content={'detail':e.code,'display':e.display})
+            raise HTTPException(e.status,e.code) from None
     return router

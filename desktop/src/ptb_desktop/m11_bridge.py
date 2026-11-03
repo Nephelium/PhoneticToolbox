@@ -7,6 +7,7 @@ from pathlib import Path
 from uuid import uuid4,UUID
 from .file_provider import FileAccessError,checked_path
 from .task_requests import M11_INPUT_LIMITS
+from .native_i18n import native_error
 
 
 class M11Bridge:
@@ -90,7 +91,9 @@ class M11Bridge:
             for audio in sorted(p for p in entries if p.is_file() and p.suffix.lower()=='.wav'):
                 checked_path(audio)
                 candidates=[p for p in audio.parent.iterdir() if p.is_file() and p.stem==audio.stem and p.suffix.lower() in ('.lab','.txt','.textgrid') and (source=='auto' or p.suffix.lower()==source.lower())]
-                if len(candidates)!=1:raise FileAccessError(f'{audio.name} 需要唯一同名转写。有多种格式时，请选择转写来源后重新读取。' if source=='auto' else f'{audio.name} 缺少唯一同名 {source[1:]} 转写，请检查所选格式。')
+                if len(candidates)!=1:
+                    if source=='auto':raise native_error(FileAccessError(f'{audio.name} 需要唯一同名转写。有多种格式时，请选择转写来源后重新读取。'),'errors.mfa.uniqueTranscript',name=audio.name)
+                    raise native_error(FileAccessError(f'{audio.name} 缺少唯一同名 {source[1:]} 转写，请检查所选格式。'),'errors.mfa.missingTranscriptFormat',name=audio.name,format=source[1:])
                 text=candidates[0];checked_path(text)
                 if audio.stat().st_size>64_000_000 or not 0<text.stat().st_size<=2_000_000:raise FileAccessError('文件超过预算或转写为空。')
                 total+=audio.stat().st_size+text.stat().st_size

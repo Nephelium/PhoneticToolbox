@@ -1,0 +1,786 @@
+{
+  "schemaVersion": "ptb-manual-localization/1",
+  "locale": "en",
+  "entries": {
+    "3b2aa0258cbd14355d8fd3999b1edc47752341ca3a6fb403c93771a0c7a7b614": {
+      "source": "汉字转国际音标",
+      "translation": "Chinese to IPA"
+    },
+    "061a20e4a5ca546b7658086f78336bcdaeb26c072c79a704d005b37757824767": {
+      "source": "汉字与拼音音节字表导入、选列与起始行预览、可编辑声调映射、多音选择、儿化组合与PNG导出。",
+      "translation": "Import character/pinyin-syllable tables, preview columns and starting rows, edit tone mappings, select polyphonic readings, combine erhua and export PNG."
+    },
+    "e422abc59006e9e32788d37a88d4aca3d391c50eac8a3050708db53cd3b25bab": {
+      "source": "视频教程：<s id=\"0\">观看本章视频</s>。",
+      "translation": "Video tutorial: <s id=\"0\">watch this chapter's video</s>."
+    },
+    "14837fff53f44b0116b66ea6f352d23677be9cc04342622c8d68e2b4a1ef8d8c": {
+      "source": "用途与输入准备",
+      "translation": "Purpose and input preparation"
+    },
+    "ca8fbe15662c81ae7fc0863750128673924a564d4a5bebe59a09fc171af7debd": {
+      "source": "本模块把汉字逐字转换为国际音标或汉语拼音，适合制作读音对照、教学示例和经人工校对的转写图片。<s id=\"0\">文本在本机转换，不上传。</s>",
+      "translation": "Converts Chinese characters individually to IPA or Hanyu Pinyin for pronunciation comparisons, teaching examples and manually reviewed transcription images. <s id=\"0\">Text is converted locally and is not uploaded.</s>"
+    },
+    "4214c8143a5b3600f1057dbc6439587d209f05c856094aecc76a36a6f42bbb4a": {
+      "source": "<s id=\"0\">多音字需按词义人工选择。</s> 初始采用字表第一条读音；结果为单字读音，不自动处理语流变调、轻声词法判断或连读；Unt两列可主动组合和拆分儿化。连续语流转写还需结合实际录音核对。",
+      "translation": "<s id=\"0\">Choose polyphonic readings manually by meaning.</s> The first table entry is used initially. Results are isolated-character readings, without automatic connected-speech tone sandhi, lexical neutral-tone decisions or liaison. The two Unt columns allow explicit erhua combination/splitting. Verify continuous-speech transcription against recordings."
+    },
+    "eb6fb1bfdcfe7f6c9cd0b868689863c8801af0acb209082236073e441d212f79": {
+      "source": "准备文本、标准和字体",
+      "translation": "Prepare text, standard and fonts"
+    },
+    "eb389553daf2dac2eb1c36ebf5d16e0370b08b0f6a95e3ba80a179817f08c63a": {
+      "source": "从首页或侧栏打开<s id=\"0\">汉字转国际音标</s>，在汉字输入框键入或粘贴文本。可保留标点、数字、英文、表情和换行，可直接使用内置字表，也可导入自己的汉字或拼音音节对照表。",
+      "translation": "Open <s id=\"0\">Chinese to IPA</s> from Home/sidebar and type or paste text. Punctuation, numbers, English, emoji and newlines are retained. Use built-in tables or import your own character/pinyin mappings."
+    },
+    "0276808d30c0757fca58aef1de7cb36d50b5287b3d60d1fcf48d7e988a3c327f": {
+      "source": "<s id=\"0\">重新打开页面时文本为空；默认使用 Standard Chinese (Beijing)，已保存并选用的自定义字表会自动载入并选中。</s> 已保存的排版偏好可沿用；切回仍打开的标签会保留当前编辑。需要旧文本时，使用顶部的<s id=\"1\">恢复本机草稿</s>。",
+      "translation": "<s id=\"0\">Reopening starts with empty text and Standard Chinese (Beijing); a saved, selected custom table loads automatically.</s> Saved layout preferences remain, and switching back to an open tab retains current edits. Use <s id=\"1\">Restore local draft</s> for earlier text."
+    },
+    "9d442fb603f3f8b7607af6993c54aa650f3bee7d3200c46fd43f212bb752f6e7": {
+      "source": "转换标准依次为 Standard Chinese (Beijing)、Standard Chinese (Beijing)严、胡裕树《现代汉语》、黄伯荣、廖序东《现代汉语》、钱乃荣《现代汉语》、吴宗济、赵元任《汉语口语语法》、《汉语方音字汇》、UntPhesoca宽、UntPhesoca严、汉语拼音。名称沿用历史字表，选好标准后再校对读音。",
+      "translation": "Standards are Standard Chinese (Beijing), its narrow version, Hu Yushu's Modern Chinese, Huang Borong and Liao Xudong's Modern Chinese, Qian Nairong's Modern Chinese, Wu Zongji, Yuen Ren Chao's A Grammar of Spoken Chinese, Chinese Dialect Pronunciation Dictionary, UntPhesoca broad, UntPhesoca narrow and Hanyu Pinyin. Names follow historical tables; choose one and review readings."
+    },
+    "59b8b2c17f14187d4f49dfe5abb539f1bd31eb0aa850a27f8b28d7eee79fc978": {
+      "source": "<s id=\"0\">音标字体固定为 Doulos SIL</s>；结果中的汉字可另选本机字体。",
+      "translation": "<s id=\"0\">IPA uses fixed Doulos SIL</s>; choose a separate installed font for Chinese characters."
+    },
+    "7ce624cbef5594db4ecfee8c5f41faf693535f065bf4c85074ba14134a84b134": {
+      "source": "导入并保存自己的对照表",
+      "translation": "Import and save your mappings"
+    },
+    "3c69ad067adf18ac417c1fd5c16b38b2afd10e10975588633ba17544e928ddf9": {
+      "source": "在转换标准下点击导入自定义字表，选择汉字 → 国际音标或拼音音节 → 国际音标。读取文件后指定汉字或音节列、音标列和数据起始行，其他列不会导入。起始行包含在数据内，可跳过标题、表头和前置说明。原始预览显示起始行附近最多8行及原表行号，转换预览显示前8条有效记录。汉字列须为单个汉字，音节列使用普通话拼音。",
+      "translation": "Choose Import custom wordlist and Characters → IPA or Pinyin syllables → IPA. After reading, select character/syllable and IPA columns and the first data row; other columns are excluded. The starting row is included, allowing headings to be skipped. The original preview shows up to 8 nearby rows with source row numbers; conversion shows the first 8 valid records. Character cells need one Chinese character; syllables use Mandarin pinyin."
+    },
+    "05a6874195487ba0e82b23fabb96ebf75f3e2e539c3172a0e76a7af50c4416bf": {
+      "source": "支持 XLSX、UTF-8 CSV、TSV 和以制表符分列的 TXT。单文件不超过 8 MB，最多 50,000 条记录；XLSX 有多张工作表时，可在预览上方选择所需工作表。表中公式请先复制并粘贴为值，旧版 XLS 请另存为 XLSX。",
+      "translation": "Supports XLSX, UTF-8 CSV, TSV and tab-delimited TXT, up to 8 MB and 50,000 records per file. Select an XLSX worksheet above the preview. Copy/paste formulas as values; save older XLS as XLSX."
+    },
+    "6d21c52c41f373a6838c373311a43496eff9a14b95c906d7a5bd67d233a3c71f": {
+      "source": "同一汉字的多个读音可以分别占一行，保存后点击结果中的多音小三角选择。完全相同的重复记录只保留一次。汉字表按导入内容转换，可用于自己的方言或调查记音。",
+      "translation": "Different readings of one character may occupy separate rows. Select them using the result triangle after saving. Identical duplicates are retained once. Character tables follow imported content and can hold dialect/survey transcriptions."
+    },
+    "eb78d249bfa3dd2978a505862f7ddd75d5804de41705d994d228cb423ec8ad2a": {
+      "source": "拼音音节表支持 ma、ma1、mā 等写法，ü 可以写成 v 或 u:，轻声可用 0 或 5。模块先按内置普通话字音取得拼音，再查找导入的音标。带调条目优先，无调条目供该音节的各调使用。以上例子中，妈使用 ma˥，麻、马、骂使用 mɑ。音标按所选音标列及声调处理设置使用，不会根据拼音再补声调；需要区分各调时，逐调填写完整音标。",
+      "translation": "Pinyin tables accept ma, ma1, mā; ü may be v or u:, and neutral tone 0 or 5. Built-in Mandarin readings provide pinyin for lookup. Tone-specific entries take priority; unmarked entries serve all tones. In the example, 妈 uses ma˥, while 麻、马、骂 use mɑ. IPA follows the imported column/tone settings; pinyin does not supply extra tones. Enter complete tone-specific IPA when needed."
+    },
+    "8775f154a664158b8d7be66293805654037386e1c0980377d70915ab7494b2f4": {
+      "source": "选择调值或调类的表示方式",
+      "translation": "Choose tone values or categories"
+    },
+    "9634ec3e8bcf520d76f87222d3984c73493de4204b9ec0dec28c9bfc210ce17b": {
+      "source": "声调处理默认保留原样。音标末尾为五度调值时，选择五度调值 → 声调符号，1为最低、5为最高。例如 ma55 → ma˥˥，ma35 → ma˧˥，ma214 → ma˨˩˦。普通数字、上标数字和全角数字都可识别，例如 ma55、ma⁵⁵、ma５５。已有的声调符号保持原样。",
+      "translation": "Tone processing defaults to Preserve original. For trailing five-level values, choose Five-level tone values → tone letters: 1 lowest, 5 highest. For example ma55 → ma˥˥, ma35 → ma˧˥, ma214 → ma˨˩˦. Ordinary, superscript and full-width digits are recognized, including ma55, ma⁵⁵, ma５５. Existing tone letters remain."
+    },
+    "77e51ac52b6fa6e9d64a23b878442f12f0b0d38ba9b04c189d4884b4e32997e9": {
+      "source": "末尾数字表示调类时，选择调类，再选择保留原调类，或映射到调值并显示声调符号。映射表按所选音标列列出调类，逐项填写字表采用的调值，例如调类1填33、调类2填21，结果显示ma˧˧、ma˨˩。支持1a、1b等分组。未填写或调值超出1–5时，请核对提示再保存。系统不会预设普通话的调类对应。",
+      "translation": "For category digits, choose Tone categories and either Preserve original categories or map to values/tone letters. Categories come from the IPA column; enter their table-specific values, for example category 1 = 33 and category 2 = 21, giving ma˧˧ and ma˨˩. Subgroups 1a/1b are supported. Resolve missing values or values outside 1–5 before saving. Mandarin mappings are not assumed."
+    },
+    "08abf612793ac63f39e96d39473408a2f0a02a9a7c1cf9bc0b5df409f5de3ed9": {
+      "source": "保存字表后，选中它并点击声调映射，可直接修改设置，无需重新导入文件。修改时先查看原始音标和转换结果，保存后随字表自动载入。原始音标仍保留，随时可选保留原样或保留原调类。调值和调类模式下关闭显示声调，隐藏对应的末尾声调，保留音段与附加符号。",
+      "translation": "After saving a table, choose it and Tone mapping to edit without reimport. Compare original IPA and conversion, then save for automatic loading. Original IPA remains; return to Preserve original at any time. In value/category modes, hiding tones removes the corresponding endings but retains segments/diacritics."
+    },
+    "8f22868225d6f2a16f5abb431befe03cc8d9dff885918f96f230626a2ee2d624": {
+      "source": "确认预览后填写 1–60 个字符的字表名称，点击保存字表并使用。自定义字表出现在转换标准列表中，输入结果会立即更新。可保存多套不同名称的字表，同名时请换一个名称；最多保存 32 套，总内容不超过 8 MB。未覆盖的汉字显示 ?，标点、空白和换行继续保留。",
+      "translation": "Confirm the preview, enter a 1–60-character name and Save and use wordlist. It appears in standards and updates results immediately. Save differently named tables, up to 32 sets and 8 MB total. Uncovered characters show ?; punctuation, spaces and newlines remain."
+    },
+    "d31747ad674d7c628390160efdc9ae6cfeb93274fad5e33d812df79b6b57c4df": {
+      "source": "字表保存与文本草稿分别管理。保存成功后，重新打开工具或应用会自动载入字表，并记住最近选用的自定义字表。旧文本仍通过恢复本机草稿读取。改选内置标准后，下次按原来的内置默认方式打开，自定义字表仍可在列表中选择。",
+      "translation": "Tables and text drafts are separate. Saved tables load when reopening the tool/app, remembering the latest custom selection. Restore local draft retrieves old text. After choosing a built-in standard, next opening uses the built-in default behavior; custom tables remain available."
+    },
+    "9b1688560e979847f2c140b16a9851b4d56aa56b3ac80e9780e604790307d70e": {
+      "source": "Windows、macOS 和网页版使用相同的选列、声调映射与转换操作。字表保存在当前设备，网页版按登录账号分别保存。更换设备或浏览器时，重新导入原始文件即可，建议保留原文件。保存失败时，预览和当前输入继续保留；提示另一窗口已更新时，先关闭导入窗并点击重新载入已存字表，再重新导入。",
+      "translation": "Windows, macOS and web share column selection, tone mapping and conversion. Tables stay on the device; web separates accounts. On another device/browser, reimport originals, which should be retained. Save failure preserves preview/input. For another-window updates, close import, Reload saved wordlists, then import again."
+    },
+    "f8deb2c56021e1baa2a10f77b7ca5031a2fef0f9bd410bcb7e9ed718a6d4c709": {
+      "source": "需要更新已导入的字表时，先在转换标准中选中它，再点击替换字表。选择新文件、核对预览，可保留原名称或修改名称，点击替换字表并使用后完成更新，不会额外增加一套字表。保存前点击取消或文件校验失败时，原字表保持原样。替换后需重新核对多音字读音，旧草稿仍可恢复文本与排版。",
+      "translation": "To update a table, select it and Replace wordlist. Choose a file, review, retain/change its name and Replace and use wordlist. This updates the existing table. Cancellation/validation failure leaves it unchanged. Review polyphonic readings afterward; old drafts still restore text/layout."
+    },
+    "21b44170984d2726a546b19807395e88cf7620859a194f87a11246ec10c063ce": {
+      "source": "不再使用某套字表时，先选中它，再点击删除字表，核对名称后确认删除。删除后从列表移除，当前文本保留，并切回内置标准；其他自定义字表继续保留。取消删除时不作修改。删除只影响应用内保存的字表，原始文件仍可重新导入。",
+      "translation": "To remove a table, select it, Delete wordlist, check its name and confirm. Text remains and a built-in standard is selected; other custom tables remain. Cancel changes nothing. Only the app's saved table is removed; original files can be reimported."
+    },
+    "8c511416d626db025d672957cfe79fe114335288514a8a6e654758b24c05800c": {
+      "source": "恢复草稿时，如果对应字表已替换，会清除旧的逐位置多音选择并提示重新核对。如果字表已删除，仍可恢复草稿文本与排版，并使用当前可用标准，随后选择所需字表并核对读音。替换或删除保存失败时，原字表保留，可按提示重试。",
+      "translation": "When a restored draft's table was replaced, old position-specific choices are cleared and review is requested. A deleted table still allows text/layout restoration with an available standard; choose another table and review. Failed replacement/deletion saves retain the original for retry."
+    },
+    "69e490e730bb792dae15fdd9061350c850b5e37b2b6a6bfa8566fb752da776a9": {
+      "source": "界面区块",
+      "translation": "Interface areas"
+    },
+    "4d2741960d262fae77396b596f25c4753597ea7df8df7508a2182b7687b4e826": {
+      "source": "<s id=\"0\">顶部操作栏</s>：保存为 PNG、保存本机草稿、恢复本机草稿、帮助、方法与引用。恢复按钮仅在存有非空草稿时出现；有未保存修改时暂不可用。",
+      "translation": "<s id=\"0\">Top toolbar</s>: Save as PNG, Save local draft, Restore local draft, Help and Methods and references. Restore appears only for a nonempty saved draft and is disabled with unsaved edits."
+    },
+    "9eb69641db6f0b94d92c34ae6538d9a8e5434bc6302470e0b46411bc195ea8d7": {
+      "source": "<s id=\"0\">转换与排版</s>：选择标准、显示内容、声调、排布、字号、间距、样式、颜色和汉字字体。底部选项看不到时，在设置栏内滚动。",
+      "translation": "<s id=\"0\">Conversion and layout</s>: standard, content, tone, arrangement, sizes, spacing, styles, colors and Chinese font. Scroll within this panel for lower options."
+    },
+    "001600543522046be2f5425eaf9a2987e9317372e94e2db7f0e6b648d61c4b09": {
+      "source": "<s id=\"0\">汉字输入与转换结果</s>：输入后立即显示字音对照。字符计数在汉字输入标题右侧，包含标点、空白、换行和表情。左右排布默认让输入与结果两栏等宽，可拖动边界调整。结果中带 ▼ 的字组可选读音。",
+      "translation": "<s id=\"0\">Input and results</s>: live character/IPA comparison. Count beside the input heading includes punctuation, spaces, newlines and emoji. Side-by-side defaults to equal input/result widths, adjustable by dragging. ▼ marks selectable readings."
+    },
+    "7fcfd3a8dace257149452061b25c5a7101d9823a63ca06a94e6e8f19d5ab430e": {
+      "source": "<s id=\"0\">顶部状态提示</s>：生成图片时显示进度提示，字体或保存失败时显示错误。收起提示仅隐藏文字，仍需处理原因后重试。",
+      "translation": "<s id=\"0\">Top status</s>: progress during image creation and font/save errors. Dismissing hides text only; address the cause before retrying."
+    },
+    "87dfcf55073dad93905bde080ed3874c55d88fae2d4c3e846900e2a667d84c08": {
+      "source": "左右排布依次显示设置、输入、结果。<s id=\"0\">上下排布</s>把输入放在结果上方，设置栏仍在左侧。可拖动栏间分隔线调宽，设置栏和输入栏宽度各为 240–560 px。",
+      "translation": "Side-by-side shows settings, input and results in order. <s id=\"0\">Stacked</s> places input above results, keeping settings on the left. Drag dividers; settings/input widths each allow 240–560 px."
+    },
+    "64bbac1a6ec7b59939861c90bc039c9cb70733ae09e1d5c2ad9d7ce0fa2a0c33": {
+      "source": "工作台总览：输入与结果两栏默认等宽，字符数在输入标题右侧，左侧提供等宽排版；儿化操作区仅在Unt两项下显示。",
+      "translation": "Overview: input/results default to equal widths; count is beside the input heading. Equal-width layout sits on the left; erhua controls appear only with the two Unt standards."
+    },
+    "5ea9855e156c66d4b2c6b7c39fed5d80fb774043973399928e5225cb2bd58ba9": {
+      "source": "2560×1600、150%DPI的最大化浅色Qt工作台，侧栏收起，输入与结果等宽，输入标题右侧显示0个字符，两框底边对齐。",
+      "translation": "Maximized light Qt workbench at 2560×1600 and 150% DPI, sidebar collapsed, equal input/result widths, count 0 and aligned lower edges."
+    },
+    "fa8267af89c7d2b803bf9b8adb9b4412962f3f689b19afd6a588dc99d3e10571": {
+      "source": "最短完整流程",
+      "translation": "Shortest complete workflow"
+    },
+    "7fcc7d96b3e4fd8d462a74e205fb9a0695b9ad32e9d7333a174bcda20892f318": {
+      "source": "输入<s id=\"0\">银行</s>，确认标准为 <s id=\"1\">Standard Chinese (Beijing)</s>，查看实时结果。",
+      "translation": "Enter <s id=\"0\">银行</s>, choose <s id=\"1\">Standard Chinese (Beijing)</s> and inspect the live result."
+    },
+    "49db8d2afe48777f8c1c3a5419777d96a5af8745f3b8ef86818d79b038957b22": {
+      "source": "点击结果中带 ▼ 的<s id=\"0\">行</s>，在读音窗选择 <s id=\"1\">hang2</s>。小窗关闭，这一位置更新；同字在别处需分别选择。",
+      "translation": "Click the ▼ on <s id=\"0\">行</s> and select <s id=\"1\">hang2</s>. The popup closes and updates only this position; other occurrences need separate choices."
+    },
+    "3481ccc214f2cd2ed498c803d16592935b96cff3cf988c62a15909e67a9b5b99": {
+      "source": "调整显示、声调和排版，检查附加符号与换行。默认字号为汉字 24 px、音标 16 px。",
+      "translation": "Adjust display, tones and layout, checking diacritics/newlines. Defaults are Chinese 24 px and IPA 16 px."
+    },
+    "84f216ead748690d10102a74d0b9315ea440e9f8d394e2fb2769e3148e94facf": {
+      "source": "点击<s id=\"0\">保存本机草稿</s>，确认按钮星号和标签未保存标记消失。",
+      "translation": "Click <s id=\"0\">Save local draft</s>; confirm the button asterisk and tab's unsaved marker disappear."
+    },
+    "9c385f4040c377c8a9016394c3e1fed5b736be3537d60222d2e21517696fa439": {
+      "source": "点击<s id=\"0\">保存为 PNG</s>，完成系统保存或浏览器下载，再打开实际文件核对内容。",
+      "translation": "Click <s id=\"0\">Save as PNG</s>, complete the system save/browser download, then open the actual file to inspect it."
+    },
+    "907775f02f08a833e2782d9b55601abf213a07697170f79f7717ca3a080de85d": {
+      "source": "<s id=\"0\">PNG 与本机草稿需分别保存。</s> PNG 用于固定外观，草稿用于继续编辑；导出图片不会自动保存草稿。",
+      "translation": "<s id=\"0\">Save PNG and drafts separately.</s> PNG fixes the appearance; drafts support further editing. Exporting an image does not save the draft."
+    },
+    "1e501f570ba2b87d358feb06f605fa6b118f4cf374c0d1807c67beb1d33136d3": {
+      "source": "逐控件与参数说明",
+      "translation": "Controls and parameters"
+    },
+    "05527d0ac29cc9e8cfcd49de850278c8711f9ef4a5656ab5b1223f1a15907917": {
+      "source": "下表为没有已存偏好时的默认值。修改立即反映在结果区，已保存的排版可在下次打开时沿用。",
+      "translation": "The table shows defaults without saved preferences. Changes update results immediately; saved layouts may be reused next time."
+    },
+    "2fcfdd227704df1f95c04dbe8f677f788507475edd8ece567b18f30f5047b0bb": {
+      "source": "汉字转国际音标控件与参数",
+      "translation": "Chinese-to-IPA controls and parameters"
+    },
+    "9aa63f70b1e8caf291767d2f441a4ef74eaf92208e1721fa1d21d3f44f8b05bc": {
+      "source": "控件",
+      "translation": "Control"
+    },
+    "1476b2105baff25c84126459cbbc5c1082560c371f6d0d715f0e5dd742d1eb2b": {
+      "source": "默认值 / 范围",
+      "translation": "Default / range"
+    },
+    "270ec4eb3d4412ff6ad7acec3fd5a75857e41b49b040cccb1d69b6a02cd25a9d": {
+      "source": "怎样使用",
+      "translation": "How to use"
+    },
+    "c74c5e6629696aa0cf703332975ddc9922b1dcc04280083949a8fb97f762a402": {
+      "source": "<s id=\"0\">字音同显 / 仅音标</s>",
+      "translation": "<s id=\"0\">Characters and IPA / IPA only</s>"
+    },
+    "11bc531a4111288cc6cfbb6d5701eb8045b76f84b1f2f880aabdc0b1d22ca9f0": {
+      "source": "字音同显",
+      "translation": "Characters and IPA"
+    },
+    "7db6ae24231d7c30086d95e08d5409c570535d5fd30a512f64d73f9939b2375d": {
+      "source": "字音同显把音标放在参考汉字上方；仅音标隐藏已转换字的汉字，标点和未收录字符仍可见。",
+      "translation": "Paired display puts IPA above the reference character. IPA only hides converted characters while retaining punctuation/uncovered characters."
+    },
+    "f5cd78f5a0796110a068ac68690f4c223ae1a5fe1d27dea11a2448d6e194eab8": {
+      "source": "<s id=\"0\">显示声调</s>",
+      "translation": "<s id=\"0\">Show tones</s>"
+    },
+    "08f8e7374cb1dd446e98d817d9cacf05aeeec3586942c9d00cd2afa0f0783cde": {
+      "source": "开启",
+      "translation": "On"
+    },
+    "d2c1ed9f93f9435750b4a3cbae0b70a8d5ed9b80c20effa67348108918f4a075": {
+      "source": "再次点击关闭。IPA 末尾调符或拼音调标被隐藏，ü 和音段附加符号保留；多音窗仍显示读音编号。",
+      "translation": "Click again to hide IPA tone letters or pinyin tone marks. ü and segmental diacritics remain. The pronunciation popover still shows tone numbers."
+    },
+    "7eb14dba0061b752d43ba0f16fad7115af3be6b5c58f7d33474292be070a74de": {
+      "source": "<s id=\"0\">左右排布 / 上下排布</s>",
+      "translation": "<s id=\"0\">Side by side / Stacked</s>"
+    },
+    "d2b429331b2603fc0bc8ebca43ac3b744ed36aafaa51090afba3114c51f76ba4": {
+      "source": "左右排布",
+      "translation": "Side by side"
+    },
+    "cecf18b6d6a4b7169a6e5bd83f076649d0879ce923253611bf007335c46041f5": {
+      "source": "改变输入和结果的位置。导出的 PNG 只包含结果，不包含工作台设置和输入框。",
+      "translation": "Changes the positions of the input and result. Exported PNGs contain only the result, without workbench settings or the input box."
+    },
+    "d521671d564866ae41a3e19b773ac2bc1408e66ed7ebf728a404ec72975d3c59": {
+      "source": "<s id=\"0\">汉字字号</s>",
+      "translation": "<s id=\"0\">Character size</s>"
+    },
+    "1ddc820cb4bb4aac34f84715d70a9922116a4fa6c860773e0b8ef8353f6a481d": {
+      "source": "控制结果中的参考汉字和字音同显下的原样字符，不改变输入框字号。",
+      "translation": "Controls reference characters and unchanged characters in Characters and IPA mode. It does not change the input font size."
+    },
+    "18a0e798fb9c251cb686f16a886ed84beb1981be39dcb4c757d40a833f46da59": {
+      "source": "<s id=\"0\">音标字号</s>",
+      "translation": "<s id=\"0\">IPA size</s>"
+    },
+    "5160ac2a1c17a3b2cefebec12aec01bdcb189df95fdec3b5c0749630192f31fd": {
+      "source": "字音同显 16 px；仅音标 28 px / 12–48 px",
+      "translation": "Characters and IPA: 16 px; IPA only: 28 px / 12–48 px"
+    },
+    "6a056f02fc0dd92026f108d140f48cc7e317200c307abb9043598dcd83560eb5": {
+      "source": "未手调时按显示模式切换字号。手调一次后，两种模式都沿用所设值。",
+      "translation": "Before manual adjustment, the size follows the display mode. After you adjust it once, both modes use your chosen value."
+    },
+    "27a77583b18bbf77f63226459c79d25db2c4c4b7f070cdcdefdd2755b8a4da44": {
+      "source": "<s id=\"0\">字音间距</s>",
+      "translation": "<s id=\"0\">Character–IPA gap</s>"
+    },
+    "b17d5a2c1fc145ce1e0a8220a349dfa7dfb8eee6d892283fc882f8771c542736": {
+      "source": "控制同组音标与汉字的距离。负值使两层靠近，不能用来添加音节间空格。",
+      "translation": "Controls the distance between IPA and the character in each group. Negative values bring the layers closer; they do not add spaces between syllables."
+    },
+    "baf527c249029f3006d2c008dcfd0130f6f5604c73234132ad79c1fb6fa34d78": {
+      "source": "<s id=\"0\">行距</s>",
+      "translation": "<s id=\"0\">Line spacing</s>"
+    },
+    "db8c4d187c9e52bb9f83cce3d50a88eb1d3ff6f9b8be12ecaf80f05a9959260d": {
+      "source": "1.8 / 0.8–3.0，步进 0.1",
+      "translation": "1.8 / 0.8–3.0, step 0.1"
+    },
+    "305ae444beeb8bc51eaa5d7d8efe49328a281e15868425648efa69dace9594d4": {
+      "source": "控制结果实际的行间空隙。0.8为紧排，增大数值可拉开各行，页面和PNG都生效；字音间距另外控制同一字组内的两层文字。",
+      "translation": "Controls the actual gap between result lines. 0.8 gives compact spacing; larger values separate the lines in both the page and PNG. Character–IPA gap separately controls the two layers within each group."
+    },
+    "cd84b79bfcb49a4ca8de173a49c28579de0941b84e1eb3ed69a3d7388daf34ad": {
+      "source": "等宽排版",
+      "translation": "Equal-width layout"
+    },
+    "5dd3b1edc3e9bcf755e1147e9e59fc0104dba0fdc90d821064bebedc6c10d035": {
+      "source": "默认关闭",
+      "translation": "Off by default"
+    },
+    "723d3f96b5a995319c456e160ff67f59342a6208e55061d2bf22654fc0a2ffe8": {
+      "source": "开启后，各字音单元按当前结果最宽的字组统一宽度并居中，标点和儿化字组也参与对齐。字号、字体或读音变化时自动重算；再次点击恢复自然宽度。",
+      "translation": "When enabled, all groups use the width of the widest group in the current result and are centered. Punctuation and rhotacized groups are included. Width is recalculated after font, size, or pronunciation changes. Click again to restore natural widths."
+    },
+    "d259e796ad51e8437f865a098051186ee8772497b1b335b3aa8cda59b219d121": {
+      "source": "<s id=\"0\">B 粗体 / I 斜体 / U 下划线</s>",
+      "translation": "<s id=\"0\">B Bold / I Italic / U Underline</s>"
+    },
+    "ea90b411b6ee6472be665ee16cbc7d0bb5977b7f7201b7ff02b9f427586199f5": {
+      "source": "均关闭",
+      "translation": "All off"
+    },
+    "b82f8034b12b3cceb8d0c5fdd49e2c60f71e50e273dd7e45407b23ee83beaec8": {
+      "source": "三个开关可分别使用，作用于参考汉字和字音同显下的原样字符，IPA 层保持原样。",
+      "translation": "The three switches work independently on reference characters and unchanged characters in Characters and IPA mode. The IPA layer remains unchanged."
+    },
+    "41c18b208eef2fac0d15eab53063a417da9e7be8cb5affb36745d5b8677aa962": {
+      "source": "自动组合儿化 / 全部拆分",
+      "translation": "Combine rhotacization automatically / Split all"
+    },
+    "44bd2068ed635d44ed5fc4e880725b81e8e0b50fefa62fc9e623e0241a9dc61e": {
+      "source": "仅Unt宽式或严式下显示",
+      "translation": "Shown only for Unt broad or narrow transcription"
+    },
+    "940ee35308673ece286e76c51900a26717543e1a7b7853ce9e641ec464018154": {
+      "source": "一次组合所有可转写的相邻字＋儿/兒；全部拆分恢复逐字结果。",
+      "translation": "Combines all transcribable adjacent character + 儿/兒 pairs at once. Split all restores character-by-character results."
+    },
+    "c19767f2adea46a137515096fc8e349d0e9ebc48e5dc07d72fd8619a653d23a0": {
+      "source": "组合儿化 / 拆分儿化",
+      "translation": "Combine rhotacization / Split rhotacization"
+    },
+    "f5a4d4004381077da6ba3e28a9e7e2666f2d79e516aba506db52139d378805d2": {
+      "source": "仅Unt下，点击结果字组的近旁小窗",
+      "translation": "For Unt only, in the popover next to a result group"
+    },
+    "efff928e4955da0af7ff1c7ff20f98b141d884aff5093bd976559b1c5e8bde2f": {
+      "source": "可手动组合单个位置或拆分已组合字组，保留原文字及逐位置读音。",
+      "translation": "Manually combines an individual pair or splits a combined group, retaining the original text and position-specific pronunciations."
+    },
+    "5146ea1be1abff39324906e63990edb88a16776b4bf104e9af8493202826bff5": {
+      "source": "进阶操作与图表",
+      "translation": "Advanced operations and figures"
+    },
+    "75db77df7a8d93d619c6dcbf9aacb180681d07e285c36f561cba8dd994dd56d0": {
+      "source": "输入和即时转换",
+      "translation": "Input and live conversion"
+    },
+    "81e08cde490ad12c1c929b22206951d1c6aeb6ac08226a4d7a5713156c969330": {
+      "source": "在<s id=\"0\">汉字输入</s>键入两行：第一行 <s id=\"1\">实验语音学</s>，第二行 <s id=\"2\">重行长乐</s>。保持 Beijing、字音同显和声调开启。右侧立即显示两行结果，计数为 10，含一个换行。",
+      "translation": "Enter two lines in <s id=\"0\">Character input</s>: <s id=\"1\">实验语音学</s> on the first and <s id=\"2\">重行长乐</s> on the second. Keep Beijing, Characters and IPA, and tones enabled. Two result lines appear immediately on the right. The count is 10, including one newline."
+    },
+    "1d7d652e77447c6360464fdf90ac0cf91175bbc5e0ba4e3f609e61bfa567ea78": {
+      "source": "对照原文检查每个字。标点、数字、英文和未收录字符按原样显示；已有读音在当前 IPA 标准中缺值时显示 <s id=\"0\">?</s>。",
+      "translation": "Check each character against the original. Punctuation, numbers, English, and unlisted characters appear unchanged. If a known pronunciation has no value in the current IPA standard, it appears as <s id=\"0\">?</s>."
+    },
+    "2198b4649d8303a6574b6586123e8d5e641c583b3116ace931ffb46083e7a142": {
+      "source": "输入框改字、插字或删字后，结果立即刷新。接着核对受影响的多音位置。",
+      "translation": "The result refreshes immediately when you change, insert, or delete input characters. Then check the affected polyphonic positions."
+    },
+    "74a5455e8388620bc8bf1d9a2e0fe4d723db97a80eb670abd988dcc65be7cdfb": {
+      "source": "在汉字输入区分两行输入实验语音学和重行长乐后，右侧按 Standard Chinese (Beijing) 实时显示字音对照；多音字组右下显示三角标记。",
+      "translation": "After entering 实验语音学 and 重行长乐 on separate lines, the right side shows character–IPA pairs using Standard Chinese (Beijing). Polyphonic groups have a triangle at the lower right."
+    },
+    "c4d8afa2f32af93e1176480bca7829967b0d14a8a3817fb15c14b844b1047104": {
+      "source": "最大化浅色汉字转国际音标工作台，输入区为实验语音学和重行长乐两行文本，计数为10个字符；转换标准为 Standard Chinese (Beijing)，字音同显和声调显示开启，结果区显示对应的两行 IPA 与汉字。",
+      "translation": "Maximized light Character-to-IPA workbench with 实验语音学 and 重行长乐 on two input lines and a count of 10 characters. Standard Chinese (Beijing), Characters and IPA, and tones are enabled; the result shows two corresponding lines of IPA and characters."
+    },
+    "afba64890fadd9bb0abbc41185d7b5c6159edd69c7ce8dc883fa51ecec088ec8": {
+      "source": "逐位置读音与缺失映射",
+      "translation": "Position-specific pronunciations and missing mappings"
+    },
+    "57a7e989b4bdae2f459c4106a93478c3b2f58e71a4e1a73f9599ab7d82b73110": {
+      "source": "点击带 <s id=\"0\">▼</s> 的字组，读音窗列出<s id=\"1\">拼音、声调编号或轻声标签、当前标准的转写</s>。按文本意义选择一项，这一位置立即更新，小窗关闭。",
+      "translation": "Click a group marked <s id=\"0\">▼</s>. The popover lists <s id=\"1\">pinyin, tone number or neutral-tone label, and transcription in the current standard</s>. Choose by meaning; that position updates immediately and the popover closes."
+    },
+    "6f4cf0642408f3a049e2d4e374f2b920aefcbffa7fa2beab3e62dd7ac7b0b37a": {
+      "source": "同一个字出现多次时，逐个位置核对。按 <s id=\"0\">Esc</s>、点 <s id=\"1\">×</s> 或点窗外可关闭小窗并保留原选择；目标字滚出可见区时，小窗也会关闭。",
+      "translation": "Check repeated occurrences of the same character separately. Press <s id=\"0\">Esc</s>, click <s id=\"1\">×</s>, or click outside to close the popover without changing the selection. It also closes when the target scrolls out of view."
+    },
+    "3acae1bbbd0fc0a2f8724fe02a47bd60eca807478f99e5f54c39d1f54eb02b18": {
+      "source": "点击第一行结果中的实字组后，读音窗显示 shi2 和 shi（轻声）两个候选，shi2 为当前选项。点击候选只作用于实在这一位置的读音。",
+      "translation": "Clicking 实 in the first result line opens two choices, shi2 and shi (neutral tone), with shi2 selected. Choosing an item changes only this occurrence of 实."
+    },
+    "977915c38ad6f760f6f09e8cbce72a5fe17731d5b0b692221e317b3780810ee9": {
+      "source": "输入实验语音学和重行长乐两行文本的浅色工作台；结果中实的读音窗打开，上方 shi2 候选高亮，下方 shi（轻声）未选中，二者右侧显示各自 IPA。",
+      "translation": "Light workbench with 实验语音学 and 重行长乐 on two lines. The pronunciation popover for 实 is open, with shi2 highlighted above an unselected shi (neutral tone); their IPA forms appear on the right."
+    },
+    "7155e35a4acc77807b3f472413d48585977803328a826ddafa163200c9f8cca0": {
+      "source": "点击带三角标记的字后，在读音列表中选择。此处只改变当前这个字的位置。",
+      "translation": "Click a character with a triangle and choose from the pronunciation list. Only this position changes."
+    },
+    "755b3af92bb28f3ff1b81f539c970ee35ce153133fa12d607d93ba15a3756a06": {
+      "source": "图中打开<s id=\"0\">实</s>的读音窗，当前项为 <s id=\"1\">shi2</s>。再点 shi2 只是确认当前读音；改选轻声会去掉该位置的调符，其他字保持原样。本例应按实际词义决定，按词义选读音，候选按字表顺序排列。",
+      "translation": "The figure opens the popover for <s id=\"0\">实</s>, with <s id=\"1\">shi2</s> selected. Clicking shi2 confirms it. Choosing the neutral tone removes the tone letters at this position, leaving other characters unchanged. Decide by the actual meaning; candidates follow dictionary order."
+    },
+    "5adf9b165cead7f0d9c2f1d1f904f0025f0c5d30f3257aa152eb710c072b8343": {
+      "source": "再输入<s id=\"0\">银行行走</s>，点第一处<s id=\"1\">行</s>并选择 <s id=\"2\">hang2</s>，再次打开可核对高亮项。关闭小窗后，第一处为 <s id=\"3\">xaŋ˧˥</s>，第二处仍为首条 xing2 对应的 <s id=\"4\">ɕiŋ˧˥</s>。",
+      "translation": "Enter <s id=\"0\">银行行走</s>, click the first <s id=\"1\">行</s>, and choose <s id=\"2\">hang2</s>. Reopen it to check the highlight. After closing, the first occurrence is <s id=\"3\">xaŋ˧˥</s>, while the second retains <s id=\"4\">ɕiŋ˧˥</s>, corresponding to the first entry xing2."
+    },
+    "e78f667d4a0d3d83960c41da1bbe9b854a8eedca50b980505858f67e3bc96609": {
+      "source": "银行行走中，第一个行已选择 hang2；再次点这个字组，读音窗突出显示当前 hang2，并列出 xing2、hang4、heng2 候选。",
+      "translation": "The first 行 in 银行行走 has been set to hang2. Reopening its popover highlights hang2 and lists xing2, hang4, and heng2."
+    },
+    "57b130743eb5cb9630307585f93e2584a34bfc46df6395f653d794bc704110e5": {
+      "source": "最大化浅色工作台输入银行行走，第一处行读音窗打开，hang2候选带选中高亮，xing2、hang4和heng2候选可见。",
+      "translation": "Maximized light workbench with 银行行走 entered. The first 行 popover is open, with hang2 highlighted and xing2, hang4, and heng2 visible."
+    },
+    "caa47e7f999371440d8ac61e343e2173ffa8d3d070e362cdb6cc77ab45c7599a": {
+      "source": "在最前插入 <s id=\"0\">🙂</s>，形成<s id=\"1\">🙂银行行走</s>，计数变为 5。表情原样保留，两个行的已选读音随未改变的文字向后移动。",
+      "translation": "Insert <s id=\"0\">🙂</s> at the start to form <s id=\"1\">🙂银行行走</s>. The count becomes 5. The emoji remains unchanged, and the two selected 行 pronunciations move with the unchanged text."
+    },
+    "cbb749da0eca2f96ae101b50d8135fe51d9a18ac4768d23a92d57a7c04f01b97": {
+      "source": "在银行行走前插入一个表情字符后，字符计数成为 5；两个行的读音选择分别保留，表情按原字符显示。",
+      "translation": "Adding an emoji before 银行行走 changes the character count to 5. Both 行 selections are retained, and the emoji appears unchanged."
+    },
+    "6f96a85c217cd0333b7f8d89be9adc66ac30a608c620b4d6e84e4c13fde60329": {
+      "source": "最大化浅色工作台输入🙂银行行走，计数5，结果保留表情，第一个行显示xaŋ˧˥，第二个行显示ɕiŋ˧˥。",
+      "translation": "Maximized light workbench with 🙂银行行走, count 5. The result retains the emoji, with xaŋ˧˥ for the first 行 and ɕiŋ˧˥ for the second."
+    },
+    "55e5b8fa53774493a1f3b18ed4cfc83eda28c1b881b6c0d4b86edee55b937825": {
+      "source": "<s id=\"0\">替换文字后，重新检查多音字。</s> 未变化的前后片段可保留选择，被替换片段回到字表首条；位置保留不能判断新词义。",
+      "translation": "<s id=\"0\">Recheck polyphonic characters after replacing text.</s> Unchanged leading and trailing segments may retain selections; replaced segments return to the first dictionary entry. Preserving a position cannot determine a new meaning."
+    },
+    "ff0c937c19a23ff9f0090b40308b2231e3e35cf2606fab573753e07d61772ecf": {
+      "source": "字符原样显示或出现 <s id=\"0\">?</s> 时，先分辨未收录与当前列缺值。可切换标准帮助核对，再按所需标准查证。本页不能直接新增单条字音或自由改写单个映射；需要自定义记音时，请整理成字表，通过导入或替换字表使用。",
+      "translation": "If a character stays unchanged or shows <s id=\"0\">?</s>, first distinguish an unlisted character from a missing value in the current column. Switch standards to help check, then verify the required source. This page cannot add individual character readings or freely edit individual mappings. For custom transcription, prepare a table and use Import or Replace table."
+    },
+    "b34ee84e74fc264d7cd3c7afb3c1e5565e78dbc14c519752120cd163e4293991": {
+      "source": "比较不同映射列",
+      "translation": "Compare mapping columns"
+    },
+    "29c76fdd2420afc77dfc816a5d46bd8682a47c9833f3dea5cd88d4a942367f4c": {
+      "source": "先固定<s id=\"0\">文本、逐位置读音、声调与字号</s>，再切换标准。同一妈读音行在 Beijing 为 <s id=\"1\">ma˥</s>、Beijing 严为 <s id=\"2\">ma̠˥</s>、UntPhesoca 严为 <s id=\"3\">mä˥</s>。这些值来自各标准的字表，可按所用记音体系分别核对。",
+      "translation": "Keep <s id=\"0\">text, position-specific readings, tones, and font sizes</s> fixed before switching standards. The same reading of 妈 is <s id=\"1\">ma˥</s> in Beijing, <s id=\"2\">ma̠˥</s> in Beijing narrow, and <s id=\"3\">mä˥</s> in UntPhesoca narrow. These values come from each standard's table; check them within the transcription system you use."
+    },
+    "3c6dae9620e888e1aab0fccd074e2b0f06089991ada05146521bde6ef691d19e": {
+      "source": "输入两行<s id=\"0\">春江花月夜</s>与<s id=\"1\">银行行走</s>，选 <s id=\"2\">Standard Chinese (Beijing)严</s>和<s id=\"3\">仅音标</s>。未手调时音标字号为28px。图中第一处行已选择hang2，第二处保留xing2；切换标准时保持这些逐位置读音决定。",
+      "translation": "Enter <s id=\"0\">春江花月夜</s> and <s id=\"1\">银行行走</s> on separate lines, and select <s id=\"2\">Standard Chinese (Beijing)严</s> and <s id=\"3\">IPA only</s>. Before manual adjustment, IPA size is 28 px. The first 行 in the figure is set to hang2, and the second retains xing2. Keep these position-specific decisions when switching standards."
+    },
+    "515c3d00cceb5370be15348223636c8ad4dda9255c4945339692078af7ada6df": {
+      "source": "选择 Standard Chinese (Beijing)严与仅音标后，右侧保留原来的两行顺序，音标字号显示为 28 px。",
+      "translation": "Selecting Standard Chinese (Beijing)严 and IPA only retains the two-line order on the right and shows an IPA size of 28 px."
+    },
+    "54e707c569a07491886b0a5edc47997f5cae9576142dc0017e88ab18c6b9b732": {
+      "source": "最大化浅色工作台，输入两行春江花月夜和银行行走，计数10，转换标准 Standard Chinese (Beijing)严，仅音标开启，音标字号28px，右侧为两行IPA。",
+      "translation": "Maximized light workbench with 春江花月夜 and 银行行走 on two lines, count 10, Standard Chinese (Beijing)严, IPA only enabled, and IPA size 28 px. Two IPA lines appear on the right."
+    },
+    "e944644a66ff369e8ff84e0d81f21358197e8e8cd7da4239380f664c2572223c": {
+      "source": "用同一文本核对六种显示",
+      "translation": "Compare six displays using the same text"
+    },
+    "de155b685ab90acee8cb9f55f740f904720e35c4398798c63a8663c6fca75392": {
+      "source": "可依次比较 <s id=\"0\">Beijing、Beijing 严、赵元任《汉语口语语法》、UntPhesoca 严、胡裕树《现代汉语》、汉语拼音</s>，也可选择其余标准。每次切换后检查标准名，再分别导出，用文件名区分。当前每次显示一项，需手动切换保存。",
+      "translation": "Compare <s id=\"0\">Beijing, Beijing narrow, Chao Yuen Ren's 汉语口语语法, UntPhesoca narrow, Hu Yushu's 现代汉语, and Hanyu Pinyin</s> in sequence, or choose other standards. Check the standard name after each switch and export separate files with distinguishing names. Only one standard is shown at a time; switch and save manually."
+    },
+    "18fa0c31a96400b2437e9bbc2c9e434f75fc218509b12f50243023309732bdc6": {
+      "source": "下列两图使用相同两行文本、字音同显、声调开启、汉字24px、音标16px。银行的行已选择hang2，行走的行保留xing2，便于比较同一读音在不同标准中的记法。",
+      "translation": "The following two figures use the same two-line text, Characters and IPA, tones on, character size 24 px, and IPA size 16 px. 行 in 银行 is set to hang2, while 行 in 行走 retains xing2, allowing comparison of the same readings across standards."
+    },
+    "929c1c3a95a7e517f6c73822721797d08eb3bda74f779953eab11b8d723870da": {
+      "source": "选择赵元任《汉语口语语法》，春显示 <s id=\"0\">tʂʰuən˥</s>。比较时保持逐位置读音选择。",
+      "translation": "Select Chao Yuen Ren's 汉语口语语法; 春 appears as <s id=\"0\">tʂʰuən˥</s>. Retain the position-specific readings for comparison."
+    },
+    "cf1fe6890c3ddac95476fa7fef609620f5fffaa39e1ee4e21d4c0c424f0f9e24": {
+      "source": "相同两行文本切换到赵元任《汉语口语语法》列，字音同显便于逐字查看该列结果。",
+      "translation": "The same two lines with Chao Yuen Ren's 汉语口语语法 column selected. Characters and IPA makes each result easy to inspect."
+    },
+    "016e3a441647e283f770e2596dcc6d9c6c7faa049584fef5e787332daa5de203": {
+      "source": "最大化浅色Qt工作台，输入春江花月夜与银行行走，第一处行已选hang2，第二处保留xing2，赵元任列字音同显，汉字24px和音标16px。",
+      "translation": "Maximized light Qt workbench with 春江花月夜 and 银行行走, the first 行 set to hang2 and the second retaining xing2. The Chao column shows characters at 24 px and IPA at 16 px."
+    },
+    "6d0c8c8b3772abe5c2fdbbfaf3ce31c32d63702a01965b7741bd191e17cb0e12": {
+      "source": "只把标准改为 <s id=\"0\">UntPhesoca严</s>，春变为 <s id=\"1\">t͡ʂ̺ʰuɘ̹̑˗n̚˥</s>。附加符号较密时，放大检查上下记号与连音线。",
+      "translation": "Change only the standard to <s id=\"0\">UntPhesoca narrow</s>; 春 becomes <s id=\"1\">t͡ʂ̺ʰuɘ̹̑˗n̚˥</s>. Zoom in to inspect diacritics above and below and the tie bar when notation is dense."
+    },
+    "d5eb4e1e5f3e6cdd5a8bc3daace779bd34494281e2b7dd0efe68690eaa5e8b97": {
+      "source": "当前Unt严式采用作者网站中派基准，春的声母为t͡ʂ̺ʰ，走的严式上声为213。",
+      "translation": "The current Unt narrow transcription follows the middle-variety baseline in the author's website text. 春 has the initial t͡ʂ̺ʰ, and 走 has narrow third-tone contour 213."
+    },
+    "e260c21867887a368414d94a763159b15ca9e2ceb8fea305a5174afd0ccbd021": {
+      "source": "最大化浅色Qt工作台，输入春江花月夜与银行行走，第一处行已选hang2，第二处保留xing2，Unt严式字音同显，附加符号与连音线可见。",
+      "translation": "Maximized light Qt workbench with 春江花月夜 and 银行行走, first 行 set to hang2 and second retaining xing2. Unt narrow displays characters and IPA, including diacritics and tie bars."
+    },
+    "3914ed5ff1a8b6f521be79a34ccb27d5106f161fb58190c170921159943f3584": {
+      "source": "组合与拆分儿化韵",
+      "translation": "Combine and split rhotacized finals"
+    },
+    "b2ba86cc70f6121045e12244a4f99f5780c12d677b9037a184648164baa56243": {
+      "source": "选择 UntPhesoca宽 或 UntPhesoca严，左侧出现儿化操作区。输入花儿女儿门儿，点击自动组合儿化，相邻的字＋儿/兒会组合为一个字组，保留前字声调，原输入文字不改动。组合不跨空格、标点或换行。",
+      "translation": "Select UntPhesoca broad or UntPhesoca narrow to reveal rhotacization controls on the left. Enter 花儿女儿门儿 and click Combine rhotacization automatically. Adjacent character + 儿/兒 pairs form single groups, retaining the preceding character's tone and leaving the original input unchanged. Combination does not cross spaces, punctuation, or newlines."
+    },
+    "9c8e784ca0149678bf8d1d1cd830c13ce169925982cfdaf3c826198f56e03e81": {
+      "source": "点击女儿字组，在近旁小窗选择拆分儿化，恢复女和儿的两个独立音节。自动组合不判断词义，女儿、婴儿等独立的儿字需要逐项核对。点击未组合的字＋儿中的前字，选择组合儿化，可直接手动组合；全部拆分恢复所有逐字结果。",
+      "translation": "Click 女儿 and choose Split rhotacization in the nearby popover to restore separate 女 and 儿 syllables. Automatic combination does not infer meaning: check independent 儿 syllables in words such as 女儿 and 婴儿 individually. To combine manually, click the first character of an uncombined character + 儿 pair and choose Combine rhotacization. Split all restores all individual characters."
+    },
+    "59d75d8c8266e9115f3c5211405096ba4044a091309868f7bdb983f214616d1f": {
+      "source": "例如花儿在Unt宽式为xwɐɚ˥，严式为x̞ʷwɐɻ˕˥。组合会按韵母规则处理韵腹、韵尾、鼻化和儿化合流，不能简单在单字音标后添加r。宽式上声为214，严式采用正文中派上声213。",
+      "translation": "For example, 花儿 is xwɐɚ˥ in Unt broad and x̞ʷwɐɻ˕˥ in Unt narrow. Combination applies final-specific rules for nuclei, codas, nasalization, and rhotacized mergers; simply appending r to individual IPA forms is insufficient. The broad third tone is 214; narrow transcription follows the middle-variety third tone 213 in the main text."
+    },
+    "5b5eb4871f3aaf7a9e568aea1575366c101e7b06028a6528816d17b961540b0c": {
+      "source": "Unt严式组合花儿和门儿，并把女儿手动拆分为两个音节；输入框保留原文字。",
+      "translation": "Unt narrow combines 花儿 and 门儿 while 女儿 is manually split into separate syllables. The input retains its original text."
+    },
+    "1d45f3812d1dd9d70c5068212418d9ccb5c197c3c03e7e0b4a7f93243cfaa820": {
+      "source": "浅色实际Qt工作台显示自动组合儿化、全部拆分、已组合2处及花儿女儿门儿的结果。",
+      "translation": "Actual light Qt workbench showing Combine rhotacization automatically, Split all, 2 combined positions, and the result for 花儿女儿门儿."
+    },
+    "9476b8fab3af5d266b51e893ea9fab83e5b9897f11d24e40cd70b579299ea03f": {
+      "source": "点击花儿字组可选择拆分儿化，也可核对前字的读音。",
+      "translation": "Click 花儿 to choose Split rhotacization or check the preceding character's pronunciation."
+    },
+    "a1a3bb34d13e8fbf429c15b11ebaf7193f7e9d09fc57b2f1d75cc6109191e72d": {
+      "source": "花儿旁的实际读音小窗提供拆分儿化操作。",
+      "translation": "Actual pronunciation popover next to 花儿 offering Split rhotacization."
+    },
+    "5aa96833aaf0c7cd9154aa861739542b911824d9e5ab21602182703eeacda0ce": {
+      "source": "儿化组合决定随草稿和PNG快照保存。左侧儿化操作区及读音小窗中的组合、拆分按钮仅在Unt宽式或严式下显示。切换到其他转换标准时隐藏这些控件，保持其原逐字结果，切回Unt后恢复组合。编辑文本时，完整且未改变的前后字对保留组合，被替换或插入文字拆开的字对清除。作者正文未列儿化对应的音节不会组合。",
+      "translation": "Rhotacization choices are saved with drafts and PNG snapshots. The combination and splitting controls appear only for Unt broad or narrow, both in the left panel and pronunciation popover. Switching to another standard hides them and displays that standard's original character-by-character results; switching back to Unt restores combinations. During text edits, intact unchanged pairs at the beginning and end retain their combinations; replaced pairs or pairs separated by inserted text lose them. Syllables without a rhotacized counterpart in the author's main text are not combined."
+    },
+    "af835da7e6ecc0fbd3889fd0f682d34b6d7f552f9a373c186561e3aa1fb55689": {
+      "source": "排版、字体和颜色",
+      "translation": "Layout, fonts, and colors"
+    },
+    "b359b0bb4402d144c16d395c17cbf1b03589b56510aeda56b391cef218041c57": {
+      "source": "确定最终标准后，选<s id=\"0\">字音同显</s>或<s id=\"1\">仅音标</s>，再选排布并调宽结果区。仅音标模式下，参考汉字样式不再显示。",
+      "translation": "After choosing the final standard, select <s id=\"0\">Characters and IPA</s> or <s id=\"1\">IPA only</s>, then choose a layout and resize the result area. Reference-character styling is hidden in IPA-only mode."
+    },
+    "5b81286097f46679ca42cd78edf796689eb63823d54589ab0fc08f457cb85d57": {
+      "source": "先调两层字号，再调字音间距和行距。行距同时作用于手动换行与自动换行，数值增大时行间空隙随之增大，空行保留。需要对齐各字组时，点击等宽排版。需要突出参考汉字时，再开启粗体、斜体或下划线。",
+      "translation": "Adjust both font sizes first, followed by the character–IPA gap and line spacing. Line spacing applies to manual and automatic wraps; larger values increase the gap, and blank lines are retained. Enable Equal-width layout to align groups. Use bold, italic, or underline to emphasize reference characters."
+    },
+    "0c780d9662cf8afc5cd1d16f7c3f207433a29c06f64e872a7150d0e80def7593": {
+      "source": "在<s id=\"0\">汉字字体</s>选系统默认或本机字体。选<s id=\"1\">自定义字体…</s>后填写准确的已安装名称。字体只改变结果中的汉字与原样字符，输入框和固定 Doulos 音标保持各自字体。",
+      "translation": "In <s id=\"0\">Character font</s>, choose System default or a local font. After selecting <s id=\"1\">Custom font…</s>, enter the exact installed name. This changes only result characters and unchanged text; the input and fixed Doulos IPA keep their respective fonts."
+    },
+    "74b705abb2e0d36b2953512ec202dd2108318d61607bfb65de933c9ccd01593a": {
+      "source": "分别设置<s id=\"0\">音标颜色</s>与<s id=\"1\">汉字颜色</s>。点击<s id=\"2\">跟随主题</s>会同时清除两项自选颜色；尚未自选时按钮不可用。<s id=\"3\">PNG背景可以单独设置，自选文字颜色保持，请核对背景与文字的对比。</s>",
+      "translation": "Set <s id=\"0\">IPA color</s> and <s id=\"1\">Character color</s> separately. <s id=\"2\">Follow theme</s> clears both custom colors and is disabled when neither has been customized. <s id=\"3\">The PNG background can be set separately while retaining custom text colors. Check text–background contrast.</s>"
+    },
+    "3b46050a6c643b70a88c4281254f040e6b4a6917856fa30bb8b9159f554519ea": {
+      "source": "排版示例：输入<s id=\"0\">春江花月夜</s>与<s id=\"1\">银行行走</s>两行，选 Beijing 严、字音同显、上下排布。设汉字 <s id=\"2\">32 px</s>、音标 <s id=\"3\">22 px</s>、间距 <s id=\"4\">4 px</s>、行距 <s id=\"5\">2.2</s>，开启粗体，汉字字体选 <s id=\"6\">KaiTi · 楷体</s>，音标色 <s id=\"7\">#2345AB</s>、汉字色 <s id=\"8\">#AB4523</s>。",
+      "translation": "Layout example: enter <s id=\"0\">春江花月夜</s> and <s id=\"1\">银行行走</s> on two lines; select Beijing narrow, Characters and IPA, and Stacked. Set characters to <s id=\"2\">32 px</s>, IPA to <s id=\"3\">22 px</s>, gap to <s id=\"4\">4 px</s>, and line spacing to <s id=\"5\">2.2</s>. Enable bold, choose <s id=\"6\">KaiTi · 楷体</s>, and use IPA color <s id=\"7\">#2345AB</s> and character color <s id=\"8\">#AB4523</s>."
+    },
+    "cbacbe3e76f8cd539c8cf82b257f85c85c488a44232caae44cb397c74473beb0": {
+      "source": "上下排布把输入放在结果上方；本例使用楷体、汉字 32 px、音标 22 px、间距 4 px、行距 2.2，并分别设置两层文字颜色。",
+      "translation": "Stacked places input above the result. This example uses KaiTi, characters 32 px, IPA 22 px, gap 4 px, line spacing 2.2, and separate colors for both text layers."
+    },
+    "07581bed153c9dac6f320effa263c7206b050b8cb70409e585bed00adc7f7ecd": {
+      "source": "最大化浅色工作台采用上下排布，上方春江花月夜和银行行走两行输入，下方蓝色Doulos音标与棕色楷体粗体汉字；左侧显示32px汉字、22px音标、4px间距、2.2行距及KaiTi · 楷体。",
+      "translation": "Maximized light workbench in stacked layout. 春江花月夜 and 银行行走 are entered above; below are blue Doulos IPA and brown bold KaiTi characters. The left controls show 32 px characters, 22 px IPA, 4 px gap, 2.2 line spacing, and KaiTi · 楷体."
+    },
+    "6dd0e3d5836da097d5e031d81283c05c9c9df5b83badc932edb15c379046d4a8": {
+      "source": "点击等宽排版后，每个汉字及其音标共同占一个等宽单元，宽度取当前完整结果中最宽的字组。标点、原样字符和已组合的儿化字组也使用同样宽度。调整左侧字号、更换字体或选择读音时会自动重算，再次点击可恢复各字组的自然宽度。",
+      "translation": "Equal-width layout gives each character and its IPA a shared cell as wide as the widest group in the full current result. Punctuation, unchanged characters, and combined rhotacized groups use the same width. Font, size, or pronunciation changes recalculate it automatically. Click again to restore natural widths."
+    },
+    "f25e8fcc1c4fc1dec1ec271c6a141334126c6a20616e2ff54878e9744b9becde": {
+      "source": "开启等宽排版：各字组和标点占相同宽度，汉字26px、音标20px；输入与结果两栏默认等宽，字符数显示在输入标题右侧。",
+      "translation": "Equal-width layout enabled: groups and punctuation have the same width, with characters 26 px and IPA 20 px. Input and result columns have equal widths by default; the character count is at the right of the input heading."
+    },
+    "c70238528ab651eecabb446d2e46428c8f389188e249bee1cb7852287092efac": {
+      "source": "最大化浅色Qt工作台，输入两行春江潮水连海平等文字，右侧所有字组按当前最宽单元对齐，左侧等宽排版按钮开启。",
+      "translation": "Maximized light Qt workbench with two lines beginning 春江潮水连海平. All result groups on the right align to the widest current cell; Equal-width layout is enabled on the left."
+    },
+    "aca4a24f46edd1ace3e8200d773cb8abdfe8d270334668c95b60815c754ee449": {
+      "source": "输出与保存",
+      "translation": "Output and saving"
+    },
+    "594a6d72f6bae55ea5158d178da3aba07b0182c0c9911e110554f723de1efb9a": {
+      "source": "复制文字用于核对",
+      "translation": "Copy text for checking"
+    },
+    "177a600f4bd55029642aecd059b1f2463c9f849f4a53d565b68224d4ea19c0f2": {
+      "source": "要保留原文本，点击<s id=\"0\">汉字输入框</s>，拖选文字或按 <s id=\"1\">Ctrl+A</s> 全选，使用系统复制后粘贴到独立文本文件，同时记录标准与人工读音决定。<s id=\"2\">页面没有文本导出或复制纯音标按钮。</s>",
+      "translation": "To retain the original text, click <s id=\"0\">Character input</s>, select text by dragging or press <s id=\"1\">Ctrl+A</s>, then use the system copy command and paste into a separate text file. Record the standard and manual pronunciation decisions too. <s id=\"2\">The page has no text-export or copy-IPA-only button.</s>"
+    },
+    "1d2b3130da2d20ef134b101e9d49f81147246a77c8dc971297d9ee380d25659d": {
+      "source": "在汉字输入框按 Ctrl+A 后，当前两行文本被选中，可用系统复制操作保留原始文本。",
+      "translation": "After pressing Ctrl+A in Character input, both input lines are selected and can be copied with the system command to retain the original text."
+    },
+    "bab2806ad52fbff8ae9bc5d591903f4e9dfaf80e7bd627008387cee9584d7024": {
+      "source": "最大化浅色上下排布工作台，汉字输入框获得焦点，春江花月夜与银行行走两行全部呈蓝色选区高亮，右下结果继续可见。",
+      "translation": "Maximized light stacked workbench with focus in Character input. Both 春江花月夜 and 银行行走 are highlighted in blue, while the result remains visible at the lower right."
+    },
+    "2961479d4ea4efbbc1ad3a8771269a9768e38a14ade0e8532a55cde0fd4c61d7": {
+      "source": "临时从结果区选取文字复制时，粘贴后检查字符顺序、汉字层、标点、换行和附加符号。结果按字组排版，复制内容需校对后使用。固定外观用 PNG，继续编辑用本机草稿。",
+      "translation": "If you temporarily select and copy text from the result, check pasted character order, character layer, punctuation, newlines, and diacritics. Results are laid out in groups and copied text needs proofreading. Use PNG for a fixed appearance and a local draft to continue editing."
+    },
+    "f847e2788e735698e83ea71a4389be111125c1c646b33491f0f976e73ee69ac5": {
+      "source": "设置 PNG 背景并导出",
+      "translation": "Set the PNG background and export"
+    },
+    "78e21ae374c70b739623c424310558e9d886745053469232b7745adedecdaee7": {
+      "source": "点击保存为 PNG 打开导出设置窗。打开时默认沿用当前工作台的背景图、高斯模糊和图片不透明度；没有背景图时，默认使用当前主题的背景颜色。可单独调整本次导出，工作台外观保持原设置。文字、读音、声调、等宽排版和行距采用打开导出窗时的状态，PNG不包含多音小三角或读音窗。",
+      "translation": "Click Save as PNG to open export settings. Initially it inherits the current workbench's background image, Gaussian blur, and image opacity; without an image, it uses the current theme background color. Changes apply only to this export and leave the workbench appearance unchanged. Text, pronunciations, tones, equal-width layout, and line spacing are captured when the dialog opens. PNG excludes polyphonic triangles and pronunciation popovers."
+    },
+    "6542fa9cc4b75c14d35981bb8fac84a0f647bbbf6b7ebb5ad0a596b8dbf4db29": {
+      "source": "在导出背景中选择背景图片或背景颜色，两者只使用一项。选择背景图片时，可用当前图片或替换本机PNG、JPG、WebP，文件不超过20 MB、4000万像素；图片等比居中铺满，超出部分裁切。",
+      "translation": "Choose either Background image or Background color. In image mode, use the current image or replace it with a local PNG, JPG, or WebP no larger than 20 MB and 40 million pixels. The image fills the background proportionally, centered and cropped where needed."
+    },
+    "8353ee7a3ea6d06b8dadd3138e35f9ad529e24c5ab6b0857cfebb062b266155f": {
+      "source": "图片模式可调整高斯模糊0–40 px及图片不透明度0–100%。模糊只作用于背景，文字保持清晰。纯色模式使用颜色选择器，不显示模糊或图片不透明度。",
+      "translation": "Image mode offers Gaussian blur 0–40 px and image opacity 0–100%. Blur affects only the background, leaving text sharp. Solid-color mode uses a color picker and hides image blur and opacity controls."
+    },
+    "cedf719be7e23fda5d643721510f95992a49630a2af86578e76897709027a9bf": {
+      "source": "点击使用当前背景，恢复当前工作台的图片、模糊、不透明度或背景色。导出预览实时更新，确认内容、色彩、附加符号及文字对比后，点击导出 PNG。",
+      "translation": "Click Use current background to restore the workbench's image, blur, opacity, or background color. The preview updates live. Check content, colors, diacritics, and text contrast, then click Export PNG."
+    },
+    "a5e4b16bf6689b938cf43f3971533a2f3078e06aa7aec93fb9999f27227ad150": {
+      "source": "浏览器按下载设置保存，桌面选择保存路径。默认文件名为ipa_output_加时间戳.png。取消导出窗或系统保存时，文本和字表继续保留。",
+      "translation": "Browsers follow their download settings; desktop users choose a save path. The default filename is ipa_output_ followed by a timestamp and .png. Canceling the dialog or system save leaves the text and tables intact."
+    },
+    "33775f6629aac0da2c37416afcaca6b41e9003d60378488670eab7059fc1970c": {
+      "source": "打开实际PNG核对。字体、背景图片或PNG编码失败时，导出窗显示具体提示；可重新选择图片，或取消后调整字体再试。设置只用于本次导出，重开导出窗重新沿用当前工作台背景。",
+      "translation": "Open the saved PNG to check it. Font, background-image, or PNG-encoding failures produce specific messages in the dialog. Reselect the image, or cancel, adjust the font, and retry. Settings apply to this export only; reopening inherits the current workbench background again."
+    },
+    "a35be9614c944c8f1badef0d629c3e928f6dd5491495933f56559b082fbf3dad": {
+      "source": "下图为前节楷体与两色示例的实际 PNG，设置栏和输入框未写入。检查附加符号、调符和行尾，再用于展示。",
+      "translation": "The following is the actual PNG of the KaiTi and two-color example above. Settings and input are excluded. Check diacritics, tones, and line endings before presentation."
+    },
+    "d648a74d438429a37fa7c6f524df1ebe4b9e0ecbd33040ec8d52a2c8399af36c": {
+      "source": "纯白背景的 PNG 示例：标题标明 Standard Chinese (Beijing)严，音标为蓝色 Doulos，参考汉字为棕色楷体粗体，两行文本保留。",
+      "translation": "PNG example on white: the heading identifies Standard Chinese (Beijing)严; IPA is blue Doulos and reference characters are brown bold KaiTi. Both text lines remain."
+    },
+    "6ec31e6cb8853e8ec43f0d93455426be2cd9801f4de2e084aefaa5b89ed4e287": {
+      "source": "实际落盘PNG，白底上方为国际音标与Standard Chinese (Beijing)严，正文第一行春江花月夜、第二行银行行走，每字上方蓝色IPA、下方棕色楷体粗体汉字，图中不包含多音小三角。",
+      "translation": "Actual saved PNG on white, with International Phonetic Alphabet and Standard Chinese (Beijing)严 above. The body has 春江花月夜 on the first line and 银行行走 on the second; blue IPA sits above brown bold KaiTi characters, with no polyphonic triangles."
+    },
+    "18acf07816729954b68cbc25263a7846d408e2735648916121c8dc86dc1d5a39": {
+      "source": "图片按结果区宽度重新排版，自动换行可能与预览略有不同。通常以 3 倍像素生成，长图会降低倍率；仍过长时提示分段导出。PNG 保存固定图像，继续编辑请另存本机草稿；打印时按实际图片尺寸设置纸张和缩放。",
+      "translation": "The image is laid out again using the result area's width, so automatic wrapping may differ slightly from the preview. It normally uses 3× resolution, reduced for long images. If still too long, a message requests separate exports. PNG preserves a fixed image; save a local draft to keep editing. For printing, set paper and scaling to the actual image dimensions."
+    },
+    "b0f3faf263f36ec7e35b4f0620d0c5141f00ead25f46eeff6a55082f21f86e3f": {
+      "source": "保存、恢复与关闭草稿",
+      "translation": "Save, restore, and close drafts"
+    },
+    "d66650133584f6d43b2fc597eec3b9f3c4628233c913f58e69ca2b5b24756cfe": {
+      "source": "草稿保存<s id=\"0\">文本、标准、逐位置读音、儿化组合决定和全部排版设置</s>。<s id=\"1\">再次保存会替换本工作区的上一份草稿。</s> 本机草稿没有历史列表，长期材料还需另存原文本与读音决定。",
+      "translation": "Drafts save <s id=\"0\">text, standard, position-specific readings, rhotacization choices, and all layout settings</s>. <s id=\"1\">Saving again replaces the previous draft in this workspace.</s> Local drafts have no history list. Keep original text and pronunciation decisions separately for long-term materials."
+    },
+    "16db1f4290cdc557e1e78ab3a51cd6b32a077d46de87ac4e7d2a0e7cd1f00365": {
+      "source": "有修改时点击<s id=\"0\">保存本机草稿</s>，成功后星号与标签未保存标记消失。保存失败时保持页面，先外存原文本，再检查本机存储。",
+      "translation": "After editing, click <s id=\"0\">Save local draft</s>. The asterisk and unsaved-tab marker disappear on success. If saving fails, keep the page open, save the original text elsewhere, then check local storage."
+    },
+    "a92c8662f106cf9ce7cacfa5b45f9b7847def5610206ddb23c816fd638cdd230": {
+      "source": "关闭后重新打开模块，文本为空、标准为 Beijing，已存排版偏好可保留。有非空已存文本时，顶部出现<s id=\"0\">恢复本机草稿</s>。",
+      "translation": "After closing and reopening the module, input is empty and the standard is Beijing; saved layout preferences may remain. If a saved draft has nonempty text, <s id=\"0\">Restore local draft</s> appears at the top."
+    },
+    "4c63d5eea4210032b8cfc442ba4773ed9668ad1132daa0bb7e71a264c1d773b3": {
+      "source": "保存草稿并重新打开后，输入区为空、转换标准为 Beijing，工具栏出现可点击的恢复本机草稿。已保存的排版偏好仍可见。",
+      "translation": "After saving a draft and reopening, the input is empty, the standard is Beijing, and Restore local draft is available. Saved layout preferences remain visible."
+    },
+    "d6edcf655753062f70d1c8dee580086b15a38b98cb856d5a47dba5a56ecd5074": {
+      "source": "最大化浅色上下排布工作台，输入计数0，转换标准Standard Chinese (Beijing)，恢复本机草稿按钮可用，保存草稿与保存PNG按钮禁用，已存32px/22px和楷体排版仍显示。",
+      "translation": "Maximized light stacked workbench with count 0 and Standard Chinese (Beijing). Restore local draft is enabled; Save draft and Save PNG are disabled. Saved 32 px/22 px and KaiTi settings remain visible."
+    },
+    "b1b42c72d976161bff19fa8f0d46047987683a71de4be4bd87ae8da59a0052e4": {
+      "source": "当前没有未保存修改时，点击<s id=\"0\">恢复本机草稿</s>。本例读回春江花月夜与银行行走，标准回到 Beijing 严，读音和排版一同恢复。",
+      "translation": "When there are no unsaved edits, click <s id=\"0\">Restore local draft</s>. This example restores 春江花月夜 and 银行行走, Beijing narrow, pronunciations, and layout together."
+    },
+    "022d01ee2f0243dd21cef56b18c505cee5f72593b82142cdcde81f91befd8e5b": {
+      "source": "恢复按钮禁用时，先决定保留当前编辑还是旧草稿。要读回旧草稿，先外存当前原文本及读音决定，再关闭标签，选<s id=\"0\">放弃草稿并关闭</s>，重开后恢复。直接保存当前编辑会覆盖旧草稿。",
+      "translation": "If restoration is disabled, first decide whether to retain current edits or the old draft. To restore the old draft, save current text and pronunciation decisions elsewhere, close the tab with <s id=\"0\">Discard draft and close</s>, then reopen and restore. Saving current edits directly overwrites the old draft."
+    },
+    "151a5248f2d489c07ac8e586017d7f0c677675a4292f37312313970778bbb939": {
+      "source": "关闭未保存标签时，<s id=\"0\">保存转换草稿？</s>提供三项：<s id=\"1\">取消关闭</s>返回编辑；<s id=\"2\">放弃草稿并关闭</s>放弃当前未保存修改，已存草稿保留；<s id=\"3\">保存草稿并关闭</s>保存成功后关闭，失败时保留标签和编辑。",
+      "translation": "Closing an unsaved tab opens <s id=\"0\">Save conversion draft?</s> with three choices: <s id=\"1\">Cancel closing</s> returns to editing; <s id=\"2\">Discard draft and close</s> discards unsaved changes while retaining the saved draft; <s id=\"3\">Save draft and close</s> closes only after successful saving and retains the tab and edits if saving fails."
+    },
+    "0c4d7d636c310bae7b0be57bcd810696d34e6d563c3a7e11cb98e801730dacc7": {
+      "source": "修改已恢复的文本再关闭标签时，应用显示取消关闭、放弃草稿并关闭、保存草稿并关闭三个选择。",
+      "translation": "After editing restored text and closing the tab, the app offers Cancel closing, Discard draft and close, and Save draft and close."
+    },
+    "8213da3b8a4d0163e2623a3ee1abe6e0b540d07054d3db35c43e646519637b35": {
+      "source": "最大化浅色工作台显示保存转换草稿对话框，背景两行输入末尾有新加叹号，弹窗提供取消关闭、放弃草稿并关闭、保存草稿并关闭。",
+      "translation": "Maximized light workbench with the Save conversion draft dialog. An exclamation mark has been added to the two-line input in the background. The dialog offers Cancel closing, Discard draft and close, and Save draft and close."
+    },
+    "cf7b37938ea25a25b82a66a74969f559ca6bc05b95e8d3e29f55760957bc5c13": {
+      "source": "本机草稿属于当前设备和存储环境。刷新、退出或清理存储前，确认需要的材料已保存；转到其他电脑时另行携带原文本、读音记录与 PNG。",
+      "translation": "Local drafts belong to the current device and storage environment. Before refreshing, quitting, or clearing storage, confirm that needed materials are saved. Carry original text, pronunciation records, and PNG files separately when moving to another computer."
+    },
+    "a2985d26e1d2f05d80be96a5c08375a9f65ecc732f77303b003b60426850f845": {
+      "source": "错误恢复",
+      "translation": "Error recovery"
+    },
+    "a6259e4ae3a9c7b4a750831db63f53cf2e8d119bce48182055482d30a0209401": {
+      "source": "常见现象与恢复步骤",
+      "translation": "Common issues and recovery steps"
+    },
+    "54f1425cdb4ab54d7f8767b1e546b65f67ed7643c4f60d537f45f4a71a73f84b": {
+      "source": "现象或提示",
+      "translation": "Issue or message"
+    },
+    "5189be2aba9f84cddc782c42c61149aaaae5490f9a356187945d8c0be78420b9": {
+      "source": "恢复办法",
+      "translation": "Recovery"
+    },
+    "968dc0f3efd2b48483a80414c8852777713db9f0e0c8dc7114b0837c2ce02d98": {
+      "source": "<s id=\"0\">读音不符合词义</s>",
+      "translation": "<s id=\"0\">Pronunciation does not match the meaning</s>"
+    },
+    "0283c1de5a6ca55a8d470e893f59a6dd50e2b8aee784c24b0848d459165f446e": {
+      "source": "点击该位置的 ▼，按拼音与编号重新选择。编辑过文本后核对替换区和重复字，再保存。",
+      "translation": "Click ▼ at that position and choose again using pinyin and the number. After text edits, check replaced segments and repeated characters before saving."
+    },
+    "020510cedade800c63c4df568b4df0d1afdd12386afc7ee5df56e1ec923f03dc": {
+      "source": "<s id=\"0\">字符原样显示 / 映射为 ?</s>",
+      "translation": "<s id=\"0\">Character remains unchanged / Mapping is ?</s>"
+    },
+    "c0df51f559055145825e259e25c408def77ea6268bd42e2e34ca6c0064a24131": {
+      "source": "原样字符可能未收录；<s id=\"0\">?</s> 表示当前标准缺值。切换标准辅助核对并查证来源，需要补写时另用文本工具。",
+      "translation": "Unchanged characters may be unlisted; <s id=\"0\">?</s> indicates a missing value in the current standard. Switch standards to help check and verify sources. Use a separate text editor for additions."
+    },
+    "d6c396841d9c2e803b9a3129088c420f3883924ce23343750de76bf34228b437": {
+      "source": "<s id=\"0\">恢复草稿不显示 / 不可用</s>",
+      "translation": "<s id=\"0\">Restore draft is absent / unavailable</s>"
+    },
+    "a750b8fd045a6fed3b0937621e35db16dcef6c6259a1d870a372f1d5c825a2b0": {
+      "source": "仅非空草稿显示恢复入口，当前未保存时禁用。按前节外存当前材料、关闭放弃、重开恢复，并核对文本和标准。",
+      "translation": "Restore appears only for nonempty drafts and is disabled while current edits are unsaved. Follow the preceding steps: save current materials elsewhere, close and discard, reopen, restore, then check text and standard."
+    },
+    "acc6058ddfd9d6a49b00af4ba876b4a40b7cde4a8ec2147ec7037d3c62cf232e": {
+      "source": "<s id=\"0\">草稿保存失败</s>",
+      "translation": "<s id=\"0\">Draft saving failed</s>"
+    },
+    "a806b76053bc8b7e935aa0387e3017e3e162046970274eb2843aa9665ee1dab6": {
+      "source": "保持页面，先外存原文与设置，检查本机存储权限或空间后重试。未保存标记消失后再关闭。",
+      "translation": "Keep the page open, save original text and settings elsewhere, check local storage permissions or space, and retry. Close only after the unsaved marker disappears."
+    },
+    "b7b522f2ee138c70874f82ba2aed657691e42e82e4832c978d13183743bdae7c": {
+      "source": "<s id=\"0\">Doulos SIL 字体加载失败 / 未就绪</s>",
+      "translation": "<s id=\"0\">Doulos SIL font failed to load / not ready</s>"
+    },
+    "7e4e2325f931bbe99979f2345c58229b639d8864bbf83c0c9e19a124721e3074": {
+      "source": "先保留原文和草稿，稍后重试；持续失败时记录提示并反馈问题，导出后核对组合符号。",
+      "translation": "Retain the original text and draft, then retry later. If failure persists, record the message and report it. Check combining marks after export."
+    },
+    "6f66f2dafbac25b5fb729c28d827e7214504ad1c4a05fd5bebb48be707381f2d": {
+      "source": "<s id=\"0\">汉字字体在当前设备不可用</s>",
+      "translation": "<s id=\"0\">Character font is unavailable on this device</s>"
+    },
+    "0805c0b4136db109cac3e68580776757b6f43207e710cb5af233003db96a6998": {
+      "source": "核对名称，改选系统默认或已安装字体，再保存 PNG。导出前会检查指定字体是否可用。",
+      "translation": "Check the name, choose System default or an installed font, then save PNG again. The app checks font availability before export."
+    },
+    "7d906cfe7d080a0ccaf5760f1f77e956b63ad4e0b27e86e6d7be6ea1bbaebccd": {
+      "source": "<s id=\"0\">输出内容过长，请分段导出。</s>",
+      "translation": "<s id=\"0\">Output is too long. Export in sections.</s>"
+    },
+    "2519edd5ea45d7572addd38e995d9ea370466047d72ffb5befb98d22277130b2": {
+      "source": "先保存完整原文和草稿，再按段导出。修改输入后复核多音位置，按文件名记录段落顺序。",
+      "translation": "Save the complete original text and draft first, then export sections. Recheck polyphonic positions after changing input and use filenames to record section order."
+    },
+    "5397e3d1f8554a4ff3ab8e81781a0594189a6b994bc712b8d5c2b1ace10303e0": {
+      "source": "<s id=\"0\">无法导出 PNG</s>",
+      "translation": "<s id=\"0\">Cannot export PNG</s>"
+    },
+    "f8d9e6ce419689936cd9a7c73101a8d901cc15614a28f1a994c2fe1eb36e17fa": {
+      "source": "先保留原文和草稿，再重新导出。仍然失败时记录提示并反馈问题。",
+      "translation": "Retain the original text and draft, then retry export. If it still fails, record the message and report it."
+    },
+    "7ba316545fbe63d7ad9bafefede176240528876e10c09d6537db7d7b767c98f6": {
+      "source": "<s id=\"0\">找不到 PNG / 取消保存</s>",
+      "translation": "<s id=\"0\">Cannot find PNG / Save canceled</s>"
+    },
+    "ebb851f0709fab1cb864c1eaef6a640ec6df02fa076338e48f19a63100cd2159": {
+      "source": "检查下载记录或所选目录，必要时重新导出并完成保存。页面没有成功路径清单，以实际文件为准。",
+      "translation": "Check download history or the selected directory, and export again if needed, completing the save. The page has no successful-path list; verify the actual file."
+    },
+    "f3e8b729c479c95087809d067752605d5abcaf4637ad2447b9f2eb818625113b": {
+      "source": "<s id=\"0\">颜色难读 / 符号拥挤 / 换行不同</s>",
+      "translation": "<s id=\"0\">Unreadable colors / Crowded symbols / Different wrapping</s>"
+    },
+    "f59f4873f2e426b0d96b33a5bc75a5621fc86e6ab113404e142f97024aa5eb50": {
+      "source": "调整颜色、字号、间距、行距或结果区宽度后重导，打开原图核对。收起提示只隐藏错误文字。",
+      "translation": "Adjust colors, font sizes, gaps, line spacing, or result width, then export again and open the original image to check. Dismissing a message only hides its text."
+    },
+    "156f7366c336edfef660d33748a565d839a7f4119951f8efd56baa1da9e45d10": {
+      "source": "导出时会检查字体。所选字体不可用时，页面保留输入与结果，并提示改选本机已安装的字体。",
+      "translation": "Fonts are checked during export. If the selected font is unavailable, input and results remain and the page asks you to choose an installed font."
+    },
+    "e3a4eea22e07a9c6fc337642b961f7fa5899bc0eb0115da657d5e3b171f052d0": {
+      "source": "输入未安装的字体名后导出，页面提示汉字字体不可用，输入和结果保留。",
+      "translation": "Exporting with an uninstalled font name shows a font-unavailable message while retaining input and results."
+    },
+    "d7f95123066e0159791c9d18ce5ffb28a1381dc216537e7de0e95b70fa1d4c97": {
+      "source": "浅色工作台提示所选汉字字体不可用，请选择已安装的字体后重试；两行输入和字音结果保留。",
+      "translation": "Light workbench reporting that the selected character font is unavailable and asking for an installed font before retrying. Both input lines and their results remain."
+    },
+    "a943cd5521deac53b424ac2cfd908fd2d047e200b6353ba41c686eee0f75b5ea": {
+      "source": "改选<s id=\"0\">系统默认</s>或本机已安装的 <s id=\"1\">KaiTi</s>，再次保存为 PNG，并打开文件检查。设置变化会清除旧错误，仍需完成重试。",
+      "translation": "Choose <s id=\"0\">System default</s> or an installed font such as <s id=\"1\">KaiTi</s>, save as PNG again, and open the file to check. A setting change clears the old error, but you still need to retry."
+    },
+    "aade15f53708e4e0dd1f1948856e778e1b337c1db9a2a0be79217066542c9166": {
+      "source": "方法来源与转写范围",
+      "translation": "Sources and transcription scope"
+    },
+    "fe669d1bbf7e9a0398d0ddd4d5e92b2de764175a23a485b33af5ca874440d765": {
+      "source": "顶部<s id=\"0\">方法与引用</s>可查看书目、版本说明和内置 Doulos SIL 的来源与许可。Unt两列采用作者网站2026-10-11访问正文的中派基准，更新记录至2024-10-11；自由变体取第一项。其他标准沿用各自历史记音规则；已核实的异常字音键统一修正，正常映射保持原样。具体著作版次及单字条目仍需按研究用途核对。制作语料时保存标准名称与人工读音决定，便于复核。",
+      "translation": "Open <s id=\"0\">Methods and references</s> at the top for bibliography, version notes, and the source and license of bundled Doulos SIL. Both Unt columns use the middle-variety baseline in the author's main text accessed 2026-10-11, with updates through 2024-10-11; the first option is used for free variants. Other standards retain their historical conventions. Verified anomalous pronunciation keys were corrected consistently; normal mappings remain unchanged. Check editions and individual entries for research use. Save standard names and manual pronunciation decisions with your corpus for review."
+    },
+    "c6c4fe1341dc30569534a35706e938d68760ee47d386eee00122e2b79cfe9d89": {
+      "source": "内置 Doulos SIL 按 SIL Open Font License 1.1 保留许可。本机汉字字体不会随 PNG 打包为字体文件；需要另行分发字体时，核对该字体的许可。",
+      "translation": "Bundled Doulos SIL retains its SIL Open Font License 1.1. Local character fonts are not bundled as font files in PNGs. Check their licenses before distributing font files separately."
+    },
+    "c9a918556a5c6f57a2f54829100e06f2c39235e4f6717c1c7378165ba91a45d6": {
+      "source": "Unt引用：UntPhesoca. 新老派普通话的宽严式记音（含儿化韵）[EB/OL]. (2019-04-22)[2026-10-11]. https://phesoca.com/aws/268/. 首发知乎：https://zhuanlan.zhihu.com/p/38258415。hm/hng 音值及 io/ê 的儿化对应在作者正文中未列出，使用时需另行查证。",
+      "translation": "Unt reference: UntPhesoca. 新老派普通话的宽严式记音（含儿化韵）[EB/OL]. (2019-04-22)[2026-10-11]. https://phesoca.com/aws/268/. First published on Zhihu: https://zhuanlan.zhihu.com/p/38258415. The author's main text does not list hm/hng sound values or rhotacized counterparts for io/ê; verify these separately before use."
+    }
+  }
+}

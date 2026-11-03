@@ -1,0 +1,790 @@
+{
+  "schemaVersion": "ptb-manual-localization/1",
+  "locale": "en",
+  "entries": {
+    "551d39f28127578e1800b23965b4fd07cff2c620d9a0574a2fe07376583442fe": {
+      "source": "LPC 谱图",
+      "translation": "LPC spectrum"
+    },
+    "49456dd427c8e83a07a1c1a2700bf70bb4d3c5fafa740a50f07014f53c9b44b4": {
+      "source": "加载WAV与可选TextGrid，选择分析声道和片段，对照LPC包络与FFT频谱，保存当前PNG及完整结果。",
+      "translation": "Load WAV and optional TextGrid files, select the analysis channel and segment, compare the LPC envelope with the FFT spectrum, and save the current PNG and complete results."
+    },
+    "48d58b7caec9bbc36e0d014b65bed8d3be19490c14af531b406d6cea399d8426": {
+      "source": "视频教程：<s id=\"0\">观看本章视频</s>。",
+      "translation": "Video tutorial: <s id=\"0\">watch this chapter's video</s>."
+    },
+    "c4fcd92c434ec68d779434854de3ce706700bb250f11785f0ee590f8855bee2a": {
+      "source": "打开 WAV，准备短片段",
+      "translation": "Open a WAV and prepare a short segment"
+    },
+    "8e490cd437e92e8ede7880fc85da3919883b1ff28fd387f422ebacfdfc2a398d": {
+      "source": "LPC 谱图用于观察短片段的谱包络，例如擦音的宽带峰形或元音的谱形变化。常用流程是 <s id=\"0\">打开 WAV → 选区试听 → 设置参数 → 开始分析 → 保存图与数据</s>。",
+      "translation": "LPC spectrum displays the spectral envelope of a short segment, such as broadband fricative peaks or changes in vowel spectral shape. A typical workflow is <s id=\"0\">Open WAV → select and listen → set parameters → start analysis → save figures and data</s>."
+    },
+    "0e4b249b3b00b3c37b07fa049e118312848843e3df738a86fdc549b75894d273": {
+      "source": "加载音频与标注",
+      "translation": "Load audio and annotations"
+    },
+    "c9519c71373fcc44487a19b7b69d51dbcdb280ff7e1e9edc43da0bb792da6154": {
+      "source": "准备 WAV，需要按标注定位时再配同名 TextGrid。目录可包含多个文件，当前每次分析一个文件的一段选区。",
+      "translation": "Prepare a WAV, adding a same-named TextGrid only if annotation-based navigation is needed. A directory can contain multiple files; each analysis currently processes one selection from one file."
+    },
+    "24bc883dcfaa49a6234b49ce9e82183e94799214e1a6ef0cef7528419d1216cb": {
+      "source": "点击顶部 <s id=\"0\">打开音频目录</s>，选择含 WAV 的文件夹。显示 <s id=\"1\">导入文件</s> 的入口可一次添加 WAV 和 TextGrid；外部增改文件后点击 <s id=\"2\">刷新文件</s>。",
+      "translation": "Click <s id=\"0\">Open audio directory</s> at the top and select a folder containing WAVs. Interfaces with <s id=\"1\">Import files</s> can add WAVs and TextGrids together. Click <s id=\"2\">Refresh files</s> after externally adding or changing files."
+    },
+    "3d912755da581e99c6032db0a97407203fe37e98f585ac0dc2ea157fddd29ec2": {
+      "source": "在左栏 <s id=\"0\">音频文件</s> 中选择 WAV，等待读取完成。核对文件名、采样率、声道数与时长，中区应出现波形。",
+      "translation": "Select a WAV under <s id=\"0\">Audio files</s> on the left and wait for loading. Check its filename, sample rate, channel count, and duration; a waveform should appear in the center."
+    },
+    "1a7e48b19f7aa59c411081ab33ffdf1d33b321b6f2aa778aa341392b3619cb6b": {
+      "source": "需要标注时，检查 <s id=\"0\">关联 TextGrid</s> 和 <s id=\"1\">标注层</s>。唯一同名文件会自动关联；可手动改选，也可选 <s id=\"2\">不关联</s>。没有标注也能分析。",
+      "translation": "If using annotations, check <s id=\"0\">Associated TextGrid</s> and <s id=\"1\">Annotation tier</s>. A unique same-named file is associated automatically; you can change it manually or select <s id=\"2\">None</s>. Analysis is also possible without annotations."
+    },
+    "cc72f63032e70e8938ca1e21c34b9dcb5b77e0f7f66e66bc7230daeea5f19106": {
+      "source": "加载完成的波形工作区，左栏可见 16000 Hz、单声道和约 0.672 s。示例 TextGrid 已关联，底部为全长范围。",
+      "translation": "Loaded waveform workspace. The left panel shows 16000 Hz, mono, and about 0.672 s. The example TextGrid is associated; the bottom range spans the full recording."
+    },
+    "6d2ad1caec424fd7b80de5d12c69cac2895dcce7a13ff9b1618acc1740a3f9e7": {
+      "source": "WAV加载完成，显示波形、输入信息、示例标注层与底部全长时间范围。",
+      "translation": "Loaded WAV with waveform, input information, example annotation tier, and full-length time range at the bottom."
+    },
+    "b68b88f701744e5e91cdc2f8d4700525c9a518925383a8f7c842a59bc5cfc8ac": {
+      "source": "输入 WAV 限 <s id=\"0\">64,000,000 字节、800 万帧、8 声道、8–96 kHz</s>；预览另限各声道合计 3200 万采样值。<s id=\"1\">单次 LPC 选区最多 48,000 样本</s>，48 kHz 下约 1 s，默认 50 阶至少需 52 样本。",
+      "translation": "Input WAV limits are <s id=\"0\">64,000,000 bytes, 8 million frames, 8 channels, and 8–96 kHz</s>. Preview additionally limits the total across all channels to 32 million sample values. <s id=\"1\">An LPC selection can contain at most 48,000 samples</s>, about 1 s at 48 kHz; the default order of 50 requires at least 52 samples."
+    },
+    "69b0a840aac75f055f543690b3b4a4e96b73a0d17a8879ae3aeec5870fb0d40b": {
+      "source": "<s id=\"0\">分析声道默认使用各声道均值，也可选择单个声道</s>，导出的分析 WAV 为单声道。<s id=\"1\">试听声道</s> 只改变播放、波形和语谱预览。需要指定计算输入时，使用分析声道选择。",
+      "translation": "<s id=\"0\">The analysis channel defaults to the mean of all channels; a single channel can also be selected</s>. The exported analysis WAV is mono. <s id=\"1\">Playback channel</s> changes only playback, waveform, and spectrogram preview. Use Analysis channel to specify the computational input."
+    },
+    "93d5c0e3b53c7b80423a01615ba837f5da0d894c96775bfe998f259b612bdf86": {
+      "source": "工作区各部分做什么",
+      "translation": "Workspace areas"
+    },
+    "8780c23c5f1c6fdbb98cff6dc719b64cb3b7f8387342990203e14c60d979731b": {
+      "source": "<s id=\"0\">左栏</s>：选择文件、标注层、分析声道与试听声道，下方设置阶数、频率上限与固定 dB 范围。",
+      "translation": "<s id=\"0\">Left panel</s>: select files, annotation tier, analysis channel, and playback channel; set order, maximum frequency, and fixed dB range below."
+    },
+    "49097aad023525d2b49a4d2b8acae12ee2ef7efaf4fb798e8bb040b0b53a9fa7": {
+      "source": "<s id=\"0\">中区</s>：在 <s id=\"1\">波形</s> 与 <s id=\"2\">LPC 频谱</s> 间切换，查看选区、语谱图和谱包络。",
+      "translation": "<s id=\"0\">Center</s>: switch between <s id=\"1\">Waveform</s> and <s id=\"2\">LPC spectrum</s> to inspect the selection, spectrogram, and spectral envelope."
+    },
+    "6ca581a3a50639b7ffbc22534974fa592073d677fef049eab64c6a6d74152ec0": {
+      "source": "<s id=\"0\">右栏</s>：开始或取消分析，查看任务状态、参数快照与历史，保存结果。",
+      "translation": "<s id=\"0\">Right panel</s>: start or cancel analysis, inspect task status, parameter snapshots and history, and save results."
+    },
+    "b655f88798cff636d1f91b031d2c5a4091a8ceec57fe81acb2f6f17dbdd928a5": {
+      "source": "<s id=\"0\">底部</s>：输入起点、终点，选择全部，播放、暂停或停止，调整进度与音量。",
+      "translation": "<s id=\"0\">Bottom</s>: enter start and end times, select all, play, pause or stop, and adjust playback position and volume."
+    },
+    "e0bc8c84cb011fed07696ed87646b97d265e16821d524a2b87045aefd0361e87": {
+      "source": "标注、声道与常用工具",
+      "translation": "Annotations, channels, and common tools"
+    },
+    "9da892a3122a90780aed91b22b98fd3b3574e962b7bbc3cd66cfb2b1f0fef5f8": {
+      "source": "文件与常用工具",
+      "translation": "Files and common tools"
+    },
+    "9aa63f70b1e8caf291767d2f441a4ef74eaf92208e1721fa1d21d3f44f8b05bc": {
+      "source": "控件",
+      "translation": "Control"
+    },
+    "222b22ac29c1d4eb91a1bc3ab931617a9f567a0daa34c6c753e0913a726c4d32": {
+      "source": "用法",
+      "translation": "Usage"
+    },
+    "82e13408dacd9f8a63b45e86ebfa0c7dd437ffb136e865a47a4dbb91c44e02eb": {
+      "source": "<s id=\"0\">标注层 / 下一层</s>",
+      "translation": "<s id=\"0\">Annotation tier / Next tier</s>"
+    },
+    "08a863a8d5e6dac54cbeb4b2ab1b49a017302e6d97928fe0f3a35ff89868ea35": {
+      "source": "选择当前层；两层以上可用下一层循环切换。标签轨随之更新。",
+      "translation": "Select the current tier. With at least two tiers, Next tier cycles through them and updates the label track."
+    },
+    "73d50605eb1d5c0f41fa930e8b698d72831f8f9b8a38a2f3a391a952f1a74277": {
+      "source": "<s id=\"0\">试听声道</s>",
+      "translation": "<s id=\"0\">Playback channel</s>"
+    },
+    "9c8c7a1e21e42b94fb7e7bc5de11356bea2d57ae11a64660a0c25b03adc4d307": {
+      "source": "多声道文件可选单个原始声道试听；切换会停止播放。",
+      "translation": "For multichannel files, select an individual original channel for playback. Switching stops playback."
+    },
+    "8a926103b7b8b19f18ced8b98a8ff1e9d8f75f5b7b5ebec5744f5dde9426d2a7": {
+      "source": "<s id=\"0\">保存参数草稿</s>",
+      "translation": "<s id=\"0\">Save parameter draft</s>"
+    },
+    "3c4c62c35c3b2d670978f3dd5c96a1f9b2371ab574d00134f24c0b68164c3278": {
+      "source": "保存阶数、频率上限和纵轴设置，供下次沿用。有效草稿可能覆盖初始默认值；不保存音频和结果。",
+      "translation": "Save order, maximum frequency, and vertical-axis settings for next time. A valid draft may override initial defaults; audio and results are not saved."
+    },
+    "84839ce9ab039cdb26bc1bad77a1018d28693be637ee9891f791f50d53aa6e84": {
+      "source": "<s id=\"0\">帮助 / 方法与引用</s>",
+      "translation": "<s id=\"0\">Help / Methods and references</s>"
+    },
+    "5177027d385039486516e008a8bc943f4d7137cc5aaa801fef30e7b77490716c": {
+      "source": "帮助打开本章，点击返回 LPC 谱图继续原工作区；方法与引用可查来源和许可。",
+      "translation": "Help opens this chapter; click Return to LPC spectrum to resume the original workspace. Methods and references lists sources and licenses."
+    },
+    "7df0e679c828d39a89067b9d85c482d54c1fa3409609612bf66faf7e0b007543": {
+      "source": "定位并试听分析片段",
+      "translation": "Locate and listen to the analysis segment"
+    },
+    "23f86cc844f38661f1c80de45060c9b1fe0a6298a131c939721a5c08a145b70a": {
+      "source": "选短片段，核对起止时间",
+      "translation": "Select a short segment and check its boundaries"
+    },
+    "7f042c7c151890f1e798e1eebef7ab9cb326844e3b58ddbdd98a74551d11f050": {
+      "source": "<s id=\"0\">每次分析前以底部起点、终点为准</s>。尚未明确选区时，范围跟随可见窗；一旦拖选、点击标注、编辑时间或点全部，随后缩放只改变观察范围。",
+      "translation": "<s id=\"0\">Use the bottom start/end times as the reference before each analysis</s>. Before an explicit selection is made, the range follows the visible window. After dragging a selection, clicking an annotation, editing times, or clicking All, later zooming changes only the view."
+    },
+    "510347d727ac0e59427ba3f12ab21acc0feca37775d9b4459e31f68a14c2b937": {
+      "source": "在波形上按 <s id=\"0\">Ctrl＋滚轮</s>，或点图下 <s id=\"1\">＋</s> 放大。放大后拖动 <s id=\"2\">时间窗起点</s> 滑条寻找目标声音；双击波形或点 <s id=\"3\">适合窗口</s> 返回全长。",
+      "translation": "Use <s id=\"0\">Ctrl + mouse wheel</s> over the waveform or <s id=\"1\">+</s> below it to zoom in. Drag the <s id=\"2\">Time-window start</s> slider to find the target sound. Double-click the waveform or click <s id=\"3\">Fit window</s> to restore full length."
+    },
+    "438281bdaa85f58f6ca1a5d4c50bf224b2d28dc5210118cf03a6bd5b4dcb1941": {
+      "source": "用<s id=\"0\">左键拖动</s>选出片段，不必按 Shift。也可点击 TextGrid 标签区间，再在底部 <s id=\"1\">起点 / 终点</s> 中输入准确秒数。反向拖选同样有效。",
+      "translation": "<s id=\"0\">Drag with the left mouse button</s> to select a segment; Shift is unnecessary. You can also click a TextGrid interval and enter exact seconds under <s id=\"1\">Start / End</s> at the bottom. Dragging in reverse also works."
+    },
+    "e7bd717a574f09ad19607ce26607aedeefbb91ef6eb7d4eeac63be84ab8a86fc": {
+      "source": "点击 <s id=\"0\">播放选区</s> 确认声音。点击 <s id=\"1\">暂停</s> 保留位置，再次播放可继续；<s id=\"2\">停止</s> 结束播放。<s id=\"3\">全部</s> 选中完整音频，分析前仍须检查样本上限。",
+      "translation": "Click <s id=\"0\">Play selection</s> to check the sound. <s id=\"1\">Pause</s> retains the position so playback can resume; <s id=\"2\">Stop</s> ends playback. <s id=\"3\">All</s> selects the complete audio; still check the sample limit before analysis."
+    },
+    "03ddff9c88554db8c143293eea07ee09a8b669f0af47f163be02a1e883adc590": {
+      "source": "示例采用 16000 Hz 单音节 WAV：在底部输入 <s id=\"0\">0.1–0.4 s</s>，选区为 4800 个样本。图中的示例标注只演示定位操作；试听使用底部播放栏。",
+      "translation": "The example uses a 16000 Hz monosyllabic WAV. Enter <s id=\"0\">0.1–0.4 s</s> at the bottom to select 4800 samples. The example annotations demonstrate navigation only; use the bottom playback bar to listen."
+    },
+    "cbe5dc59146b9206fcf4f17a8b9504b4ae22eb3382aeac9599c299c46edc295d": {
+      "source": "底部输入 0.1–0.4 s 后，波形和标签轨高亮对应范围。阶数为 50，尚未开始分析。",
+      "translation": "After entering 0.1–0.4 s, the waveform and label track highlight that range. Order is 50; analysis has not started."
+    },
+    "c5bb1210a2a21ca6d557ed881c31e5a0bd66f47eff6017bbb59f34b7ff28f437": {
+      "source": "波形与标签轨高亮0.1至0.4秒，底部起止时间一致。",
+      "translation": "Waveform and label track highlighting 0.1 to 0.4 seconds, matching the bottom boundary times."
+    },
+    "920c11f9d7229d6ac23708af18c810296d45b179ffaa666d6e21ee6960576375": {
+      "source": "按 TextGrid 定位与切层",
+      "translation": "Navigate and switch tiers with TextGrid"
+    },
+    "5aa84f5d45d51e6f5047b6aeb76998a05cf49ab44df4e742075edef83a4b9110": {
+      "source": "在 <s id=\"0\">关联 TextGrid</s> 选择匹配文件，等待层名出现。检查波形下方标签轨；读取失败时改选可解析的文件。",
+      "translation": "Select the matching file in <s id=\"0\">Associated TextGrid</s> and wait for tier names. Inspect the label track below the waveform; choose a parseable file if loading fails."
+    },
+    "8d028ce58f00867adeaff2943998365cbe1ab507ac981fba6de3d2803e766991": {
+      "source": "选择 <s id=\"0\">标注层</s> 或点 <s id=\"1\">下一层</s>。示例由定位示例切到对照层，标签轨随之改变。切层影响结果标签，需要新图时重新分析。",
+      "translation": "Select <s id=\"0\">Annotation tier</s> or click <s id=\"1\">Next tier</s>. The example switches from the navigation-example tier to the comparison tier, updating the label track. Tier changes affect result labels; run analysis again for a new figure."
+    },
+    "aff23e79c7ec7153716572aeaf4406e0e60b9bcc9742ef56b01bf98d11c211b6": {
+      "source": "示例已明确选定 <s id=\"0\">0.1–0.4 s</s>，再放大到 2× 时可见窗约为 0–0.336 s。选区终点暂在图外，底部起止值仍保持原范围。",
+      "translation": "With <s id=\"0\">0.1–0.4 s</s> already explicitly selected, zooming to 2× makes the visible window approximately 0–0.336 s. The selection end is temporarily off-screen, but bottom boundary values retain the original range."
+    },
+    "05db4769456dfc18be5f59fc9a5829ae439a62b4bbdbce56906781ffa2a2da51": {
+      "source": "切到对照层并放大到 2×，标签轨更新，可见窗缩短。底部明确选区仍为 0.1–0.4 s。",
+      "translation": "After switching to the comparison tier and zooming to 2×, the label track updates and the visible window shortens. The explicit bottom selection remains 0.1–0.4 s."
+    },
+    "9f07a979fac007416ea77d0a5a88201a50f86795b5efc600ed61855c8afb8860": {
+      "source": "标注层切为对照层，波形放大2倍，底部明确选区保持0.1至0.4秒。",
+      "translation": "Comparison annotation tier and waveform at 2× zoom, with the explicit bottom selection still 0.1 to 0.4 seconds."
+    },
+    "1e270e5d0dd6a4e17188036f66c38e2962cafc37bcc2baa7fad6feb66b495dea": {
+      "source": "点击目标标签区间后，底部时间变为该区间与音频的交集。可继续缩短到目标声音的稳定部分，再核对层名与秒数。",
+      "translation": "Clicking a target label interval sets the bottom times to its intersection with the audio. You can shorten it further to the stable part of the sound, then check the tier name and seconds."
+    },
+    "8b098f14a513a87d65cd36e593f2d6a72cff1fa703611a92c31d9f643da9f8e3": {
+      "source": "出现非空标签越界提示时，检查录音和标注是否来自同一裁剪版本。改选匹配文件；确实不使用标注时选择 <s id=\"0\">不关联</s> 再分析。",
+      "translation": "If a nonempty label exceeds the audio boundary, check whether the recording and annotations use the same trimmed version. Choose matching files, or select <s id=\"0\">None</s> before analysis if annotations are unnecessary."
+    },
+    "4571a7bdf5f58dd5089e5751cb2ff4266737b6a3963f49daa520298c41fc4213": {
+      "source": "关联 TextGrid 的<s id=\"0\">全部层</s>都会检查。任一非空标签超出音频范围会阻止分析；空白末端可裁到音频边界，原标注保持不变。",
+      "translation": "<s id=\"0\">All tiers</s> in the associated TextGrid are checked. Any nonempty label outside the audio range blocks analysis. Empty trailing intervals can be clipped to the audio boundary; the original annotations remain unchanged."
+    },
+    "2f419923ed92e596a49e24b380043fd4518ab26e0437fb8ca648ec23888d491c": {
+      "source": "结果标签取当前层的非空文字，去重后用 <s id=\"0\">＋</s> 拼接。只在选区末端相交且未包含起点的区间会被排除，完整分析范围以底部起止时间和结果 JSON 为准。",
+      "translation": "Result labels use nonempty text from the current tier, deduplicated and joined with <s id=\"0\">+</s>. Intervals that intersect only the selection's end without including its start are excluded. Use bottom boundary times and result JSON for the complete analysis range."
+    },
+    "13dd519c9592ed879a78a81f0ad338f306e157431257d1e28d13f0d38302b602": {
+      "source": "用语谱图辅助定位",
+      "translation": "Use a spectrogram to aid navigation"
+    },
+    "c1ebf72341995e76f302f85f661d2e315a1d617c414367e6f19e943d0443c3ec": {
+      "source": "语谱预览固定为 Gaussian 5 ms 窗、50 dB 相对灰度、6 dB/oct 显示预加重，最高频率为 5000 Hz 与采样率一半中的较小值。它用于定位，谱包络请查看 LPC 结果。",
+      "translation": "Spectrogram preview uses a fixed Gaussian 5 ms window, 50 dB relative grayscale, and 6 dB/oct display pre-emphasis. The maximum frequency is the smaller of 5000 Hz and half the sample rate. Use it for navigation; inspect spectral envelopes in LPC results."
+    },
+    "5a4451794a424fe29fbd1480ed0efdc63552b81f37e3090f11d8c6a1daff369f": {
+      "source": "在波形视图勾选 <s id=\"0\">显示语谱图（Praat）</s>，等待灰度图出现。它与波形共用时间轴，可直接左键拖选。",
+      "translation": "In Waveform view, select <s id=\"0\">Show spectrogram (Praat)</s> and wait for the grayscale image. It shares the waveform's time axis and supports direct left-drag selection."
+    },
+    "45c0735597b409b439f8a1662361f3db6c944673c201a2f01c2748dbfa4abcf5": {
+      "source": "放大、平移或切换试听声道后，等待当前窗预览刷新。只改选区且可见窗未变时，无须重算预览。",
+      "translation": "After zooming, panning, or switching the playback channel, wait for the current-window preview to refresh. Changing only the selection without changing the visible window does not require preview recomputation."
+    },
+    "3659b50e2122d9adb18a8851815b3a3d3b3383c61234b9c3f610623922dba70f": {
+      "source": "忙碌时稍等，失败时点击提示中的 <s id=\"0\">重试</s>。可见窗不足 10 ms 时放宽，超时时缩小；暂不需要预览时可关闭它继续 LPC 分析。",
+      "translation": "Wait while busy; on failure, click <s id=\"0\">Retry</s> in the message. Widen a visible window shorter than 10 ms; narrow it on timeout. You can turn off preview and continue LPC analysis when it is unnecessary."
+    },
+    "6707691ffa288928f592f2a56db44dc9d817ba4353a585e2449992add41555c8": {
+      "source": "勾选显示语谱图后，波形与 Praat 灰度图共用 0.1–0.4 s 选区。",
+      "translation": "After enabling the spectrogram, the waveform and Praat grayscale image share the 0.1–0.4 s selection."
+    },
+    "c889bd2e92adf0d9826ff8d876a1d8c8c131c389085603e74fd7f69b91214293": {
+      "source": "实际Praat灰度语谱图位于波形下方，时间轴与选区一致。",
+      "translation": "Actual Praat grayscale spectrogram below the waveform, with matching time axis and selection."
+    },
+    "c2c4bcaf48a2e8917cb47df60fb3fc57cf38437c9aa50ee473752ff2fa355e69": {
+      "source": "设置参数并开始分析",
+      "translation": "Set parameters and start analysis"
+    },
+    "c073bf737661f9ae71a78a9265c749374e1aa51c05a3929a9b3888ffb59799fc": {
+      "source": "LPC 计算与显示参数",
+      "translation": "LPC computation and display parameters"
+    },
+    "cf2b9939631b8f51a0b276a591b2fe6feeb5324f486c9b88aeafeff21cc615dd": {
+      "source": "参数",
+      "translation": "Parameter"
+    },
+    "8fed5d6947bbf98cf1777bafeedcd40eb15d6e3384f79bec03a531d336c66064": {
+      "source": "初始值 / 范围",
+      "translation": "Initial value / range"
+    },
+    "ec7ea2b02035babf91d4ede5506bb2b7af7a270553e5ac7c4412d54c93c5499d": {
+      "source": "操作要点",
+      "translation": "Key points"
+    },
+    "c4ec4bc2e9b7db5fa28f6a1c3d922f8fa464ae5ebfd74dc762e10e3092fdadca": {
+      "source": "<s id=\"0\">阶数</s>",
+      "translation": "<s id=\"0\">Order</s>"
+    },
+    "15dff5a4836911a35a997d9697db088a120283dbfdc655a58365e1b378c735f7": {
+      "source": "50 / 整数 1–200",
+      "translation": "50 / integer 1–200"
+    },
+    "0ad6cbb3687382df0046a443b79f6485ccaf48365923cf9a5854187c36907ee7": {
+      "source": "改变谱包络的模型复杂程度。修改后重新分析，并结合选区检查谱包络。",
+      "translation": "Changes spectral-envelope model complexity. Analyze again after changing it and inspect the envelope together with the selection."
+    },
+    "0eadbb73d67ea1577d8917f5c9649054d7548af12ea7fdf74922ab90cc573469": {
+      "source": "<s id=\"0\">频率上限 Hz</s>",
+      "translation": "<s id=\"0\">Maximum frequency Hz</s>"
+    },
+    "e83f3be9c488542cd37be112f1b51f51303fdaed4f77f4771769ba9038e4235f": {
+      "source": "设置结果图的频率范围。修改后重新分析；高于采样率一半的区域没有数据。",
+      "translation": "Sets the result figure's frequency range. Analyze again after changing it; there are no data above half the sample rate."
+    },
+    "48d52bc25c7dee567f677f465eebf5f868efdd78b5423656b0d57819af55ef5c": {
+      "source": "<s id=\"0\">dB 下限 / 上限</s>",
+      "translation": "<s id=\"0\">dB minimum / maximum</s>"
+    },
+    "a02a7d76a85b67738a9b5f428d01e18c7456fef0452423ecbe91f912dd16eb40": {
+      "source": "−5 / 35；各值 −200–100 dB",
+      "translation": "−5 / 35; each value −200–100 dB"
+    },
+    "e5a09bcdd8c1474d51259c69957ecb14d5a306ceff0844280a91f1cb27173d6f": {
+      "source": "固定纵轴时立即应用已有谱值。<s id=\"0\">下限须小于上限</s>；动态纵轴时暂不可编辑。",
+      "translation": "With a fixed vertical axis, applies immediately to existing spectral values. <s id=\"0\">Minimum must be below maximum</s>. Temporarily unavailable with a dynamic axis."
+    },
+    "c41617c5d72c01e183b267695b45b827f105581152a2514dbfcc1e13380bf085": {
+      "source": "<s id=\"0\">时间选区</s>",
+      "translation": "<s id=\"0\">Time selection</s>"
+    },
+    "747f935928ae9b944e53116593891898ab663b67ccdbce2157e6a65a7a5f1a29": {
+      "source": "底部起点、终点，单位 s",
+      "translation": "Bottom start/end times, in s"
+    },
+    "33caa979a75990b01f8fa40cc31c0691c8786282542c348a7921e1ba60fe71a7": {
+      "source": "整段选区参与一次计算。单次最多 48,000 样本，至少为阶数＋2。",
+      "translation": "The entire selection is used in one computation. At most 48,000 samples per analysis, and at least order + 2."
+    },
+    "7607ea50cbeddcda2b2dbba73000e61ff084d77040bd8f4437cc118b3ce9dd21": {
+      "source": "提交并核对结果",
+      "translation": "Submit and check results"
+    },
+    "b7000be767f29897be72ecb2d3c97e74af57f7deb441d852f4542a81c9ac030b": {
+      "source": "核对 WAV、标注层和底部选区，试听确认片段。在左栏设置阶数、频率上限及所需图轴。",
+      "translation": "Check the WAV, annotation tier, and bottom selection; listen to confirm the segment. Set order, maximum frequency, and desired axes on the left."
+    },
+    "b21b8fcf7663ae6e1c027a53dc4fadcb319ec30f6ffe2a7a5765b500aee3b173": {
+      "source": "点击右栏 <s id=\"0\">开始分析</s>。如有输入提示，先修正再提交；运行期间可查看状态或 <s id=\"1\">取消分析</s>，无需重复点击。",
+      "translation": "Click <s id=\"0\">Start analysis</s> on the right. Correct any input warnings before submitting. During processing, inspect status or <s id=\"1\">Cancel analysis</s>; repeated clicks are unnecessary."
+    },
+    "5f4a2e6d83fe179ace782ffb5bf1fc970167b52d25378ececf89f243eef14c79": {
+      "source": "完成后自动打开 <s id=\"0\">LPC 频谱</s>。<s id=\"1\">先核对图下文件名、实际时间、样本数和阶数</s>，再展开 <s id=\"2\">查看此结果的参数快照</s>。",
+      "translation": "On completion, <s id=\"0\">LPC spectrum</s> opens automatically. <s id=\"1\">First check the filename, actual times, sample count, and order below the figure</s>, then expand <s id=\"2\">View this result's parameter snapshot</s>."
+    },
+    "e1ef0b8afc6d23ee6966932b073432e79075b3e1a9482edf499cb82a67821127": {
+      "source": "修改选区、阶数、频率上限、音频或标注层后，旧图会显示提示。需要对应的新结果时再次 <s id=\"0\">开始分析</s>。",
+      "translation": "Changing selection, order, maximum frequency, audio, or annotation tier marks the old figure with a message. Click <s id=\"0\">Start analysis</s> again when a corresponding new result is needed."
+    },
+    "4122f2c4ad250fc6f4e7b33ee2effca2479ce5c97b1bb262a552811ba4b0cc34": {
+      "source": "0.1–0.4 s、4800 样本、50 阶分析完成。当前固定纵轴为 −5 至 35 dB，右栏出现保存与任务记录。",
+      "translation": "Analysis complete for 0.1–0.4 s, 4800 samples, order 50. The current fixed axis is −5 to 35 dB; saving and task records appear on the right."
+    },
+    "c63d7da9bab5509595a0c72f49b64f42714ba98a328cd1b087072a5c621089dc": {
+      "source": "LPC分析完成，固定轴谱包络、结果保存与已完成任务可见。",
+      "translation": "Completed LPC analysis with fixed-axis spectral envelope, result-saving controls, and completed task."
+    },
+    "46692e7d4a78738c466f4eaea3c31bc1b3e7944002cc8ade71cddbc37edd5d47": {
+      "source": "展开结果参数快照，核对本次时间、50 阶、8000 Hz 和原任务纵轴。",
+      "translation": "Expand the result's parameter snapshot and check this task's time range, order 50, 8000 Hz, and original vertical axis."
+    },
+    "440b5261afecaeb0a3af8e8538efd5793c6453b9db56d7be6236a11b7ed6678a": {
+      "source": "右栏参数快照展开，与图下原文件和选区信息对照。",
+      "translation": "Expanded right-panel parameter snapshot for comparison with the original file and selection below the figure."
+    },
+    "3c52f5dd904aa9030a7e3679322692de5336bd0e668967c817387790ea3d81b9": {
+      "source": "阶数、频率上限和幅度范围分开填写。修改后重新分析，结果才会采用新参数。",
+      "translation": "Enter order, maximum frequency, and amplitude range separately. After changes, analyze again for the result to use the new parameters."
+    },
+    "836dd7b87862bb589b62a66753bed551781614400966651c4a44712ef0ba44e0": {
+      "source": "查看任务与参数",
+      "translation": "Inspect tasks and parameters"
+    },
+    "f244ec08d82191c95e0ad3d31d5ad1f942e32b8591eee4d8f18641703f8d8c57": {
+      "source": "任务记录常用操作",
+      "translation": "Common task-history actions"
+    },
+    "4ec37fbd8c58183c0a734a215a29b6380a58c89c4becf6101d9f184ca7102670": {
+      "source": "作用",
+      "translation": "Purpose"
+    },
+    "2f14d015d04ccb260d4e0a04fc9e70683a6bbd36027673ef2c91e5782772a59b": {
+      "source": "<s id=\"0\">查看此结果的参数快照</s>",
+      "translation": "<s id=\"0\">View this result's parameter snapshot</s>"
+    },
+    "55b877cdef3371897996f628daceda14e753b5a4af012ca67077011b14e20730": {
+      "source": "查看创建该任务时的选区、阶数、频率上限、图轴、层名和字体。",
+      "translation": "View the selection, order, maximum frequency, axes, tier name, and font used when creating the task."
+    },
+    "eaf75a35251937b705213ab0771d4a68f6ab4b56240070ca1d84f77f3fd97a07": {
+      "source": "<s id=\"0\">分析任务与历史结果 / 查看结果</s>",
+      "translation": "<s id=\"0\">Analysis tasks and historical results / View result</s>"
+    },
+    "27a0b6237bd01f9124173e3f1c627a3adce41b0f371ca90e422b8754862ee711": {
+      "source": "按时间与短 ID 找到任务，打开已完成结果。读取失败可再次查看。",
+      "translation": "Find tasks by time and short ID and open completed results. Try viewing again if loading fails."
+    },
+    "87220a57978e47e19dac8358de103c3b7806f6521b4827c2514e50bb9da98ca0": {
+      "source": "<s id=\"0\">取消分析 / 取消此任务</s>",
+      "translation": "<s id=\"0\">Cancel analysis / Cancel this task</s>"
+    },
+    "f0b5db1024169c744f40a2a2d2eae55a4ad0739a518d624c57d50aa54fff7430": {
+      "source": "请求停止提交、排队或运行中的任务，继续观察最终状态。",
+      "translation": "Request that submission, queued, or running tasks stop, then observe the final status."
+    },
+    "3edfee19629ce4936cbbeba23f76aabf6ddf8dfc4172ebb8acb3f185c4ad122e": {
+      "source": "<s id=\"0\">重试此任务</s>",
+      "translation": "<s id=\"0\">Retry this task</s>"
+    },
+    "8357fd94de9b25c7ee9e87566c609e7940be5db786e9fd25b15e4503a48e9181": {
+      "source": "失败、中断或取消后按原输入、原配置重试。需要修改参数时另行开始分析。",
+      "translation": "Retry after failure, interruption, or cancellation with original input and settings. Start a separate analysis to change parameters."
+    },
+    "822442f75e26d7ba5ede530ed7a93d6e29974e4e4b1b12166e74f1feccffcefd": {
+      "source": "读图、试听与比较",
+      "translation": "Read figures, listen, and compare"
+    },
+    "94685c1cc3df209e89e7bd04ab604f50979283b20d1484d1e65beccd574d563a": {
+      "source": "放大谱图与调整纵轴",
+      "translation": "Zoom the spectrum and adjust the vertical axis"
+    },
+    "d1f40d6b16a4732c7c81a326997e54d5f0f9350a79cda4f6826853ceba91a3f9": {
+      "source": "点击显示频谱图，在LPC曲线上叠加同一片段的FFT。参考频谱采用相同0.97预加重与Hamming窗，FFT峰值对齐LPC，仅比较频谱形状。开关不重新分析，也不改变原谱值；保存当前PNG时包含已显示的FFT灰线。旧历史没有FFT时可重新分析后显示。",
+      "translation": "Click Show FFT spectrum to overlay the same segment's FFT on the LPC curve. The reference spectrum uses the same 0.97 pre-emphasis and Hamming window; its peak is aligned to LPC for spectral-shape comparison only. This switch neither reruns analysis nor changes original spectral values. Saving the current PNG includes the visible gray FFT line. Reanalyze older historical results without FFT to display it."
+    },
+    "cd3cd6e77c245588be44a6d041192cec679be6c549b060b66c5349176866bbc3": {
+      "source": "低于固定轴下限的曲线会被裁切，可切换动态轴或降低下限。频率超过采样率一半的空白区域没有额外数据。",
+      "translation": "Curves below the fixed-axis minimum are clipped; switch to a dynamic axis or lower the minimum. Blank regions above half the sample rate contain no extra data."
+    },
+    "09b3f985b34af21035aac1407f2aa7e2d22fff18f1daedb0d540c6da24ad4799": {
+      "source": "打开已完成结果，核对图下信息。谱图横轴为 <s id=\"0\">Hz</s>，纵轴为 <s id=\"1\">dB</s>；当前只显示一条 LPC 谱包络。",
+      "translation": "Open a completed result and check the information below the figure. The spectrum's horizontal axis is <s id=\"0\">Hz</s> and vertical axis <s id=\"1\">dB</s>. Only one LPC spectral envelope is currently displayed."
+    },
+    "a1b34bdc71fe727b1460bb2a60a22053d9824a42afbe3206b2cee7a568845fab": {
+      "source": "点击 <s id=\"0\">动态纵轴</s> 先看整体谱形。它在任务频率范围内的最小、最大谱值外各留 5 dB，横向放大不会重新改变纵轴。",
+      "translation": "Click <s id=\"0\">Dynamic vertical axis</s> to inspect the overall spectral shape first. It adds 5 dB beyond the minimum and maximum within the task's frequency range; horizontal zoom does not readjust it."
+    },
+    "ad209d9d80d9d66ff50cdc6324da32745dd5b6c120f7cdf16ed33925e91eaa55": {
+      "source": "同一结果切换为动态纵轴，较低幅度部分显示，左栏 dB 输入暂不可编辑。",
+      "translation": "The same result with a dynamic vertical axis shows lower-amplitude parts; left-panel dB inputs are temporarily unavailable."
+    },
+    "adabf1d8cf0ab056b9bbfc9ff4784a220be7517db843cf39ee1c19062871e144": {
+      "source": "动态纵轴按钮选中，完整谱包络显示，分析范围和任务数量保持。",
+      "translation": "Dynamic vertical axis selected with the full spectral envelope visible; analysis range and task count unchanged."
+    },
+    "fd50172cdb1f1933eb61b5c11ccf40a2134a7efaf73cdab77dbbea5288589b16": {
+      "source": "点击 <s id=\"0\">固定纵轴</s>，在左栏编辑 dB 范围。示例把下限改为 <s id=\"1\">−30</s>、上限保持 <s id=\"2\">35</s>，较低部分立即显示，任务数量不增加。",
+      "translation": "Click <s id=\"0\">Fixed vertical axis</s> and edit the dB range on the left. In the example, set minimum to <s id=\"1\">−30</s> while retaining maximum <s id=\"2\">35</s>; lower parts appear immediately without adding tasks."
+    },
+    "aa9b63d30603a06941102b07579dc197de3fbb7e53aa0fabf04c514a35212765": {
+      "source": "右栏快照仍是原 <s id=\"0\">−5 至 35 dB</s>。当前改轴只影响显示与单独 PNG，完整任务结果保留原设置。",
+      "translation": "The right-panel snapshot retains the original <s id=\"0\">−5 to 35 dB</s>. Current axis edits affect only the display and standalone PNG; complete task results retain original settings."
+    },
+    "6c76e3e2b85bcad60c502c222e9f2defd6282fb49a1ee30efd2a785beb4cefb1": {
+      "source": "若上下限无效，页面提示错误并禁用 PNG 保存。恢复有效范围即可继续，无须为改轴另建任务。",
+      "translation": "Invalid bounds produce an error and disable PNG saving. Restore a valid range to continue; no new task is needed for axis changes."
+    },
+    "3d12a60c76ab4577b0d288f76bc362fdaf32be1323c864055ad0c456f22da824": {
+      "source": "当前固定下限改为 −30 dB 后立即应用，右栏原任务快照仍为 −5 至 35 dB。",
+      "translation": "Changing the current fixed minimum to −30 dB applies immediately, while the original task snapshot remains −5 to 35 dB."
+    },
+    "882716517c8d8c165dab75c3748cfff589a49ee9b5162d3ce2c923670aa00dc8": {
+      "source": "左栏当前下限为负30，右栏原任务下限仍为负5，中区显示低幅度谱线。",
+      "translation": "Current minimum −30 on the left, original task minimum −5 on the right, and low-amplitude spectral line visible in the center."
+    },
+    "16f94609ad2a167caa9faffac7da5b4529337598898c7a0de1aaf6d22496b2d4": {
+      "source": "用 <s id=\"0\">Ctrl＋滚轮</s>、图下 <s id=\"1\">− / ＋</s> 或键盘加减键放大，拖动或左右方向键平移。<s id=\"2\">适合频率范围</s>、双击或 Home 恢复完整频率范围。",
+      "translation": "Zoom using <s id=\"0\">Ctrl + mouse wheel</s>, <s id=\"1\">− / +</s> below the figure, or keyboard plus/minus keys. Drag or use left/right arrow keys to pan. <s id=\"2\">Fit frequency range</s>, double-click, or Home restores the full range."
+    },
+    "5d0327e65cd1615c500799fb8180f5d087d64207e3c7ef37b6b35f21448796cb": {
+      "source": "比较多个结果时采用相同固定轴。<s id=\"0\">横向放大只帮助读图，保存 PNG 仍覆盖任务完整频率范围</s>。",
+      "translation": "Use the same fixed axis when comparing results. <s id=\"0\">Horizontal zoom aids reading only; saved PNGs still cover the task's full frequency range</s>."
+    },
+    "31360d0eb629d6674677a0d47a76544f1c0b7792a4fea5094e986ffc95ebf9d3": {
+      "source": "图窗与播放操作速查",
+      "translation": "Figure and playback quick reference"
+    },
+    "754075be69047d2ac98c1dd676e66c46559b090e025b2f9bf9f75786da4ab4ab": {
+      "source": "图窗与播放操作",
+      "translation": "Figure and playback actions"
+    },
+    "de85bbf3ac0d98687ecad4ebca76c51d8864c31a240afa6d899afce349584cd8": {
+      "source": "操作",
+      "translation": "Action"
+    },
+    "17ba5116b1d8180b078a97f0afdce4ccbac96f2fbea2e4ff7e2515d3b5e0991d": {
+      "source": "结果",
+      "translation": "Result"
+    },
+    "7e8d3ee3373c97d077187b357b229102c996bea724c733aaae5924394295d812": {
+      "source": "<s id=\"0\">波形 / LPC 频谱</s>",
+      "translation": "<s id=\"0\">Waveform / LPC spectrum</s>"
+    },
+    "5bc5d6df442466d50d2e1e31b593a8a77f63ad0ebb49ed7a0c729bfdb76740e6": {
+      "source": "完成分析后可切换；保留时间选区，不重新计算。",
+      "translation": "Switch after analysis completes; retain the time selection without recomputing."
+    },
+    "f677e078f21e5cc08218d54a6b05074f4b6f113ac6d899954ee58389dc8fbd78": {
+      "source": "<s id=\"0\">显示两个声道</s>",
+      "translation": "<s id=\"0\">Show two channels</s>"
+    },
+    "6a26d5084461658b02b99728e44b5c2feca016812d2eabec2dce03640a6bb281": {
+      "source": "多声道时可同时看声道 1 与所选声道；选中声道 1 时另一条为声道 2。只改变波形显示。",
+      "translation": "For multichannel audio, show channel 1 and the selected channel together; when channel 1 is selected, the other line is channel 2. Changes waveform display only."
+    },
+    "c1c8009a4a8a2b26a6ddcd5de63a136fd97508948ddca351af88250b9e2fdfef": {
+      "source": "<s id=\"0\">适合窗口 / 全部</s>",
+      "translation": "<s id=\"0\">Fit window / All</s>"
+    },
+    "49d334c2b07d438a6130d20b232ade354b4717515561b24f1d3f0f0d7ad3305a": {
+      "source": "前者恢复全长视窗；后者明确选满音频。两者作用不同，仍以底部时间为准。",
+      "translation": "The former restores the full-length view; the latter explicitly selects the entire audio. These are different actions; use bottom times as the reference."
+    },
+    "402476a6e36119f6412b3b7cd5a28667df90f11d10468a932872dc215026930a": {
+      "source": "<s id=\"0\">播放进度 / 播放音量</s>",
+      "translation": "<s id=\"0\">Playback position / Playback volume</s>"
+    },
+    "26cc2ea9971aab8f37da5f48d10a2e03b961cc02c7bb799c99d1359507e584f8": {
+      "source": "在选区内跳转播放位置，或调节试听音量。均不修改分析范围、谱值和导出 WAV。",
+      "translation": "Seek within the selection or adjust listening volume. Neither changes analysis range, spectral values, or exported WAV."
+    },
+    "52406cc0785e01a26583aaeb8e642e97f1c28c214f504ae9f7f44cf0adaf736b": {
+      "source": "<s id=\"0\">空格</s>",
+      "translation": "<s id=\"0\">Space</s>"
+    },
+    "7ccf68611f0e055f3f7792b92f5f0d0188c2aafbb05fa0b2e34680dcdd905f05": {
+      "source": "图区可播放或停止。编辑输入框时保留正常输入；切换文件、视图或模块会停止播放。",
+      "translation": "In the plot area, plays or stops. Text inputs retain normal typing behavior. Switching files, views, or modules stops playback."
+    },
+    "ead63fb7840d4d693965e0aa1e88a6453646244dca1951ebbe44b028e2881c60": {
+      "source": "打开历史结果并试听",
+      "translation": "Open and listen to historical results"
+    },
+    "0d9c2d9aff729850c3938c54c1992d9c89275e77a5d3ac6c80536877e968185f": {
+      "source": "<s id=\"0\">原 WAV 已加载时，打开历史谱图不会换掉正在试听的原音频</s>。先核对图下文件名；需要对应原片段时加载匹配 WAV 并选回原始范围。",
+      "translation": "<s id=\"0\">If an original WAV is already loaded, opening a historical spectrum does not replace the original audio being auditioned</s>. Check the filename below the figure first. To hear the matching original segment, load the corresponding WAV and restore its original selection."
+    },
+    "856dfdd6420f1fa9abe12c1f5697eb9a9025a38d6e7845b17619dd8b040a0194": {
+      "source": "历史片段读取后会自动选满，底部为 <s id=\"0\">0–片段时长</s>，播放按钮可用。打开结果不会自动播放；之后缩短过试听范围时，可用 <s id=\"1\">全部</s> 再次选满。",
+      "translation": "Loading a historical segment automatically selects it all; the bottom shows <s id=\"0\">0–segment duration</s>, and playback becomes available. Opening a result does not play automatically. After narrowing the playback range, use <s id=\"1\">All</s> to select the complete segment again."
+    },
+    "742c7720a83730efdac0b2a937024a168daf38b2a6c7ed4288e0adaa55a793fa": {
+      "source": "在 <s id=\"0\">分析任务与历史结果</s> 中点击目标任务的 <s id=\"1\">查看结果</s>，等待谱线和图下文件信息出现。",
+      "translation": "Under <s id=\"0\">Analysis tasks and historical results</s>, click <s id=\"1\">View result</s> for the target task and wait for the curve and file information below it."
+    },
+    "6c3f1785f69aeb86c684715e6bc38ab11acdf516c7abdd9a22a3534e62f4066a": {
+      "source": "未加载原 WAV 时，示例原选区 <s id=\"0\">0.1–0.4 s</s> 恢复为一段 <s id=\"1\">0.3 s</s> 的单声道分析音频，底部自动为 <s id=\"2\">0–0.3 s</s>。",
+      "translation": "Without the original WAV loaded, the example's original <s id=\"0\">0.1–0.4 s</s> selection restores as a <s id=\"1\">0.3 s</s> mono analysis segment, automatically setting the bottom to <s id=\"2\">0–0.3 s</s>."
+    },
+    "db887ec5bcac1d924bff006f4849fda504456e98935371e66b49f65f652570b4": {
+      "source": "点 <s id=\"0\">播放选区</s>、<s id=\"1\">暂停</s> 或 <s id=\"2\">停止</s> 试听。片段内 0.1 s 对应原音频约 0.2 s；需要新分析时，先加载原 WAV，再按原始时间选区。",
+      "translation": "Click <s id=\"0\">Play selection</s>, <s id=\"1\">Pause</s>, or <s id=\"2\">Stop</s> to listen. A segment time of 0.1 s corresponds to about 0.2 s in the original audio. For new analysis, load the original WAV and select using original times."
+    },
+    "8f6230fc82ec98be2152bb7ca4dce76499c300eeb7b077559621397a2789ec14": {
+      "source": "未加载原 WAV，历史结果的试听范围为片段内 0–0.3 s。图下仍为原录音 0.1–0.4 s，开始分析不可用。",
+      "translation": "Without the original WAV loaded, historical-result playback spans 0–0.3 s within the segment. Below the figure, original-recording times remain 0.1–0.4 s; Start analysis is unavailable."
+    },
+    "8624dc64018ec6d2ba2b8caa4f357f12e6e6fe0bca7d22049ce3da71f652694e": {
+      "source": "历史单声道片段以相对0至0.3秒试听，图下保留原始绝对时间。",
+      "translation": "Historical mono segment auditioned at relative 0 to 0.3 seconds, with original absolute times retained below the figure."
+    },
+    "98afd6339fc3cc7586d6273bb896262e463f3bd1a9bb9833c4700a7755584be6": {
+      "source": "逐个比较文件或片段",
+      "translation": "Compare files or segments one by one"
+    },
+    "7948bfaac9e27ba82830d64f997af2935db56586a6ba93335ef1c80a2b121e8c": {
+      "source": "先选一个短片段确定比较设置，分析并保存结果。记下原文件、标注层、选区与阶数。",
+      "translation": "Use a short segment to establish comparison settings, analyze, and save. Record the original file, annotation tier, selection, and order."
+    },
+    "359fe03322e94246446e37c884740e9e3a66de7cf766f8bfcd9574f2ad7bce29": {
+      "source": "同文件的下一片段：返回 <s id=\"0\">波形</s> 重新选区。另一文件：在 <s id=\"1\">音频文件</s> 中切换，重新检查关联标注，然后开始分析。",
+      "translation": "For another segment in the same file, return to <s id=\"0\">Waveform</s> and reselect. For another file, switch under <s id=\"1\">Audio files</s>, recheck associated annotations, and start analysis."
+    },
+    "02f2c652619142a0e1c7f71ad92aabbc597cd542d106ca3b3cb150ff9a8151cc": {
+      "source": "从历史记录逐个打开结果，以相同固定轴单独保存 PNG，并保留各任务 WAV 和 JSON。导入多文件后逐个分析并保存结果。",
+      "translation": "Open results individually from history, save separate PNGs using the same fixed axis, and retain each task's WAV and JSON. After importing multiple files, analyze and save them individually."
+    },
+    "14222f79e26f05ad45d9a59bf72425727dd88eff13af0cbcc9c243658f8a00fb": {
+      "source": "保存图片与数据",
+      "translation": "Save images and data"
+    },
+    "b1feb697bf3545f4092b8148649048b34983e12e2e3b9dbea3559923f3d07335": {
+      "source": "三份结果各保存什么",
+      "translation": "What the three result files contain"
+    },
+    "2af33059651cee7a71c7d9eaba4ed05b22b141926eecdfd1be99d5e457a3f3c4": {
+      "source": "成功任务有三份结果：<s id=\"0\">PNG</s> 是谱图，<s id=\"1\">WAV</s> 是保持原采样率的 FLOAT64 单声道分析片段，<s id=\"2\">JSON</s> 保存参数、谱值、源文件校验信息和实际边界。",
+      "translation": "A successful task has three outputs: <s id=\"0\">PNG</s> contains the spectrum, <s id=\"1\">WAV</s> is the FLOAT64 mono analysis segment at the original sample rate, and <s id=\"2\">JSON</s> stores parameters, spectral values, source-file checksums, and actual boundaries."
+    },
+    "c9921723093eb6a9ab0ce5e3929b336f7bcafe748a4cbf602586d9a292850ce9": {
+      "source": "建议文件名含源文件主名、标签与时间，如下例。特殊字符或过长部分会调整，准确来源仍以 JSON 为准。",
+      "translation": "Recommended names include the source basename, label, and times, as below. Special characters or excessive length are adjusted; use the JSON for precise provenance."
+    },
+    "01f5b7cfdeec74ba73154b4cba8327198269ea8502adeb8fd1f91a1df2905251": {
+      "source": "保存当前显示的 PNG",
+      "translation": "Save the currently displayed PNG"
+    },
+    "f5f7ee41408bd39b67566e3c97fb580e11931744ffd5d05675356f52c5b36816": {
+      "source": "打开目标结果并核对来源。选择 <s id=\"0\">动态纵轴</s> 或 <s id=\"1\">固定纵轴</s>；固定模式下确认 dB 范围有效。",
+      "translation": "Open the target result and check its source. Select <s id=\"0\">Dynamic vertical axis</s> or <s id=\"1\">Fixed vertical axis</s>; in fixed mode, check that the dB range is valid."
+    },
+    "dcb9a833c3f7d339ed4a6f5c726ff13f107ecd25b052581a677e511dc31b0e40": {
+      "source": "点击 <s id=\"0\">保存 PNG 图片</s>，选择位置和文件名后确认。网页则由浏览器下载。<s id=\"1\">看到保存窗口或下载提示后，还需确认实际文件已保存</s>。",
+      "translation": "Click <s id=\"0\">Save PNG image</s>, choose a location and filename, and confirm. On the web, the browser downloads it. <s id=\"1\">After seeing a save dialog or download notification, still confirm that the actual file was saved</s>."
+    },
+    "e0381167137b7f2d9723c1b6ab68856ad77429d56b99f51428da3bb6fc5e5b42": {
+      "source": "打开图片检查曲线与标签。图片固定为 <s id=\"0\">2400×1350 像素、300 dpi、白底LPC黑线，可叠加FFT灰线</s>，不随窗口大小、主题和横向缩放改变。",
+      "translation": "Open the image and inspect curves and labels. Output is fixed at <s id=\"0\">2400×1350 pixels, 300 dpi, white background with a black LPC line and optional gray FFT overlay</s>, independent of window size, theme, and horizontal zoom."
+    },
+    "1dd4060ed0fd7d66e627a1e774e44481012ca27920d3595f5b72b682bbf6dc4e": {
+      "source": "导出沿用该任务的图表字体。希望改用新的设置字体时，重新分析后再保存。",
+      "translation": "Export uses the task's chart font. To use a newly configured font, analyze again before saving."
+    },
+    "ccc00d86df27edd14f285bba412418c372c4fe7c1766c5924ef48b3af31476b1": {
+      "source": "实际独立 PNG：固定 −5 至 35 dB，完整 0–8000 Hz，2400×1350 像素、300 dpi。此任务未关联 TextGrid。",
+      "translation": "Actual standalone PNG: fixed −5 to 35 dB, full 0–8000 Hz, 2400×1350 pixels, 300 dpi. No TextGrid was associated with this task."
+    },
+    "4742c93f98e7a5cb83879dadfb874333f535aec3aad99759f74168a1b4e866be": {
+      "source": "白底黑线LPC导出图，固定负5至35dB，频率0至8000Hz，无标注标题。",
+      "translation": "Exported black LPC line on white, fixed −5 to 35 dB and 0 to 8000 Hz, without an annotation title."
+    },
+    "2746f58e11547818c09094d64c6c156d999bab3e00d40a610d2d4fe4d98916ad": {
+      "source": "保留默认 <s id=\"0\">−5 至 35 dB</s> 的 PNG，再把同一结果改为 <s id=\"1\">−30 至 35 dB</s>，换一个文件名保存，比较低幅度部分。",
+      "translation": "Keep a PNG at the default <s id=\"0\">−5 to 35 dB</s>, then change the same result to <s id=\"1\">−30 to 35 dB</s> and save under another name to compare lower-amplitude parts."
+    },
+    "48b0b17318f2ba4c348a52a5ffe06a787b103ea32157ab397b27246a0e7bd88d": {
+      "source": "再保存完整三份结果，原任务 PNG 和 JSON 中的纵轴仍为 <s id=\"0\">−5 至 35 dB</s>。两份单独 PNG 使用同一谱值，显示范围不同。",
+      "translation": "Save the complete three-file result as well. The original task PNG and JSON retain <s id=\"0\">−5 to 35 dB</s>. Both standalone PNGs use identical spectral values with different display ranges."
+    },
+    "2794b3f8d6551d09eb4a57c20e704edebc80d3b3f989f357f32efc1c5d3fb33b": {
+      "source": "同一谱值以 −30 至 35 dB 另存的 PNG，低幅度部分显示，频率仍为完整 0–8000 Hz。",
+      "translation": "PNG saved separately from the same spectral values at −30 to 35 dB, revealing low-amplitude parts and retaining the full 0–8000 Hz range."
+    },
+    "6a0fb7e5a23533b87a44f7be5348606e0e35e9797a1d667924bd7866297cb371": {
+      "source": "白底黑线独立PNG，固定负30至35dB，保留较低谱线，无标注标题。",
+      "translation": "Standalone black-line PNG on white, fixed −30 to 35 dB, showing lower spectral values without an annotation title."
+    },
+    "4846224bdf6c14b711d243af4ae990afa579adf5cab8315dc4c586aa09f38386": {
+      "source": "保存完整任务结果",
+      "translation": "Save complete task results"
+    },
+    "fce796bfeb04a6e0ae5e5755a47b069d2b120cf5cf3e46d5eff50307b894e570": {
+      "source": "点击右栏 <s id=\"0\">选择目录保存完整结果</s>，选择可写目录。此入口保存任务最初生成的 <s id=\"1\">PNG、WAV 和 JSON</s>，不采用后来编辑的显示轴。",
+      "translation": "Click <s id=\"0\">Choose directory to save complete results</s> on the right and select a writable directory. This saves the task's originally generated <s id=\"1\">PNG, WAV, and JSON</s>, ignoring subsequent display-axis edits."
+    },
+    "5c7cae04b442d894b65abee6c7b86b5ea49f7bf52ddae12c93c59e7e7ac9fd03": {
+      "source": "核对保存反馈与目录中的三份文件。同名不同内容会另名保留，已有相同内容可复用；取消窗口时保留待保存结果。",
+      "translation": "Check the save feedback and three files in the directory. Different content with the same name receives another name; identical existing content can be reused. Cancelling retains the pending results."
+    },
+    "a5029ef864cc95c91a398431025248e1ee55a09298561d8f83ca938957b2d1bf": {
+      "source": "网页入口用 <s id=\"0\">下载选区 WAV</s>、<s id=\"1\">下载参数与谱值 JSON</s> 逐份保存。PNG 下载使用当前纵轴，另记所用范围。",
+      "translation": "On the web, save files separately using <s id=\"0\">Download selection WAV</s> and <s id=\"1\">Download parameters and spectral values JSON</s>. PNG downloads use the current vertical axis; record the range separately."
+    },
+    "142e927deda0ae420cf31611ac877e7221097cc00d5aac8c529e9da9d39d95de": {
+      "source": "长期保留原 WAV、原 TextGrid 与完整结果。<s id=\"0\">只留图片会丢失准确边界、参数和谱值</s>。",
+      "translation": "Retain the original WAV, original TextGrid, and complete results long term. <s id=\"0\">Keeping images alone loses precise boundaries, parameters, and spectral values</s>."
+    },
+    "8d95709c3ac368152549732d762ee5c09e9c5f3254ddabfd6baeff342cd1e3fb": {
+      "source": "完整结果保存后，右栏确认已保存 3 个文件。单独 PNG 与完整结果保存入口并列。",
+      "translation": "After saving complete results, the right panel confirms 3 files saved. Standalone PNG and complete-result saving controls appear together."
+    },
+    "dada6de034dd406624229cbab104d491b1854bd59005643825b8e68a89457b57": {
+      "source": "右栏显示已保存3个结果文件，并列两个保存入口。",
+      "translation": "Right panel reporting 3 result files saved, with two saving controls side by side."
+    },
+    "1218d2b9ea0513b56f6aac66e311d5db7e5f064519c235739e0baf4b221ce4cb": {
+      "source": "复核实际分析边界",
+      "translation": "Verify actual analysis boundaries"
+    },
+    "429341c1b0612c454c505e5374c1466738c12bdadfb2de5bea71a46b8ff96582": {
+      "source": "实际选区包含起点样本，不包含终点样本。以下为 JSON 字段节选：选区样本数＝end_sample−start_sample；sample_count 是原文件帧数。JSON 用于复核，页面没有导入它重新配置的入口。",
+      "translation": "The actual selection includes the start sample and excludes the end sample. The following excerpt shows JSON fields: selection sample count = end_sample−start_sample; sample_count is the original file's frame count. JSON supports verification; the page has no import function to reconfigure from it."
+    },
+    "aec6bd5cbc00f9095b82230449a9686b9b54a5f4e2d8fc32e29a10646d7a1828": {
+      "source": "遇到提示时怎样恢复",
+      "translation": "Recovering from messages"
+    },
+    "b3490e134c1e7a8e8a5b9c4d52e6100f204b642a5091797475dfa633cd794200": {
+      "source": "文件、选区与计算提示",
+      "translation": "File, selection, and computation messages"
+    },
+    "e054d2d3d87e7bed6d9de39af4f0a94749feeaa401fc87c22bf8b5e6e9b29ce9": {
+      "source": "<s id=\"0\">超过 48,000 样本</s>：缩短底部选区。降低频率上限不能减少样本数，程序不会自动截短。",
+      "translation": "<s id=\"0\">More than 48,000 samples</s>: shorten the bottom selection. Lowering maximum frequency does not reduce sample count; the app does not truncate automatically."
+    },
+    "74cbf674b94d3221b31d1e42d69cd5968ebc2a43789ef3622fd4ff9188200959": {
+      "source": "<s id=\"0\">选区过短</s>：至少需阶数＋2 个样本。扩大有效片段，或按分析目的降低阶数；达到门槛仍需检查谱形。",
+      "translation": "<s id=\"0\">Selection too short</s>: at least order + 2 samples are required. Extend the valid segment or reduce order according to the analysis purpose; still inspect the spectral shape after meeting the threshold."
+    },
+    "85f493f47c6c1f4d9370dbd078622cb284cf1a44f591b11106d89a49b59a8c41": {
+      "source": "<s id=\"0\">时间、阶数或 dB 无效</s>：完成数值输入，确认终点大于起点、阶数为整数、dB 下限小于上限。",
+      "translation": "<s id=\"0\">Invalid time, order, or dB</s>: finish entering values; check that end exceeds start, order is an integer, and dB minimum is below maximum."
+    },
+    "a15c1eea0c8a309cfe5e53b4cf7df88c8974a39dbed9ffb5c624c1d58d11f4fc": {
+      "source": "<s id=\"0\">静音、无法求解或音频无效</s>：检查波形与试听，换有效片段。失败不会生成可用的零幅度谱。",
+      "translation": "<s id=\"0\">Silence, unsolvable input, or invalid audio</s>: inspect the waveform, listen, and choose a valid segment. A failure does not produce a usable zero-amplitude spectrum."
+    },
+    "6934bfb034fa95c86e21aa8dd9705c09862e0e9e56732a49b0b278e24256a6e1": {
+      "source": "<s id=\"0\">文件或预览超限</s>：另行准备符合输入限制的 WAV。只缩放视窗不能减少整个文件的读取量。",
+      "translation": "<s id=\"0\">File or preview limit exceeded</s>: prepare a WAV that meets the input limits. Zooming the view alone does not reduce the amount read from the whole file."
+    },
+    "1142656145b0f543418bbe0b232d83a4c205daba71a72fa370f874c279d0786d": {
+      "source": "<s id=\"0\">标注越界、无有效层或标签过长</s>：核对 WAV 裁剪版本、全部标注层与选区。合并标签最多 200 字符；不需要标注时选不关联。",
+      "translation": "<s id=\"0\">Annotation out of bounds, no valid tier, or label too long</s>: check the WAV's trimmed version, all annotation tiers, and selection. Combined labels are limited to 200 characters. Select None if annotations are unnecessary."
+    },
+    "87531e94ebc9d754234983040d88518e543f093dd3c3e7590aad1aed8ec84fae": {
+      "source": "<s id=\"0\">源文件失效或内容变化</s>：刷新并重新选择或上传。原任务重试仍需访问原输入。",
+      "translation": "<s id=\"0\">Source file invalid or changed</s>: refresh and reselect or upload. Retrying an original task still requires access to its original input."
+    },
+    "10f738d93b183fd7c0ea4cd4009cee7408a986c91945448cb50c3b704af80d93": {
+      "source": "<s id=\"0\">超时、环境或空间提示</s>：缩短选区后重新分析；环境不可用时重启工作台，空间不足时先检查项目可用空间。",
+      "translation": "<s id=\"0\">Timeout, environment, or space message</s>: shorten the selection and analyze again. Restart the workbench if the environment is unavailable; check available project space if storage is low."
+    },
+    "3eb918396881620057115a2557cc869ea054135fd7903d2bdea67f23cba211c5": {
+      "source": "示例：选区过短后继续",
+      "translation": "Example: continue after a too-short selection"
+    },
+    "714978a67f5adaee265388ad80c6f60c886649daa7edb9517cd7ed085ec79342": {
+      "source": "16000 Hz WAV、50 阶下，填写 <s id=\"0\">0.1–0.1001 s</s> 并点击 <s id=\"1\">开始分析</s>。该范围仅一个样本，页面提示至少需要 <s id=\"2\">52 个样本</s>。",
+      "translation": "With a 16000 Hz WAV and order 50, enter <s id=\"0\">0.1–0.1001 s</s> and click <s id=\"1\">Start analysis</s>. This range contains only one sample; the page reports a minimum of <s id=\"2\">52 samples</s>."
+    },
+    "6cc3d8093427daf869277127faaca62c7bbb439484604c0282f2c31f64caaa68": {
+      "source": "波形和输入保留，任务数量仍为 0，尚未生成结果。",
+      "translation": "The waveform and inputs remain, task count is still 0, and no result has been generated."
+    },
+    "4241ec6b8894a49a948c1f66b8d33fbee7a704d8ffc3438843a77603a7ef7100": {
+      "source": "50 阶下填写 0.1–0.1001 s，页面提示至少需 52 样本。WAV 和输入保留，任务数量为 0。",
+      "translation": "At order 50 with 0.1–0.1001 s entered, the page reports at least 52 samples required. WAV and inputs remain, with 0 tasks."
+    },
+    "684b405246853ab881cf9a4287f267f3376b70a822247465245db75c493eb5d8": {
+      "source": "选区过短提示至少52样本，底部0.1至0.1001秒可见，尚无任务结果。",
+      "translation": "Too-short selection message requiring at least 52 samples, with 0.1 to 0.1001 seconds visible at the bottom and no task result yet."
+    },
+    "1673a4e96a667ca929584567d63a4dd893938da6bde22a92932ef6c4ddc7167d": {
+      "source": "把终点改为 <s id=\"0\">0.4 s</s>，核对起点仍为 0.1 s，再点 <s id=\"1\">开始分析</s>。选区变为 4800 样本，完成后出现频谱与已完成任务。",
+      "translation": "Change end to <s id=\"0\">0.4 s</s>, confirm start remains 0.1 s, and click <s id=\"1\">Start analysis</s> again. The selection becomes 4800 samples; the spectrum and completed task appear when finished."
+    },
+    "dd09672caf8f6e501b855a0f18a9155877b9cf803c6cc9ded2877d7efd1ae3ec": {
+      "source": "预览、旧图与试听问题",
+      "translation": "Preview, old-figure, and playback issues"
+    },
+    "0074f211290e5fac18fc1e6fc615968690ebf236c24a6b7706921bc35af6bb78": {
+      "source": "<s id=\"0\">语谱图忙碌或失败</s>：等候或点击重试，按提示调整可见窗，也可关闭预览继续分析。",
+      "translation": "<s id=\"0\">Spectrogram busy or failed</s>: wait or click Retry, adjust the visible window as instructed, or turn off preview to continue analysis."
+    },
+    "19b21986cbcf4bdb533f4f1e95b998b0b1f0a2489feb57b125a1f9867c24175e": {
+      "source": "<s id=\"0\">旧图仍显示</s>：核对图下文件与时间。输入已改变时重新开始分析；纵轴调整只改变显示。",
+      "translation": "<s id=\"0\">Old figure still shown</s>: check the file and times below it. Start a new analysis after changing input; vertical-axis edits affect display only."
+    },
+    "703cc7d37d2973d271dc36d34ef681d0d6dd141b3330231ab02a13bd882ad6cd": {
+      "source": "<s id=\"0\">历史图与试听不对应</s>：原 WAV 已加载时，播放仍用当前原音频；未加载时用历史单声道片段。核对文件名和两种时间。",
+      "translation": "<s id=\"0\">Historical figure and playback do not match</s>: when an original WAV is loaded, playback uses the current original audio; otherwise it uses the historical mono segment. Check the filename and both time references."
+    },
+    "8b10f13afc0aea5eff940cbd05e294db088d6f3885dbb185080345ab63a7216f": {
+      "source": "<s id=\"0\">开始分析不可用</s>：先加载原 WAV。",
+      "translation": "<s id=\"0\">Start analysis unavailable</s>: load the original WAV first."
+    },
+    "500bb9bc0fd9c225ebedfb0b855d93c7a31cf40a8e7572be50a4362fe8e3d17f": {
+      "source": "<s id=\"0\">试听无声</s>：检查音量、所选声道和实际播放设备，再点击播放；计算状态请查看任务提示。",
+      "translation": "<s id=\"0\">No sound during playback</s>: check volume, selected channel, and physical output device, then click Play. Inspect task messages for computation status."
+    },
+    "0d7708e0c093d204773aa8e7cfe5960fe9db8bd32dd040a5f43935f9066c53cb": {
+      "source": "取消、重试与保存失败",
+      "translation": "Cancellation, retry, and save failures"
+    },
+    "58aae556954bb694343a6526f9d8c34759aea8a4146d88f950c2ad2745245a49": {
+      "source": "用 <s id=\"0\">取消分析</s> 或 <s id=\"1\">取消此任务</s> 请求停止，等待最终状态。正在取消时无需重复提交。",
+      "translation": "Request stopping with <s id=\"0\">Cancel analysis</s> or <s id=\"1\">Cancel this task</s> and wait for the final status. Do not resubmit repeatedly while cancellation is in progress."
+    },
+    "c5121062f36ff0a0d90248f1990ff41e5994ebf6d339242b84cfff0d0086d2dd": {
+      "source": "失败、中断或取消后，先处理具体错误。原设置仍适用时点 <s id=\"0\">重试此任务</s>；需改选区、参数、文件或字体时回到输入并 <s id=\"1\">开始分析</s>。",
+      "translation": "After failure, interruption, or cancellation, resolve the specific error first. If original settings still apply, click <s id=\"0\">Retry this task</s>. To change selection, parameters, file, or font, return to input and <s id=\"1\">Start analysis</s>."
+    },
+    "1771e27c2a4e15d4a5d01923d4708f6db3d0728de06a922074c24f7148b04868": {
+      "source": "结果读取失败可再次 <s id=\"0\">查看结果</s>。字体缺失时到工作台设置检查图表字体，重新分析。",
+      "translation": "On result-loading failure, click <s id=\"0\">View result</s> again. If a font is missing, check the chart font in workbench settings and reanalyze."
+    },
+    "0a5564faa8e6d94f57e73a9259dbea02a8060de792e2af0fd687c5d84ed3b290": {
+      "source": "保存取消或失败后，当前结果可继续保留。重选可写目录或重新保存 PNG，检查空间、权限和下载状态，直到文件可打开。",
+      "translation": "After cancelling or failing to save, the current result can remain available. Choose another writable directory or save PNG again; check space, permissions, and download status until the file opens."
+    },
+    "c360b8ac8f13a9485adb2ee9e77d9829d24eab027c826d60df97081841f17354": {
+      "source": "分析设置与方法来源",
+      "translation": "Analysis settings and method sources"
+    },
+    "243d23b3284b733a799bce88e92e57da558164e97e16c0fc6e7f2940040a0af0": {
+      "source": "本页固定的分析设置",
+      "translation": "Fixed analysis settings on this page"
+    },
+    "e1ed0aadc51630dc5ce33c112b2708fcec26bbb891569f8d9c312664172289f6": {
+      "source": "固定预加重系数为 <s id=\"0\">0.97</s>，整段选区采用 <s id=\"1\">Hamming 窗</s>，输出 <s id=\"2\">1024 点 LPC 谱包络</s>。上述设置在本页固定使用。",
+      "translation": "Pre-emphasis is fixed at <s id=\"0\">0.97</s>. The entire selection uses a <s id=\"1\">Hamming window</s> and produces a <s id=\"2\">1024-point LPC spectral envelope</s>. These settings are fixed on this page."
+    },
+    "8549a13ae902ebc027956d5cb46cb77cbf975b36894cb3eef386d84b1def1d04": {
+      "source": "解释结果时注意什么",
+      "translation": "Interpreting results"
+    },
+    "2361e4822ef61baac576828e7e54f29237904f77f9704e49051ccbab8ac92c75": {
+      "source": "LPC 计算来自项目 V2。Praat / Parselmouth 在本页负责语谱预览。默认参数是本项目设置；方法论文、代码来源及分发许可可在 <s id=\"0\">方法与引用</s> 分别查阅。",
+      "translation": "LPC computation comes from project V2. Praat / Parselmouth provides spectrogram preview on this page. Default parameters are project settings. Method papers, code sources, and distribution licenses can be consulted separately under <s id=\"0\">Methods and references</s>."
+    },
+    "61db3cf749965db0d92cb8c40a08d30935dc9f63b15d600e7bc28c871299207d": {
+      "source": "<s id=\"0\">谱峰用于观察 LPC 包络，F1、F2 等共振峰需结合其他分析核验</s>。谱值可随 JSON 保存。",
+      "translation": "<s id=\"0\">Spectral peaks describe the LPC envelope; formants such as F1 and F2 require corroboration with other analyses</s>. Spectral values can be saved with the JSON."
+    },
+    "e384699e4f41dce10c0b539a7def2904f28ca76dde2e4cd69c25bf6f89b872a9": {
+      "source": "纵轴 dB 未经声压校准。录音条件、选区与阶数会影响谱形；跨材料比较时记录这些条件，统一图轴只帮助观察。",
+      "translation": "The vertical dB axis is not sound-pressure calibrated. Recording conditions, selection, and order affect spectral shape. Record them for comparisons across materials; matching axes aids visual inspection only."
+    },
+    "c5df6cc2ba8f9b12ac916298fc6427f86aebab7c618681dd0e973d2c8a7dea55": {
+      "source": "多声道均值可能混入其他用途信号、直流分量或因相位相反而抵消。先检查原始声道，在分析声道中选择需要的输入后重新分析；试听声道和音量独立于分析选择。",
+      "translation": "A multichannel mean may mix signals intended for other purposes or DC components, or cancel opposite-phase signals. Inspect original channels first, select the required Analysis channel, and reanalyze. Playback channel and volume are independent of the analysis selection."
+    },
+    "53bdfce25863e5d16e963c3f014de1cfe8a1f8ddd5b6b50f5e3565f359940208": {
+      "source": "进一步阅读",
+      "translation": "Further reading"
+    },
+    "02235ac1118bcba26955f8fc019efab3c4598a0af8dc36cfa5cbe28b919bea03": {
+      "source": "方法背景见以下资料。具体分析以保存的音频、选区和参数为准。",
+      "translation": "The following sources provide method background. Use the saved audio, selection, and parameters as the reference for each analysis."
+    }
+  }
+}

@@ -1,3 +1,5 @@
+import {messageText,message as uiMessage,type MessageDescriptor} from '../i18n/index.ts';
+import {tr} from '../i18n/index.ts';
 export type PublicAccountFlow='register'|'forgot'|'verify'|'reset';
 
 /** Email tokens stay in the URL fragment until consumed by the page, never in a request URL. */
@@ -6,11 +8,12 @@ export function accountLink(fragment:string):{flow:'verify'|'reset';token:string
   return match ? {flow:match[1] as 'verify'|'reset',token:match[2]} : null;
 }
 
-export function accountError(code:string):string {
-  return ({email_rate_limited:'请求过于频繁，请15分钟后再试。',
-    email_link_invalid:'链接已失效或已使用，请重新申请邮件。',
-    registration_unavailable:'注册和密码找回暂不可用，请稍后再试。',
-    csrf_rejected:'页面验证已过期，请重新提交。',
-    invalid_request:'请检查邮箱、登录名和密码格式。'} as Record<string,string>)[code]
-    ?? '暂时无法连接账号服务，请稍后重试。';
+export function accountErrorMessage(code:string):MessageDescriptor {
+  return ({email_rate_limited:uiMessage('account.too_many_requests_try_again_in_15_minutes'),
+    email_link_invalid:uiMessage('account.this_link_has_expired_or_has_already_been_used'),
+    registration_unavailable:uiMessage('account.registration_and_password_recovery_are_temporarily_unavailable_try_again'),
+    csrf_rejected:uiMessage('account.page_verification_has_expired_submit_again'),
+    invalid_request:uiMessage('account.check_the_email_address_login_name_and_password_format')} as Record<string,MessageDescriptor>)[code]
+    ?? uiMessage('account.the_account_service_is_temporarily_unreachable_retry_later');
 }
+export function accountError(code:string):string {return messageText(accountErrorMessage(code));}

@@ -1,29 +1,30 @@
 <script setup lang="ts">
+import {tr} from '../../i18n/index.ts';
 import {vTimePrecision} from '../../design/time-precision.ts';
 import type {EggTaskConfig} from '../../platform/research.ts';
 const config=defineModel<EggTaskConfig>({required:true});
 defineProps<{autoDbEnabled?:boolean;autoDbEmpty?:boolean}>();
 const emit=defineEmits<{autoDb:[]}>();
 </script>
-<template><div class="egg-parameter-row" aria-label="EGG 检测参数">
-<section class="parameter-group"><div class="parameter-heading"><span>事件检测</span><label class="check" title="200 ms 局部窗口，100 ms 步长；峰阈值=max(0.01,0.6×局部绝对峰值)。只作用于峰，谷阈值保持手动。"><input v-model="config.auto_prominence" type="checkbox"/>峰自动</label></div>
+<template><div class="egg-parameter-row" :aria-label="tr('modules.egg-analysis.egg_detection_parameters')">
+<section class="parameter-group"><div class="parameter-heading"><span>{{tr('modules.egg-analysis.event_detection')}}</span><label class="check" :title="tr('modules.egg-analysis.200_ms_local_window_100_ms_step_peak_threshold')"><input v-model="config.auto_prominence" type="checkbox"/>{{tr('modules.egg-analysis.automatic_peaks')}}</label></div>
 <div class="egg-field-grid">
-<label title="相对周围基线的幅度差，非百分比。自动开启时此手动值不参与计算。">峰显著度<input v-model.number="config.peak_prominence" aria-label="EGG 峰显著度" type="number" min="0" max="10" step=".001" :disabled="config.auto_prominence"/></label>
-<label title="在负 EGG 上检测谷，相对基线的幅度差。0.01 为起始值，须观察误检与漏检。">谷显著度<input v-model.number="config.valley_prominence" aria-label="EGG 谷显著度" type="number" min="0" max="10" step=".001"/></label>
-<label>GCI<select v-model="config.gci_method"><option value="slope">斜率</option><option value="scale">尺度 0.25</option></select></label>
-<label>GOI<select v-model="config.goi_method"><option value="slope">斜率</option><option value="scale">尺度 0.25</option></select></label>
+<label :title="tr('modules.egg-analysis.amplitude_difference_from_the_surrounding_baseline_not_a_percentage')">{{tr('modules.egg-analysis.peak_prominence')}}<input v-model.number="config.peak_prominence" :aria-label="tr('modules.egg-analysis.egg_peak_prominence')" type="number" min="0" max="10" step=".001" :disabled="config.auto_prominence"/></label>
+<label :title="tr('modules.egg-analysis.detects_valleys_on_negative_egg_using_amplitude_difference_from')">{{tr('modules.egg-analysis.valley_prominence')}}<input v-model.number="config.valley_prominence" :aria-label="tr('modules.egg-analysis.egg_valley_prominence')" type="number" min="0" max="10" step=".001"/></label>
+<label>GCI<select v-model="config.gci_method"><option value="slope">{{tr('modules.egg-analysis.slope')}}</option><option value="scale">{{tr('modules.egg-analysis.scale_0_25')}}</option></select></label>
+<label>GOI<select v-model="config.goi_method"><option value="slope">{{tr('modules.egg-analysis.slope')}}</option><option value="scale">{{tr('modules.egg-analysis.scale_0_25')}}</option></select></label>
 </div></section>
-<section class="parameter-group"><div class="parameter-heading"><span>语谱图与 F0</span></div>
+<section class="parameter-group"><div class="parameter-heading"><span>{{tr('modules.egg-analysis.spectrogram_and_f0')}}</span></div>
 <div class="egg-field-grid egg-spectral-grid">
-<label>谱窗 ms<input v-time-precision="'ms'" v-model.number="config.spec_window_ms" type="number" min="5" max="50" step="1"/></label>
-<button class="auto-db" type="button" :aria-pressed="!!autoDbEnabled" :title="autoDbEnabled?'已开启：拖动或缩放后按当前选区 PSD 更新 50 dB 色阶。点击关闭，可手动调整。':'已关闭：保留手动 dB 范围。点击开启实时自动色阶。'" @click="emit('autoDb')">自动 dB</button>
-<label>dB 下限<input v-model.number="config.spec_vmin" aria-label="EGG dB 下限" type="number" min="-160" max="20" :disabled="autoDbEnabled"/></label>
-<label>dB 上限<input v-model.number="config.spec_vmax" aria-label="EGG dB 上限" type="number" min="-160" max="20" :disabled="autoDbEnabled"/></label>
-</div><small class="db-mode-note">{{autoDbEnabled?(autoDbEmpty?'自动已开启 · 静音区间保留当前色阶':'自动已开启 · 随可见区间更新'):'自动已关闭 · 手动色阶'}}</small>
-<div class="egg-field-grid egg-f0-grid" title="Praat AC 与 REAPER 共用搜索范围，GCI F0 不受此设置影响。">
-<label>F0 下限 Hz<input v-model.number="config.f0_min_hz" aria-label="EGG F0 下限 Hz" type="number" min="10" max="2000" step="1"/></label>
-<label>F0 上限 Hz<input v-model.number="config.f0_max_hz" aria-label="EGG F0 上限 Hz" type="number" min="10" max="2000" step="1"/></label>
-</div><div class="egg-checks"><label title="音频 Praat AC，使用上方 F0 上下限"><input v-model="config.keep_praat_f0" type="checkbox"/>Praat F0</label><label><input v-model="config.keep_gci_f0" type="checkbox"/>GCI F0</label><label title="音频 REAPER，使用上方 F0 上下限"><input v-model="config.keep_reaper_f0" type="checkbox"/>REAPER F0</label></div>
+<label>{{tr('modules.egg-analysis.spectral_window_ms')}}<input v-time-precision="'ms'" v-model.number="config.spec_window_ms" type="number" min="5" max="50" step="1"/></label>
+<button class="auto-db" type="button" :aria-pressed="!!autoDbEnabled" :title="autoDbEnabled?tr('modules.egg-analysis.enabled_after_panning_or_zooming_updates_a_50_db'):tr('modules.egg-analysis.disabled_retains_the_manual_db_range_click_to_enable')" @click="emit('autoDb')">{{tr('modules.egg-analysis.automatic_db')}}</button>
+<label>{{tr('modules.egg-analysis.minimum_db')}}<input v-model.number="config.spec_vmin" :aria-label="tr('modules.egg-analysis.egg_minimum_db')" type="number" min="-160" max="20" :disabled="autoDbEnabled"/></label>
+<label>{{tr('modules.egg-analysis.maximum_db')}}<input v-model.number="config.spec_vmax" :aria-label="tr('modules.egg-analysis.egg_maximum_db')" type="number" min="-160" max="20" :disabled="autoDbEnabled"/></label>
+</div><small class="db-mode-note">{{autoDbEnabled?(autoDbEmpty?tr('modules.egg-analysis.automatic_enabled_silent_intervals_retain_current_scale'):tr('modules.egg-analysis.automatic_enabled_updates_with_visible_interval')):tr('modules.egg-analysis.automatic_disabled_manual_scale')}}</small>
+<div class="egg-field-grid egg-f0-grid" :title="tr('modules.egg-analysis.praat_ac_and_reaper_share_the_search_range_gci')">
+<label>{{tr('modules.egg-analysis.minimum_f0_hz')}}<input v-model.number="config.f0_min_hz" :aria-label="tr('modules.egg-analysis.egg_minimum_f0_hz')" type="number" min="10" max="2000" step="1"/></label>
+<label>{{tr('modules.egg-analysis.maximum_f0_hz')}}<input v-model.number="config.f0_max_hz" :aria-label="tr('modules.egg-analysis.egg_maximum_f0_hz')" type="number" min="10" max="2000" step="1"/></label>
+</div><div class="egg-checks"><label :title="tr('modules.egg-analysis.audio_praat_ac_using_f0_bounds_above')"><input v-model="config.keep_praat_f0" type="checkbox"/>Praat F0</label><label><input v-model="config.keep_gci_f0" type="checkbox"/>GCI F0</label><label :title="tr('modules.egg-analysis.audio_reaper_using_f0_bounds_above')"><input v-model="config.keep_reaper_f0" type="checkbox"/>REAPER F0</label></div>
 </section></div></template>
 <style scoped>
 .auto-db[aria-pressed=true]{background:var(--selected);color:var(--accent);border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent);font-weight:600}.auto-db[aria-pressed=true]::after{content:'✓';font-size:0.785714rem}.auto-db{justify-self:end;min-height:28px;padding:3px 6px;font-size:var(--control-size,12px)}.db-mode-note{color:var(--muted);font-size:0.785714rem}

@@ -63,6 +63,7 @@ try{
  const runtime=process.env.PTB_PLAYWRIGHT??path.join(process.env.USERPROFILE,'.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright/index.mjs');
  const {chromium}=await import(pathToFileURL(runtime));
  context=await chromium.launchPersistentContext(path.join(scratch,'chrome-profile'),{executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe',headless:!preview,viewport:{width:1440,height:900},args:['--no-first-run','--mute-audio']});
+ await context.route('**/announcements/v1.json',route=>route.fulfill({json:{schema:'ptb-announcements/1',items:[]}}));
  page=context.pages()[0]||await context.newPage();page.on('pageerror',error=>errors.push(error.message));
  await page.addInitScript(()=>{localStorage.setItem('ptb.v3.theme',JSON.stringify('dark'));localStorage.setItem('ptb.v3.palette',JSON.stringify('everforest'));});
  const url=`http://127.0.0.1:${server.httpServer.address().port}/@fs/${path.join(scratch,'index.html').split(path.sep).join('/')}`;

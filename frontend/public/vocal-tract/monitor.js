@@ -1,3 +1,4 @@
+import {msg,tr,join,bindText,appendText,bindAttribute,textNode,setHTML,onLocaleChange,parameterLabel,uiError} from './i18n.mjs';
 import {canvasFont} from './fonts.js';
 import {tint} from './theme.js';
 import {zoomMonitor,monitorRange,monitorTimeLabel,waveformLimit} from './monitor-view.mjs';
@@ -8,7 +9,7 @@ export function setupMonitor(post,isClosed){
   let view={span:+$('monitorSeconds').value,lag:0};
   function resetZoom(){view={span:+$('monitorSeconds').value,lag:0};lastKey='';draw();poll();}
   for(const id of ['waveCanvas','spectrogramCanvas']){
-    const canvas=$(id);canvas.title='Ctrl＋滚轮缩放时间；双击恢复显示时长';
+    const canvas=$(id);bindAttribute(canvas,'title',()=>msg("modules.vocal-tract-frame.text.ctrl_wheel_zooms_time_double_click_restores_display_duration_185"));
     canvas.addEventListener('wheel',e=>{if(!e.ctrlKey)return;e.preventDefault();e.stopPropagation();
       const rect=canvas.getBoundingClientRect(),delta=e.deltaY*(e.deltaMode===1?16:e.deltaMode===2?rect.height:1);
       view=zoomMonitor(view,delta,(e.clientX-rect.left-36)/(rect.width-46));draw();lastKey='';poll();
@@ -22,7 +23,7 @@ export function setupMonitor(post,isClosed){
   $('monitorCollapse').onclick=()=>select('acoustics');
   $('monitorExpand').onclick=()=>{dialog.querySelector('.monitor-dialog-body').append(panel);dialog.showModal();draw();};
   $('monitorClose').onclick=()=>dialog.close();dialog.addEventListener('close',()=>{home.append(panel);draw();});
-  $('monitorStop').onclick=async()=>{if(!$('stopFrames').disabled)$('stopFrames').click();try{await post('deactivate');}catch(e){$('monitorStatus').textContent='停止失败：'+e.message;}};
+  $('monitorStop').onclick=async()=>{if(!$('stopFrames').disabled)$('stopFrames').click();try{await post('deactivate');}catch(e){bindText($('monitorStatus'),()=>join(()=>msg("modules.vocal-tract-frame.text.stop_failed_165"),()=>e.message));}};
   $('monitorSeconds').onchange=resetZoom;
   $('monitorAmplitude').onchange=draw;
   for(const id of ['monitorWindow','monitorHop'])$(id).onchange=()=>{lastKey='';poll();};
@@ -31,7 +32,7 @@ export function setupMonitor(post,isClosed){
     if(!visible||panel.clientWidth<=0||panel.clientHeight<=0)return;
     const wave=context('waveCanvas'),spec=context('spectrogramCanvas');if(!wave.w)return;
     const {seconds,start,end}=monitorRange(view,latest?.end||0);
-    $('waveLabel').textContent='波形 · 振幅 · '+(seconds<1?(seconds*1000).toFixed(seconds<.01?1:0)+' ms':seconds.toFixed(2)+' s');
+    bindText($('waveLabel'),()=>join(()=>msg("modules.vocal-tract-frame.text.waveform_amplitude_186"),()=>(seconds<1?(seconds*1000).toFixed(seconds<.01?1:0)+' ms':seconds.toFixed(2)+' s')));
     for(const id of ['waveCanvas','spectrogramCanvas'])Object.assign($(id).dataset,{viewStart:String(start),viewEnd:String(end),viewSeconds:String(seconds)});
     for(const {c,w,h} of [wave,spec]){
       c.fillStyle=tint('#fffef9');c.fillRect(0,0,w,h);c.fillStyle=tint('#7b877a');
@@ -62,7 +63,7 @@ export function setupMonitor(post,isClosed){
       const x=36+(latest.end-latest.duration+latest.frame_offset-latest.hop_seconds/2-start)/seconds*(s.w-46);
       const topFrequency=rows*latest.frequency_step,plotHeight=s.h-30;
       s.c.save();s.c.beginPath();s.c.rect(36,8,s.w-46,plotHeight);s.c.clip();s.c.imageSmoothingEnabled=false;s.c.drawImage(buffer,x,8+plotHeight*(1-topFrequency/6000),cols*latest.hop_seconds/seconds*(s.w-46),plotHeight*topFrequency/6000);s.c.restore();
-    }else{s.c.fillStyle=tint('#839080');s.c.fillText('点击发声后显示实际输出音频',45,s.h/2);}
+    }else{s.c.fillStyle=tint('#839080');s.c.fillText(msg("modules.vocal-tract-frame.text.start_phonation_to_display_actual_output_audio_187"),45,s.h/2);}
   }
   async function poll(){if(pending||!visible||isClosed()||document.hidden||panel.clientWidth<=0||panel.clientHeight<=0)return;pending=true;
     try{const requested={...view},width=Math.max(64,Math.min(2048,Math.ceil($('waveCanvas').clientWidth-46)));
@@ -72,10 +73,11 @@ export function setupMonitor(post,isClosed){
       if(requested.span!==view.span||requested.lag!==view.lag)return;
       requestKey=keyBefore;
       const key=[s.generation,s.end,s.seconds,s.window_ms,s.hop_seconds,requested.span,requested.lag,width].join(':');latest=s;
-      $('monitorStatus').textContent=`48 kHz 输出 · 分析窗 ${s.window_ms} ms（1/T ≈ ${Math.round(s.resolution_hz)} Hz）· 实际步长 ${(s.hop_seconds*1000).toFixed(1)} ms · 90 dB`;
+      bindText($('monitorStatus'),()=>msg("modules.vocal-tract-frame.text.48_khz_output_window_value_ms_1_t_value_hz_actual_step_value_ms_90_db_188",{v0:()=>s.window_ms,v1:()=>Math.round(s.resolution_hz),v2:()=>(s.hop_seconds*1000).toFixed(1)}));
       if(key!==lastKey){lastKey=key;draw();}
-    }catch(e){$('monitorStatus').textContent='分析未更新：'+e.message;}finally{pending=false;}
+    }catch(e){bindText($('monitorStatus'),()=>join(()=>msg("modules.vocal-tract-frame.text.analysis_not_updated_189"),()=>e.message));}finally{pending=false;}
   }
   document.addEventListener('m10-theme',draw);
+  onLocaleChange(()=>{if(!latest?.spectrogram?.length)draw();}); // Empty-state label only; retain cached spectra.
   new ResizeObserver(draw).observe(panel);setInterval(poll,180);select('acoustics');
 }

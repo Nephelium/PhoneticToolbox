@@ -1,0 +1,4 @@
+{
+  "platform.recording.recovered_partial": "異常終了後の復元です。ディスクに書き込み済みでハッシュ検証に合格した先頭部分のみを含むため、末尾が欠けている可能性があります。",
+  "platform.recording.noise_nonstationary": "ノイズ区間の統計量の変動が大きいため、音声または非定常ノイズが含まれている可能性があります。試聴して確認してください。"
+}

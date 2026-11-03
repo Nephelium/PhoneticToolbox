@@ -1,3 +1,5 @@
+import {uiError as displayError,uiMessage as displayMessage} from '../module-localization.ts';
+import {tr} from '../../i18n/index.ts';
 import type {EditorSnapshot,SymbolEntry} from './types.ts';
 import {graphemes,safeSelection} from './unicode.ts';
 export function insertSymbol(current:EditorSnapshot,entry:Pick<SymbolEntry,'insertText'|'insertionMode'|'prefix'|'suffix'>):EditorSnapshot {
@@ -7,7 +9,7 @@ export function insertSymbol(current:EditorSnapshot,entry:Pick<SymbolEntry,'inse
     const before=entry.prefix??'',after=entry.suffix??'';
     value=before+selected+after;caret=start+before.length;selectionEnd=caret+selected.length;
   }else if(entry.insertionMode==='bridge'&&selected){
-    const units=graphemes(selected);if(units.length!==2)throw Error('连线操作需要恰好选中两个字素（字母及其附加符号）。');
+    const units=graphemes(selected);if(units.length!==2)throw displayError(displayMessage('modules.ipa-plus.text.f3d34d168249'));
     value=units[0]!.text+entry.insertText+units[1]!.text;caret=start+value.length;selectionEnd=caret;
   }
   return {text:current.text.slice(0,start)+value+current.text.slice(end),start:caret,end:selectionEnd};

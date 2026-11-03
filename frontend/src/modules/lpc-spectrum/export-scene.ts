@@ -1,3 +1,4 @@
+import {tr} from '../../i18n/index.ts';
 import type {LpcResult} from './state.ts';
 import {quoteFamily} from '../../design/fonts.ts';
 import {plotTickLabel} from '../../platform/plotTicks.ts';
@@ -27,7 +28,7 @@ export function spectrumSvg(result:LpcResult,y:[number,number],showSpectrum=fals
     <rect width="100%" height="100%" fill="white"/>
     <desc>LPC spectrum; y-axis ${y[0]} to ${y[1]} dB; task ${escape(result.input_sha256)}; time ${result.selection.start_s} to ${result.selection.end_s} s</desc>
     <defs><clipPath id="lpc-export-clip"><rect x="${left}" y="${top}" width="${pw}" height="${ph}"/></clipPath></defs>
-    ${fft?text(left,42,'LPC（黑） · FFT（灰，预加重，峰值对齐）','start'):''}
+    ${fft?text(left,42,tr("modules.lpc-spectrum.lpc_black_fft_grey_pre_emphasized_peak_aligned"),'start'):''}
     ${ticks}${fftPath?`<path d="${fftPath}" fill="none" stroke="#888" stroke-width="0.7" clip-path="url(#lpc-export-clip)"/>`:''}<path d="${path}" fill="none" stroke="black" stroke-width="1" clip-path="url(#lpc-export-clip)"/>
     <rect x="${left}" y="${top}" width="${pw}" height="${ph}" fill="none" stroke="black"/>
     ${label}${text(left+pw/2,height-9,'Frequency (Hz)')}${text(0,0,'Amplitude (dB)','middle',`transform="translate(17 ${top+ph/2}) rotate(-90)"`)}

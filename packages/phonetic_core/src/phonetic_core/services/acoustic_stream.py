@@ -20,7 +20,7 @@ from ..egg._legacy import LegacyCalculations
 from ..egg.model import EGGAnalysisResult
 from .acoustic import analyze_audio
 
-REVISION = 'acoustic-bounded/1'
+REVISION = 'acoustic-bounded/2'
 
 
 def layout(frames, rate, config, block_seconds=20.):

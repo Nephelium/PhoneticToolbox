@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import {plotGroupTitle} from './state.ts';
+import {uiError,uiErrorMessage} from '../module-localization.ts';
+import {uiMessage,joinMessages} from '../module-localization.ts';
+import {tr,messageRef} from '../../i18n/index.ts';
 import {computed,ref,onMounted,onUnmounted,useId} from 'vue';
 import {preferences,fontPayload} from '../../state/fonts.ts';
 import type {ParameterTable} from '../../platform/research.ts';
@@ -11,7 +15,7 @@ const emit=defineEmits<{activate:[]}>();
 const clipId='m02-plot-'+useId().replace(/[^a-zA-Z0-9_-]/g,'');
 const exporting=ref(false);
 const format=ref<'png'|'svg'>('png');
-const svg=ref<SVGSVGElement>(),surface=ref<HTMLElement>(),error=ref(''),measuredWidth=ref(600);
+const svg=ref<SVGSVGElement>(),surface=ref<HTMLElement>(),error=messageRef(''),measuredWidth=ref(600);
 const viewportHeight=ref(window.innerHeight);const updateHeight=()=>{viewportHeight.value=window.innerHeight;};
 const fontScale=computed(()=>preferences.value.figure.size/12);
 const chartWidth=computed(()=>Math.max(Math.ceil(340*fontScale.value),measuredWidth.value));
@@ -30,7 +34,7 @@ const legend=computed(()=>{
  measure.font=`${13*s}px ${fontPayload.value?.figure??'Times New Roman, SimSun, serif'}`;
  const maxText=Math.max(25,Math.min(300*s,plotWidth.value-66*s));
  const entries=chart.value.curves.map(curve=>{
-  const text=curve.name+(chart.value.dual?(curve.axis==='right'?' [右]':' [左]'):'');
+  const text=curve.name+(chart.value.dual?(curve.axis==='right'?tr('modules.parameter-display.right'):tr('modules.parameter-display.left')):'');
   const lines:string[]=[];let line='';
   for(const character of text){if(line&&measure.measureText(line+character).width>maxText){lines.push(line);line='';}line+=character;}if(line)lines.push(line);
   return {curve,lines};
@@ -70,25 +74,26 @@ function move(event:PointerEvent){if(!drag||drag.id!==event.pointerId)return;if(
 function wheel(event:WheelEvent){if(!event.ctrlKey||!event.deltaY)return;event.preventDefault();const rect=svg.value!.getBoundingClientRect();const fraction=Math.max(0,Math.min(1,((event.clientX-rect.left)/rect.width*chartWidth.value-plotLeft.value)/plotWidth.value));const anchor=start.value+fraction*span.value;props.wave.zoom=Math.max(1,Math.min(Math.max(1,duration.value/.01),props.wave.zoom*(event.deltaY<0?1.25:.8)));props.wave.offset=Math.max(0,Math.min(duration.value-duration.value/props.wave.zoom,anchor-fraction*duration.value/props.wave.zoom));}
 async function save(){
  if(exporting.value||props.pending)return;exporting.value=true;error.value='';
- try{if(format.value==='png'){downloadImage(await currentFigurePng(svg.value!,props.group.title),props.group.title+'.png');return;}
+ try{if(format.value==='png'){downloadImage(await currentFigurePng(svg.value!,plotGroupTitle(props.group)),props.group.title+'.png');return;}
   const clone=styledSvg(svg.value!);clone.style.width=chartWidth.value+'px';clone.style.height=chartHeight.value+'px';clone.setAttribute('width',String(chartWidth.value));clone.setAttribute('height',String(chartHeight.value));
   downloadImage(new Blob([await editableSvg(clone)],{type:'image/svg+xml;charset=utf-8'}),props.group.title+'.svg');
- }catch(e){error.value=e instanceof Error?e.message:'图片导出失败，请重试。';}finally{exporting.value=false;}
+ }catch(e){error.value=e instanceof Error?uiErrorMessage(e):uiMessage('modules.parameter-display.image_export_failed_retry');}finally{exporting.value=false;}
 }
 async function saveWhole(){
  if(exporting.value||props.pending)return;error.value='';exporting.value=true;
- try{const waveform=props.waveform();if(!svg.value||!waveform)throw Error('波形尚未就绪。');
-  const name=(props.wave.asset?.name??'参数').replace(/\.wav$/i,'')+'-'+props.group.title;
-  const blob=await wholeFigurePng({chart:svg.value,waveform,title:name,start:start.value,end:start.value+span.value,plotLeft:plotLeft.value,plotRight:plotRight.value});
+ try{const waveform=props.waveform();if(!svg.value||!waveform)throw uiError(uiMessage('modules.parameter-display.waveform_is_not_ready'));
+  const audioName=(props.wave.asset?.name??tr('modules.parameter-display.parameters_66')).replace(/\.wav$/i,'');
+  const name=audioName+'-'+props.group.title;
+  const blob=await wholeFigurePng({chart:svg.value,waveform,title:audioName+'-'+plotGroupTitle(props.group),start:start.value,end:start.value+span.value,plotLeft:plotLeft.value,plotRight:plotRight.value});
   downloadImage(blob,name+'.png');
- }catch(e){error.value=e instanceof Error?e.message:'整幅图片导出失败，请重试。';}finally{exporting.value=false;}
+ }catch(e){error.value=e instanceof Error?uiErrorMessage(e):uiMessage('modules.parameter-display.full_image_export_failed_retry');}finally{exporting.value=false;}
 }
 </script>
-<template><section class="parameter-figure" :class="{'is-active':active}" :data-group-id="group.id" :aria-label="group.title" :aria-busy="!!pending" @pointerdown.capture="emit('activate')" @focusin="emit('activate')">
-<header class="section-title"><div class="figure-heading"><h3><button class="figure-title" :aria-label="'选择'+group.title" :aria-pressed="!!active" @click="emit('activate')">{{group.title}}<span v-if="active" class="active-indicator">当前</span></button></h3><small>{{pending?'正在读取当前时间窗…':chart.curves.length+' 条曲线'+(annotations.length?' · '+annotations.length+' 层标注':'')}}<template v-if="chart.curves.length"> · {{chart.dual?'双纵轴':'共用纵轴'}}</template></small></div><div class="figure-actions"><slot/><select v-model="format" :aria-label="group.title+'图片格式'" class="image-format"><option value="png">PNG</option><option value="svg">SVG</option></select><button @click="save" :disabled="!group.parameters.length||exporting||pending" :title="'仅保存参数图 '+format.toUpperCase()">保存当前图</button><button @click="saveWhole" :disabled="!group.parameters.length||exporting||pending" title="白底 300 dpi，包含波形、已开启语谱图及此参数图">{{exporting?'正在生成 PNG…':'保存整幅 PNG'}}</button></div></header>
+<template><section class="parameter-figure" :class="{'is-active':active}" :data-group-id="group.id" :aria-label="plotGroupTitle(group)" :aria-busy="!!pending" @pointerdown.capture="emit('activate')" @focusin="emit('activate')">
+<header class="section-title"><div class="figure-heading"><h3><button class="figure-title" :aria-label="tr('modules.parameter-display.select')+plotGroupTitle(group)" :aria-pressed="!!active" @click="emit('activate')">{{plotGroupTitle(group)}}<span v-if="active" class="active-indicator">{{tr('modules.parameter-display.current')}}</span></button></h3><small>{{pending?tr('modules.parameter-display.reading_current_time_window'):chart.curves.length+tr('modules.parameter-display.curves')+(annotations.length?' · '+annotations.length+tr('modules.parameter-display.annotation_tiers'):'')}}<template v-if="chart.curves.length"> · {{chart.dual?tr('modules.parameter-display.dual_vertical_axes'):tr('modules.parameter-display.shared_vertical_axis')}}</template></small></div><div class="figure-actions"><slot/><select v-model="format" :aria-label="plotGroupTitle(group)+tr('modules.parameter-display.image_format')" class="image-format"><option value="png">PNG</option><option value="svg">SVG</option></select><button @click="save" :disabled="!group.parameters.length||exporting||pending" :title="tr('modules.parameter-display.save_parameter_plot_only')+format.toUpperCase()">{{tr('modules.parameter-display.save_current_plot')}}</button><button @click="saveWhole" :disabled="!group.parameters.length||exporting||pending" :title="tr('modules.parameter-display.white_background_300_dpi_including_waveform_enabled_spectrogram_and')">{{exporting?tr('modules.parameter-display.generating_png'):tr('modules.parameter-display.save_full_png')}}</button></div></header>
 <p v-if="error" role="alert">{{error}}</p><div ref="surface" class="plot-surface">
-<div v-if="!group.parameters.length" class="empty-plot"><strong>在右侧勾选参数</strong><p>{{active?'勾选后，曲线立即显示在这里。':'点击此图窗，再在右侧勾选要显示的参数。'}}</p></div>
-<svg v-else ref="svg" class="parameter-chart" tabindex="0" :viewBox="'0 0 '+chartWidth+' '+chartHeight" :data-plot-left="plotLeft" :data-plot-right="plotRight" :style="{height:chartHeight+'px',minWidth:Math.ceil(340*fontScale)+'px'}" role="img" :aria-label="group.title+'叠加参数曲线'" @pointerdown="down" @pointermove="move" @pointerup="move($event);drag=null" @pointercancel="drag=null" @wheel="wheel" @dblclick="wave.zoom=1;wave.offset=0">
+<div v-if="!group.parameters.length" class="empty-plot"><strong>{{tr('modules.parameter-display.select_parameters_on_the_right')}}</strong><p>{{active?tr('modules.parameter-display.selected_curves_appear_here_immediately'):tr('modules.parameter-display.click_this_plot_then_select_parameters_on_the_right')}}</p></div>
+<svg v-else ref="svg" class="parameter-chart" tabindex="0" :viewBox="'0 0 '+chartWidth+' '+chartHeight" :data-plot-left="plotLeft" :data-plot-right="plotRight" :style="{height:chartHeight+'px',minWidth:Math.ceil(340*fontScale)+'px'}" role="img" :aria-label="plotGroupTitle(group)+tr('modules.parameter-display.overlay_parameter_curves')" @pointerdown="down" @pointermove="move" @pointerup="move($event);drag=null" @pointercancel="drag=null" @wheel="wheel" @dblclick="wave.zoom=1;wave.offset=0">
 <rect :width="chartWidth" :height="chartHeight" fill="var(--panel)"/>
 <defs><clipPath :id="clipId"><rect :x="plotLeft" :y="plotTop" :width="plotWidth" :height="plotHeight"/></clipPath></defs>
 <g class="shared-plot-area" :data-plot-top="plotTop" :data-plot-bottom="plotBottom">
@@ -100,17 +105,17 @@ async function saveWhole(){
 <text :x="plotLeft+(i-1)*plotWidth/4" :y="plotBottom+22*fontScale" text-anchor="middle" font-size="12" fill="var(--muted)">{{(start+(i-1)*span/4).toFixed(3)}}</text>
 </g>
 <path :d="'M'+plotLeft+' '+plotTop+'V'+plotBottom+'H'+plotRight+(chart.dual?'V'+plotTop:'')" stroke="var(--muted)" stroke-width=".8" fill="none" vector-effect="non-scaling-stroke"/>
-<text :x="plotLeft" :y="plotTop-11*fontScale" fill="var(--muted)" font-size="12">{{chart.dual?'左轴 · 原数值':'原数值'}}</text>
-<text v-if="chart.dual" :x="plotRight" :y="plotTop-11*fontScale" text-anchor="end" fill="var(--muted)" font-size="12">右轴 · 原数值</text>
-<g :clip-path="'url(#'+clipId+')'"><path v-for="curve in chart.curves" :key="curve.name" class="parameter-curve" :data-parameter="curve.name" :data-axis="curve.axis" :data-scale-min="scale(curve).min" :data-scale-max="scale(curve).max" :d="curvePaths.get(curve.name)" :stroke="styleFor(curve.name).color" :stroke-dasharray="curve.axis==='right'?'7 3':styleFor(curve.name).dash" stroke-width="1.65" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke" fill="none"><title>{{curve.name}} · {{curve.axis==='left'?'左轴':'右轴'}}</title></path></g>
+<text :x="plotLeft" :y="plotTop-11*fontScale" fill="var(--muted)" font-size="12">{{chart.dual?tr('modules.parameter-display.left_axis_original_values'):tr('modules.parameter-display.original_values')}}</text>
+<text v-if="chart.dual" :x="plotRight" :y="plotTop-11*fontScale" text-anchor="end" fill="var(--muted)" font-size="12">{{tr('modules.parameter-display.right_axis_original_values')}}</text>
+<g :clip-path="'url(#'+clipId+')'"><path v-for="curve in chart.curves" :key="curve.name" class="parameter-curve" :data-parameter="curve.name" :data-axis="curve.axis" :data-scale-min="scale(curve).min" :data-scale-max="scale(curve).max" :d="curvePaths.get(curve.name)" :stroke="styleFor(curve.name).color" :stroke-dasharray="curve.axis==='right'?'7 3':styleFor(curve.name).dash" stroke-width="1.65" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke" fill="none"><title>{{curve.name}} · {{curve.axis==='left'?tr('modules.parameter-display.left_axis'):tr('modules.parameter-display.right_axis')}}</title></path></g>
 <g v-for="(tier,index) in annotations" :key="tier.name"><g v-for="run in tier.runs" :key="run.start"><path :d="'M'+x(run.start)+' '+((index*23+5)*fontScale)+'V'+plotBottom" :stroke="styleFor(tier.name).color" stroke-dasharray="2 4" opacity=".65"/><text class="ipa-text" v-if="printable(run.text)" :x="x((run.start+run.end)/2)" :y="(index*23+16)*fontScale" text-anchor="middle" font-size="13" fill="var(--text)"><title>{{tier.name}}</title>{{run.text}}</text></g></g>
 </g>
-<text :x="plotLeft+plotWidth/2" :y="plotBottom+44*fontScale" text-anchor="middle" fill="var(--text)" font-size="14">时间（秒）</text>
+<text :x="plotLeft+plotWidth/2" :y="plotBottom+44*fontScale" text-anchor="middle" fill="var(--text)" font-size="14">{{tr('modules.parameter-display.time_seconds')}}</text>
 <g v-if="legend.rows.length" class="plot-legend" :data-placement="legend.inside?'inside':'above'" :transform="'translate('+legendPosition.x+' '+legendPosition.y+')'" :data-width="legend.width" :data-height="legend.height">
 <rect :width="legend.width" :height="legend.height" fill="var(--panel)" opacity=".94"/>
 <g v-for="row in legend.rows" :key="'legend-'+row.curve.name" class="curve-legend" :data-parameter="row.curve.name" :transform="'translate('+(8*fontScale)+' '+(row.y+13*fontScale)+')'"><title>{{row.curve.name}}</title><path :d="'M0 '+(-4*fontScale)+'H'+(24*fontScale)" :stroke="styleFor(row.curve.name).color" :stroke-dasharray="row.curve.axis==='right'?'7 3':styleFor(row.curve.name).dash" stroke-width="1.65" vector-effect="non-scaling-stroke"/><text v-for="(line,index) in row.lines" :key="index" :x="32*fontScale" :y="index*legend.lineHeight" font-size="13" fill="var(--text)">{{line}}</text></g>
 </g>
-</svg></div><p v-if="group.parameters.length" class="plot-help">拖动选区 · Shift＋拖动平移 · Ctrl＋滚轮缩放时间轴 · 双击全长<span v-if="chart.dual">。双轴沿用 v2 的量级判定；图例标明所属纵轴，原数值不归一化。</span></p></section></template>
+</svg></div><p v-if="group.parameters.length" class="plot-help">{{tr('modules.parameter-display.drag_to_select_shift_drag_to_pan_ctrl_wheel')}}<span v-if="chart.dual">{{tr('modules.parameter-display.dual_axes_follow_v2_magnitude_rules_the_legend_identifies')}}</span></p></section></template>
 <style scoped>
 .image-format{width:auto;max-width:90px}
 .parameter-figure{--m02-curve-1:#3567a8;--m02-curve-2:#b86b32;--m02-curve-3:#26877f;--m02-curve-4:#8965aa;--m02-curve-5:#b65576;--m02-curve-6:#73833e;--m02-curve-7:#64748b;--m02-curve-8:#357e96;transition:border-color .15s}

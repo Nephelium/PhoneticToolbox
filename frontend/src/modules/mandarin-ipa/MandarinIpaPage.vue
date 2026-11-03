@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import {uiErrorMessage as displayErrorValue} from '../module-localization.ts';
+import {localized} from '../module-localization.ts';
+import {tr,message as localizedMessage,messageRef} from '../../i18n/index.ts';
 import {useWebSettings,settingsFields} from '../../state/web-settings.ts';
 import AppIcon from '../../components/AppIcon.vue';
 import {vResizablePanels} from '../../layout/resizablePanels.ts';
@@ -20,7 +23,7 @@ import {resultMetrics} from './layout.ts';
 import CustomTableImport from './CustomTableImport.vue';
 import TableToneDialog from './TableToneDialog.vue';
 import type {ToneSettings} from './tones.ts';
-import {addTable,replaceTable,removeTable,CustomTableStore,emptyLibrary,type CustomTable} from './custom-tables.ts';
+import {addTable,replaceTable,removeTable,tableErrorNeedsReload,CustomTableStore,emptyLibrary,type CustomTable} from './custom-tables.ts';
 import type {ConversionToken} from './state.ts';
 
 const props=withDefaults(defineProps<{stateKey?:string}>(),{stateKey:'M13'});
@@ -30,9 +33,9 @@ const draftKey=computed(()=>'mandarin-ipa.v1.'+props.stateKey);
 const saved=ref(host.projects.read<unknown>(draftKey.value,null)),draft=reactive(createPageDraft(saved.value));
 const canRestore=computed(()=>!!restoreDraft(saved.value).text.trim());
 const installedFonts=ref<string[]>([]);
-const tableStore=new CustomTableStore(props.stateKey),library=ref(emptyLibrary()),tablesReady=ref(false),tableBusy=ref(false),importOpen=ref(false),tableError=ref(''),importError=ref('');
-const replaceTarget=ref<CustomTable>(),deleteTarget=ref<CustomTable>(),deleteError=ref(''),tableNotice=ref('');
-const toneTarget=ref<CustomTable>(),toneError=ref('');
+const tableStore=new CustomTableStore(props.stateKey),library=ref(emptyLibrary()),tablesReady=ref(false),tableBusy=ref(false),importOpen=ref(false),tableError=messageRef(),importError=messageRef();
+const replaceTarget=ref<CustomTable>(),deleteTarget=ref<CustomTable>(),deleteError=messageRef(),tableNotice=messageRef();
+const toneTarget=ref<CustomTable>(),toneError=messageRef();
 const customTable=computed(()=>library.value.tables.find(table=>table.id===draft.standard));
 const standardName=computed(()=>customTable.value?.name??draft.standard);
 let restoringTableSelection=false;
@@ -42,10 +45,10 @@ async function loadTables(){
     const previous=draft.standard,revision=draft.tableRevision;library.value=await tableStore.load();tablesReady.value=true;restoringTableSelection=true;
     if(library.value.selected)draft.standard=library.value.selected;
     const table=library.value.tables.find(t=>t.id===draft.standard);
-    if(table){draft.tableRevision=table.revision??1;if(previous===table.id&&(revision??1)!==draft.tableRevision){draft.selectedVariants={};if(draft.text)dirty.value=true;tableNotice.value='字表已在另一窗口替换，请重新核对读音。';}}
-    else if(draft.standard.startsWith('custom:')){draft.standard='Standard Chinese (Beijing)';draft.selectedVariants={};draft.erhuaPairs={};delete draft.tableRevision;if(draft.text)dirty.value=true;tableNotice.value='当前字表已移除，已切回内置标准。';}
+    if(table){draft.tableRevision=table.revision??1;if(previous===table.id&&(revision??1)!==draft.tableRevision){draft.selectedVariants={};if(draft.text)dirty.value=true;tableNotice.value=localizedMessage('modules.mandarin-ipa.text.6574a1e63fa4');}}
+    else if(draft.standard.startsWith('custom:')){draft.standard='Standard Chinese (Beijing)';draft.selectedVariants={};draft.erhuaPairs={};delete draft.tableRevision;if(draft.text)dirty.value=true;tableNotice.value=localizedMessage('modules.mandarin-ipa.text.05e853f4ab5c');}
   }
-  catch(cause){tableError.value=(cause as Error).message;}
+  catch(cause){tableError.value=displayErrorValue(cause);}
   finally{restoringTableSelection=false;tableBusy.value=false;}
 }
 onMounted(loadTables);
@@ -56,35 +59,37 @@ async function selectStandard(value:string){
   tableBusy.value=true;tableError.value='';
   const next={...library.value,selected:library.value.tables.find(table=>table.id===value)?.id??null};
   try{await tableStore.save(next);const custom=draft.standard.startsWith('custom:')||value.startsWith('custom:');library.value=next;draft.standard=value as typeof draft.standard;const table=next.tables.find(t=>t.id===value);if(table)draft.tableRevision=table.revision??1;else delete draft.tableRevision;if(custom){draft.selectedVariants={};draft.erhuaPairs={};}tableNotice.value='';}
-  catch(cause){tableError.value=(cause as Error).message;}
+  catch(cause){tableError.value=displayErrorValue(cause);}
   finally{tableBusy.value=false;}
 }
 async function saveTable(table:Pick<CustomTable,'name'|'kind'|'rows'|'tones'>){
   tableBusy.value=true;importError.value='';
-  try{const next=replaceTarget.value?replaceTable(library.value,replaceTarget.value.id,table):addTable(library.value,{...table,id:`custom:${crypto.randomUUID()}`});await tableStore.save(next);library.value=next;draft.standard=next.selected!;draft.tableRevision=next.tables.find(t=>t.id===next.selected)!.revision??1;draft.selectedVariants={};draft.erhuaPairs={};importOpen.value=false;tableError.value='';tableNotice.value=replaceTarget.value?'字表已替换，请重新核对多音字读音。':'';}
-  catch(cause){importError.value=(cause as Error).message;if(/保存失败|已不存在/.test(importError.value))tableError.value=importError.value;}
+  try{const next=replaceTarget.value?replaceTable(library.value,replaceTarget.value.id,table):addTable(library.value,{...table,id:`custom:${crypto.randomUUID()}`});await tableStore.save(next);library.value=next;draft.standard=next.selected!;draft.tableRevision=next.tables.find(t=>t.id===next.selected)!.revision??1;draft.selectedVariants={};draft.erhuaPairs={};importOpen.value=false;tableError.value='';tableNotice.value=replaceTarget.value?localizedMessage('modules.mandarin-ipa.text.fb5eb7cf230f'):'';}
+  catch(cause){importError.value=displayErrorValue(cause);if(tableErrorNeedsReload(cause))tableError.value=displayErrorValue(cause);}
   finally{tableBusy.value=false;}
 }
 function openImport(table?:CustomTable){replaceTarget.value=table;importError.value='';importOpen.value=true;}
 async function saveTones(tones:ToneSettings){
   const target=toneTarget.value;if(!target||tableBusy.value)return;tableBusy.value=true;toneError.value='';
-  try{const next=replaceTable(library.value,target.id,{...target,tones});await tableStore.save(next);library.value=next;draft.tableRevision=next.tables.find(t=>t.id===target.id)!.revision;draft.selectedVariants={};toneTarget.value=undefined;tableError.value='';tableNotice.value='声调映射已保存，请核对转换结果。';}
-  catch(cause){toneError.value=(cause as Error).message;tableError.value=toneError.value;}
+  try{const next=replaceTable(library.value,target.id,{...target,tones});await tableStore.save(next);library.value=next;draft.tableRevision=next.tables.find(t=>t.id===target.id)!.revision;draft.selectedVariants={};toneTarget.value=undefined;tableError.value='';tableNotice.value=localizedMessage('modules.mandarin-ipa.text.4cb60a89ed39');}
+  catch(cause){const failure=displayErrorValue(cause);toneError.value=failure;tableError.value=failure;}
   finally{tableBusy.value=false;}
 }
 async function deleteTable(){
   const target=deleteTarget.value;if(!target||tableBusy.value)return;tableBusy.value=true;deleteError.value='';
-  try{const next=removeTable(library.value,target.id);await tableStore.save(next);library.value=next;if(draft.standard===target.id){draft.standard='Standard Chinese (Beijing)';draft.selectedVariants={};draft.erhuaPairs={};delete draft.tableRevision;}deleteTarget.value=undefined;tableError.value='';tableNotice.value='字表已删除，当前文本保留。';}
-  catch(cause){deleteError.value=(cause as Error).message;tableError.value=deleteError.value;}
+  try{const next=removeTable(library.value,target.id);await tableStore.save(next);library.value=next;if(draft.standard===target.id){draft.standard='Standard Chinese (Beijing)';draft.selectedVariants={};draft.erhuaPairs={};delete draft.tableRevision;}deleteTarget.value=undefined;tableError.value='';tableNotice.value=localizedMessage('modules.mandarin-ipa.text.5ed5fad64d43');}
+  catch(cause){const failure=displayErrorValue(cause);deleteError.value=failure;tableError.value=failure;}
   finally{tableBusy.value=false;}
 }
 const themeColors=ref({ipa:'#a44e2f',hanzi:'#182332'});
 let themeObserver:MutationObserver|undefined;
 function readThemeColors(){const style=getComputedStyle(document.documentElement);themeColors.value={ipa:style.getPropertyValue('--accent').trim(),hanzi:style.getPropertyValue('--text').trim()};}
 const fontNames=computed(()=>installedFonts.value.length?installedFonts.value:candidates.zh);
-const fontLabels={SimSun:'宋体',KaiTi:'楷体',FangSong:'仿宋','Microsoft YaHei':'微软雅黑'};
+function standardLabel(value:string){return tr(standardKeys[value]??'modules.mandarin-ipa.standard.beijing');}
+const standardKeys:Record<string,string>={"Standard Chinese (Beijing)严": "modules.mandarin-ipa.text.338898d4c079", "胡裕树《现代汉语》": "modules.mandarin-ipa.text.bbd94b1a8792", "黄伯荣、廖序东《现代汉语》": "modules.mandarin-ipa.text.ffd92bff3ca6", "钱乃荣《现代汉语》": "modules.mandarin-ipa.text.12dc3c155c74", "吴宗济": "modules.mandarin-ipa.text.c8591479f203", "赵元任《汉语口语语法》": "modules.mandarin-ipa.text.35c4e10d6d24", "《汉语方音字汇》": "modules.mandarin-ipa.text.e82f3449d03f", "UntPhesoca宽": "modules.mandarin-ipa.text.80c37b8ec983", "UntPhesoca严": "modules.mandarin-ipa.text.50befcde04d0", "汉语拼音": "modules.mandarin-ipa.text.e10b52fff358"};
+const fontLabels=localized(()=>({SimSun:tr('modules.mandarin-ipa.text.bcce34b035bf'),KaiTi:tr('modules.mandarin-ipa.text.bba1d7806df9'),FangSong:tr('modules.mandarin-ipa.text.0e8f151436f2'),'Microsoft YaHei':tr('modules.mandarin-ipa.text.f18e498de92f')}));
 onMounted(async()=>{readThemeColors();themeObserver=new MutationObserver(()=>{readThemeColors();scheduleCellMeasure();});themeObserver.observe(document.documentElement,{attributes:true,attributeFilter:['data-theme','data-palette','style']});if(desktopFontFamilies)try{installedFonts.value=[...new Set((await desktopFontFamilies()).map(name=>name.trim()).filter(name=>name&&validFamily(name)))];}catch{/* Common names and custom input remain available. */}});
-const dirty=ref(false),error=ref(''),exporting=ref(false),outputArea=ref<HTMLElement>(),activeVariant=ref<{char:string;index:number}|null>(null);
+const dirty=ref(false),error=messageRef(),exporting=ref(false),outputArea=ref<HTMLElement>(),activeVariant=ref<{char:string;index:number}|null>(null);
 const tokens=computed(()=>convertText(draft.text,draft.standard,draft.selectedVariants,draft.showTone,draft.erhuaPairs,customTable.value));
 const paragraphs=computed(()=>{
   const rows:ConversionToken[][]=[[]];
@@ -171,7 +176,7 @@ function toggleErhua(token:MappedToken){
 function splitAllErhua(){draft.erhuaPairs={};closeVariants();}
 watch(()=>[draft.text,draft.layout,draft.display,draft.standard],()=>closeVariants());
 onBeforeUnmount(()=>{closeVariants();themeObserver?.disconnect();outputResize?.disconnect();cancelAnimationFrame(measureFrame);document.fonts.removeEventListener('loadingdone',scheduleCellMeasure);});
-function save(){const snapshot=snapshotDraft(draft),ok=host.projects.write(draftKey.value,snapshot);if(ok){saved.value=snapshot;dirty.value=false;error.value='';}else error.value='草稿保存失败，当前文本和排版仍保留在页面中。';return ok;}
+function save(){const snapshot=snapshotDraft(draft),ok=host.projects.write(draftKey.value,snapshot);if(ok){saved.value=snapshot;dirty.value=false;error.value='';}else error.value=localizedMessage('modules.mandarin-ipa.text.5685e059e8d0');return ok;}
 async function loadSaved(){if(dirty.value||!canRestore.value)return;const restored=restoreTableDraft(saved.value,library.value,draft.standard);delete draft.tableRevision;Object.assign(draft,restored.draft);await nextTick();dirty.value=!!restored.notice;tableNotice.value=restored.notice;error.value='';}
 function exportImage(){
   if(exporting.value)return;error.value='';closeVariants();
@@ -187,56 +192,56 @@ useWebSettings(props.stateKey,{standard:accountStandard,...settingsFields(draft,
 </script>
 
 <template>
-<ModuleFrame unified fit class="mandarin-ipa-page" label="汉字转国际音标 工作区">
-  <template #toolbar><ModuleToolbar label="汉字转国际音标 操作">
-        <button class="primary" :disabled="exporting||!draft.text.trim()" @click="exportImage">{{exporting?'正在生成…':'保存为 PNG'}}</button>
-        <template #actions><button v-if="canRestore" :disabled="dirty" @click="loadSaved">恢复本机草稿</button><button class="primary" :disabled="!dirty" @click="save">保存本机草稿<span v-if="dirty" aria-label="未保存"> *</span></button>
-        <button type="button" @click="emit('help')">帮助</button><button @click="emit('references')"><AppIcon name="book"/>方法与引用</button>
+<ModuleFrame unified fit class="mandarin-ipa-page" :label="tr('modules.mandarin-ipa.text.70f891a7d8e3')">
+  <template #toolbar><ModuleToolbar :label="tr('modules.mandarin-ipa.text.49ab3aef27c5')">
+        <button class="primary" :disabled="exporting||!draft.text.trim()" @click="exportImage">{{exporting?tr('modules.mandarin-ipa.text.a8b8730c9611'):tr('modules.mandarin-ipa.text.da64ad7328e0')}}</button>
+        <template #actions><button v-if="canRestore" :disabled="dirty" @click="loadSaved">{{tr('modules.mandarin-ipa.text.7fb4b2181a0b')}}</button><button class="primary" :disabled="!dirty" @click="save">{{tr('modules.mandarin-ipa.text.81a4b066ea77')}}<span v-if="dirty" :aria-label="tr('modules.mandarin-ipa.text.6a1be012c99c')"> *</span></button>
+        <button type="button" data-action="module-help" @click="emit('help')">{{tr('modules.mandarin-ipa.text.a57cfcb8428d')}}</button><button @click="emit('references')"><AppIcon name="book"/>{{tr('modules.mandarin-ipa.text.7eaa43419522')}}</button>
       </template></ModuleToolbar></template>
   <template #status>
-    <ModuleStatus v-if="error" kind="error" :message="error"><button @click="error=''">收起提示</button></ModuleStatus>
-    <ModuleStatus v-else-if="exporting" kind="loading" message="正在用本地 Doulos SIL 字体生成 PNG…"/>
+    <ModuleStatus v-if="error" kind="error" :message="error"><button @click="error=''">{{tr('modules.mandarin-ipa.text.fc06733cf134')}}</button></ModuleStatus>
+    <ModuleStatus v-else-if="exporting" kind="loading" :message="tr('modules.mandarin-ipa.text.e618cbab4773')"/>
   </template>
 
-  <div v-resizable-panels="{key:stateKey,center:'.m13-result-section',centerMin:240,panels:[{selector:'.m13-input-section',side:'left',label:'汉字输入',initial:300,min:240,max:1600,initialFractionOfRemaining:0.5},{selector:'.m13-settings-section',side:'left',variable:'--panel-right',label:'转换与排版',initial:300,min:240,max:560}]}" :key="draft.layout" class="m13-workspace" :class="{'m13-workspace-stacked':draft.layout==='stacked'}">
-    <ModuleSection class="m13-settings-section" label="转换和排版设置" title="转换与排版">
+  <div v-resizable-panels="{key:stateKey,center:'.m13-result-section',centerMin:240,panels:[{selector:'.m13-input-section',side:'left',label:tr('modules.mandarin-ipa.text.4bfa8eafda56'),initial:300,min:240,max:1600,initialFractionOfRemaining:0.5},{selector:'.m13-settings-section',side:'left',variable:'--panel-right',label:tr('modules.mandarin-ipa.text.fc75344980b3'),initial:300,min:240,max:560}]}" :key="draft.layout" class="m13-workspace" :class="{'m13-workspace-stacked':draft.layout==='stacked'}">
+    <ModuleSection class="m13-settings-section" :label="tr('modules.mandarin-ipa.text.03968338e1d4')" :title="tr('modules.mandarin-ipa.text.fc75344980b3')">
 
-      <p class="m13-local-note">本地转换 · 文本不上传</p><p class="m13-mapping-note">多音字需人工选读音，不处理语流变调。</p>
+      <p class="m13-local-note">{{tr('modules.mandarin-ipa.text.2789321f461d')}}</p><p class="m13-mapping-note">{{tr('modules.mandarin-ipa.text.17755b01bbed')}}</p>
 
-      <label>转换标准<select :value="draft.standard" aria-label="转换标准" :disabled="tableBusy" @change="selectStandard(($event.target as HTMLSelectElement).value)"><option v-for="standard in standards" :key="standard" :value="standard">{{standard}}</option><optgroup v-if="library.tables.length" label="自定义字表"><option v-for="table in library.tables" :key="table.id" :value="table.id">{{table.name}}</option></optgroup></select></label>
-      <div class="m13-table-actions"><button :disabled="!tablesReady||tableBusy" @click="openImport()">导入自定义字表</button><template v-if="customTable"><button :disabled="tableBusy" @click="toneError='';toneTarget=customTable">声调映射</button><button :disabled="tableBusy" @click="openImport(customTable)">替换字表</button><button :disabled="tableBusy" @click="deleteError='';deleteTarget=customTable">删除字表</button><span>{{customTable.kind==='hanzi'?'汉字表':'音节表'}} · {{customTable.rows.length.toLocaleString()}} 条</span></template></div>
-      <ModuleStatus v-if="tableError" kind="error" :message="tableError"><button :disabled="tableBusy" @click="loadTables">重新载入已存字表</button></ModuleStatus>
+      <label>{{tr('modules.mandarin-ipa.text.0ef0b768da20')}}<select :value="draft.standard" :aria-label="tr('modules.mandarin-ipa.text.0ef0b768da20')" :disabled="tableBusy" @change="selectStandard(($event.target as HTMLSelectElement).value)"><option v-for="standard in standards" :key="standard" :value="standard">{{standardLabel(standard)}}</option><optgroup v-if="library.tables.length" :label="tr('modules.mandarin-ipa.text.c7f4db2345c2')"><option v-for="table in library.tables" :key="table.id" :value="table.id">{{table.name}}</option></optgroup></select></label>
+      <div class="m13-table-actions"><button :disabled="!tablesReady||tableBusy" @click="openImport()">{{tr('modules.mandarin-ipa.text.4208e69684fe')}}</button><template v-if="customTable"><button :disabled="tableBusy" @click="toneError='';toneTarget=customTable">{{tr('modules.mandarin-ipa.text.234d5ff49d2b')}}</button><button :disabled="tableBusy" @click="openImport(customTable)">{{tr('modules.mandarin-ipa.text.880987e749b0')}}</button><button :disabled="tableBusy" @click="deleteError='';deleteTarget=customTable">{{tr('modules.mandarin-ipa.text.0bc92967ba8f')}}</button><span>{{customTable.kind==='hanzi'?tr('modules.mandarin-ipa.text.1cd03b9a270b'):tr('modules.mandarin-ipa.text.6713cdab9443')}} · {{customTable.rows.length.toLocaleString()}} {{tr('modules.mandarin-ipa.text.f004f1d84cf9')}}</span></template></div>
+      <ModuleStatus v-if="tableError" kind="error" :message="tableError"><button :disabled="tableBusy" @click="loadTables">{{tr('modules.mandarin-ipa.text.60e1ac390bd4')}}</button></ModuleStatus>
       <ModuleStatus v-if="tableNotice" kind="info" :message="tableNotice"/>
-      <fieldset v-if="untEnabled" class="m13-erhua"><legend>儿化组合</legend><button :disabled="!canAutoErhua" @click="combineErhua">自动组合儿化</button><button :disabled="!erhuaCount" @click="splitAllErhua">全部拆分</button>
-        <p>已组合 {{erhuaCount}} 处。点击字＋儿可手动组合或拆分；自动组合后请核对独立的儿字。</p>
+      <fieldset v-if="untEnabled" class="m13-erhua"><legend>{{tr('modules.mandarin-ipa.text.fb4321ed87ad')}}</legend><button :disabled="!canAutoErhua" @click="combineErhua">{{tr('modules.mandarin-ipa.text.7a37a9dbf389')}}</button><button :disabled="!erhuaCount" @click="splitAllErhua">{{tr('modules.mandarin-ipa.text.70859fecfe6e')}}</button>
+        <p>{{tr('modules.mandarin-ipa.text.8a5ef8f76bc7')}} {{erhuaCount}} {{tr('modules.mandarin-ipa.text.a9379054859c')}}</p>
       </fieldset>
-      <fieldset><legend>显示内容</legend><label><input v-model="draft.display" type="radio" value="paired"/>字音同显</label><label><input v-model="draft.display" type="radio" value="ipa-only"/>仅音标</label><button class="m13-tone-toggle" :aria-pressed="draft.showTone" @click="draft.showTone=!draft.showTone">显示声调</button></fieldset>
-      <fieldset><legend>输入与结果排布</legend><label><input v-model="draft.layout" type="radio" value="side-by-side"/>左右排布</label><label><input v-model="draft.layout" type="radio" value="stacked"/>上下排布</label></fieldset>
-      <fieldset><legend>结果对齐</legend><button :aria-pressed="draft.equalWidth" @click="draft.equalWidth=!draft.equalWidth">等宽排版</button></fieldset>
-      <label>汉字字号 <span>{{draft.hanziSize}} px</span><input v-model.number="draft.hanziSize" aria-label="汉字字号" type="range" min="16" max="72"/></label>
-      <label>音标字号 <span>{{effectiveIpaSize(draft)}} px</span><input :value="effectiveIpaSize(draft)" aria-label="音标字号" type="range" min="12" max="48" @input="draft.ipaSize=Number(($event.target as HTMLInputElement).value);draft.ipaSizeUserSet=true"/></label>
-      <label>字音间距 <span>{{draft.gap}} px</span><input v-model.number="draft.gap" aria-label="字音间距" type="range" min="-12" max="20"/></label>
-      <label>行距 <span>{{draft.lineHeight.toFixed(1)}}</span><input :value="Math.round(draft.lineHeight*10)" aria-label="行距" type="range" min="8" max="30" @input="draft.lineHeight=Number(($event.target as HTMLInputElement).value)/10"/></label>
-      <fieldset><legend>参考汉字样式</legend><button :aria-pressed="draft.bold" @click="draft.bold=!draft.bold"><strong>B</strong> 粗体</button><button :aria-pressed="draft.italic" @click="draft.italic=!draft.italic"><em>I</em> 斜体</button><button :aria-pressed="draft.underline" @click="draft.underline=!draft.underline"><u>U</u> 下划线</button></fieldset>
-      <fieldset class="m13-colors"><legend>文字颜色</legend><label><input type="color" aria-label="音标颜色" :value="draft.ipaColor||themeColors.ipa" @input="draft.ipaColor=($event.target as HTMLInputElement).value"/>音标颜色</label><label><input type="color" aria-label="汉字颜色" :value="draft.hanziColor||themeColors.hanzi" @input="draft.hanziColor=($event.target as HTMLInputElement).value"/>汉字颜色</label><button :disabled="!draft.ipaColor&&!draft.hanziColor" @click="draft.ipaColor='';draft.hanziColor=''">跟随主题</button></fieldset>
-      <FontFamilySelect v-model="draft.hanziFont" label="汉字字体" :names="fontNames" :labels="fontLabels"/>
-      <p class="m13-font-note">音标字体固定为 Doulos SIL</p>
+      <fieldset><legend>{{tr('modules.mandarin-ipa.text.de90186fc663')}}</legend><label><input v-model="draft.display" type="radio" value="paired"/>{{tr('modules.mandarin-ipa.text.2381026c3153')}}</label><label><input v-model="draft.display" type="radio" value="ipa-only"/>{{tr('modules.mandarin-ipa.text.c1d197ec5c85')}}</label><button class="m13-tone-toggle" :aria-pressed="draft.showTone" @click="draft.showTone=!draft.showTone">{{tr('modules.mandarin-ipa.text.3751d166b9b0')}}</button></fieldset>
+      <fieldset><legend>{{tr('modules.mandarin-ipa.text.f2e51e46ec7b')}}</legend><label><input v-model="draft.layout" type="radio" value="side-by-side"/>{{tr('modules.mandarin-ipa.text.2f56a4dfc5c8')}}</label><label><input v-model="draft.layout" type="radio" value="stacked"/>{{tr('modules.mandarin-ipa.text.8acc3de62ec7')}}</label></fieldset>
+      <fieldset><legend>{{tr('modules.mandarin-ipa.text.b91b96f3f5d0')}}</legend><button :aria-pressed="draft.equalWidth" @click="draft.equalWidth=!draft.equalWidth">{{tr('modules.mandarin-ipa.text.a4c10dd667ed')}}</button></fieldset>
+      <label>{{tr('modules.mandarin-ipa.text.9bd5d708ab99')}} <span>{{draft.hanziSize}} px</span><input v-model.number="draft.hanziSize" :aria-label="tr('modules.mandarin-ipa.text.9bd5d708ab99')" type="range" min="16" max="72"/></label>
+      <label>{{tr('modules.mandarin-ipa.text.4dbb035fe149')}} <span>{{effectiveIpaSize(draft)}} px</span><input :value="effectiveIpaSize(draft)" :aria-label="tr('modules.mandarin-ipa.text.4dbb035fe149')" type="range" min="12" max="48" @input="draft.ipaSize=Number(($event.target as HTMLInputElement).value);draft.ipaSizeUserSet=true"/></label>
+      <label>{{tr('modules.mandarin-ipa.text.bb7934f5b438')}} <span>{{draft.gap}} px</span><input v-model.number="draft.gap" :aria-label="tr('modules.mandarin-ipa.text.bb7934f5b438')" type="range" min="-12" max="20"/></label>
+      <label>{{tr('modules.mandarin-ipa.text.40026aada6d8')}} <span>{{draft.lineHeight.toFixed(1)}}</span><input :value="Math.round(draft.lineHeight*10)" :aria-label="tr('modules.mandarin-ipa.text.40026aada6d8')" type="range" min="8" max="30" @input="draft.lineHeight=Number(($event.target as HTMLInputElement).value)/10"/></label>
+      <fieldset><legend>{{tr('modules.mandarin-ipa.text.e352d9a301ac')}}</legend><button :aria-pressed="draft.bold" @click="draft.bold=!draft.bold"><strong>B</strong> {{tr('modules.mandarin-ipa.text.f6da93ed21e7')}}</button><button :aria-pressed="draft.italic" @click="draft.italic=!draft.italic"><em>I</em> {{tr('modules.mandarin-ipa.text.217901c51a44')}}</button><button :aria-pressed="draft.underline" @click="draft.underline=!draft.underline"><u>U</u> {{tr('modules.mandarin-ipa.text.d3b4a22b4725')}}</button></fieldset>
+      <fieldset class="m13-colors"><legend>{{tr('modules.mandarin-ipa.text.f21ef4aba5ab')}}</legend><label><input type="color" :aria-label="tr('modules.mandarin-ipa.text.38dd98a5de9b')" :value="draft.ipaColor||themeColors.ipa" @input="draft.ipaColor=($event.target as HTMLInputElement).value"/>{{tr('modules.mandarin-ipa.text.38dd98a5de9b')}}</label><label><input type="color" :aria-label="tr('modules.mandarin-ipa.text.64f44918815e')" :value="draft.hanziColor||themeColors.hanzi" @input="draft.hanziColor=($event.target as HTMLInputElement).value"/>{{tr('modules.mandarin-ipa.text.64f44918815e')}}</label><button :disabled="!draft.ipaColor&&!draft.hanziColor" @click="draft.ipaColor='';draft.hanziColor=''">{{tr('modules.mandarin-ipa.text.d7fa90d22bb7')}}</button></fieldset>
+      <FontFamilySelect v-model="draft.hanziFont" :label="tr('modules.mandarin-ipa.text.6750c6c6a069')" :names="fontNames" :labels="fontLabels"/>
+      <p class="m13-font-note">{{tr('modules.mandarin-ipa.text.5e8b45cc4b88')}}</p>
     </ModuleSection>
 
-    <ModuleSection class="m13-input-section" label="汉字输入" title="汉字输入">
-      <template #actions><span class="m13-count">{{[...draft.text].length.toLocaleString()}} 个字符</span></template>
-      <textarea v-model="draft.text" aria-label="待转换汉字文本" placeholder="输入汉字、标点或分行文本…" spellcheck="false"/>
+    <ModuleSection class="m13-input-section" :label="tr('modules.mandarin-ipa.text.4bfa8eafda56')" :title="tr('modules.mandarin-ipa.text.4bfa8eafda56')">
+      <template #actions><span class="m13-count">{{[...draft.text].length.toLocaleString()}} {{tr('modules.mandarin-ipa.text.d988c1bfb392')}}</span></template>
+      <textarea v-model="draft.text" :aria-label="tr('modules.mandarin-ipa.text.fbbf2631f805')" :placeholder="tr('modules.mandarin-ipa.text.7873b4ef1b09')" spellcheck="false"/>
     </ModuleSection>
 
-    <ModuleSection class="m13-result-section" label="转换结果" title="转换结果">
+    <ModuleSection class="m13-result-section" :label="tr('modules.mandarin-ipa.text.54a8366124bb')" :title="tr('modules.mandarin-ipa.text.54a8366124bb')">
       <div ref="outputArea" class="m13-output" :class="{'m13-paired':draft.display==='paired'}" :style="outputStyle" :data-standard="draft.standard">
-        <ModuleStatus v-if="!draft.text.trim()" kind="empty" message="输入文本后，这里会实时显示转换结果。"/>
+        <ModuleStatus v-if="!draft.text.trim()" kind="empty" :message="tr('modules.mandarin-ipa.text.0e330468bc1e')"/>
         <template v-else><div v-for="(paragraph,index) in paragraphs" :key="index" class="m13-paragraph">
         <template v-for="token in paragraph" :key="token.index">
           <span v-if="token.kind==='literal'" class="m13-token m13-literal" :class="{'m13-ipa-only-literal':draft.display==='ipa-only'}" :data-index="token.index">
             <span v-if="draft.display==='paired'" class="m13-ipa-placeholder" aria-hidden="true">&nbsp;</span><span class="m13-hanzi" :style="hanziStyle">{{token.char}}</span>
           </span>
-          <button v-else-if="token.variants.length>1||token.canCombine||token.erhua" type="button" class="m13-token m13-mapped m13-ambiguous" :class="{'m13-erhua-group':token.erhua}" :data-erhua="token.erhua||undefined" :data-index="token.index" :data-value="token.value" :aria-label="`${token.char}：${token.variants.length} 个读音，当前 ${token.value}${token.erhua?'，可拆分儿化':token.canCombine?'，可组合儿化':''}`" aria-haspopup="dialog" :aria-expanded="activeVariant?.index===token.index" @click="openVariants(token,$event)">
+          <button v-else-if="token.variants.length>1||token.canCombine||token.erhua" type="button" class="m13-token m13-mapped m13-ambiguous" :class="{'m13-erhua-group':token.erhua}" :data-erhua="token.erhua||undefined" :data-index="token.index" :data-value="token.value" :aria-label="tr('modules.mandarin-ipa.text.9d3767f78998',{v0:token.char,v1:token.variants.length,v2:token.value,v3:token.erhua?tr('modules.mandarin-ipa.text.e4066f552054'):token.canCombine?tr('modules.mandarin-ipa.text.8257dd15f3e7'):''})" aria-haspopup="dialog" :aria-expanded="activeVariant?.index===token.index" @click="openVariants(token,$event)">
             <span class="m13-ipa ipa-text">{{token.value}}</span><span v-if="draft.display==='paired'" class="m13-hanzi" :style="hanziStyle">{{token.char}}</span>
           </button>
           <span v-else class="m13-token m13-mapped" :data-index="token.index" :data-value="token.value">
@@ -246,11 +251,11 @@ useWebSettings(props.stateKey,{standard:accountStandard,...settingsFields(draft,
         </div></template>
       </div>
       <Teleport to="body">
-      <div v-if="selectedToken" ref="variantPanel" class="m13-variants" :style="variantPosition" role="dialog" :aria-label="'选择 '+selectedToken.char+' 的读音'">
-        <div><strong>选择读音：{{selectedToken.char}}</strong><button aria-label="关闭读音选择" @click="closeVariants(true)">×</button></div>
-        <button v-if="untEnabled&&(selectedToken.erhua||selectedToken.canCombine)" class="m13-erhua-action" @click="toggleErhua(selectedToken)">{{selectedToken.erhua?'拆分儿化':'组合儿化'}}</button>
+      <div v-if="selectedToken" ref="variantPanel" class="m13-variants" :style="variantPosition" role="dialog" :aria-label="tr('modules.mandarin-ipa.reading.select',{character:selectedToken.char})">
+        <div><strong>{{tr('modules.mandarin-ipa.text.89ea25e0c5c9')}}{{selectedToken.char}}</strong><button :aria-label="tr('modules.mandarin-ipa.text.16303eb3d9c3')" @click="closeVariants(true)">×</button></div>
+        <button v-if="untEnabled&&(selectedToken.erhua||selectedToken.canCombine)" class="m13-erhua-action" @click="toggleErhua(selectedToken)">{{selectedToken.erhua?tr('modules.mandarin-ipa.text.a82eb8d62b2c'):tr('modules.mandarin-ipa.text.42e277c45883')}}</button>
         <button v-for="option in options" :key="option.index" :aria-pressed="selectedToken.selectedVariant===option.index" @click="chooseVariant(selectedToken,option.index)">
-          <span>{{option.pinyin?option.pinyin+(option.toneLabel==='轻声'?'（轻声）':option.toneLabel):'读音 '+(option.index+1)}}</span><span class="ipa-text">{{option.value}}</span>
+          <span>{{option.pinyin?option.pinyin+(option.tone===0?tr('modules.mandarin-ipa.text.f56fd6416d7f'):option.toneLabel):tr('modules.mandarin-ipa.text.2697bfc9fa58')+(option.index+1)}}</span><span class="ipa-text">{{option.value}}</span>
         </button>
       </div>
       </Teleport>
@@ -261,11 +266,11 @@ useWebSettings(props.stateKey,{standard:accountStandard,...settingsFields(draft,
   <CustomTableImport v-if="importOpen" :saving="tableBusy" :save-error="importError" :replace-target="replaceTarget" @close="importOpen=false" @save="saveTable"/>
   <PngExportDialog v-if="pngSnapshot" :snapshot="pngSnapshot" @close="pngSnapshot=undefined" @busy="exporting=$event"/>
   <TableToneDialog v-if="toneTarget" :table="toneTarget" :saving="tableBusy" :save-error="toneError" @close="toneTarget=undefined" @save="saveTones"/>
-  <ModalDialog v-if="deleteTarget" title="删除自定义字表" variant="confirm" :close-disabled="tableBusy" @close="deleteTarget=undefined">
-    <p>确定删除字表 <strong>{{deleteTarget.name}}</strong>？</p>
-    <p>删除后会从转换标准中移除。当前文本保留，使用该字表的草稿需重新选择字表。</p>
+  <ModalDialog v-if="deleteTarget" :title="tr('modules.mandarin-ipa.text.11da3d944109')" variant="confirm" :close-disabled="tableBusy" @close="deleteTarget=undefined">
+    <p>{{tr('modules.mandarin-ipa.text.8b4da7b8aae1')}} <strong>{{deleteTarget.name}}</strong>？</p>
+    <p>{{tr('modules.mandarin-ipa.text.ff4db1513183')}}</p>
     <ModuleStatus v-if="deleteError" kind="error" :message="deleteError"/>
-    <template #footer><button :disabled="tableBusy" @click="deleteTarget=undefined">取消</button><button class="danger" :disabled="tableBusy" @click="deleteTable">{{tableBusy?'正在删除…':'删除字表'}}</button></template>
+    <template #footer><button :disabled="tableBusy" @click="deleteTarget=undefined">{{tr('modules.mandarin-ipa.text.2cd0f3be8738')}}</button><button class="danger" :disabled="tableBusy" @click="deleteTable">{{tableBusy?tr('modules.mandarin-ipa.text.4fd4f40094d4'):tr('modules.mandarin-ipa.text.0bc92967ba8f')}}</button></template>
   </ModalDialog>
 </ModuleFrame>
 </template>

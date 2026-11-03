@@ -1,8 +1,6 @@
 """Opt-in, server-only leases. Closing a page never invokes an early-delete path."""
 from uuid import UUID, uuid4
 from contextlib import contextmanager
-import psycopg
-from psycopg.rows import dict_row
 from fastapi import APIRouter, Depends, Request, Response
 from pydantic import Field,PrivateAttr
 from .models import WireModel, Identifier
@@ -50,9 +48,9 @@ class WorkspaceService:
     def default_quota(self, conn):
         return conn.execute('SELECT default_quota_bytes FROM ptb_web.capacity_policy WHERE version=1').fetchone()['default_quota_bytes']
 
-    def expire_quota(self, conn):
+    def expire_quota(self, conn, owner=None):
         conn.execute('''UPDATE ptb_storage.quota_accounts SET quota_bytes=coalesce(web_base_quota_bytes,(SELECT default_quota_bytes FROM ptb_web.capacity_policy WHERE version=1)),
-            web_override=(web_base_quota_bytes IS NOT NULL),web_override_expires_at=NULL WHERE web_override_expires_at<=clock_timestamp()''')
+            web_override=(web_base_quota_bytes IS NOT NULL),web_override_expires_at=NULL WHERE web_override_expires_at<=clock_timestamp() AND (%s::uuid IS NULL OR owner_id=%s::uuid)''',(owner,owner))
 
     def activate(self):
         self.check_schema()
@@ -63,8 +61,9 @@ class WorkspaceService:
         # Identity queries never read a physical file. Taking the storage writer
         # lock here serialized every user's polling behind scientific output I/O.
         # Data reads and publication still recheck the lease in their own fence.
-        with psycopg.connect(self.storage._dsn, autocommit=True, row_factory=dict_row,
-                connect_timeout=5, options='-c statement_timeout=10000 -c default_transaction_read_only=on') as c:
+        from .postgres_pool import connection
+        with connection(self.storage._dsn) as c, c.transaction():
+            c.execute('SET TRANSACTION READ ONLY')
             yield c
 
     @staticmethod

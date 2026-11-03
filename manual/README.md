@@ -25,6 +25,8 @@ npm run build
 
 命令使用项目已经准备的 Python 与 Node 环境。第一次配置作者工具请按 [编辑器 README](../tools/manual-studio/README.md) 操作。统一写作约定见 [AUTHORING.md](AUTHORING.md)。
 
+英文、日文正文使用[本地化翻译目录](locales/README.md)维护。默认软件仅附中文说明书，其他语言作为可下载、可离线安装的说明书包。构建不会通过在线翻译补全缺译，源段落变化也不会继续沿用未经复核的旧译文。
+
 ## 素材分发
 
 自然录音和相关处理结果获准随软件分发，未获准上传公开 GitHub。它们及相应截图保存在忽略的 `assets/software-only/`，素材清单使用 `git:false` 与 `distribution:software-only`。私人原始路径仅进入本机忽略的来源记录。

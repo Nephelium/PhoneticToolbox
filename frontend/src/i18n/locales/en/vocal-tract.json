@@ -1,0 +1,12 @@
+{
+  "modules.vocal-tract.acoustic_analysis": "Acoustic analysis",
+  "modules.vocal-tract.controls": "Controls",
+  "modules.vocal-tract.vocal_tract_request_failed": "Vocal tract request failed",
+  "modules.vocal-tract.physiological_parameter_synthesis": "Articulatory synthesis",
+  "modules.vocal-tract.the_server_vtl_engine_and_session_interface_are_still": "The server VTL engine and session interface are still being adapted. The web version is not yet connected.",
+  "modules.vocal-tract.vocal_tract_workspace": "Vocal tract workspace",
+  "modules.vocal-tract.physiological_parameter_synthesis_web": "Articulatory synthesis · Web",
+  "modules.vocal-tract.due_to_server_performance_limits_adjust_and_fix_the": "Due to server performance limits, adjust and fix the articulatory posture first, then click Test phonation for a 0.5-second preview.",
+  "modules.vocal-tract.the_web_version_does_not_yet_support_real_time": "The web version does not yet support real-time synthesis while adjusting posture. Use the desktop app for real-time synthesis.",
+  "modules.vocal-tract.got_it": "Got it"
+}

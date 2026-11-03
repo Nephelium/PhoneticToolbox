@@ -6,8 +6,6 @@ from typing import Protocol
 from uuid import uuid4
 import re
 
-import psycopg
-from psycopg.rows import dict_row
 from argon2 import PasswordHasher
 from argon2.low_level import Type
 
@@ -19,6 +17,7 @@ def hash_token(value: str) -> str:
 class AccountStore(Protocol):
     def get_user(self, username: str): ...
     def allow_login(self, username: str, ip: str) -> bool: ...
+    def login_succeeded(self, username: str, ip: str): ...
     def issue_session(self, user: dict, token_hash: str, csrf: str, expires, old_hash: str): ...
     def session(self, token_hash: str): ...
     def revoke(self, token_hash: str): ...
@@ -33,8 +32,8 @@ class PostgresAccountStore:
 
     @contextmanager
     def connection(self):
-        with psycopg.connect(self._dsn, row_factory=dict_row, connect_timeout=5,
-                             options='-c statement_timeout=10000 -c lock_timeout=5000') as conn:
+        from .postgres_pool import connection
+        with connection(self._dsn) as conn, conn.transaction():
             yield conn
 
     def check_schema(self):
@@ -62,7 +61,7 @@ class PostgresAccountStore:
 
     def allow_login(self, username, ip):
         # Fixed-window attempt reservation is atomic across connections/processes.
-        limits = [(hash_token('account:'+username), 10), (hash_token('ip:'+ip), 50)]
+        limits = [(hash_token('account-ip:'+username+'\0'+ip), 10), (hash_token('ip:'+ip), 50)]
         allowed = True
         with self.connection() as c:
             for key, limit in sorted(limits):
@@ -73,6 +72,13 @@ class PostgresAccountStore:
                     RETURNING attempts""", (key,)).fetchone()
                 allowed = allowed and row['attempts'] <= limit
         return allowed
+
+    def login_succeeded(self, username, ip):
+        # Preserve the IP resource limit; successful authentication resets only
+        # this account/client failure streak, never another client's bucket.
+        with self.connection() as c:
+            c.execute('DELETE FROM ptb_accounts.login_attempts WHERE bucket_key=%s',
+                      (hash_token('account-ip:'+username+'\0'+ip),))
 
     def issue_session(self, user, token_hash, csrf, expires, old_hash):
         with self.connection() as c:

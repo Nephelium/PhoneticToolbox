@@ -153,8 +153,18 @@ class FilePipeline:
         if sum(a['size_bytes']+a['reserved_bytes'] for a in outputs)+extra > budget:
             raise StorageError('output_budget_exceeded',413)
 
+    @contextmanager
+    def _asset_scope(self,identity,asset_id,*,read=False):
+        # Owner is immutable, but the lease/ownership is rechecked inside the
+        # scoped lock. Never hold a job transaction while acquiring storage.
+        with self.jobs.transaction(write=False) as tx:
+            job=self.jobs._row(tx,identity[0])
+            if not job:raise StorageError('stale_worker',409)
+            owner=str(job['owner_id'])
+        with self.storage._locked(owner,asset_id,read=read) as conn:yield conn
+
     def write(self, identity, asset_id, offset, data):
-        with self.storage._locked() as conn:
+        with self._asset_scope(identity,asset_id,read=False) as conn:
             job, _ = self._fence(conn,identity)
             output = self._output(conn,identity,asset_id)
             if output['sha256'] is not None: raise StorageError('output_sealed',409)
@@ -164,7 +174,7 @@ class FilePipeline:
     def read_input(self, identity, asset_id, offset, size):
         if not 0 < size <= CHUNK_BYTES or offset < 0:
             raise StorageError('invalid_chunk',422)
-        with self.storage._locked() as conn:
+        with self._asset_scope(identity,asset_id,read=True) as conn:
             job, inputs = self._fence(conn,identity)
             if str(asset_id) not in {str(a['id']) for a in inputs}:
                 raise StorageError('asset_not_found',404)
@@ -178,7 +188,7 @@ class FilePipeline:
     def seal(self, identity, asset_id):
         digest, offset = hashlib.sha256(), 0
         while True:
-            with self.storage._locked() as conn:
+            with self._asset_scope(identity,asset_id,read=False) as conn:
                 self._fence(conn,identity)
                 row = self.storage._sync(conn,self._output(conn,identity,asset_id))
                 if row['state']!='uploading': raise StorageError('output_closed',409)

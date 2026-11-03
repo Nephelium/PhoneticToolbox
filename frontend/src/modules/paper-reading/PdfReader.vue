@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import {uiMessage as localizedMessage} from '../module-localization.ts';
+import {uiErrorMessage as displayErrorValue} from '../module-localization.ts';
+
+import {tr,messageRef,type MessageDescriptor} from '../../i18n/index.ts';
 import {useWebSettings} from '../../state/web-settings.ts';
 import {syncNumberInput} from '../../design/numeric-input.ts';
 import {computed,nextTick,onBeforeUnmount,onMounted,ref,shallowRef,useId,watch} from 'vue';
@@ -15,9 +19,9 @@ const emit=defineEmits<{language:[PaperLanguage];position:[number];fullscreen:[b
 const reader=ref<HTMLElement>(),viewport=ref<HTMLElement>();
 const notesId=useId(),notesPanel=ref<HTMLElement>();
 type CachedPage=PaperPage&{renderWidth:number};
-const page=ref(props.initialPage),ratios=ref<number[]>([]),cache=shallowRef<Record<number,CachedPage>>({}),loading=ref(0),failure=ref(''),notice=ref('');
+const page=ref(props.initialPage),ratios=ref<number[]>([]),cache=shallowRef<Record<number,CachedPage>>({}),loading=ref(0),failure=messageRef(),notice=messageRef();
 const zoom=ref(100),fit=ref(true),width=ref(800),full=ref(false),showText=ref(false),sidebar=ref(false),color=ref<PaperAnnotation['color']>('yellow');
-const annotations=ref<PaperAnnotations>({revision:0,items:[]}),saving=ref(false),annotationError=ref(''),annotationsReady=ref(false);
+const annotations=ref<PaperAnnotations>({revision:0,items:[]}),saving=ref(false),annotationError=messageRef(),annotationsReady=ref(false);
 const selection=ref<{page:number;quote:string;rects:number[][]}[]>([]),editing=ref<PaperAnnotation>(),draft=ref('');
 const history=ref(new AnnotationHistory()),selectedHighlightId=ref('');
 const selectedHighlight=computed(()=>annotations.value.items.find(item=>item.id===selectedHighlightId.value&&item.kind==='highlight'));
@@ -26,8 +30,8 @@ const pageWidth=computed(()=>fit.value?Math.max(280,Math.min(1100,width.value-32
 const deviceRatio=ref(window.devicePixelRatio||1);
 const renderWidth=computed(()=>rasterWidth(pageWidth.value,deviceRatio.value,pageScale.value));
 const zoomOptions=computed(()=>[...new Set([25,50,75,100,125,150,175,200,250,300,zoom.value])].sort((a,b)=>a-b));
-const activeText=computed(()=>cache.value[page.value]?.text??'当前页正在加载。');
-const languageTitle=computed(()=>props.paper.notice?'栏目说明':props.paper.local?'本地 PDF':{original:'原文',translation:'中文译文',analysis:'论文解读'}[props.language]);
+const activeText=computed(()=>cache.value[page.value]?.text??tr('modules.paper-reading.text.1a6149e4f63e'));
+const languageTitle=computed(()=>props.paper.notice?tr('modules.paper-reading.text.0bf18cd07b12'):props.paper.local?tr('modules.paper-reading.text.76dade2029ef'):{original:tr('modules.paper-reading.text.354b28c85333'),translation:tr('modules.paper-reading.text.2f6fc1af333a'),analysis:tr('modules.paper-reading.text.c57e0f8bc6f8')}[props.language]);
 const offsets=computed(()=>{let y=16;return ratios.value.map(r=>{const top=y;y+=pageWidth.value*r+12;return top;});});
 const lineStyles=new Map<string,Record<string,string>>();
 let disposed=false,controller:AbortController|undefined,annotationController:AbortController|undefined,resize:ResizeObserver|undefined,pumping=false,epoch=0,rasterEpoch=0;
@@ -48,7 +52,7 @@ async function pump(){
    const decoded=(p:CachedPage)=>(p.imageWidth??p.renderWidth)*(p.imageHeight??p.renderWidth*p.ratio)*4;
    const farthest=Object.keys(next).map(Number).sort((a,b)=>Math.abs(b-page.value)-Math.abs(a-page.value));let bytes=Object.values(next).reduce((v,p)=>v+p.image.length,0),decodedBytes=Object.values(next).reduce((v,p)=>v+decoded(p),0);for(const key of farthest){if(bytes<=48_000_000&&decodedBytes<=160_000_000)break;if(key!==n&&key!==page.value){bytes-=next[key].image.length;decodedBytes-=decoded(next[key]);delete next[key];}}
    cache.value=next;if(!ratios.value.length){ratios.value=result.ratios;await nextTick();jump(Math.max(1,Math.min(props.initialPage,result.pages)));}
-  }catch(e){if(token!==rasterEpoch||controller.signal.aborted)continue;if(!disposed)failure.value=(e as Error).message;break;}
+  }catch(e){if(token!==rasterEpoch||controller.signal.aborted)continue;if(!disposed)failure.value=displayErrorValue(e);break;}
  }}finally{pumping=false;loading.value=0;}
 }
 function schedule(){if(frame)return;frame=requestAnimationFrame(()=>{frame=0;scan();});}
@@ -89,7 +93,7 @@ function key(event:KeyboardEvent){if(props.active===false||event.defaultPrevente
  if(event.key==='ArrowLeft'||event.key==='ArrowRight'){event.preventDefault();jump(page.value+(event.key==='ArrowLeft'?-1:1));}
  if(event.key==='Escape'&&full.value){event.preventDefault();void document.exitFullscreen();}
 }
-async function fullscreen(){try{if(document.fullscreenElement)await document.exitFullscreen();else await reader.value?.requestFullscreen();}catch(e){notice.value='无法进入全屏：'+(e as Error).message;}}
+async function fullscreen(){try{if(document.fullscreenElement)await document.exitFullscreen();else await reader.value?.requestFullscreen();}catch(e){notice.value=localizedMessage('modules.paper-reading.error.fullscreen',{detail:(e as Error).message});}}
 function fullscreenChanged(){full.value=document.fullscreenElement===reader.value;emit('fullscreen',full.value);nextTick(schedule);}
 function selectText(){
  if(props.active===false)return;
@@ -113,13 +117,13 @@ function selectText(){
 function clearSelection(native=false){cancelAnimationFrame(selectionFrame);selectionFrame=0;selection.value=[];selectedHighlightId.value='';if(native){const s=window.getSelection();if(s?.rangeCount&&viewport.value?.contains(s.getRangeAt(0).commonAncestorContainer))s.removeAllRanges();}}
 function selectionPointerDown(event:PointerEvent){if(props.active===false||event.button!==0)return;const target=event.target as Element;if(viewport.value?.contains(target))clearSelection(!target.closest('.pdf-text-line'));else if(!reader.value?.contains(target))clearSelection(true);}
 function selectionChanged(){if(!selectionFrame)selectionFrame=requestAnimationFrame(()=>{selectionFrame=0;selectText();});}
-async function copySelection(){selectText();try{await copyText(selection.value.map(x=>x.quote).join('\n\n'));notice.value='已复制所选文字。';}catch(e){notice.value=(e as Error).message;}}
-async function reloadAnnotations(){if(saving.value)return;annotationController?.abort();const request=new AbortController();annotationController=request;const token=epoch;try{const value=await papers.annotations(props.paper.id,props.language,request.signal);if(token!==epoch||disposed||request.signal.aborted)return;annotations.value=value;history.value.clear();selectedHighlightId.value='';annotationError.value='';annotationsReady.value=true;}catch(e){if(token!==epoch||disposed||request.signal.aborted)return;annotationError.value=(e as Error).message;annotationsReady.value=false;}}
+async function copySelection(){selectText();try{await copyText(selection.value.map(x=>x.quote).join('\n\n'));notice.value=localizedMessage('modules.paper-reading.text.467c6a41cf4b');}catch(e){notice.value=displayErrorValue(e);}}
+async function reloadAnnotations(){if(saving.value)return;annotationController?.abort();const request=new AbortController();annotationController=request;const token=epoch;try{const value=await papers.annotations(props.paper.id,props.language,request.signal);if(token!==epoch||disposed||request.signal.aborted)return;annotations.value=value;history.value.clear();selectedHighlightId.value='';annotationError.value='';annotationsReady.value=true;}catch(e){if(token!==epoch||disposed||request.signal.aborted)return;annotationError.value=displayErrorValue(e);annotationsReady.value=false;}}
 async function persist(item:PaperAnnotation,remove:boolean,token:number,id:string,language:PaperLanguage){
  try{const result=await papers.saveAnnotation(id,language,annotations.value.revision,copyAnnotation(item),remove);if(token!==epoch||disposed)return false;annotations.value=result;return true;}
- catch(e){if(token===epoch&&!disposed)annotationError.value=(e as Error).message;return false;}
+ catch(e){if(token===epoch&&!disposed)annotationError.value=displayErrorValue(e);return false;}
 }
-async function commit(label:string,changes:AnnotationChange[],onApplied?:(count:number)=>void){
+async function commit(label:string|MessageDescriptor,changes:AnnotationChange[],onApplied?:(count:number)=>void){
  if(saving.value||!annotationsReady.value)return false;
  saving.value=true;annotationError.value='';notice.value='';
  const token=epoch,id=props.paper.id,language=props.language,applied:AnnotationChange[]=[];
@@ -132,20 +136,20 @@ async function commit(label:string,changes:AnnotationChange[],onApplied?:(count:
   if(token!==epoch||disposed)return false;
   history.value.record(label,applied);
   if(applied.length!==changes.length)return false;
-  notice.value=changes.every(c=>c.after===null)?'标注已删除，可撤销。':(papers.web?'批注已保存。':'批注已保存到本机。');
+  notice.value=changes.every(c=>c.after===null)?localizedMessage('modules.paper-reading.text.96ce31612abf'):(papers.web?localizedMessage('modules.paper-reading.text.e7432a041765'):localizedMessage('modules.paper-reading.text.7c6fdf6190da'));
   if(selectedHighlightId.value&&!selectedHighlight.value)selectedHighlightId.value='';
   return true;
  }finally{saving.value=false;}
 }
-async function save(item:PaperAnnotation,remove=false){const before=annotations.value.items.find(a=>a.id===item.id)??null;return commit(remove?'删除标注':before?'编辑批注':'添加批注',[{before,after:remove?null:item}]);}
+async function save(item:PaperAnnotation,remove=false){const before=annotations.value.items.find(a=>a.id===item.id)??null;return commit(remove?localizedMessage('modules.paper-reading.text.4d3df8d27c75'):before?localizedMessage('modules.paper-reading.text.4a144990d92c'):localizedMessage('modules.paper-reading.text.150f47300f4d'),[{before,after:remove?null:item}]);}
 async function travel(direction:AnnotationDirection){
  if(saving.value||!annotationsReady.value)return;
- const label=direction==='undo'?history.value.undoLabel:history.value.redoLabel;if(!label)return;
+ const label=direction==='undo'?history.value.undoMessage:history.value.redoMessage;if(!label)return;
  saving.value=true;annotationError.value='';notice.value='';const token=epoch,id=props.paper.id,language=props.language;
  try{
   const result=await history.value.travel(direction,(item,remove)=>persist(item,remove,token,id,language));
   if(token!==epoch||disposed)return;
-  if(result.changed){clearSelection(true);notice.value=result.complete?`已${direction==='undo'?'撤销':'重做'}${label}。`:`部分标注已${direction==='undo'?'撤销':'重做'}，处理错误提示后可继续。`;}
+  if(result.changed){clearSelection(true);notice.value=result.complete?localizedMessage('modules.paper-reading.text.45dfcb6e8a19',{v0:direction==='undo'?localizedMessage('modules.paper-reading.text.926a50b98ece'):localizedMessage('modules.paper-reading.text.03717b6f1070'),v1:label}):localizedMessage('modules.paper-reading.text.5313ee00f409',{v0:direction==='undo'?localizedMessage('modules.paper-reading.text.926a50b98ece'):localizedMessage('modules.paper-reading.text.03717b6f1070')});}
  }finally{saving.value=false;}
 }
 function chooseHighlight(event:MouseEvent,n:number){
@@ -158,13 +162,13 @@ function chooseHighlight(event:MouseEvent,n:number){
 }
 function locateAnnotation(item:PaperAnnotation){jump(item.page);if(item.kind==='highlight')selectedHighlightId.value=item.id;}
 function make(group:typeof selection.value[number],kind:PaperAnnotation['kind']):PaperAnnotation{return {id:crypto.randomUUID(),page:group.page,kind,color:color.value,text:'',quote:group.quote.slice(0,5000),rects:group.rects};}
-async function highlight(){if(saving.value||!annotationsReady.value)return;selectText();const groups=[...selection.value];if(!groups.length)return;await commit('添加荧光笔',groups.map(group=>({before:null,after:make(group,'highlight')})),count=>{clearSelection(true);selection.value=groups.slice(count);});}
-function note(){if(saving.value||!annotationsReady.value)return;selectText();if(!selection.value.length)return;if(selection.value.length>1){notice.value='文字批注请在一页内选择，跨页内容可分别标注。';return;}editing.value=make(selection.value[0],'note');draft.value='';}
+async function highlight(){if(saving.value||!annotationsReady.value)return;selectText();const groups=[...selection.value];if(!groups.length)return;await commit(localizedMessage('modules.paper-reading.text.acd71aeeaf88'),groups.map(group=>({before:null,after:make(group,'highlight')})),count=>{clearSelection(true);selection.value=groups.slice(count);});}
+function note(){if(saving.value||!annotationsReady.value)return;selectText();if(!selection.value.length)return;if(selection.value.length>1){notice.value=localizedMessage('modules.paper-reading.text.d9b2ba4dc4f2');return;}editing.value=make(selection.value[0],'note');draft.value='';}
 function pageNote(){if(!annotationsReady.value||!ratios.value.length)return;editing.value={id:crypto.randomUUID(),page:page.value,kind:'note',color:color.value,text:'',quote:'',rects:[[.94,.025,.025,.025]]};draft.value='';}
 function toggleNotes(){sidebar.value=!sidebar.value;if(sidebar.value)nextTick(()=>notesPanel.value?.focus());}
 function edit(item:PaperAnnotation){if(saving.value)return;editing.value=copyAnnotation(item);draft.value=item.text;}
 async function saveNote(){if(!editing.value)return;const ok=await save({...editing.value,text:draft.value});if(ok){editing.value=undefined;clearSelection(true);}}
-async function exportPdf(){exporting.value=true;try{const result=await papers.export(props.paper.id,exportLanguage.value,exportAnnotated.value);notice.value=result.cancelled?'已取消导出。':`已导出 ${result.name}`;if(!result.cancelled)exportOpen.value=false;}catch(e){notice.value=(e as Error).message;}finally{exporting.value=false;}}
+async function exportPdf(){exporting.value=true;try{const result=await papers.export(props.paper.id,exportLanguage.value,exportAnnotated.value);notice.value=result.cancelled?localizedMessage('modules.paper-reading.text.84880323c334'):localizedMessage('modules.paper-reading.text.51e2081699e3',{v0:result.name});if(!result.cancelled)exportOpen.value=false;}catch(e){notice.value=displayErrorValue(e);}finally{exporting.value=false;}}
 watch(pageWidth,()=>{const a=zoomAnchor??anchor();zoomAnchor=undefined;lineStyles.clear();nextTick(()=>{restoreAnchor(a);schedule();});});
 watch(renderWidth,refreshRaster);
 watch(showText,()=>clearSelection(true));
@@ -175,43 +179,43 @@ onBeforeUnmount(()=>{disposed=true;clearSelection(true);controller?.abort();anno
 useWebSettings(props.settingsScope,{readerZoom:zoom,readerFit:fit,readerText:showText,readerSidebar:sidebar,annotationColor:color,exportLanguage,exportAnnotated});
 </script>
 <template>
-<section ref="reader" class="pdf-reader" aria-label="论文 PDF 阅读器">
+<section ref="reader" class="pdf-reader" :aria-label="tr('modules.paper-reading.text.6f3d7e49918e')">
  <div class="pdf-toolbar">
-  <div class="pdf-controls"><button :disabled="saving" :class="{primary:language==='original'}" @click="emit('language','original')">{{paper.notice?'栏目说明':paper.local?'本地 PDF':'原文'}}</button><button v-if="!paper.local&&!paper.notice" :disabled="saving" :class="{primary:language==='translation'}" @click="emit('language','translation')">中文译文</button><button v-if="paper.analysisPdf&&paper.analysisDownloaded!==false" :class="{primary:language==='analysis'}" :disabled="saving" @click="emit('language','analysis')">论文解读</button></div>
-  <div class="pdf-controls"><button aria-label="上一页" :disabled="page<=1" @click="jump(page-1)">‹</button><label>第 <input aria-label="页码" type="number" v-model.lazy.number="pageInput" @change="syncNumberInput($event,pageInput)" min="1" :max="ratios.length"> / {{ratios.length||'—'}} 页</label><button aria-label="下一页" :disabled="page>=ratios.length" @click="jump(page+1)">›</button></div>
-  <div class="pdf-controls"><select aria-label="阅读缩放" title="也可按住 Ctrl 在页面上滚动鼠标滚轮" :value="fit?'fit':zoom" @change="changeZoom(($event.target as HTMLSelectElement).value)"><option value="fit">适宽</option><option v-for="z in zoomOptions" :key="z" :value="z">{{z}}%</option></select><button @click="fullscreen">{{full?'退出全屏':'全屏阅读'}}</button></div>
-  <div class="pdf-controls"><button :aria-expanded="sidebar" :aria-controls="notesId" title="打开批注列表，可添加本页笔记" @click="toggleNotes">批注 {{annotations.items.length}}</button><button @click="exportOpen=true">导出 PDF</button><button :aria-pressed="showText" @click="showText=!showText">本页文字</button></div>
+  <div class="pdf-controls"><button :disabled="saving" :class="{primary:language==='original'}" @click="emit('language','original')">{{paper.notice?tr('modules.paper-reading.text.0bf18cd07b12'):paper.local?tr('modules.paper-reading.text.76dade2029ef'):tr('modules.paper-reading.text.354b28c85333')}}</button><button v-if="!paper.local&&!paper.notice" :disabled="saving" :class="{primary:language==='translation'}" @click="emit('language','translation')">{{tr('modules.paper-reading.text.2f6fc1af333a')}}</button><button v-if="paper.analysisPdf&&paper.analysisDownloaded!==false" :class="{primary:language==='analysis'}" :disabled="saving" @click="emit('language','analysis')">{{tr('modules.paper-reading.text.c57e0f8bc6f8')}}</button></div>
+  <div class="pdf-controls"><button :aria-label="tr('modules.paper-reading.text.c9b9ae7a6144')" :disabled="page<=1" @click="jump(page-1)">‹</button><label>{{tr('modules.paper-reading.text.af50a0fe2a50')}} <input :aria-label="tr('modules.paper-reading.text.0c0c4dcb33a3')" type="number" v-model.lazy.number="pageInput" @change="syncNumberInput($event,pageInput)" min="1" :max="ratios.length"> / {{ratios.length||'—'}}</label><button :aria-label="tr('modules.paper-reading.text.8a8542f69648')" :disabled="page>=ratios.length" @click="jump(page+1)">›</button></div>
+  <div class="pdf-controls"><select :aria-label="tr('modules.paper-reading.text.9ac5aadc5cf5')" :title="tr('modules.paper-reading.text.7c3308988ebb')" :value="fit?'fit':zoom" @change="changeZoom(($event.target as HTMLSelectElement).value)"><option value="fit">{{tr('modules.paper-reading.text.b30c74614063')}}</option><option v-for="z in zoomOptions" :key="z" :value="z">{{z}}%</option></select><button @click="fullscreen">{{full?tr('modules.paper-reading.text.0f1505b6ad3f'):tr('modules.paper-reading.text.55a4a65530a3')}}</button></div>
+  <div class="pdf-controls"><button :aria-expanded="sidebar" :aria-controls="notesId" :title="tr('modules.paper-reading.text.1253ff79eaa6')" @click="toggleNotes">{{tr('modules.paper-reading.text.85c5c1f5567b')}} {{annotations.items.length}}</button><button @click="exportOpen=true">{{tr('modules.paper-reading.text.e42c8735ec9f')}}</button><button :aria-pressed="showText" @click="showText=!showText">{{tr('modules.paper-reading.text.8939da0e7e7c')}}</button></div>
  </div>
  <div class="pdf-mark-tools" @pointerdown.capture="selectText">
-  <span>{{selection.length?`已选择 ${selection.length} 页的文字`:'拖选页面文字可复制或标记'}}</span><button :disabled="!selection.length" @mousedown.prevent @click="copySelection">复制选文</button><select aria-label="荧光笔颜色" v-model="color"><option value="yellow">黄色</option><option value="green">绿色</option><option value="pink">粉色</option></select><button :disabled="!selection.length||saving||!annotationsReady" @mousedown.prevent @click="highlight">荧光笔</button><button :disabled="!selection.length||saving||!annotationsReady" @mousedown.prevent @click="note">添加批注</button>
-  <div class="pdf-history-tools"><button aria-label="撤销标注" :title="history.canUndo?`撤销${history.undoLabel}（Ctrl+Z / ⌘Z）`:'撤销标注（Ctrl+Z / ⌘Z）'" :disabled="saving||!annotationsReady||!history.canUndo" @mousedown.prevent @click="travel('undo')">撤销</button><button aria-label="重做标注" :title="history.canRedo?`重做${history.redoLabel}（Ctrl+Shift+Z / ⌘⇧Z）`:'重做标注（Ctrl+Shift+Z / ⌘⇧Z）'" :disabled="saving||!annotationsReady||!history.canRedo" @mousedown.prevent @click="travel('redo')">重做</button></div>
-  <template v-if="selectedHighlight"><span class="pdf-selected-mark" role="status">已选中荧光笔</span><button :disabled="saving" title="Delete 或 Backspace，删除后可撤销" @mousedown.prevent @click="save(selectedHighlight,true)">删除荧光笔</button></template>
-  <small v-if="saving">正在保存…</small><small v-else-if="notice" role="status">{{notice}}</small>
+  <span>{{selection.length?tr('modules.paper-reading.text.320619ab53ff',{v0:selection.length}):tr('modules.paper-reading.text.c8c76c55d98a')}}</span><button :disabled="!selection.length" @mousedown.prevent @click="copySelection">{{tr('modules.paper-reading.text.7b057e58ea32')}}</button><select :aria-label="tr('modules.paper-reading.text.578c22ffc98d')" v-model="color"><option value="yellow">{{tr('modules.paper-reading.text.d451c07d739b')}}</option><option value="green">{{tr('modules.paper-reading.text.30c83dc25b12')}}</option><option value="pink">{{tr('modules.paper-reading.text.dbd379b39f0d')}}</option></select><button :disabled="!selection.length||saving||!annotationsReady" @mousedown.prevent @click="highlight">{{tr('modules.paper-reading.text.e3c114d7cd60')}}</button><button :disabled="!selection.length||saving||!annotationsReady" @mousedown.prevent @click="note">{{tr('modules.paper-reading.text.150f47300f4d')}}</button>
+  <div class="pdf-history-tools"><button :aria-label="tr('modules.paper-reading.text.7bda5027951e')" :title="history.canUndo?tr('modules.paper-reading.text.4649e527c4a4',{v0:history.undoLabel}):tr('modules.paper-reading.text.bffb9de88535')" :disabled="saving||!annotationsReady||!history.canUndo" @mousedown.prevent @click="travel('undo')">{{tr('modules.paper-reading.text.926a50b98ece')}}</button><button :aria-label="tr('modules.paper-reading.text.36459273ed1c')" :title="history.canRedo?tr('modules.paper-reading.text.ef159c635cdc',{v0:history.redoLabel}):tr('modules.paper-reading.text.bd5cec7de262')" :disabled="saving||!annotationsReady||!history.canRedo" @mousedown.prevent @click="travel('redo')">{{tr('modules.paper-reading.text.03717b6f1070')}}</button></div>
+  <template v-if="selectedHighlight"><span class="pdf-selected-mark" role="status">{{tr('modules.paper-reading.text.009a168cc49e')}}</span><button :disabled="saving" :title="tr('modules.paper-reading.text.cb51b854c1de')" @mousedown.prevent @click="save(selectedHighlight,true)">{{tr('modules.paper-reading.text.c1ab378991b2')}}</button></template>
+  <small v-if="saving">{{tr('modules.paper-reading.text.6bdb4435095e')}}</small><small v-else-if="notice" role="status">{{notice}}</small>
  </div>
- <div v-if="annotationError" class="pdf-warning" role="alert">{{annotationError}} <button @click="reloadAnnotations">重新载入批注</button></div>
+ <div v-if="annotationError" class="pdf-warning" role="alert">{{annotationError}} <button @click="reloadAnnotations">{{tr('modules.paper-reading.text.3872ff36fd6d')}}</button></div>
  <div class="pdf-layout" :class="{annotating:sidebar}">
-  <div ref="viewport" class="paper-viewport" tabindex="0" aria-label="连续 PDF 页面" @scroll.passive="schedule" @mouseup="selectText" @keyup="selectText">
-   <p v-if="failure" class="pdf-warning" role="alert">{{failure}} <button @click="failure='';wanted.add(page);pump()">重试页面</button></p>
-   <p v-if="!ratios.length">正在打开论文…</p>
+  <div ref="viewport" class="paper-viewport" tabindex="0" :aria-label="tr('modules.paper-reading.text.a85848ee18cb')" @scroll.passive="schedule" @mouseup="selectText" @keyup="selectText">
+   <p v-if="failure" class="pdf-warning" role="alert">{{failure}} <button @click="failure='';wanted.add(page);pump()">{{tr('modules.paper-reading.text.6572a7836d54')}}</button></p>
+   <p v-if="!ratios.length">{{tr('modules.paper-reading.text.111b82eb3c94')}}</p>
    <pre v-if="showText" class="paper-text">{{activeText}}</pre>
    <div v-for="(ratio,index) in ratios" v-show="!showText" :key="index" class="pdf-page" :data-page="index+1" :style="{width:pageWidth+'px',height:pageWidth*ratio+'px'}" @click="chooseHighlight($event,index+1)">
-    <template v-if="cache[index+1]&&Math.abs(index+1-page)<=2"><img :src="cache[index+1].image" class="paper-sheet" :alt="`${languageTitle} 第 ${index+1} 页`" draggable="false" decoding="async">
+    <template v-if="cache[index+1]&&Math.abs(index+1-page)<=2"><img :src="cache[index+1].image" class="paper-sheet" :alt="tr('modules.paper-reading.text.594a7222da77',{v0:languageTitle,v1:index+1})" draggable="false" decoding="async">
      <div class="pdf-text-layer"><span v-for="(line,i) in cache[index+1].lines" :key="i" class="pdf-text-line" :style="textStyle(line,ratio)">{{line.text+'\n'}}</span></div>
-    </template><span v-else class="pdf-placeholder">第 {{index+1}} 页{{loading===index+1?' · 正在加载…':''}}</span>
+    </template><span v-else class="pdf-placeholder">{{tr('modules.paper-reading.page_label',{page:index+1})}}{{loading===index+1?tr('modules.paper-reading.text.73c1bc043248'):''}}</span>
     <div class="pdf-selection-layer" aria-hidden="true"><template v-for="group in selection.filter(s=>s.page===index+1)" :key="group.page"><span v-for="(r,i) in group.rects" :key="i" :style="{left:r[0]*100+'%',top:r[1]*100+'%',width:r[2]*100+'%',height:r[3]*100+'%'}"/></template></div>
     <div class="pdf-marks" aria-hidden="true"><template v-for="item in annotations.items.filter(a=>a.page===index+1)" :key="item.id"><span v-for="(r,i) in item.rects" :key="i" :data-annotation-id="item.id" :class="['pdf-mark',item.kind,item.color,{'is-selected':selectedHighlightId===item.id}]" :style="{left:r[0]*100+'%',top:r[1]*100+'%',width:r[2]*100+'%',height:r[3]*100+'%'}"/></template></div>
-    <button v-for="item in annotations.items.filter(a=>a.page===index+1&&a.kind==='note')" :key="item.id" class="pdf-note-pin" :style="{left:Math.min(.96,item.rects[0][0]+item.rects[0][2])*100+'%',top:item.rects[0][1]*100+'%'}" :title="item.text" aria-label="编辑此处批注" @click.stop="edit(item)">✎</button>
+    <button v-for="item in annotations.items.filter(a=>a.page===index+1&&a.kind==='note')" :key="item.id" class="pdf-note-pin" :style="{left:Math.min(.96,item.rects[0][0]+item.rects[0][2])*100+'%',top:item.rects[0][1]*100+'%'}" :title="item.text" :aria-label="tr('modules.paper-reading.text.e61e8cff2700')" @click.stop="edit(item)">✎</button>
    </div>
   </div>
-  <aside v-if="sidebar" :id="notesId" ref="notesPanel" class="pdf-notes" :aria-label="papers.web?'个人批注':'本机批注'" tabindex="-1"><strong>{{papers.web?'个人批注':'本机批注'}} · {{languageTitle}}</strong><button :disabled="saving||!annotationsReady||!ratios.length" @click="pageNote">添加本页笔记</button><p class="hint">可为整页写笔记，也可拖选文字后添加批注。</p><p v-if="!annotations.items.length" class="hint">还没有批注，先记下一个想法吧。</p>
+  <aside v-if="sidebar" :id="notesId" ref="notesPanel" class="pdf-notes" :aria-label="papers.web?tr('modules.paper-reading.text.3c0a3846ee32'):tr('modules.paper-reading.text.a73d3c1316d5')" tabindex="-1"><strong>{{papers.web?tr('modules.paper-reading.text.3c0a3846ee32'):tr('modules.paper-reading.text.a73d3c1316d5')}} · {{languageTitle}}</strong><button :disabled="saving||!annotationsReady||!ratios.length" @click="pageNote">{{tr('modules.paper-reading.text.1c4eb23823a1')}}</button><p class="hint">{{tr('modules.paper-reading.text.587a92464205')}}</p><p v-if="!annotations.items.length" class="hint">{{tr('modules.paper-reading.text.6225ecd479bc')}}</p>
    <div v-for="item in annotations.items" :key="item.id" :data-annotation-id="item.id" :class="['pdf-note-card','note-'+item.color,{'is-selected':selectedHighlightId===item.id}]">
-    <button class="pdf-note-location" :disabled="saving" @click="locateAnnotation(item)">第 {{item.page}} 页 · {{item.kind==='highlight'?'荧光笔':item.quote?'便签':'本页笔记'}}</button><p v-if="item.text">{{item.text}}</p>
-    <div class="pdf-note-actions"><button :disabled="saving" @click="edit(item)">编辑</button><button :disabled="saving" @click="save(item,true)">删除</button></div>
+    <button class="pdf-note-location" :disabled="saving" @click="locateAnnotation(item)">{{tr('modules.paper-reading.page_label',{page:item.page})}} · {{item.kind==='highlight'?tr('modules.paper-reading.text.e3c114d7cd60'):item.quote?tr('modules.paper-reading.text.e3c5f4c93feb'):tr('modules.paper-reading.text.f709e2eb0acd')}}</button><p v-if="item.text">{{item.text}}</p>
+    <div class="pdf-note-actions"><button :disabled="saving" @click="edit(item)">{{tr('modules.paper-reading.text.051836569928')}}</button><button :disabled="saving" @click="save(item,true)">{{tr('modules.paper-reading.text.2f9daa828907')}}</button></div>
    </div>
   </aside>
  </div>
  <AnnotationNoteDialog v-if="editing" v-model="draft" :page="editing.page" :color="editing.color" :saving="saving" :error="annotationError" @close="editing=undefined" @save="saveNote" @reload="reloadAnnotations"/>
- <ModalDialog v-if="exportOpen" title="导出论文 PDF" :close-disabled="exporting" @close="exportOpen=false"><label class="note-label">文档<select v-model="exportLanguage"><option value="original">{{paper.notice?'栏目说明':paper.local?'本地 PDF':'原文'}}</option><option v-if="!paper.local&&!paper.notice" value="translation">中文译文</option><option v-if="paper.analysisPdf&&paper.analysisDownloaded!==false" value="analysis">论文解读</option></select></label><label class="export-check"><input type="checkbox" v-model="exportAnnotated">包含此文档的{{papers.web?'个人批注':'本机批注'}}与荧光笔</label><p class="hint">未勾选时导出原文件，勾选时生成含标准 PDF 批注的副本。注释显示方式取决于外部阅读器。</p><p role="status">{{notice}}</p><template #footer><button :disabled="exporting" @click="exportOpen=false">取消</button><button class="primary" :disabled="exporting||saving" @click="exportPdf">{{exporting?'正在导出…':'选择位置并导出'}}</button></template></ModalDialog>
+ <ModalDialog v-if="exportOpen" :title="tr('modules.paper-reading.text.4d2c92849afe')" :close-disabled="exporting" @close="exportOpen=false"><label class="note-label">{{tr('modules.paper-reading.text.2687ccdbb1d2')}}<select v-model="exportLanguage"><option value="original">{{paper.notice?tr('modules.paper-reading.text.0bf18cd07b12'):paper.local?tr('modules.paper-reading.text.76dade2029ef'):tr('modules.paper-reading.text.354b28c85333')}}</option><option v-if="!paper.local&&!paper.notice" value="translation">{{tr('modules.paper-reading.text.2f6fc1af333a')}}</option><option v-if="paper.analysisPdf&&paper.analysisDownloaded!==false" value="analysis">{{tr('modules.paper-reading.text.c57e0f8bc6f8')}}</option></select></label><label class="export-check"><input type="checkbox" v-model="exportAnnotated">{{tr(papers.web?'modules.paper-reading.export_session_annotations':'modules.paper-reading.export_local_annotations')}}</label><p class="hint">{{tr('modules.paper-reading.text.cdb1b5266014')}}</p><p role="status">{{notice}}</p><template #footer><button :disabled="exporting" @click="exportOpen=false">{{tr('modules.paper-reading.text.2cd0f3be8738')}}</button><button class="primary" :disabled="exporting||saving" @click="exportPdf">{{exporting?tr('modules.paper-reading.text.62731d95bc80'):tr('modules.paper-reading.text.10f98535ae54')}}</button></template></ModalDialog>
 </section>
 </template>
 <style scoped>

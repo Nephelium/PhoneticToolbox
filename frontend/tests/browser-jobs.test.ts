@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {BrowserJobs} from '../src/platform/browser-jobs.ts';
 import {LocalStorageError} from '../src/platform/local-assets.ts';
 import type {ResearchFile,ReconstructionConfig} from '../src/platform/research.ts';
+import {formatErrorCode,setLocale} from '../src/i18n/index.ts';
 const source={id:'input',name:'image.png',kind:'image',size:100,sha256:'a'.repeat(64)} as ResearchFile;
 const config={mode:'image'} as ReconstructionConfig;
 const encode=(text:string)=>new TextEncoder().encode(text).buffer;
@@ -29,7 +30,13 @@ test('failed final history save is retried and restores the completed result',as
  const f=fixture(),upload=f.ports.upload;let records=0;
  f.ports.upload=async(name,raw)=>{if(name.endsWith('.ptb-browser.json')&&++records===2)throw Error('connection lost');return upload(name,raw);};
  const a=new BrowserJobs('owner','project',f.ports),job=await a.start(source,config);await terminal(a,job.id);await new Promise(r=>setTimeout(r,0));
- assert.match(a.get(job.id)?.error_code??'',/保存尚未完成/);assert.equal((await a.list())[0].error_code,null);a.close();
+ const code=a.get(job.id)?.error_code??'';
+ assert.equal(code,'platform.saving_results_has_not_finished_keep_this_page_open');
+ assert.match(formatErrorCode(code),/保存尚未完成/);
+ await setLocale('en');assert.match(formatErrorCode(code),/Saving results/);
+ await setLocale('ja');assert.match(formatErrorCode(code),/保存/);
+ await setLocale('zh-CN');assert.equal(a.get(job.id)?.error_code,code);
+ assert.equal((await a.list())[0].error_code,null);a.close();
  const b=new BrowserJobs('owner','project',f.ports),restored=await b.list();assert.equal(restored.length,1);assert.equal(restored[0].state,'succeeded');assert.equal(restored[0].result_manifest?.files?.length,4);b.close();
 });
 

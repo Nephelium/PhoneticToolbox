@@ -1,0 +1,12 @@
+{
+  "modules.vocal-tract.acoustic_analysis": "声学分析",
+  "modules.vocal-tract.controls": "操作面板",
+  "modules.vocal-tract.vocal_tract_request_failed": "声道请求失败",
+  "modules.vocal-tract.physiological_parameter_synthesis": "生理参数合成",
+  "modules.vocal-tract.the_server_vtl_engine_and_session_interface_are_still": "服务器的 VTL 引擎与会话接口仍在适配中，网页版暂未接通。",
+  "modules.vocal-tract.vocal_tract_workspace": "声道工作区",
+  "modules.vocal-tract.physiological_parameter_synthesis_web": "生理参数合成 · 网页版",
+  "modules.vocal-tract.due_to_server_performance_limits_adjust_and_fix_the": "由于服务器性能限制，请先调整并固定调音姿态，再点击测试发声试听 0.5 秒。",
+  "modules.vocal-tract.the_web_version_does_not_yet_support_real_time": "网页版暂不支持边调整姿态边实时合成语音。需要实时合成时，请使用桌面版。",
+  "modules.vocal-tract.got_it": "知道了"
+}

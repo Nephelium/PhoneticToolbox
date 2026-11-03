@@ -4,6 +4,8 @@ import {readFileSync} from 'node:fs';
 import {parse,compileScript} from '@vue/compiler-sfc';
 import ts from 'typescript';
 import * as vue from 'vue';
+import * as i18n from '../src/i18n/index.ts';
+import * as localization from '../src/modules/module-localization.ts';
 
 // Exercise actual component lifecycles with a controllable document and transport.
 function mount(file:string,hidden=false){
@@ -15,8 +17,11 @@ function mount(file:string,hidden=false){
  const response=(name:string)=>name.includes('capabilities')?{task_operations:[]}:name.includes('assets?')?{assets:[],available:true}:name.includes('references')?[]:name.includes('capacity-request')?null:{available_bytes:100,quota_bytes:1000,used_bytes:0,reserved_bytes:0,policy_version:2};
  const fetch=async(name:string)=>{requests.push(name);if(hold)await new Promise<void>(resolve=>pending.push(resolve));return {ok:true,json:async()=>response(name)};};
  const require=(name:string)=>{
+  if(name.endsWith('/i18n/index.ts'))return i18n;
+  if(name.endsWith('/module-localization.ts'))return localization;
   if(name==='vue')return {...vue,onMounted:(fn:()=>void)=>mounted.push(fn),onUnmounted:(fn:()=>void)=>unmounted.push(fn)};
-  if(name.endsWith('feedback.ts'))return {feedbackCall:async()=>{requests.push('unread');if(hold)await new Promise<void>(resolve=>pending.push(resolve));return {unread:3};}};
+  if(name.endsWith('feedback.ts'))return {onFeedbackNotification:()=>()=>{},feedbackCall:async(op:string)=>{requests.push(op);if(hold)await new Promise<void>(resolve=>pending.push(resolve));return op==='messages'?{messages:[],cursor:0,hasMore:false,status:'open'}:{unread:3};}};
+  if(name.endsWith('feedback-drafts.ts'))return {loadFeedbackDraft:async()=>({text:'',images:[],requestId:'fixture'}),saveFeedbackDraft:async()=>{},newFeedbackDraft:()=>({requestId:'fixture'})};
   if(name.endsWith('local-assets.ts'))return {LocalStorageError:class extends Error{},LocalAssets:class{async list(){lists++;return []}}};
   if(name.endsWith('local-asset-transport.ts'))return {LocalAssetTransport:class{fetch=fetch;view=(v:unknown)=>v}};
   return {default:{}};
@@ -51,4 +56,15 @@ test('feedback unread polling coalesces slow checks and ignores a late reply aft
   await f.visible(false);await f.release();assert.equal(f.m.unread.value,3);await f.tick();assert.equal(f.requests.length,1);
   f.hold();await f.visible(true);assert.equal(f.requests.length,2);f.m.unread.value=4;f.close();await f.release();assert.equal(f.m.unread.value,4);
  }finally{f.close();}assert.equal(f.timers.size,0);assert.equal(f.events.get('visibilitychange')?.size,0);
+});
+
+test('feedback conversation pauses periodic reads while hidden and releases visibility listener',async()=>{
+ const f=mount('components/FeedbackThread.vue',true);try{
+  await f.start();const initial=f.requests.length;assert.equal(initial,1);
+  await f.tick();await f.tick();assert.equal(f.requests.length,initial);
+  await f.visible(true);assert.equal(f.requests.length,initial+1);
+  f.hold();await f.tick();const pending=f.requests.length;await f.tick();assert.equal(f.requests.length,pending);
+  await f.release();
+ }finally{f.close();}
+ assert.equal(f.timers.size,0);assert.equal(f.events.get('visibilitychange')?.size,0);
 });

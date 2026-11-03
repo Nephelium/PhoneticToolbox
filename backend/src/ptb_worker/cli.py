@@ -15,6 +15,8 @@ def main():
     if not 0<=args.probe_step_delay<=0.2:parser.error('Probe delay must be 0–0.2 seconds')
     config=json.loads(sys.stdin.readline())
     if config.get('kind') not in ('postgres','sqlite'):raise ValueError('Unsupported task store')
+    if config.get('storage_root') and config['kind'] != 'postgres':
+        raise ValueError('storage_root requires postgres; use local_files_root with sqlite')
     options={'max_running':config.get('max_running',2),'lease_seconds':config.get('lease_seconds',10)}
     store=PostgresJobStore(config['dsn'],**options) if config['kind']=='postgres' else SQLiteJobStore(config['path'],**options)
     store.check_schema()

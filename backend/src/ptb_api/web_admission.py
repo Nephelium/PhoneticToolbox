@@ -14,6 +14,7 @@ class WebAdmission:
     def __init__(self, app, *, slots=8, recovery_slots=4, waiting=24, timeout=1.5):
         self.app=app;self.timeout=timeout
         self.normal=Lane(slots,waiting);self.recovery=Lane(recovery_slots,16)
+        self.transfers=Lane(slots,waiting)
 
     async def __call__(self,scope,receive,send):
         path=scope.get('path','');method=scope.get('method','')
@@ -22,7 +23,11 @@ class WebAdmission:
         recovery=(method=='POST' and (path in ('/api/v1/workspaces/heartbeat','/api/v1/auth/logout')
             or path.startswith('/api/v1/jobs/') and path.endswith('/cancel'))
             or method=='DELETE' and path.startswith(('/api/v1/assets/','/api/v1/vocal/sessions/')))
-        lane=self.recovery if recovery else self.normal
+        # Bound transfer back-pressure independently so large file requests
+        # cannot consume the interactive or recovery lanes.
+        transfer=(method=='GET' and path.startswith('/api/v1/assets/') and path.endswith('/content')) or (
+            method=='PUT' and path.startswith('/api/v1/uploads/'))
+        lane=self.recovery if recovery else self.transfers if transfer else self.normal
         async def reject():
             await JSONResponse({'detail':'web_server_busy'},status_code=429,
                 headers={'Retry-After':'5','Cache-Control':'no-store'})(scope,receive,send)

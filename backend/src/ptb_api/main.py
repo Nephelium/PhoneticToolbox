@@ -75,7 +75,9 @@ def create_app(mode: Literal['local', 'server'] = 'server', *, account_store: Ac
                 while True:
                     await asyncio.sleep(1)
                     try:await asyncio.to_thread(workspace_service.release_expired_preview,egg_preview)
-                    except (psycopg.Error,OSError,StorageError):pass
+                    except Exception:
+                        import logging
+                        logging.getLogger(__name__).warning('preview_maintenance_retry_required')
             preview_task=asyncio.create_task(maintain_preview())
         if feedback_service is not None:
             import asyncio
@@ -95,6 +97,9 @@ def create_app(mode: Literal['local', 'server'] = 'server', *, account_store: Ac
             egg_preview.close()
             if vocal_service is not None:vocal_service.close()
             if spectrogram_session is not None:spectrogram_session.close()
+            from .postgres_pool import close_pool
+            for dsn in {getattr(adapter,'_dsn',None) for adapter in (storage,account_store,job_store)}-{None}:
+                close_pool(dsn)
     app = FastAPI(title='PhoneticToolbox API', version=API_VERSION, lifespan=lifespan,
                   description='Shared API; accounts require configured PostgreSQL. M01 batches require an explicitly configured durable worker and resource store.')
     ctx = AccountContext(account_store, auth_settings, mode, workspace_service)

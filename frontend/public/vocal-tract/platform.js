@@ -1,22 +1,24 @@
+import {msg,tr,join,bindText,appendText,bindAttribute,textNode,setHTML,onLocaleChange,parameterLabel,uiError} from './i18n.mjs';
 // M10 platform port. This module cannot open sockets or choose native paths.
 import {applyFonts} from './fonts.js';
+import {receiveError} from './i18n.mjs';
 const pending=new Map();let sequence=0;
 let resolveChart;
 export const ipaChart=new Promise(resolve=>{resolveChart=resolve;});
 export function request(op,body={}){
   return new Promise((resolve,reject)=>{
-    const id=String(++sequence),timer=setTimeout(()=>{pending.delete(id);reject(Error('声道引擎请求超时'));},['animation/prepare','preview'].includes(op)?660000:160000);
+    const id=String(++sequence),timer=setTimeout(()=>{pending.delete(id);reject(uiError(msg("modules.vocal-tract-frame.text.vocal_tract_engine_request_timed_out_196")));},['animation/prepare','preview'].includes(op)?660000:160000);
     pending.set(id,{resolve,reject,timer});parent.postMessage({type:'m10-request',id,op,body},'*');
   });
 }
 window.addEventListener('message',event=>{
   if(event.source!==parent)return;
   const data=event.data;
-  if(data?.type==='m10-ipa-chart'&&data.chart)resolveChart(data.chart);
+  if(data?.type==='m10-ipa-chart'&&data.chart&&event.origin===location.origin){resolveChart(data.chart);document.dispatchEvent(new CustomEvent('m10-ipa-chart',{detail:data.chart}));}
   if(data?.type==='m10-fonts')void applyFonts(data.fonts);
   if(data?.type==='m10-response'){
     const item=pending.get(data.id);if(!item)return;pending.delete(data.id);clearTimeout(item.timer);
-    data.ok?item.resolve(data.value):item.reject(Error(data.error));
+    data.ok?item.resolve(data.value):item.reject(Object.assign(receiveError(data.display,data.error),{recoveryAvailable:data.recoveryAvailable===true}));
   }
   if(data?.type==='m10-theme'){
     const root=document.documentElement;
@@ -30,7 +32,7 @@ window.addEventListener('message',event=>{
       if(typeof data.buttons.css==='string'){
         let style=document.getElementById('ptb-button-styles');
         if(!style){style=document.createElement('style');style.id='ptb-button-styles';document.head.append(style);}
-        if(style.textContent!==data.buttons.css)style.textContent=data.buttons.css;
+        if(style.textContent!==data.buttons.css)bindText(style,()=>data.buttons.css);
       }
     }
   }

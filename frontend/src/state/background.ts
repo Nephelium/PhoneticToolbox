@@ -1,10 +1,13 @@
+import {messageRef} from '../i18n/index.ts';
+import {uiMessage,uiError,uiErrorMessage,localized,ModuleDisplayError} from '../modules/module-localization.ts';
+import {tr} from '../i18n/index.ts';
 import {ref,watch} from 'vue';
 import {projects} from '../platform/browser.ts';
 import {normalizeBackground,type BackgroundAppearance} from '../design/background.ts';
 import {buttonAppearance,installButtonAppearance,setButtonAppearance} from './buttons.ts';
 import {openImageDatabase} from '../platform/image-storage.ts';
 import {refreshGlassWallpaper,syncGlassWallpaperFrame} from './glass-wallpaper.ts';
-export const backgroundAppearance=ref(normalizeBackground(null)),backgroundUrl=ref(''),backgroundName=ref(''),backgroundError=ref('');
+export const backgroundAppearance=ref(normalizeBackground(null)),backgroundUrl=ref(''),backgroundName=ref(''),backgroundError=messageRef();
 export const savedBackgrounds=ref<{id:string;name:string;url:string}[]>([]),selectedBackground=ref<string|null>(null);
 export const MAX_BACKGROUNDS=8;
 let initialized:Promise<void>|undefined,layer:HTMLDivElement;
@@ -50,7 +53,7 @@ function show(image?:SavedImage){
  backgroundUrl.value=image?URL.createObjectURL(image.blob):'';backgroundName.value=image?.name??'';apply();
  if(image){
   installButtonAppearance();
-  if(buttonAppearance.value.material!=='glass'&&!setButtonAppearance({material:'glass'}))backgroundError.value='背景图已保存，磨砂玻璃按钮已生效，但按钮设置未能保存。';
+  if(buttonAppearance.value.material!=='glass'&&!setButtonAppearance({material:'glass'}))backgroundError.value=uiMessage('state.the_background_image_was_saved_and_frosted_glass_buttons');
  }
  if(old)URL.revokeObjectURL(old);
 }
@@ -60,26 +63,26 @@ export function initializeBackground(){return initialized??=(async()=>{
  installBackgroundAppearance();
  watch(()=>buttonAppearance.value.glassBlur,apply);
  try{const value=await imageStore();displayLibrary(value);}
- catch(error){backgroundError.value=error instanceof Error?error.message:'背景图未能读取，请重新选择图片。';}
+ catch(error){backgroundError.value=error instanceof Error?uiErrorMessage(error):uiMessage('state.the_background_image_could_not_be_read_choose_the');}
 })();}
 export function setBackgroundAppearance(value:Partial<BackgroundAppearance>){
  backgroundAppearance.value=normalizeBackground({...backgroundAppearance.value,...value});apply();
- backgroundError.value=projects.write('backgroundAppearance',backgroundAppearance.value)?'':'背景效果已生效，但设置未能保存。';
+ backgroundError.value=projects.write('backgroundAppearance',backgroundAppearance.value)?'':uiMessage('state.the_background_effect_was_applied_but_its_settings_could');
 }
 export async function prepareBackground(file:File):Promise<SavedImage>{
- if(file.size>20*1024*1024)throw Error('请选择不超过 20 MB 的图片。');
- if(!/\.(png|jpe?g|webp)$/i.test(file.name))throw Error('支持 PNG、JPG 和 WebP 图片。');
+ if(file.size>20*1024*1024)throw uiError(uiMessage('state.choose_an_image_no_larger_than_20_mb'));
+ if(!/\.(png|jpe?g|webp)$/i.test(file.name))throw uiError(uiMessage('state.png_jpg_and_webp_images_are_supported'));
  const url=URL.createObjectURL(file),image=new Image();
  try{
   image.src=url;await image.decode();
-  if(!image.naturalWidth||!image.naturalHeight||image.naturalWidth*image.naturalHeight>40_000_000)throw Error('请选择不超过 4000 万像素的图片。');
+  if(!image.naturalWidth||!image.naturalHeight||image.naturalWidth*image.naturalHeight>40_000_000)throw uiError(uiMessage('state.choose_an_image_with_no_more_than_40_million'));
   const scale=Math.min(1,2560/Math.max(image.naturalWidth,image.naturalHeight)),canvas=document.createElement('canvas');
   canvas.width=Math.max(1,Math.round(image.naturalWidth*scale));canvas.height=Math.max(1,Math.round(image.naturalHeight*scale));
-  const context=canvas.getContext('2d');if(!context)throw Error('当前环境无法处理图片。');
+  const context=canvas.getContext('2d');if(!context)throw uiError(uiMessage('state.images_cannot_be_processed_in_this_environment'));
   context.drawImage(image,0,0,canvas.width,canvas.height);
-  const blob=await new Promise<Blob>((resolve,reject)=>canvas.toBlob(value=>value?resolve(value):reject(Error('图片处理失败。')),'image/webp',.9));
+  const blob=await new Promise<Blob>((resolve,reject)=>canvas.toBlob(value=>value?resolve(value):reject(uiError(uiMessage('state.image_processing_failed'))),'image/webp',.9));
   return {blob,name:file.name};
- }catch(error){if(error instanceof Error&&error.message.startsWith('请选择'))throw error;throw Error('无法读取这张图片，请选择有效的 PNG、JPG 或 WebP 文件。');}
+ }catch(error){if(error instanceof ModuleDisplayError)throw error;throw uiError(uiMessage('state.this_image_could_not_be_read_choose_a_valid_23'));}
  finally{URL.revokeObjectURL(url);}
 }
 export async function changeBackground(file?:File){
@@ -96,21 +99,21 @@ export async function changeBackground(file?:File){
    const a=new Uint8Array(await match.blob.arrayBuffer()),b=new Uint8Array(await image.blob.arrayBuffer());
    if(!a.every((byte,index)=>byte===b[index]))match=undefined;
   }
-  if(!match&&library.items.length>=MAX_BACKGROUNDS)throw Error('最多保存 8 张背景图，请先移除一张再上传。');
+  if(!match&&library.items.length>=MAX_BACKGROUNDS)throw uiError(uiMessage('state.you_can_save_up_to_8_background_images_remove'));
   const value={items:match?library.items:[...library.items,{...image,id}],selected:match?.id??id};
   await imageStore(value);displayLibrary(value);return true;
  }
- catch(error){backgroundError.value=error instanceof Error?error.message:'背景图未能保存，请重试。';return false;}
+ catch(error){backgroundError.value=error instanceof Error?uiErrorMessage(error):uiMessage('state.the_background_image_could_not_be_saved_try_again');return false;}
 }
 export async function selectBackground(id:string){
  await initializeBackground();backgroundError.value='';
- try{if(!libraryLoaded)displayLibrary(await imageStore());if(!library.items.some(image=>image.id===id))throw Error('这张背景图已移除，请选择其他图片。');const value={...library,selected:id};await imageStore(value);displayLibrary(value);return true;}
- catch(error){backgroundError.value=error instanceof Error?error.message:'背景图未能切换，请重试。';return false;}
+ try{if(!libraryLoaded)displayLibrary(await imageStore());if(!library.items.some(image=>image.id===id))throw uiError(uiMessage('state.this_background_image_has_been_removed_choose_another'));const value={...library,selected:id};await imageStore(value);displayLibrary(value);return true;}
+ catch(error){backgroundError.value=error instanceof Error?uiErrorMessage(error):uiMessage('state.the_background_image_could_not_be_changed_try_again');return false;}
 }
 export async function removeBackground(id:string){
  await initializeBackground();backgroundError.value='';
  try{if(!libraryLoaded)displayLibrary(await imageStore());const value={items:library.items.filter(image=>image.id!==id),selected:library.selected===id?null:library.selected};await imageStore(value);displayLibrary(value);return true;}
- catch(error){backgroundError.value=error instanceof Error?error.message:'背景图未能移除，请重试。';return false;}
+ catch(error){backgroundError.value=error instanceof Error?uiErrorMessage(error):uiMessage('state.the_background_image_could_not_be_removed_try_again');return false;}
 }
 /** Align the frame wallpaper and shared glass bitmap with the outer document. */
 export function syncBackgroundFrame(frame:HTMLIFrameElement){

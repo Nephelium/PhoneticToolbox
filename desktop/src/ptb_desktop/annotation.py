@@ -13,6 +13,49 @@ import stat
 from .file_provider import Directory, Entry, FileAccessError, checked_path, identity, fingerprint, read_locked, open_locked
 
 
+def _process_alive(pid):
+    """Unknown/permission-denied owners are retained, never guessed dead."""
+    if pid<=0:return True
+    if os.name=='nt':
+        import ctypes
+        from ctypes import wintypes
+        kernel=ctypes.WinDLL('kernel32',use_last_error=True)
+        kernel.OpenProcess.argtypes=[wintypes.DWORD,wintypes.BOOL,wintypes.DWORD]
+        kernel.OpenProcess.restype=wintypes.HANDLE
+        kernel.WaitForSingleObject.argtypes=[wintypes.HANDLE,wintypes.DWORD]
+        kernel.CloseHandle.argtypes=[wintypes.HANDLE]
+        handle=kernel.OpenProcess(0x100000,False,pid)
+        if not handle:return ctypes.get_last_error()!=87
+        try:return kernel.WaitForSingleObject(handle,0)!=0
+        finally:kernel.CloseHandle(handle)
+    try:os.kill(pid,0)
+    except ProcessLookupError:return False
+    except PermissionError:return True
+    return True
+
+
+def _save_lock(output,path):
+    for _ in range(2):
+        try:
+            stream=output.open(path,'xb')
+            try:
+                stream.write(str(os.getpid()).encode('ascii'));stream.flush();os.fsync(stream.fileno())
+            except BaseException:
+                stamp=identity(os.fstat(stream.fileno()));stream.close();output.unlink(path,stamp)
+                raise
+            return stream
+        except FileExistsError:
+            try:
+                with output.open(path,'rb') as existing:
+                    stamp=identity(os.fstat(existing.fileno()));raw=existing.read(32)
+            except FileNotFoundError:continue
+            # Old empty locks have no provable owner, so preserve them.
+            if not raw.isdigit() or len(raw)>10 or _process_alive(int(raw)):
+                raise FileAccessError('另一个窗口正在保存此文件，请稍后重试。') from None
+            output.unlink(path,stamp)
+    raise FileAccessError('另一个窗口正在保存此文件，请稍后重试。')
+
+
 class AnnotationFiles:
     def __init__(self, provider):
         self.provider = provider
@@ -173,10 +216,7 @@ class AnnotationFiles:
         temp = root/('.ptb-annotation-'+secrets.token_hex(16)+'.part')
         with pin_directory(root) as output:
             self.provider.directory(grant)
-            try:
-                lock_stream = output.open(lock,'xb')
-            except FileExistsError:
-                raise FileAccessError('另一个窗口正在保存此文件，请稍后重试。') from None
+            lock_stream = _save_lock(output,lock)
             lock_identity=identity(os.fstat(lock_stream.fileno()));temporary_identity=None
             try:
                 if self._version(target, root) != (stamp, expected):

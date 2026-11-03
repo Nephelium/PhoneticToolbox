@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import {tr} from '../i18n/index.ts';
 import {computed,provide} from 'vue';
 import type {AssetResolver,ManualAsset,ManualChapter,ManualReference,ManualTarget} from './types.ts';
 import {chapterDisplayNumbers,manualAnchor} from './content.ts';
@@ -14,6 +15,6 @@ const emit=defineEmits<{navigate:[target:ManualTarget]}>();
   <article class="manual-document" :id="manualAnchor(chapter.id)" :data-manual-chapter="chapter.id">
     <header class="manual-chapter-header"><h1><span class="manual-chapter-number">{{chapterNumber}}</span> {{chapter.title}}</h1><p v-if="chapter.summary">{{chapter.summary}}</p></header>
     <ManualNode :node="chapter.body" :chapter-id="chapter.id" :numbering="numbering" :assets="assets" :references="references" :asset-base-url="assetBaseUrl" :asset-resolver="assetResolver" @navigate="emit('navigate',$event)"/>
-    <p v-if="!chapter.body.content?.length" class="manual-empty" role="status">本章正文尚未提供。</p>
+    <p v-if="!chapter.body.content?.length" class="manual-empty" role="status">{{tr('manual.reader.emptyChapter')}}</p>
   </article>
 </template>

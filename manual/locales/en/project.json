@@ -1,0 +1,90 @@
+{
+  "schemaVersion": "ptb-manual-localization/1",
+  "locale": "en",
+  "entries": {
+    "16b92633b8095c2fe220c08fa65ceba506cf0501e02ce9c2b0f99a5c77eef16e": {
+      "source": "PhoneticToolbox 使用说明",
+      "translation": "PhoneticToolbox User Manual"
+    },
+    "0146c95d63fe9d03e89b6f045c01aec781ae91b40a71f10022650db85934a46e": {
+      "source": "实际分析导出图",
+      "translation": "Exported analysis figure"
+    },
+    "a3c58e36281cdc95c55912b93b47d9c611e21898e4ed699818a637bb064633e4": {
+      "source": "V3实际导出图",
+      "translation": "V3 Exported figure"
+    },
+    "52bf227f28eead3f2c72d0e328f994e410e271dc02da1ba26c7e935701184ac3": {
+      "source": "V3 实际导出图",
+      "translation": "V3 Exported figure"
+    },
+    "756b3238167c00d5104dbff40090e3a2f45c1a00f993736095610ad53427fd07": {
+      "source": "v3 实际处理音频",
+      "translation": "V3 Processed audio"
+    },
+    "aaeb1c43b4aa07d4c1681426223d8ddf37af4a7aafb58ffdea92cc77c2d079af": {
+      "source": "自然录音",
+      "translation": "Natural recording"
+    },
+    "6e827f6d1edb81fb753f3290403fc93a23f281cd5e133236b1adf1954815c8eb": {
+      "source": "实际应用截图",
+      "translation": "Application screenshot"
+    },
+    "011404313c2a2c2a785e7a7e46ba8b02eee99b5672e98a00eb1a3c521fe395b8": {
+      "source": "实际应用合成输出",
+      "translation": "Synthesized audio"
+    },
+    "f05efcbe5109819fa2f74fbc54a347d7ff97ef53d287dfc17463c1beadbbebc5": {
+      "source": "实际应用截图局部标注",
+      "translation": "Annotated application screenshot detail"
+    },
+    "a43d99b1ec68e91231bb027a853dfa053e26e6626e8e23ec19b3819980463268": {
+      "source": "实际Qt工作台截图",
+      "translation": "Desktop workbench screenshot"
+    },
+    "9789544563de55ae203f4efffb71e495a165b2e4db6ae750d7460bcb6a95cfc7": {
+      "source": "实际原生参数模型合成",
+      "translation": "Parameter model synthesis example"
+    },
+    "2dfa44661f73def45a1c0256eb4a36211482825bcb30d234a63d04a3737e2091": {
+      "source": "实际应用截图局部",
+      "translation": "Application screenshot detail"
+    },
+    "3d3abad995c253efc514247b82d7f28d6435a4532e2b1eda57183d160f098621": {
+      "source": "v3 实际处理",
+      "translation": "V3 Processed audio"
+    },
+    "b26f1e522eeda7a3fb7af5dec22b0c38ddf6d120014688efa572d27fc7b51317": {
+      "source": "Klatt 合成示例",
+      "translation": "Klatt synthesis example"
+    },
+    "ccdd059bc0ff504c4e9cc23fef9d70c4ee6473871112f0aed67641a5e78c6173": {
+      "source": "合成信号实际操作示例",
+      "translation": "Synthetic signal example"
+    },
+    "5e211b9ab7c6b149d05c2bdcaf3e268bfc0c3cb6a0abe88a0fbd1812401426cf": {
+      "source": "作者提供的实际应用屏幕录制",
+      "translation": "Application screen recording supplied by the author"
+    },
+    "eb8da9f1aac1cc767529e52707c0bc8b8d8ed4df6c3b92403cb9ff03c2a4aca8": {
+      "source": "实际应用导出",
+      "translation": "Exported application output"
+    },
+    "0c57f35e89a529ff208e170e4e2dbe3965ee3b2daaab25aef56c1b05bf4c037d": {
+      "source": "实际导出的白底 PNG：标题标明 Standard Chinese (Beijing)严，音标为蓝色 Doulos，参考汉字为棕色楷体粗体，两行文本保留。",
+      "translation": "An exported PNG with a white background. The title reads Standard Chinese (Beijing)严. Phonetic symbols use blue Doulos, reference Chinese characters use bold brown Kai-style type, and both text lines are retained."
+    },
+    "6739b61d7d9351ac3bfbd1a82ff7cf6d95ba155939fa94004552dd05268075b9": {
+      "source": "三维视图默认显示半侧模型，圆点沿用当前器官；空白区域拖动可转动观察。",
+      "translation": "The three-dimensional view shows a half model by default, with control points for the current organ. Drag an empty area to rotate the view."
+    },
+    "6c4d3704b79009e6dec24e2f67aa2b5ec07e225d453a04b15bfa450343ab1ea4": {
+      "source": "当前应用首页",
+      "translation": "Current application home page"
+    },
+    "fffc35c3110c4b46184764ed6b76c4d0810ff99293b185bbe5b457df76d5a23a": {
+      "source": "当前应用说明书",
+      "translation": "Current in-app manual"
+    }
+  }
+}

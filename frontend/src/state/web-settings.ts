@@ -1,3 +1,4 @@
+import {tr} from '../i18n/index.ts';
 import {computed,isRef,nextTick,onBeforeUnmount,onMounted,ref,watch,type Ref} from 'vue';
 import {projects} from '../platform/browser.ts';
 import {accountSettingsError,flushAccountPreferences,mergePreferences,preferenceChanges} from '../platform/account-preferences.ts';
@@ -11,7 +12,7 @@ export function settingsFields<T extends object,K extends keyof T>(target:T|Ref<
  return Object.fromEntries(keys.map(key=>[key,computed({get:()=> (isRef(target)?target.value:target)[key],set:value=>{(isRef(target)?target.value:target)[key]=value;}})])) as Record<string,Ref<T[K]>>;
 }
 const failures=ref<string[]>([]);
-export const webSettingsError=computed(()=>accountSettingsError.value||(failures.value.length?'设置暂未保存，请检查存储权限后重试。':''));
+export const webSettingsError=computed(()=>accountSettingsError.value||(failures.value.length?tr('state.the_settings_have_not_been_saved_check_storage_permissions'):''));
 const flushers=new Set<()=>void>();
 const hydrating=new Map<string,number>();
 export function applyingWebSettings(scope?:string){return (hydrating.get(webSettingsKey(scope)??'')??0)>0;}

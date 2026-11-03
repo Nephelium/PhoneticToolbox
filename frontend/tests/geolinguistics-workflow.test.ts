@@ -8,11 +8,15 @@ import {displayCounts,displayText,displayColor,broadPendingCount,isBroadCategory
 import {wrapMapText,composeMapSvgs} from '../src/modules/geolinguistics/export.ts';
 import {mapPaint,mapPaintPriority,contextBoundaryVisible,contextGeometryVisible} from '../src/modules/geolinguistics/map-paint.ts';
 import * as mapOptions from '../src/modules/geolinguistics/map-options.ts';
+import * as moduleLocalization from '../src/modules/module-localization.ts';
+import {tr,messageRef} from '../src/i18n/index.ts';
+import {displayValue} from '../src/modules/geolinguistics/groups.ts';
 
 // Execute the functions and state declarations from the actual SFC source. Only
 // browser / storage / map boundaries are faked; no workflow is reimplemented.
 const source=(name:string)=>readFileSync(new URL(`../src/modules/geolinguistics/${name}.vue`,import.meta.url),'utf8');
 function component(name:string,names:string[],env:Record<string,any>,state:string[]=[],expose:string[]=[]){
+ env={...moduleLocalization,tr,messageRef,displayValue,...env};
  env={mapPaint,mapPaintPriority,contextBoundaryVisible,contextGeometryVisible,...mapOptions,boundaryFeatures:new Map(),boundaryData:new Map(),boundaries:{clear(){},addFeatures(){}},boundaryLayer:{setVisible(){}},adminLayer:{changed(){}},adminStyles:new Map(),requestedBoundaries:'',exportBusy:ref(false),exportOptions:ref(mapOptions.defaultMapExportOptions([])),modal:ref(''),projectedBaseFeatures:(value:any)=>Array.isArray(value)?value:[value],projectedContextFeatures:(value:any)=>Array.isArray(value)?value:[value],...env};
  const script=source(name).match(/<script setup lang="ts">([\s\S]*?)<\/script>/)![1];
  const file=ts.createSourceFile(name+'.ts',script,ts.ScriptTarget.Latest,true,ts.ScriptKind.TS);
@@ -25,6 +29,9 @@ function component(name:string,names:string[],env:Record<string,any>,state:strin
  }
  const required=(items:Map<string,string>,key:string)=>{assert(items.has(key),`Missing ${name}.${key}`);return items.get(key)!;};
  if(name==='GeoMap'&&names.includes('syncLevel')&&!names.includes('readBoundary'))names=[...names,'readBoundary'];
+ if(name==='GeolinguisticsPage'&&names.some(value=>value==='exportComparison'||value==='exportTable')){
+  names=[...new Set([...names,'sourceValueLabel'])];state=[...new Set([...state,'sourceVolumeNames','sourceComparisonNames'])];
+ }
  const body=[...state.map(key=>required(variables,key)),...names.map(key=>required(functions,key)),`return {${[...names,...expose].join(',')}};`].join('\n');
  const js=ts.transpileModule(body,{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.None}}).outputText;
  return new Function(...Object.keys(env),js)(...Object.values(env));
@@ -34,7 +41,7 @@ const tick=()=>new Promise(resolve=>setImmediate(resolve));
 const input=()=>({target:{files:[{name:'manifest.json'}],value:'selected'}});
 
 function pageEnv(){
- const env={project:ref(emptyProject()),resources:ref<any>(),ready:ref(true),loading:ref(false),saving:ref(false),matrix:ref<any>(),matrixBusy:ref(false),matrixName:ref('main'),compareOpen:ref(false),controller:new AbortController(),error:ref(''),errorRetry:ref(''),notice:ref(''),fit:ref<any>(),props:{stateKey:'account:project:M19',active:true},restoreSettings:()=>{},validateProject,emit:()=>{},storage:{value:async()=>null,compare:async()=>{}},geoPort:{load:async()=>({version:'new'}),useDirectory:async()=>{},matrix:async()=>new Float64Array([0])}};
+ const env={project:ref(emptyProject()),resources:ref<any>(),ready:ref(true),loading:ref(false),saving:ref(false),matrix:ref<any>(),matrixBusy:ref(false),matrixName:ref('main'),compareOpen:ref(false),controller:new AbortController(),error:messageRef(''),errorRetry:ref(''),notice:messageRef(''),fit:ref<any>(),props:{stateKey:'account:project:M19',active:true},restoreSettings:()=>{},validateProject,emit:()=>{},storage:{value:async()=>null,compare:async()=>{}},geoPort:{load:async()=>({version:'new'}),useDirectory:async()=>{},matrix:async()=>new Float64Array([0])}};
  return {...env,emptyProject,isLegacyWorldView,reportError:(message:string,retry='')=>{env.error.value=message;env.errorRetry.value=retry;}};
 }
 
@@ -231,7 +238,8 @@ test('personal observations label map and CSV exports while retaining the origin
  assert.match(captured[1].legend[0].label,/乙类/);assert.match(captured[1].source,/含个人校订（1 个地点）/);assert.match(captured[1].source,/Huang.*2024/);assert.match(captured[1].source,/调查 2000–2008/);
  api.exportTable();assert.match(await files.at(-1)!.text(),/Huang et al\. 2024.*含个人校订/);
  project.value.edits['S1:F1_P']='A1';assert.equal(api.personalObservationCount(feature),0);
- assert.match(source('GeolinguisticsPage'),/personalObservationCount\(feature\).*含个人校订/);
+ assert.match(source('GeolinguisticsPage'),/personalObservationCount\(feature\).*modules\.geolinguistics\.includes_personal_corrections_213/);
+ assert.equal(tr('modules.geolinguistics.includes_personal_corrections_213'),'含个人校订');
 });
 
 test('retry routes map, save and initial-load failures to their actual recovery and preserves a failed map error',async()=>{

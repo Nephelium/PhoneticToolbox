@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import {tr} from '../../i18n/index.ts';
 import {ref,watch,onMounted,onBeforeUnmount} from 'vue';
 import IpaKeyboardChart,{type KeyboardSymbol} from './IpaKeyboardChart.vue';
 import type {ChartSystem} from '../ipa-plus/types.ts';
@@ -24,10 +25,10 @@ onMounted(()=>{const view=viewport();x=view.width-width-24;y=view.height-height-
 onBeforeUnmount(()=>{end();cancelAnimationFrame(frame);zoomObserver?.disconnect();window.removeEventListener('resize',layout);});
 </script>
 <template>
- <Teleport to="body"><section v-show="active" ref="panel" class="ipa-keyboard" role="dialog" aria-label="国际音标小键盘" :style="{'--ipa-key-size':19*zoom/100+'px'}" @keydown.esc.stop="emit('close')">
-  <header><button type="button" class="keyboard-drag" aria-label="拖动音标键盘" @pointerdown="begin($event,'move')" @pointermove="move" @pointerup="end" @pointercancel="end" @lostpointercapture="end" @keydown="keyboard($event,'move')">⠿ 音标键盘</button><nav aria-label="音标键盘表格"><button v-for="(name,id) in {ipa:'IPA',extipa:'extIPA',voqs:'VoQS'}" :key="id" type="button" :aria-pressed="system===id" @click="system=id">{{name}}</button></nav><div class="keyboard-scale"><button aria-label="缩小音标键盘字号" :disabled="zoom<=60" @click="zoom=Math.max(60,zoom-10)">−</button><output>{{zoom}}%</output><button aria-label="放大音标键盘字号" :disabled="zoom>=180" @click="zoom=Math.min(180,zoom+10)">＋</button></div><button type="button" aria-label="关闭音标键盘" @click="emit('close')">×</button></header>
+ <Teleport to="body"><section v-show="active" ref="panel" class="ipa-keyboard" role="dialog" :aria-label="tr('modules.annotation.text.13005bc8895d')" :style="{'--ipa-key-size':19*zoom/100+'px'}" @keydown.esc.stop="emit('close')">
+  <header><button type="button" class="keyboard-drag" :aria-label="tr('modules.annotation.text.0d18e82f1738')" @pointerdown="begin($event,'move')" @pointermove="move" @pointerup="end" @pointercancel="end" @lostpointercapture="end" @keydown="keyboard($event,'move')">{{tr('modules.annotation.text.3ab6336cfb25')}}</button><nav :aria-label="tr('modules.annotation.text.b9a0954fc9f1')"><button v-for="(name,id) in {ipa:'IPA',extipa:'extIPA',voqs:'VoQS'}" :key="id" type="button" :aria-pressed="system===id" @click="system=id">{{name}}</button></nav><div class="keyboard-scale"><button :aria-label="tr('modules.annotation.text.6f9b96c8c91d')" :disabled="zoom<=60" @click="zoom=Math.max(60,zoom-10)">−</button><output>{{zoom}}%</output><button :aria-label="tr('modules.annotation.text.c3258e976f1a')" :disabled="zoom>=180" @click="zoom=Math.min(180,zoom+10)">＋</button></div><button type="button" :aria-label="tr('modules.annotation.text.9afa3877cb8d')" @click="emit('close')">×</button></header>
   <fieldset :disabled="disabled" class="keyboard-content"><IpaKeyboardChart :system="system" @insert="emit('insert',$event)"/></fieldset>
-  <button type="button" class="keyboard-resize" aria-label="调整音标键盘大小" @pointerdown="begin($event,'resize')" @pointermove="move" @pointerup="end" @pointercancel="end" @lostpointercapture="end" @keydown="keyboard($event,'resize')">◢</button>
+  <button type="button" class="keyboard-resize" :aria-label="tr('modules.annotation.text.f64281249ff5')" @pointerdown="begin($event,'resize')" @pointermove="move" @pointerup="end" @pointercancel="end" @lostpointercapture="end" @keydown="keyboard($event,'resize')">◢</button>
  </section></Teleport>
 </template>
 <style scoped>

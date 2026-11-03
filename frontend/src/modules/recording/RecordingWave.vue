@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import {tr} from '../../i18n/index.ts';
 import {computed,ref,watch,nextTick,onMounted,onBeforeUnmount} from 'vue';
 import type {Preview,Role} from './types.ts';
 import {channelName} from './state.ts';
@@ -39,24 +40,24 @@ function draw(){
 watch(()=>[props.preview,props.spectrum],()=>nextTick(draw),{deep:false});onMounted(()=>{observer=new ResizeObserver(entries=>{if(entries[0].contentRect.width<=0||entries[0].contentRect.height<=0)return;cancelAnimationFrame(drawFrame);drawFrame=requestAnimationFrame(draw);});if(host.value)observer.observe(host.value);draw();});onBeforeUnmount(()=>{observer?.disconnect();cancelAnimationFrame(drawFrame);});
 </script>
 <template>
- <div ref="host" class="m16-wave" :class="{'has-spectrum':spectrum}" tabindex="0" role="group" aria-label="录音波形选区编辑" @focus="emit('focus',true)" @blur="emit('focus',false)" @wheel="wheel">
-  <div class="m16-wave-lanes" data-background-surface title="拖动选择时间范围，Ctrl＋滚轮缩放时间轴，各声道同步" @pointerdown="down" @pointermove="move" @pointerup="up" @pointercancel="up">
-   <div v-if="!wave.length" class="empty-wave">新建工程，选择设备后即可自由录音<br><small>{{browser?'停止后上传当前项目，空格控制试听':'原始采样保留在本地工程，空格只控制试听'}}</small></div>
+ <div ref="host" class="m16-wave" :class="{'has-spectrum':spectrum}" tabindex="0" role="group" :aria-label="tr('modules.recording.text.be4db6d30594')" @focus="emit('focus',true)" @blur="emit('focus',false)" @wheel="wheel">
+  <div class="m16-wave-lanes" data-background-surface :title="tr('modules.recording.text.d45085b182c7')" @pointerdown="down" @pointermove="move" @pointerup="up" @pointercancel="up">
+   <div v-if="!wave.length" class="empty-wave">{{tr('modules.recording.text.24c1b7548980')}}<br><small>{{browser?tr('modules.recording.text.5124a32feefd'):tr('modules.recording.text.299123831e2b')}}</small></div>
    <div v-for="(bins,index) in wave" :key="index" class="wave-lane">
     <span class="lane-label">{{channelName(browser&&!allChannels?(channel??0):index,roles)}}</span>
     <svg viewBox="0 0 1000 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" x2="1000" y1="50" y2="50" class="zero"/><polyline :points="wavePaths[index]" class="wave-line"/></svg>
    </div>
    <div v-if="selection[1]>selection[0]&&wave.length" class="selection" :style="selectionStyle"/>
   </div>
-  <div v-if="spectrum&&preview?.spectrum_start_frame!==undefined" class="m16-time-axis"><span>{{(start/rate).toFixed(3)}} s</span><span>波形</span><span>{{((start+length)/rate).toFixed(3)}} s</span></div>
+  <div v-if="spectrum&&preview?.spectrum_start_frame!==undefined" class="m16-time-axis"><span>{{(start/rate).toFixed(3)}} s</span><span>{{tr('modules.recording.text.0a40ad0e8d8f')}}</span><span>{{((start+length)/rate).toFixed(3)}} s</span></div>
   <div v-if="spectrum" class="m16-spectrum" @pointerdown="down" @pointermove="move" @pointerup="up" @pointercancel="up">
-   <canvas ref="canvas" aria-label="语谱图 0–5000 Hz"/>
-   <span class="spectrum-label" title="Praat Gaussian 5 ms · 50 dB 相对灰度 · 6 dB/oct 显示预加重。长窗口按时间抽样显示，可放大选区查看细节。">{{channelName(channel??0,roles)}} · Praat 语谱图</span>
+   <canvas ref="canvas" :aria-label="tr('modules.recording.text.060e7651af70')"/>
+   <span class="spectrum-label" :title="tr('modules.recording.text.93b1d2d1c753')">{{channelName(channel??0,roles)}} {{tr('modules.recording.text.210fe58bf99a')}}</span>
    <span class="frequency-top">{{maxFrequency}} Hz</span><span class="frequency-bottom">0 Hz</span>
    <div v-if="selection[1]>selection[0]&&wave.length" class="selection" :style="selectionStyle"/>
-   <small v-if="preview?.spectrum?.time_sampled" class="spectrum-hint">全段预览 · 放大选区查看细节</small>
+   <small v-if="preview?.spectrum?.time_sampled" class="spectrum-hint">{{tr('modules.recording.text.6a035d8fb1dc')}}</small>
   </div>
-  <div class="m16-time-axis"><template v-if="spectrum&&preview?.spectrum_start_frame!==undefined"><span>{{(spectrumStart/rate).toFixed(3)}} s</span><span>最近完成的语谱图</span><span>{{((spectrumStart+spectrumLength)/rate).toFixed(3)}} s</span></template><template v-else><span>{{(start/rate).toFixed(3)}} s</span><span>{{((start+length/2)/rate).toFixed(3)}} s</span><span>{{((start+length)/rate).toFixed(3)}} s</span></template></div>
+  <div class="m16-time-axis"><template v-if="spectrum&&preview?.spectrum_start_frame!==undefined"><span>{{(spectrumStart/rate).toFixed(3)}} s</span><span>{{tr('modules.recording.text.058361432b0d')}}</span><span>{{((spectrumStart+spectrumLength)/rate).toFixed(3)}} s</span></template><template v-else><span>{{(start/rate).toFixed(3)}} s</span><span>{{((start+length/2)/rate).toFixed(3)}} s</span><span>{{((start+length)/rate).toFixed(3)}} s</span></template></div>
  </div>
 </template>
 <style scoped>

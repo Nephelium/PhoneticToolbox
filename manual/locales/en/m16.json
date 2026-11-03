@@ -1,0 +1,2238 @@
+{
+  "schemaVersion": "ptb-manual-localization/1",
+  "locale": "en",
+  "entries": {
+    "e7fb3abb490079cebc9ea07375848d6b11d506687a3867473a13912a017747f5": {
+      "source": "录音",
+      "translation": "Recording"
+    },
+    "b54ebe3f734431f53cf25e0d03a1ab0dd3904c233b5dd35455c09946281cb1d1": {
+      "source": "视频教程：<s id=\"0\">观看本章视频</s>。",
+      "translation": "Video tutorial: <s id=\"0\">watch this chapter's video</s>."
+    },
+    "ea000a98b15a9dcd4d801b3c5a4678fda7d614d483775b909d737d80917368ae": {
+      "source": "录音能做什么",
+      "translation": "What Recording does"
+    },
+    "90922d36048c5e96e2092137abd78d935def4f005a13113152409f8fff97bdc9": {
+      "source": "可直接录音，也可按任务朗读。每次停止保存一条录音，重录追加；原音和编辑版本都保留。",
+      "translation": "Record freely or read tasks. Each stop saves one recording; rerecording appends another. Originals and edited versions are retained."
+    },
+    "e4a3859a208a8915c61bc44148ef508426d56e4413068c947c04e506c9e04716": {
+      "source": "桌面应用与网页版共用录音页，可以按任务录制、剪辑、处理和导出。工程用于继续编辑，WAV 用于后续分析，任务模板用于复用朗读清单。",
+      "translation": "Desktop and web share recording, task-based capture, editing, processing, and export. Projects retain editable work, WAV supports later analysis, and task templates reuse reading lists."
+    },
+    "45ea62a589c5309820bd2c7913a2f02a6afe9dee5de5ab23f1c04e4fc504da2e": {
+      "source": "认识录音工作台",
+      "translation": "The recording workbench"
+    },
+    "6dbb5d8b16d57ee1a73d9c1b2596689973448a8f0b5a67f3ffd0cc32117505dd": {
+      "source": "录音工作台空态：任务栏、朗读卡、波形与语谱图，以及当前顶部工程、设备和帮助入口。",
+      "translation": "Empty workbench: task panel, reading card, waveform/spectrogram, and top project, device, and help controls."
+    },
+    "1e155077422e1c10f4ab4cefa9c4497a5cf7e3ad8560ed8596378f71eb8eb22d": {
+      "source": "最大化录音工作台空态，显示任务栏、朗读卡和波形语谱区域",
+      "translation": "Maximized empty recording workbench with task panel, reading card, waveform, and spectrogram areas."
+    },
+    "9fd020e06db18ab99917d0b330cd9a25801e31b627e2c68bc16708fb3437ad3e": {
+      "source": "顶部：工程、任务导入／模板、设备与导出。",
+      "translation": "Top: project, task import/templates, devices, and export."
+    },
+    "a779c91971c446d6a7c9160fc3f54e9494803f7c3bc8077485ac36ad00c17525": {
+      "source": "左栏：任务、录音历史、选用标记和保存／导出提示；分隔条可拖动。",
+      "translation": "Left: tasks, recording history, selected-take marks, and save/export information. Drag the divider to resize."
+    },
+    "6a0898fa287bfadb6692d6da0d09f256c733b2ec1e42690638b3d194d8bcb4bc": {
+      "source": "中间：朗读卡、录音／播放、图面、版本、选区和处理。",
+      "translation": "Center: reading card, recording/playback, plots, versions, selection, and processing."
+    },
+    "bf5477476c2f1d6c306d000e5d8accf3ee3a347ec90a31ba1e26ea84a9f86762": {
+      "source": "设备面板：输入、输出、声道与电平；收起不会停止检测。",
+      "translation": "Device panel: input, output, channels, and levels. Collapsing does not stop monitoring."
+    },
+    "f1afa7c3ac5dbc001c385854311c91bfc582d42e9e72074c2066cd48d320342f": {
+      "source": "上方显示错误与恢复入口；底部进度条右侧 × 可请求取消后台任务。",
+      "translation": "Errors/recovery appear above; × at the right of the bottom progress bar requests cancellation of background tasks."
+    },
+    "aef7c0bdd3bb90eb19a7272091553abdeb2fde005c368760a7dee0cfc02e6523": {
+      "source": "本章示例使用合成输入／输出展示操作流程，EGG 角色展示通道保留。正式采集时按实际声卡与 EGG 接线检查设备。",
+      "translation": "Examples use synthesized input/output to demonstrate operations; the EGG role preserves a channel. For real capture, check actual interface and EGG wiring."
+    },
+    "5dab67978f109f4b92758ec0821bdc248b3b5b3d985dc08f1966aaa9652f6693": {
+      "source": "先录一条试试",
+      "translation": "Try one recording"
+    },
+    "9b79a2cbeb12678e95729bfaa912a4930c8bc32be4bf44bf27be50e22579f72c": {
+      "source": "点 <s id=\"0\">新建工程</s>。桌面端选择可写空目录，网页版使用当前临时项目；继续已有录音可用 <s id=\"1\">打开工程</s>。",
+      "translation": "Click <s id=\"0\">New project</s>. On desktop choose a writable empty folder; web uses the current temporary project. Use <s id=\"1\">Open project</s> for existing work."
+    },
+    "81d498ffc9e24f47dc36a6416d4f732b7018fad82eafcb320487e0a26ee765b2": {
+      "source": "点 <s id=\"0\">设备与录前检测</s>，选择输入、扬声器／耳机、采样率和通道角色。",
+      "translation": "Open <s id=\"0\">Devices and pre-recording check</s>; choose input, speakers/headphones, sample rate, and channel roles."
+    },
+    "2ff3b465e47c031aac24fcb0b979ccc334aedc0b7b918fb154666dce16e7ebf4": {
+      "source": "点 <s id=\"0\">开始录前检测（不保存音频）</s> 检查电平，再点 <s id=\"1\">停止检测</s>。",
+      "translation": "<s id=\"0\">Start pre-recording check (no audio saved)</s> to inspect levels, then <s id=\"1\">Stop check</s>."
+    },
+    "a05d48bc82470361b94e5798b8a2860c73db03c2ddede13bd81d38e719dc3817": {
+      "source": "选 <s id=\"0\">自由录音</s> 或任务，点 <s id=\"1\">开始录音</s>；结束点 <s id=\"2\">停止录音</s>，等保存提示。<s id=\"3\">空格只管试听，切页也可能继续录音。</s>",
+      "translation": "Choose <s id=\"0\">Free recording</s> or a task, then <s id=\"1\">Start recording</s>. Finish with <s id=\"2\">Stop recording</s> and wait for saving. <s id=\"3\">Space controls audition only; recording may continue after page changes.</s>"
+    },
+    "0f0d48e6278522f7c2f967846439278a2b399701d4fe75330458cc45f2f1d886": {
+      "source": "选 <s id=\"0\">试听与语谱声道</s> 后 <s id=\"1\">播放</s>。不满意可重录，要交付旧条需另标记为选用。",
+      "translation": "Choose the <s id=\"0\">Audition and spectrogram channel</s>, then <s id=\"1\">Play</s>. Rerecord if needed; mark an older take explicitly to use it for delivery."
+    },
+    "823f25a4dfeeac1728c5ca057b5c064d585a282cdc9d5d07421969be8b8a8f6c": {
+      "source": "点 <s id=\"0\">保存 / 批量导出</s>，选范围、版本和格式。桌面端导出到工程外目录，网页版点 <s id=\"1\">生成下载包</s> 保存 ZIP；继续编辑所需的完整工程另行备份。",
+      "translation": "Open <s id=\"0\">Save / Batch export</s> and choose scope, version, and format. Desktop exports outside the project; web <s id=\"1\">Generate download package</s> saves ZIP. Back up the full editable project separately."
+    },
+    "fbf9c09a7fece637b45517b0bae03062b842afe5f7af6414c52c10e693d12579": {
+      "source": "网页版首次检测或录音时，按浏览器提示允许麦克风访问。实际采样率、输入通道数和输出选择能力受系统、浏览器与声卡共同影响，正式采集前用实际设备试录并回听，多声道与 EGG 接线逐道核对。",
+      "translation": "On first web check/recording, allow microphone access in the browser. Actual sample rate, input channels, and output selection depend on system, browser, and hardware. Test and listen on actual devices; verify every multichannel/EGG connection."
+    },
+    "066a1a8589d69a8f4ddee2395b0c16ae14693d3203e5b018799c8e51bd1de78c": {
+      "source": "准备好材料和存储位置",
+      "translation": "Prepare materials and storage"
+    },
+    "f6e50dcfbc8c924c6cc46598892b61e53ee027bf72b91dc578b96291a23be032": {
+      "source": "桌面端准备可写空目录及工程外的导出位置，检查空间与供电，同一工程只开一个写入窗口。网页版需允许麦克风权限，并在退出前将录音或工程备份下载到电脑。",
+      "translation": "Desktop needs a writable empty project folder and an external export location. Check space/power and use one writing window per project. Web needs microphone permission and downloaded recordings/project backups before leaving."
+    },
+    "ee5b8324938896283a0285d9bd5ba848657f73e702231391d1c93a26f3625aa9": {
+      "source": "输入与输出需分别选择。初始 48000 Hz、双音频，单输入自动回退单道；EGG 按同声卡接线手工指定。",
+      "translation": "Select input and output separately. Initial settings are 48000 Hz and dual audio; one-input devices fall back to mono. Assign EGG manually by wiring on the same interface."
+    },
+    "6b4e81686dfd0b6757e1dc29250afc40e272a71da361437624d99985856bcb61": {
+      "source": "任务支持 UTF-8 CSV／TSV、XLSX、本模块 JSON，不直接导入 .txt。Excel 公式转文字，带前导零编号设文本。",
+      "translation": "Tasks support UTF-8 CSV/TSV, XLSX, and this module's JSON, not direct .txt import. Convert Excel formulas to text and format leading-zero IDs as text."
+    },
+    "9d5b9a43ac42248f252590c2b6e83e7e79854a4bcb9e9ab257dc2c874c9e4b9e": {
+      "source": "新建或继续工程",
+      "translation": "Create or continue a project"
+    },
+    "4e7fdb288b20c1a9ba4e21040c05e8b8ed5f4dc84c1d09b08ee4bcd7cadbb444": {
+      "source": "点 <s id=\"0\">新建工程</s>，桌面端选择可写空文件夹，取消不会创建。网页版使用当前临时项目；导入已有桌面工程时，点 <s id=\"1\">打开工程</s> 并选择完整工程文件夹。",
+      "translation": "<s id=\"0\">New project</s> selects a writable empty folder on desktop; canceling creates nothing. Web uses its current temporary project. To import desktop work, <s id=\"1\">Open project</s> and choose the complete folder."
+    },
+    "f7231fecf1d4580cda57f3d7619e2d63fffb9e9d4f23b86646e743fc8e4e8718": {
+      "source": "左栏显示工程名和保存提示。接着准备任务或设备，录音前核对当前任务与输入设备。",
+      "translation": "Project name/save status appears left. Prepare tasks/devices and verify current task/input before recording."
+    },
+    "777764129689dc31f7e90525c026480e9798f9dbb7bd088b280f22ac2a58d67a": {
+      "source": "尚未建工程时点击 <s id=\"0\">自由录音</s>、<s id=\"1\">开始录音</s> 或 <s id=\"2\">设备与录前检测</s>，会打开录音前准备提示。点 <s id=\"3\">知道了</s> 返回后先新建工程，再选择设备并检测。已有工程但未选输入时，录音和检测入口会提示先准备设备。",
+      "translation": "Without a project, <s id=\"0\">Free recording</s>, <s id=\"1\">Start recording</s>, or <s id=\"2\">Devices and pre-recording check</s> opens preparation guidance. <s id=\"3\">Got it</s> returns; create a project, select devices, then check. With a project but no input, recording/check asks for device preparation."
+    },
+    "204dd9bb8b6c6252e260e8ff14f57cb8023f66859516db732c050a4a4cb0f6c4": {
+      "source": "尚未建立工程时，开始录音会提示先新建工程，再选择设备并完成录前检测。",
+      "translation": "Without a project, recording prompts you to create one, choose devices, and complete checks first."
+    },
+    "defa3d358937fcb8d9d4bebcf5f1fb556c6842374e1fea1097428f56c6f1bd18": {
+      "source": "录音前准备对话框，显示新建工程与设备检测的操作顺序",
+      "translation": "Preparation dialog showing project creation and device-check order."
+    },
+    "7292ee4971cd4493b127e93a5db4950016e24598598fa065e8ea3b65b6503066": {
+      "source": "示例：新工程已建立，左侧显示工程名称和成功提示，录音与历史尚为空。",
+      "translation": "Example: new project created, name/success on the left, with no recordings or history yet."
+    },
+    "89346a7cc2d0239f68814818a9f1f2ccea21add18f385a64dc221154acbb8aa6": {
+      "source": "示例的最大化录音工作台，新工程成功提示和空任务列表",
+      "translation": "Maximized example workbench showing project-created success and empty tasks."
+    },
+    "be4222c1af0e05919b29ac0820127d2bf69bddc1d9c2aa959fd7d56e9e9cc3cf": {
+      "source": "工程入口与左栏控件",
+      "translation": "Project and left-panel controls"
+    },
+    "9aa63f70b1e8caf291767d2f441a4ef74eaf92208e1721fa1d21d3f44f8b05bc": {
+      "source": "控件",
+      "translation": "Control"
+    },
+    "6d9a6fe9460f7a0d7c3bd77a5d1403ad4f44bbad0d140b4f8758fcc889e941ee": {
+      "source": "位置/单位",
+      "translation": "Location / Unit"
+    },
+    "d96b5f223f71d2e565ac20aefaa3a64a543420fb7b82fd54a93781cecf9e7a48": {
+      "source": "默认值",
+      "translation": "Default"
+    },
+    "e693b465aef076ee3b13966ed6babcf40c31c3331efd9d77fe058a41d217bfe2": {
+      "source": "操作影响",
+      "translation": "Effect"
+    },
+    "37504ef5031a46e786c9c4e7d96de3991eab834f789031f0f7716becc4860b36": {
+      "source": "<s id=\"0\">新建工程</s>",
+      "translation": "<s id=\"0\">New project</s>"
+    },
+    "c2eba757ba293bd33043176d186e37bf13d33bc2b109ec8bab8aa68010f28528": {
+      "source": "顶部",
+      "translation": "Top"
+    },
+    "4a53d335e7174900ffd7c06201bf0f71f23474f710abb179e067a6d17f044640": {
+      "source": "无工程",
+      "translation": "No project"
+    },
+    "3d4c5249273b14df840fc2f7c41816b598a29a096bafc7f3dffc641eb397573b": {
+      "source": "桌面端选可写空目录；网页版使用当前临时项目。切换前尝试保存任务草稿。",
+      "translation": "Desktop selects a writable empty folder; web uses its current temporary project. Task drafts are saved where possible before switching."
+    },
+    "a458159aab74df7bdac1a8ba4e62cbe6a2c284a759e95f1a1442dd3553af0c1b": {
+      "source": "<s id=\"0\">打开工程</s>",
+      "translation": "<s id=\"0\">Open project</s>"
+    },
+    "a5064475d73b2d8c7ee73d0201e4cf0f92a3f6c2f3014e4dbd49251228807436": {
+      "source": "选择完整工程文件夹；网页版导入当前临时项目，源文件保留。换工程清空噪声样本和剪贴板。",
+      "translation": "Select the full folder. Web imports into its temporary project while retaining sources. Switching projects clears noise samples and clipboard."
+    },
+    "e2303634fac0fc315249348fb374df6140b5482a86a89c36604e5c0610e3460d": {
+      "source": "<s id=\"0\">导入任务</s>",
+      "translation": "<s id=\"0\">Import tasks</s>"
+    },
+    "73b171a529d6df6c0f43d4163eea671ffc5631cc26765ccb4868a782b1063f6b": {
+      "source": "工程打开后可用",
+      "translation": "Available after project opens"
+    },
+    "b8e72d031b031c1c3f5532a8daf47033c07e9ffef55838fa80caec6aa83796ee": {
+      "source": "选文件、映射、预览后替换草稿；录音保留。",
+      "translation": "Choose, map, and preview before replacing the draft; recordings remain."
+    },
+    "cc90caf5c71f116eb9a6d0aa5c4e29a460add2f254854f8b971c798f35fb46c1": {
+      "source": "<s id=\"0\">保存任务模板</s>",
+      "translation": "<s id=\"0\">Save task template</s>"
+    },
+    "ba46141aa674eab2b5b3dd8482bb6b95ad3667e3a506e166bdd03c7c5ef8dee3": {
+      "source": "顶部 / JSON",
+      "translation": "Top / JSON"
+    },
+    "5cc7be0805b01b61ba19b87db0aaa0cf373870a7eeedec221533e35ea1695daa": {
+      "source": "有任务时可用",
+      "translation": "Available with tasks"
+    },
+    "b08e1d45db0a29d22c0853e2ff14978ca749d5ca4ffa64916d8fa593873ba6dc": {
+      "source": "下载录音任务清单.json，只含任务文字与状态，不含音频。",
+      "translation": "Downloads 录音任务清单.json with task text/status only, without audio."
+    },
+    "f61f9e53184736fc88cb6392cab4934ecdd873d61cc0a4ed1c8b900554219f42": {
+      "source": "<s id=\"0\">设备与录前检测</s>",
+      "translation": "<s id=\"0\">Devices and pre-recording check</s>"
+    },
+    "7224d1e2c6d2648109a5bc9be2ce3ba1a7d999720ce5ab8a5257e7db92baac54": {
+      "source": "收起",
+      "translation": "Collapsed"
+    },
+    "61772452d3774a1b81df78fcead3c4d66c5715567340ad452f0eca11129b6e04": {
+      "source": "展开／收起面板；收起不停止检测。",
+      "translation": "Expands/collapses the panel without stopping checks."
+    },
+    "61fba21a2b21b18857ebe2e7ec12267a8bb4ea19e9497d3750b44c4a86b65e04": {
+      "source": "<s id=\"0\">保存 / 批量导出</s>",
+      "translation": "<s id=\"0\">Save / Batch export</s>"
+    },
+    "5c5c55a213b36de5bbbf97c716eadf4f0f7c41f9ee2063cdc50b540df2b14fe6": {
+      "source": "有工程且空闲时可用",
+      "translation": "Available with a project while idle"
+    },
+    "fc3f5ef37831e2a7456f74fa037cfed7e982196fa8f037092f23b4747e8d69e3": {
+      "source": "打开 WAV 导出窗。当前任务尚未录音时也可选批量范围；当前录音或选区需先选一条录音。",
+      "translation": "Opens WAV export. Batch scope is available even without a recording for the current task; current-recording/selection scope needs a selected take."
+    },
+    "4d6dd1a5613bb097983544e6484156649e937885a3c8bd801e9fd26f2dbcc88f": {
+      "source": "<s id=\"0\">帮助</s>",
+      "translation": "<s id=\"0\">Help</s>"
+    },
+    "c417f4c0d4aef77dbc46d0b67f2e81676a8626570758d4ae6bac5e77880c7e54": {
+      "source": "顶部右侧",
+      "translation": "Top right"
+    },
+    "ddaddd3ac9320582166f60d7f0e97321218580a38e7467f01e9798b50534037d": {
+      "source": "可打开",
+      "translation": "Available"
+    },
+    "7fb50b24400180ab6e17cf15f0e537e4bc0ac0a2d4b3573a6669e5341f8b2202": {
+      "source": "打开本章并可返回；正在录音仍需停止。",
+      "translation": "Opens this chapter with a return path. Ongoing recording must still be stopped."
+    },
+    "224f04843e5506fd1d381ab9ff4cf5828f0f77215829474a618182fb335c88f3": {
+      "source": "<s id=\"0\">方法与引用</s>",
+      "translation": "<s id=\"0\">Methods and references</s>"
+    },
+    "1ee1af33cd659b5dc1d7d439cf49e45aa7a488789c3cdda0fe1b8ff5f0d1b478": {
+      "source": "顶部右侧书图标",
+      "translation": "Book icon at top right"
+    },
+    "30914e5f0a27b2478347c4d063f04d8eaa990bca60e9bd3d361d3c30ee7b115d": {
+      "source": "查看并复制方法来源、引用或打开链接。",
+      "translation": "View/copy methods and citations, or open links."
+    },
+    "ddb9aaa1cd67b911c9ded81b2c9defae42217d434fbd53dc4dff36e37032ff6d": {
+      "source": "<s id=\"0\">收起错误</s>",
+      "translation": "<s id=\"0\">Dismiss error</s>"
+    },
+    "829df5514d1e822929b9e1841b2eed7be092fe73e0f35d97bec48eed812cbe82": {
+      "source": "上方错误条",
+      "translation": "Upper error bar"
+    },
+    "b684e7b02f0973eb02e9f87f53e362c0e90d728a7ad022b32c3f3b076be87940": {
+      "source": "错误时显示",
+      "translation": "Shown on error"
+    },
+    "4737ae39826cd4dad45be948f5a402491af3555f428cd15cc5f2086ef455ec5c": {
+      "source": "只隐藏消息，失败仍需处理。",
+      "translation": "Hides only the message; resolve the failure separately."
+    },
+    "eb51c79157d86b9a929049414bfb902e58a0b91a6c1d96d1dac01ec921561e2d": {
+      "source": "<s id=\"0\">恢复</s>",
+      "translation": "<s id=\"0\">Recover</s>"
+    },
+    "c4112af726368530f0c14426cc6a911b8599a49e74aadc9d75d30204faffee2b": {
+      "source": "上方恢复提示",
+      "translation": "Upper recovery notice"
+    },
+    "bd51410685c033396d0842bfc277284fa9ed8e1eb636f3cf78d0987a8f2d5e4b": {
+      "source": "发现有效前缀时显示",
+      "translation": "Shown when a valid prefix is found"
+    },
+    "62270a506de662099178c7e6846d6eea4baed49368786f3b7e727f36935a19c4": {
+      "source": "接回已保存且校验通过的连续片段。",
+      "translation": "Reconnects saved, verified continuous segments."
+    },
+    "f9c9bf77462a2d679dd37a48e849d2864c3394a743d336d5c811c5147c0d9435": {
+      "source": "<s id=\"0\">工程名与完成计数</s>",
+      "translation": "<s id=\"0\">Project name and completion count</s>"
+    },
+    "189048872b1816c768e875f6f612e69458a0b8bf10d4272814c2397cf5957718": {
+      "source": "左栏顶部",
+      "translation": "Top of left panel"
+    },
+    "67f3b671aa6752ec311f103602cfeadd39d63dc54ad035435a771676bb5377c0": {
+      "source": "目录名 / 已有选用数和任务总数",
+      "translation": "Folder name / Tasks with selected takes and total tasks"
+    },
+    "a03af87b0ab96381fa8a5522528ab232df7bef564dbbc27b0adcf05b70d04ece": {
+      "source": "计数表示有选用条目的任务数，未判断质量或导出。",
+      "translation": "Counts tasks with selected takes; does not assess quality/export."
+    },
+    "f7b53cd9dbd78623a7501a3d1529aa1626807fc04e2848fec4925eaa0ece4e55": {
+      "source": "<s id=\"0\">自由录音</s>",
+      "translation": "<s id=\"0\">Free recording</s>"
+    },
+    "be00bddf60dc547370771f3ee107e04879089d43392aea43f24ccac64ddc6065": {
+      "source": "左栏",
+      "translation": "Left panel"
+    },
+    "2a234d43955624a908bdc2d07793d3d25329ed01d678ce201035ec5a58658016": {
+      "source": "无任务时为自由录音",
+      "translation": "Free recording without tasks"
+    },
+    "09fef03d1147a4b4af71964dd6a316a1e14cce1ec88a5c804c180d4dc0f93798": {
+      "source": "直接录音，不绑定任务。",
+      "translation": "Records without a task link."
+    },
+    "b5b78f59a8e867b9358dcba6ad8ca77ca55b1129318f5e6f9835ec7eea9fae4d": {
+      "source": "<s id=\"0\">搜索任务文本</s>",
+      "translation": "<s id=\"0\">Search task text</s>"
+    },
+    "031a419e7934357bc2ba2d5aea8322863914d840efe98ef755e702093671e006": {
+      "source": "左栏 / 文本",
+      "translation": "Left / Text"
+    },
+    "fe9535fe5eee47ed51f779bfd92677e9fe5b65a08bf31942d41d1dff9411a6b3": {
+      "source": "空",
+      "translation": "Empty"
+    },
+    "02e17379e030ed6921ee98b9e07345cd3cfe96ec0fe087c98e5c7481fa8b2e5c": {
+      "source": "搜编号、名称和内容，不搜分组／备注，不改顺序。",
+      "translation": "Searches ID, name, and content, not groups/notes; order stays unchanged."
+    },
+    "0e16bbec7a2b4411768e1bff8af9137357946947fa3b8c1b7c9ebd263b7f934e": {
+      "source": "<s id=\"0\">任务行</s>",
+      "translation": "<s id=\"0\">Task row</s>"
+    },
+    "1a6f5218b16627ec5af1e1fe503ef6296df1ca171749c36c0d8d086239c56ca4": {
+      "source": "未选中",
+      "translation": "Unselected"
+    },
+    "63ed2216c38d02b01f6c09d5d8cb95703d4a80a0ca91baad14f7f60a02be0137": {
+      "source": "选任务并载入选用录音；停用／跳过项仍可查看。",
+      "translation": "Selects a task and loads its chosen take; disabled/skipped tasks remain viewable."
+    },
+    "043a03eaf93ac232b968055b634158523a7977cd35f667ee63aa6458120f834d": {
+      "source": "<s id=\"0\">调整任务栏宽度</s>",
+      "translation": "<s id=\"0\">Resize task panel</s>"
+    },
+    "d1bbff686bcd61b79cfe685ed3c567562027d0a4e2369b6ce8b8506ad2bce4b0": {
+      "source": "分隔条 / px",
+      "translation": "Divider / px"
+    },
+    "30d3ffa2582483bf91f8c79893efc1d5d81df11eab02504690aec2339f933ca7": {
+      "source": "300；恢复已有设置",
+      "translation": "300; restores existing settings"
+    },
+    "6c6d8416206db0e3aa045c4b5b8c833afb000f56f35f30e8b4753f62ab043c88": {
+      "source": "拖至 200–480 px，松开记忆布局。",
+      "translation": "Drag to 200–480 px; release to remember layout."
+    },
+    "7d3206892c94fcf1c85fee421741ca711b68f61dd08bde45703e560a8d706f99": {
+      "source": "<s id=\"0\">工程保存与 WAV</s>",
+      "translation": "<s id=\"0\">Project saving and WAV</s>"
+    },
+    "b626bc605cee6d91b5f96c70a07b6b627ca391a0bc5f15c018f251cca509aafb": {
+      "source": "左栏折叠说明",
+      "translation": "Left collapsible explanation"
+    },
+    "67ed676974af055362aabeaca3b67e1d9d48ca93c2b97e7b7e3fe43004eecd02": {
+      "source": "折叠",
+      "translation": "Collapsed"
+    },
+    "5332ddda33098698e67c644438ae147b88cd3413fcea6a448efabd042f13e688": {
+      "source": "展开阅读说明，不执行保存或导出。",
+      "translation": "Expands instructions without saving/exporting."
+    },
+    "2fb31e92ea723a0e07144647c01a08d806b284f2f2d6f6b4e643dbc8be9f85c4": {
+      "source": "<s id=\"0\">录音历史</s>",
+      "translation": "<s id=\"0\">Recording history</s>"
+    },
+    "fb3b5f02699460ae827e8d5e6f19fe035715fa826f1a66e6467769e891e7f941": {
+      "source": "左栏下拉",
+      "translation": "Left dropdown"
+    },
+    "71d156ee9344bf3b6dd34cbf84f2865e22eec1e74462fba9de3282b9f62e23ea": {
+      "source": "取工程可用条目",
+      "translation": "Available project entries"
+    },
+    "fba23968a5814174d68f8f7a4a7aacb09444207657f31ce15a0aaac619a2524b": {
+      "source": "包括重录和移出任务条目；换条停止试听并清空选区／缩放。",
+      "translation": "Includes rerecordings and recordings removed from tasks. Switching stops audition and clears selection/zoom."
+    },
+    "abac723a03dc0f7d9af2edec5d9c65920777d9d3fba73b07dd3590f6c3cdbb58": {
+      "source": "<s id=\"0\">标记为选用录音 / ✓ 当前选用录音</s>",
+      "translation": "<s id=\"0\">Mark as selected take / ✓ Current selected take</s>"
+    },
+    "80191cac7dca91a89d84cebaf1e1ace4a746d4f4db5a1e70bfd41322fbb07c16": {
+      "source": "新录音完成后成为选用",
+      "translation": "Newly completed takes become selected"
+    },
+    "7387663870da145f6dcd71c32120341cba0c9139841fbf58e0f9496235a0c580": {
+      "source": "决定任务批量导出的条目，查看旧条不会自动选用。",
+      "translation": "Determines task batch-export takes; viewing older ones does not select them automatically."
+    },
+    "333807a9d5fc8dcd6bb035eb371e83b298e9c667af38853cf1bc120e552208d7": {
+      "source": "<s id=\"0\">保存提示与导出结果</s>",
+      "translation": "<s id=\"0\">Save notices and export results</s>"
+    },
+    "cac415dbcf2bb9addcd0a5ca406ebaf547ffe6e12e05a858b1ccce14be0b7675": {
+      "source": "按当前操作",
+      "translation": "Depends on action"
+    },
+    "c67a6d11217f691beb94d6dc0abfdd9a3878124409ca5d32e1f2e88f6539351c": {
+      "source": "查看保存、数量、目录和逐项错误；后续操作可能换掉展示。",
+      "translation": "Shows saving, counts, folders, and per-item errors. Later actions may replace it."
+    },
+    "9d72ea81002f92bdd9605052639ffb63ba4cdcfc4962c721cc9c1effa5455295": {
+      "source": "准备朗读任务",
+      "translation": "Prepare reading tasks"
+    },
+    "6648e67a2204939c537644d60137697bbcef99aace0401ec5bd61ccb288f25f0": {
+      "source": "下表是新页初值，旧工程沿用已存记录。检测、录音或后台任务中，先停止或等完成再改。",
+      "translation": "These are new-page defaults; existing projects retain saved records. Stop monitoring/recording or wait for background tasks before changes."
+    },
+    "713d076eb12142844acd5e232e3c8e612a4857004812b7e4b0572ac2e5ecbe0d": {
+      "source": "新增与修改任务",
+      "translation": "Add and edit tasks"
+    },
+    "bf6c3a882942a4f195e5ff9ad222a3eecb4cd224201200c34cfc4025bdfa15fa": {
+      "source": "点 <s id=\"0\">＋ 新任务</s> 填写下表字段，再点 <s id=\"1\">完成编辑</s> 返回朗读卡。可点 <s id=\"2\">保存清单</s> 主动保存，开始录音前也会自动保存清单。",
+      "translation": "<s id=\"0\">+ New task</s>, fill the fields below, then <s id=\"1\">Finish editing</s> to return to the reading card. <s id=\"2\">Save list</s> explicitly; the list also saves before recording."
+    },
+    "c74dcb4c90fa1435c987e9af047baa89b27014e2c02c6a2d307e345b85df0fc4": {
+      "source": "修改时选任务后点 <s id=\"0\">编辑</s>。旧录音保留录制当时的文字，新录音记录新文字。",
+      "translation": "Select a task and <s id=\"0\">Edit</s>. Old recordings retain their original text; new takes record the new text."
+    },
+    "e7dcfdfea51941381e94307d65670f8d304fca81f783eead5d662fcba6f128df": {
+      "source": "用 <s id=\"0\">复制</s> 建相近任务，<s id=\"1\">上移／下移</s> 调顺序，<s id=\"2\">跳过此条</s> 暂缓录制；改完保存清单。",
+      "translation": "<s id=\"0\">Duplicate</s> similar tasks, <s id=\"1\">Move up/down</s> to reorder, and <s id=\"2\">Skip this task</s> to defer. Save afterward."
+    },
+    "e453b19b5289bb90cebb2ef596784570f7342ec6772376df2f149ad4fb1110c5": {
+      "source": "<s id=\"0\">删除任务</s> 会立即保存并选相邻任务，已有录音留在历史。保存失败时保留当前草稿，检查目录后重试。",
+      "translation": "<s id=\"0\">Delete task</s> saves immediately and selects a neighbor; recordings remain in history. Failed saving retains the draft; check the folder and retry."
+    },
+    "0bf98b90fd10144c77759258249d94fa4c945ad4ac250e31859525293d4796ae": {
+      "source": "单条录音任务编辑：任务编号、名称、录音内容、导出文件名、分组、备注与启用状态。",
+      "translation": "Single-task editor: ID, name, recording content, export filename, group, notes, and enabled state."
+    },
+    "89ec8f3d0c868119d22ec2d66ecd708e46cff5dac5393a76d41e46c3cbabd67d": {
+      "source": "录音任务编辑对话框，展示六项文字字段、启用复选框和完成编辑按钮",
+      "translation": "Task editor with six text fields, enabled checkbox, and Finish editing."
+    },
+    "74ea9ac1411865d0e41d133bde32cd23e8aaee87e32e6f0f1440bed91b5a7738": {
+      "source": "增删、顺序与任务字段",
+      "translation": "Add/delete, order, and task fields"
+    },
+    "bf087d8d686b45b2506074dc92475beec27a1c6fa53a9939c59130be7c6b4cd8": {
+      "source": "<s id=\"0\">＋ 新任务</s>",
+      "translation": "<s id=\"0\">+ New task</s>"
+    },
+    "6b5bf9ed776798977b247044cdc903c68c965acec3aa5453cffa6c118ce9f5e2": {
+      "source": "按任务数生成 T001 等",
+      "translation": "Generates T001 etc. from task count"
+    },
+    "6a2759f9a8db7309327918a550faea3fed517b94cf750c45e072d48bc4fceab6": {
+      "source": "新增并打开编辑窗，编号／文件名冲突时追加 A。",
+      "translation": "Adds and opens the editor; appends A for ID/filename conflicts."
+    },
+    "4749a4167e970135024cd21442662721fa31a4a8f4b5e5be4a6aea941ad7edac": {
+      "source": "<s id=\"0\">编辑</s>",
+      "translation": "<s id=\"0\">Edit</s>"
+    },
+    "c6269bfecb8fb6542b4721b3d13c9041a63bb63aeb5bcef8af72d46e77a4ffbe": {
+      "source": "需选任务",
+      "translation": "Task selection required"
+    },
+    "608943b01167c61c7f322eb980baef59a0bda930da19a5c00e73d9803d992ee9": {
+      "source": "修改当前任务，不改旧录音文字快照。",
+      "translation": "Edits current task, retaining old text snapshots."
+    },
+    "b38aa2d437f5aa54bd9bb3893ef7383a5c78572db3877bee668e408f07337867": {
+      "source": "<s id=\"0\">复制</s>",
+      "translation": "<s id=\"0\">Duplicate</s>"
+    },
+    "3d90346f44a0a83dbeffccb6e1548835ac3b2be8bfd2c825562cd52d22763105": {
+      "source": "追加 -copy 副本，冲突再加 A，取消跳过。",
+      "translation": "Appends -copy, then A on conflict, and clears skipped status."
+    },
+    "54d94db4fa68704f0306701249734b66fe748e10907e6217549176f23870d279": {
+      "source": "<s id=\"0\">删除任务</s>",
+      "translation": "<s id=\"0\">Delete task</s>"
+    },
+    "648dbc1e0e159fddbd03798800109414208b1b61ebed8e5cfa3afb02afb12a48": {
+      "source": "需选任务且空闲",
+      "translation": "Selected task, idle"
+    },
+    "cd839e10b6d260526982a2896e58c95c0c074b0119b65068f53eb86c14310cb7": {
+      "source": "移出清单并保存，录音保留；失败保留草稿。",
+      "translation": "Removes from list and saves; recordings remain. Failure retains draft."
+    },
+    "c164af0b9c769de8ae1d8848cedb7ee8a890f0980c8aefaf57bb4c99ce6cb96e": {
+      "source": "<s id=\"0\">上移 / 下移</s>",
+      "translation": "<s id=\"0\">Move up / Move down</s>"
+    },
+    "f2d8a413b9b94af8bf8c8caf811b5cd7dc3ef5037138f58f42b62dbd02b4ebc3": {
+      "source": "当前顺序",
+      "translation": "Current order"
+    },
+    "4ba5e937d033956b5fafec49eaa9f079cf789fe65143fc2ce7c7a672fbe67df1": {
+      "source": "改完整清单顺序，随后保存。",
+      "translation": "Changes the full list order; save afterward."
+    },
+    "7bcbf4c775ac62579627c3e62557f7c5d87734b52d0155185b790aa40cd13d12": {
+      "source": "<s id=\"0\">保存清单</s>",
+      "translation": "<s id=\"0\">Save list</s>"
+    },
+    "8ef12d136048d701989c00bc556924c5a2dfa9ab77e8cece4e9da24fb508060a": {
+      "source": "无改动时禁用",
+      "translation": "Disabled without changes"
+    },
+    "84f713dafb64c3e19dbd56961773f1a5a18db0908db11bf82e10f5d31e12e438": {
+      "source": "校验并提交草稿；失败保留，开始采集／关闭前也尝试保存。",
+      "translation": "Validates/commits the draft, retaining it on failure. Also attempts saving before capture/closing."
+    },
+    "64308477ed5a3894b0752d1056909b5fa079b9047174630043f47000495fdead": {
+      "source": "<s id=\"0\">任务编号</s>",
+      "translation": "<s id=\"0\">Task ID</s>"
+    },
+    "4e2b76bc788c28bc4d61a3e03445711274e280c72d473844d553718db7d1c1ed": {
+      "source": "编辑窗 / 文本",
+      "translation": "Editor / Text"
+    },
+    "dea68ca7b918987f7879365239570b522c2c2c9e48870ad7ebaf7cd6bf994c4f": {
+      "source": "T 加至少三位序号",
+      "translation": "T plus at least three digits"
+    },
+    "17f5857e0a602ccaaf615ffc35712b8c77dfb98c663fbbea2495661c792d46a3": {
+      "source": "非空且唯一，改名不改旧快照与选用关联。",
+      "translation": "Nonempty and unique. Renaming keeps old snapshots/selected-take links."
+    },
+    "01e9092837188145f427a4e29d1eb684125e5fbe38a5ee419509deb1ef3a2fce": {
+      "source": "<s id=\"0\">任务名称</s>",
+      "translation": "<s id=\"0\">Task name</s>"
+    },
+    "62a968b6d7e3a841b23208627963b25ced4d4f29bc917ddacc63283c6b5107a1": {
+      "source": "列表名称，空时显示内容首行或编号。",
+      "translation": "List name; empty uses the first content line or ID."
+    },
+    "d8502598f0b88c1cb0e70f877b7f8d855fb7821d02a299dfee1661544fc53cfb": {
+      "source": "<s id=\"0\">录音内容</s>",
+      "translation": "<s id=\"0\">Recording content</s>"
+    },
+    "2265bda436b53c361b4ec5c6703205856f17c12641a148fa3089e704b4c551ee": {
+      "source": "编辑窗 / 多行文本",
+      "translation": "Editor / Multiline text"
+    },
+    "4b8d2a09272928b1fb87a3cadd6166957ec5da4d8bae1dcfec48d7beec7dd8f1": {
+      "source": "朗读卡文字，支持中文、IPA、换行。",
+      "translation": "Reading-card text supporting Chinese, IPA, and newlines."
+    },
+    "80187a4eaa936c5c46a12a2f3398bbf63dda50fe418eb6854d02ce7019032c73": {
+      "source": "<s id=\"0\">导出文件名</s>",
+      "translation": "<s id=\"0\">Export filename</s>"
+    },
+    "1e61cc5084d414e2a4eb52dac8a952082ee1b0bba6f429e5aafe96d94c66d551": {
+      "source": "编辑窗 / 不含扩展名",
+      "translation": "Editor / Without extension"
+    },
+    "e40bd4ef9a7a129bc35fcda35beeb4943ade33b15e72101927fb4a9756ec9eaf": {
+      "source": "recording- 加至少三位序号",
+      "translation": "recording- plus at least three digits"
+    },
+    "05bfeb62652a9dc93d31547e2f719713fcdc2d518dd00a4ca946948992e1cb7d": {
+      "source": "安全且唯一，不填扩展名或路径。",
+      "translation": "Safe and unique; omit extension/path."
+    },
+    "6e2e3df1908020714065b1d20b7b4856f471d66ff4502f59718511efaca61448": {
+      "source": "<s id=\"0\">分组 / 备注</s>",
+      "translation": "<s id=\"0\">Group / Notes</s>"
+    },
+    "4f04dc046a9f28bb8f571c971bd69ebe51af9228b20c68f157ea7c5acce1d0ed": {
+      "source": "均空",
+      "translation": "Both empty"
+    },
+    "02daec919d0bdae0f8fa68f560ce19085f49ffefaf2756f8f7d82e947f15137b": {
+      "source": "仅作组织说明。",
+      "translation": "For organizational notes only."
+    },
+    "e0e6a7d3ecc24a3a279630f2342e9d136f1d1c85d1b208a22614119214e2c61f": {
+      "source": "<s id=\"0\">启用此任务</s>",
+      "translation": "<s id=\"0\">Enable this task</s>"
+    },
+    "41ad328cb30bbc8a85854d81f7508e8da3f6625a92d3ca1b802dffe720579566": {
+      "source": "编辑窗 / 复选框",
+      "translation": "Editor / Checkbox"
+    },
+    "08f8e7374cb1dd446e98d817d9cacf05aeeec3586942c9d00cd2afa0f0783cde": {
+      "source": "开启",
+      "translation": "On"
+    },
+    "e3e1e1c81bdc325e00c5d52ce1b1195ab48116315631261c7906f32be24b2965": {
+      "source": "停用后禁止录音，并排除下一条／任务批量；历史保留。",
+      "translation": "Disabling blocks recording and excludes next-task/batch tasks; history remains."
+    },
+    "221a5f7c5c1fda116745a270ca62d189dd76adce3486cd3f99d6e130ae900743": {
+      "source": "<s id=\"0\">完成编辑</s>",
+      "translation": "<s id=\"0\">Finish editing</s>"
+    },
+    "70f05174f3851ac2042050f7fe3512ffc99d3bdc9c9acbf1980a7d190ac56a30": {
+      "source": "编辑窗",
+      "translation": "Editor"
+    },
+    "2158c66037eec1a34bf963aef91ff20176639cc8dbb23d002a5f9cb967e982d6": {
+      "source": "编辑时可用",
+      "translation": "Available while editing"
+    },
+    "bdde8bd656d127c686330a9834e55921a79ce007cf75ec4f25ddfdbb47606ee5": {
+      "source": "关闭编辑窗；仍需保存清单。",
+      "translation": "Closes the editor; still save the list."
+    },
+    "e375cce5dc52465ff9aaad7ba1b3407d1caf0a61e6af71ca21a83738db299fa5": {
+      "source": "选择要导入的文件",
+      "translation": "Choose a file to import"
+    },
+    "dba252de74ac2b0e6c268c334e4e377554c99ca38cb8be3c57e61b0ca7c17dd5": {
+      "source": "点 <s id=\"0\">导入任务</s>，可 <s id=\"1\">下载 XLSX 示例</s> 或 <s id=\"2\">选择表格文件</s>，原清单暂不改变。",
+      "translation": "<s id=\"0\">Import tasks</s> offers <s id=\"1\">Download XLSX example</s> or <s id=\"2\">Choose spreadsheet file</s>. Current tasks stay unchanged initially."
+    },
+    "468860960d0ce4d34f21be7f04c639c81909d69cecf3bd33aacdbb4412469039": {
+      "source": "导入任务前的表格说明：示例列、重复次数，以及下载 XLSX 示例和选择表格文件入口。",
+      "translation": "Pre-import explanation: example columns, repeat counts, and XLSX example/file-selection controls."
+    },
+    "216a54009b4f1a448cb91f0ca81a439a5467c6023c4d2a19d9638262f1bf1520": {
+      "source": "导入录音任务说明对话框，展示中文示例表格、下载 XLSX 示例与选择表格文件按钮",
+      "translation": "Import-tasks explanation dialog with Chinese example table and download/choose buttons."
+    },
+    "75ebefed309c0d06bf485a4f04f3b8f83fd9e40524a6dd2e419ee0640034accd": {
+      "source": "说明、映射与确认",
+      "translation": "Instructions, mapping, and confirmation"
+    },
+    "260d292b54236a51fc03a1bd30f430af350367dd801aa2c20927dc44b5434f61": {
+      "source": "<s id=\"0\">下载 XLSX 示例</s>",
+      "translation": "<s id=\"0\">Download XLSX example</s>"
+    },
+    "e79bd76db06153f3609921c80598cd505c0032d3395b19290110845c5b8d882a": {
+      "source": "格式说明窗",
+      "translation": "Format explanation dialog"
+    },
+    "850d26ae49a357627a9ceee157fef6a5cf63a33f1c404883b0010e2d4264a0d5": {
+      "source": "等待点击",
+      "translation": "Awaiting click"
+    },
+    "d7ff6e29ab5cf1d533d6f43e882db02eabd8e39047f27e4a7b220618081c511d": {
+      "source": "下载录音任务表格示例.xlsx，含中文列名、两行示例和数值次数。",
+      "translation": "Downloads 录音任务表格示例.xlsx with Chinese headers, two example rows, and numeric repeat counts."
+    },
+    "8bf9ec3f4ec9e8b9e205f3d1ea3c549bab21b753ef44401bc157c6b23594a878": {
+      "source": "<s id=\"0\">选择表格文件</s>",
+      "translation": "<s id=\"0\">Choose spreadsheet file</s>"
+    },
+    "40b3ba334b3ee3cc703fde7afacec54303b0c7672c0710aa8f7e2a1a60a06182": {
+      "source": "未选择",
+      "translation": "Not selected"
+    },
+    "e7c6612cb52dc46b28c7389fba07e5f851946a76478c7b748412cdeac8fa1dd6": {
+      "source": "CSV／TSV 用 UTF-8 和对应分隔符，也支持 XLSX／JSON。",
+      "translation": "CSV/TSV use UTF-8 and the matching delimiter; XLSX/JSON are also supported."
+    },
+    "620b5563f58c8f329167993d96ada257feb7ef358d2873a2990ca56011da70d3": {
+      "source": "<s id=\"0\">关闭</s>",
+      "translation": "<s id=\"0\">Close</s>"
+    },
+    "ba6fb208883a7d8f17d86e1a79bfaa3763270a4148cddf7d322b5662ec6a4778": {
+      "source": "关闭说明，不改任务；点背景同效。",
+      "translation": "Closes instructions without changing tasks; clicking outside does the same."
+    },
+    "99d2c6dcd8330e06a0e703cf61022a2d74da3a7d10306e0746c9131780b42710": {
+      "source": "<s id=\"0\">工作表</s>",
+      "translation": "<s id=\"0\">Worksheet</s>"
+    },
+    "a5fbdcc6a75a13f65ef1259b42287f3c56da728431f99397529ea55cf393cbb4": {
+      "source": "预览窗",
+      "translation": "Preview dialog"
+    },
+    "4005a6c59e85dd51d075b636377a3c0adc681551b3af80a2b90e34a33634a4ec": {
+      "source": "第一张",
+      "translation": "First sheet"
+    },
+    "a67ce26ed94ea929737da6f85feaa43af20087b16da389f124d9698ada89493b": {
+      "source": "XLSX 换表后重新映射，需复查。",
+      "translation": "Changing XLSX sheets remaps columns; recheck."
+    },
+    "e375a50f21b7cbf0808ca4f881ea7ed12eca9c36c2f44e4e38cef2398a5ca0e0": {
+      "source": "<s id=\"0\">任务编号映射</s>",
+      "translation": "<s id=\"0\">Task ID mapping</s>"
+    },
+    "4b05f25741f33b721441dfe9d6f0f46f33175d3480845382fb74121c211ab8a5": {
+      "source": "匹配 task_id/任务编号/id",
+      "translation": "Matches task_id/任务编号/id"
+    },
+    "15eccf43c6357c9863742e20b31c4e13a8e78eaa5903aaada1e5dc8837922429": {
+      "source": "空值自动生成 T001 等；展开后唯一。",
+      "translation": "Empty generates T001 etc.; unique after expansion."
+    },
+    "a22b284610142e1fc8a39ae49b3b097605aeb72c56be72e26c6bf87655a939d8": {
+      "source": "<s id=\"0\">任务名称映射</s>",
+      "translation": "<s id=\"0\">Task name mapping</s>"
+    },
+    "ce9138caf646fda3fe31d23a2897aea8befdef5e965f50ec256042475cb9f62a": {
+      "source": "匹配 title/任务名称/名称",
+      "translation": "Matches title/任务名称/名称"
+    },
+    "2337f0d3026bb108d794cc056aebe0f88166f86dfed7b33098466bd24e188407": {
+      "source": "与录音内容至少映射一项。",
+      "translation": "Map at least name or recording content."
+    },
+    "09a6558646ca9ea337281fc03bf13c996c13cc253ef087be5bd5828253f929ab": {
+      "source": "<s id=\"0\">录音内容映射</s>",
+      "translation": "<s id=\"0\">Recording content mapping</s>"
+    },
+    "cab5d7b33f0eb9e2be58d51fc1e477f559c2ac0e1308c523779ab055cba45a49": {
+      "source": "匹配 prompt/文本/录音内容/内容",
+      "translation": "Matches prompt/文本/录音内容/内容"
+    },
+    "36aeb3c3a39efe69b8299be3c625506a40d90642b78e5a33c1c1b4b9dad24cac": {
+      "source": "朗读文字，核对中文／IPA／换行。",
+      "translation": "Reading text; check Chinese, IPA, and newlines."
+    },
+    "3e025d168e6af29ca7ceb1d8c7297e284ab82323a9dc4b01e76d94cf31c7230d": {
+      "source": "<s id=\"0\">导出文件名映射</s>",
+      "translation": "<s id=\"0\">Export filename mapping</s>"
+    },
+    "fd195bc5ed62732f87349c2e67887b634a8959fd60bdfb4dc9659c43cffb8ee2": {
+      "source": "匹配 filename_stem/文件名",
+      "translation": "Matches filename_stem/文件名"
+    },
+    "cfbf7753374eaa0759207a8c16e0bae88d12578b400f085403b1f6fea7f378e1": {
+      "source": "空值自动生成 recording-001 等；安全且忽略大小写后唯一。",
+      "translation": "Empty generates recording-001 etc.; must be safe and case-insensitively unique."
+    },
+    "0f05330498dc285e4edf801b3f2085d2dc6c5b114b2333222ca7d6b5e2faeb32": {
+      "source": "<s id=\"0\">重复次数映射</s>",
+      "translation": "<s id=\"0\">Repeat count mapping</s>"
+    },
+    "f5061ca84cc243ba162f0088482be0afd0d9e26cc67ea08c5b6439b390c63e0f": {
+      "source": "匹配 repeat_count/次数；空值 1",
+      "translation": "Matches repeat_count/次数; empty is 1"
+    },
+    "e254f5dd89ebca2374522d6da876ae8bc5c70ca0395d26910d059cae7fe55b07": {
+      "source": "1–100 整数，多次展开加 _1、_2 后缀。",
+      "translation": "Integer 1–100; repeated entries gain _1, _2 suffixes."
+    },
+    "d37f877ab0aa7834fefa2e81e1d377f9e4588ee7bdffd92597a2140c45a828e0": {
+      "source": "<s id=\"0\">分组 / 备注映射</s>",
+      "translation": "<s id=\"0\">Group / Notes mapping</s>"
+    },
+    "652a975944493bf3e758a2a4df2cdae5226e75f31cecac6fc7e76a116af6b463": {
+      "source": "匹配 group/分组与 note/备注",
+      "translation": "Matches group/分组 and note/备注"
+    },
+    "4ee0d401620484c1379dd49644201175c90d882737d76ed74fd2f537728ddd4c": {
+      "source": "可选，只保存组织说明。",
+      "translation": "Optional organizational notes only."
+    },
+    "b2fe06c38a35663dbf55c0df0f272ac8cd567955c82cf98e3b8d388fa3988a1f": {
+      "source": "<s id=\"0\">启用映射</s>",
+      "translation": "<s id=\"0\">Enabled mapping</s>"
+    },
+    "88f5112a360bd350fb7676af50573d80b535fb8aec0354e4c257bbb85dea9e20": {
+      "source": "匹配 enabled/启用；空值启用",
+      "translation": "Matches enabled/启用; empty is enabled"
+    },
+    "562f9f106997d03bf1b3843d5672e8c7e899056645389194d6b8e5122eb4ce93": {
+      "source": "接受 true／false、1／0、是／否、启用／禁用；导入时不跳过。",
+      "translation": "Accepts true/false, 1/0, 是/否, 启用/禁用; imports without skipping."
+    },
+    "18c5446f9484664e8d24ca9ff50f6129859f7b3f1e4c28423219d937f7cdefcf": {
+      "source": "<s id=\"0\">不导入此列</s>",
+      "translation": "<s id=\"0\">Do not import this column</s>"
+    },
+    "e973d8d02caa45bc9635f7a94b871f65fdbc00ebb04fad36bbc255e9b0b72ce5": {
+      "source": "映射下拉",
+      "translation": "Mapping dropdown"
+    },
+    "c41f114c8effbc90957be6c048ce42b35ce6f2ea2259bbb43dae88ed1a42f617": {
+      "source": "未匹配时使用",
+      "translation": "Used when unmatched"
+    },
+    "438668fafb59c10569c61388c3824e96dcfbdf9205912aa96282845a907a5fbb": {
+      "source": "忽略字段；名称与内容不能全不导入，JSON 无映射。",
+      "translation": "Ignores a field; name/content cannot both be omitted. JSON has no mapping."
+    },
+    "cd8166383fba43e66256ad5722f3086c88d86d0ec9231b66756d955428b34c04": {
+      "source": "<s id=\"0\">展开数、错误及预览</s>",
+      "translation": "<s id=\"0\">Expanded count, errors, and preview</s>"
+    },
+    "29e436496230d8369b90454365ba900d458eec12aa2484f7f8664f914cc63475": {
+      "source": "各显示前30条",
+      "translation": "First 30 each"
+    },
+    "2767d218fa3c5f15a451ba563c12f9f5bd5921131251c3ecb2646de969e7e039": {
+      "source": "只展示前 30 条，但校验全部数据。",
+      "translation": "Shows the first 30 but validates all data."
+    },
+    "4c6c6a6989712219964cc6abd4c02d6e49361b185021e9f9fa36b2428f8ea7f1": {
+      "source": "<s id=\"0\">确认导入</s>",
+      "translation": "<s id=\"0\">Confirm import</s>"
+    },
+    "b7edd0eddd95ac78b1dfcdc2e788ec4a52b6ed88690bf8481592742d43349c3f": {
+      "source": "有任务且无解析错误",
+      "translation": "Tasks present, no parsing errors"
+    },
+    "4aa053fc5999505b67f2c1f06fcf59d8421d56cc6ea3e71ffbef3ca0122ebe20": {
+      "source": "替换草稿并选首条，随后保存清单；录音保留。",
+      "translation": "Replaces draft and selects first task. Save the list afterward; recordings remain."
+    },
+    "b1273d5491b5811060afd309e5adcf74a0cace32a2bde75dfa6a1ed63cbb95d2": {
+      "source": "<s id=\"0\">取消</s>",
+      "translation": "<s id=\"0\">Cancel</s>"
+    },
+    "dc7faadce60c7ef419fae9e6d10ceaef1319b5c9dd017347835dd6c2d2892f34": {
+      "source": "不应用，原清单保留。",
+      "translation": "Does not apply; original list remains."
+    },
+    "c51162f574e866ecf47a7cdd06c54da3e0c0b1e9f0081de71c96eb98310d1dff": {
+      "source": "核对预览后保存",
+      "translation": "Check preview, then save"
+    },
+    "ac5ea9a807d4539d3d42a652f7ec5f8530d820180276126ebdcb76c2a13ea657": {
+      "source": "先用 <s id=\"0\">下载 XLSX 示例</s> 获取 <s id=\"1\">录音任务表格示例.xlsx</s>，在 Excel 等表格软件中填写。首行为列名，每行一任务，至少有名称或内容。也可继续导入 UTF-8 CSV／TSV 或此前保存的 JSON 任务模板。",
+      "translation": "First <s id=\"0\">Download XLSX example</s> to obtain <s id=\"1\">录音任务表格示例.xlsx</s> and edit it in spreadsheet software. First row is headers, one task per row, with name or content required. UTF-8 CSV/TSV and saved JSON templates also work."
+    },
+    "96c806aa0791a0a0076bf1c32f53a71bed7917be014afb9a4f7e877b5cf9fbc2": {
+      "source": "使用 CSV 时以逗号分列，含逗号或换行的文字加双引号，文字内的双引号写成两个。TSV 以制表符分列，两种文本均使用 UTF-8 编码。下例可保存为 CSV，作为另一种导入方式。",
+      "translation": "CSV uses commas; quote text containing commas/newlines and double internal quotes. TSV uses tabs. Both use UTF-8. Save the example below as CSV for another import method."
+    },
+    "1b89464f67cc22304a2290ebff705af7a5ba398fcb550fb4273075b7fb77ed45": {
+      "source": "下载的 XLSX 与上面的 CSV 文本采用相同示例数据，展开后生成 T001、T002_1、T002_2，文件名对应 example-001、example-002_1、example-002_2。每条任务手动开始和停止。",
+      "translation": "Downloaded XLSX and the CSV above use identical data, expanding to T001, T002_1, T002_2 with filenames example-001, example-002_1, example-002_2. Start/stop each task manually."
+    },
+    "52e8249e539204a3cc51f12321a288f4438c803a18332a1c7bc77f671f1d0efa": {
+      "source": "替换任务前，先 <s id=\"0\">保存清单</s> 并 <s id=\"1\">保存任务模板</s> 备份文字。",
+      "translation": "Before replacing tasks, <s id=\"0\">Save list</s> and <s id=\"1\">Save task template</s> to back up text."
+    },
+    "6f4cdd88030672b13ec5556c1a9f63c2d3c530cce26442c1dead59f6b224a2bc": {
+      "source": "选文件后核对工作表和八列映射；可选字段可设不导入。JSON 模板无需映射。",
+      "translation": "Check worksheet and eight column mappings; optional fields may be omitted. JSON needs no mapping."
+    },
+    "96b0bb2950a5f0f7d9add9dc20c54ccf94a42958be1800ab8d09920801a7991d": {
+      "source": "检查展开数量、前 30 条预览和错误。全部行都会校验，任何错误都需修正源文件后重选。",
+      "translation": "Check expanded count, first 30 items, and errors. All rows are validated; correct any error in the source and select again."
+    },
+    "78ed3fb2731bf0fed332bef6203949505f14d3991577711d8cf880160bfd3685": {
+      "source": "XLSX 示例的导入预览：中文列名自动映射，第二行按次数展开，确认导入前核对三条任务。",
+      "translation": "XLSX import preview: Chinese headers map automatically, the second row expands by repeat count. Check all three tasks before confirming."
+    },
+    "deaed5952e91ad54c05e9ea2f165ad7a1f0c2266a9ac90119cfa4163bdcf6c1c": {
+      "source": "XLSX 示例的工作表、八列映射与三条展开任务，确认导入按钮可用",
+      "translation": "XLSX worksheet, eight mappings, and three expanded tasks; Confirm import enabled."
+    },
+    "e9556bab4e3d46ccfefaab8134a514a7ed71cf9cd8d5874ee69a2c592d626a88": {
+      "source": "点 <s id=\"0\">确认导入</s>，左栏换成新清单，朗读卡显示第一条。此时尚是草稿。",
+      "translation": "<s id=\"0\">Confirm import</s> replaces the left list and displays the first reading card. It is still a draft."
+    },
+    "9430e37628081c38ad509fdc63f37106c06b264f2195b1ec06d2e61796bfe0ef": {
+      "source": "点 <s id=\"0\">保存清单</s> 并等成功提示。失败时检查编号、文件名、权限和空间，保留页面重试；旧录音仍保留。",
+      "translation": "<s id=\"0\">Save list</s> and wait for success. On failure, check IDs, names, permissions, and space; retain the page and retry. Old recordings remain."
+    },
+    "7a8c3171f967b2ab5134f55ba2bef4ef4f9c77a002037d76266df622c66d4c29": {
+      "source": "示例：确认导入后点击保存清单，三条任务已写入工程，当前朗读卡显示第一条材料。",
+      "translation": "Example: after confirmation and Save list, three tasks are written to the project and the first text appears on the card."
+    },
+    "908100ece3f7864488b1eec006c11d85268aaaf0a4720673618d75fe85c08e12": {
+      "source": "示例的三条任务已保存，左栏出现保存提示，右栏显示第一条录音内容",
+      "translation": "Three example tasks saved, with success left and first reading content right."
+    },
+    "a89c0e059076746b3ee31b243f4123531012d01e2430324e1529074500da0411": {
+      "source": "<s id=\"0\">保存任务模板</s> 下载录音任务清单.json，可重新导入恢复文字、顺序和状态。<s id=\"1\">模板不含音频，恢复录音需打开完整工程。</s>",
+      "translation": "<s id=\"0\">Save task template</s> downloads 录音任务清单.json, reimportable for text, order, and state. <s id=\"1\">It excludes audio; open the complete project to restore recordings.</s>"
+    },
+    "7e6236c3f3a828ec7c9d00f670b52c99ccda89f10775a0fae098e071bdedcd4a": {
+      "source": "文件最多 16 MiB、10000 数据行、51 列，单格最多 20000 字符；重复 1–100 次，展开最多 10000 条。XLSX 还受 64 MiB 解压和 2000 条目预算限制，含公式会拒绝。编号须唯一；文件名最多 100 字符、忽略大小写后唯一，不能含路径、非法字符、尾部空格／句点或 Windows 保留名。",
+      "translation": "Limits: 16 MiB, 10000 data rows, 51 columns, 20000 characters/cell; repeats 1–100, at most 10000 expanded tasks. XLSX also limits expanded size to 64 MiB/2000 entries and rejects formulas. IDs must be unique. Filenames are at most 100 characters, case-insensitively unique, without paths, illegal characters, trailing spaces/dots, or Windows reserved names."
+    },
+    "8164f0bf3c3f8eb4af857e38a2c36d2aa590f8f474a6049b8e57ff564632cee6": {
+      "source": "选择设备，开始录音",
+      "translation": "Choose devices and record"
+    },
+    "1c6c9c05605c706eed7dd53efa4decfe1872ed55887153da5806b77fdac833e5": {
+      "source": "设置输入、输出与声道",
+      "translation": "Input, output, and channels"
+    },
+    "feccaff45557e5f70c75e34133c8fa17c116574d2a32009f3e3ad3a3fe8bae17": {
+      "source": "打开 <s id=\"0\">设备与录前检测</s>，分别选输入和扬声器／耳机。失效选项会清空，需手动重选。",
+      "translation": "Open <s id=\"0\">Devices and pre-recording check</s> and select input and speakers/headphones separately. Invalid selections clear and require manual reselection."
+    },
+    "4d3e43c78c965163b5d8613ac2a6d5a2f63bb4a5fa57a37d78862d2bae210b10": {
+      "source": "核对采样率与同声卡通道数。单输入会自动回退到 1 道，未检测时电平不能判断设备故障。",
+      "translation": "Check sample rate and same-interface input count. One-input devices fall back to 1 channel. Without monitoring, levels cannot diagnose hardware failure."
+    },
+    "3a2e9e016ac520727aba24cbab7fbbe5a9a9c448b046116663c6e279398b86eb": {
+      "source": "按物理接线指定各道角色。重选输入会重置为音频角色，EGG 需要重新指定。",
+      "translation": "Assign roles by physical wiring. Reselecting input resets roles to audio; assign EGG again."
+    },
+    "c1dbdc203620b0e5ff1dc528c256d8ef3070d70add16e91e0347ddfd5ed6984b": {
+      "source": "选择单输入设备后回退单声道，输入和试听输出分别设置；下排显示播放音量、检测增益预览及输入电平。",
+      "translation": "One-input device falls back to mono; input/output are independent. The lower row shows playback volume, monitoring-gain preview, and levels."
+    },
+    "8c5ec1264f42ad5b9df243676b64675a38d19577ad60560e3672592d098fd8ca": {
+      "source": "单通道设备、物理输入角色、独立输出及横排音量与电平控件",
+      "translation": "Single-channel device, physical role, separate output, and horizontal volume/level controls."
+    },
+    "0709cc433a8624bfe5a4e8a5bacab72b10b4c8839bbaaefeca231380ad43f016": {
+      "source": "采集配置、试听路由和检测提示",
+      "translation": "Capture settings, audition routing, and monitoring notices"
+    },
+    "99d21023b833d0c89d4dd6becc7ad26c05057fb123ac3f329b8cd2bdb2e5b739": {
+      "source": "<s id=\"0\">输入设备</s>",
+      "translation": "<s id=\"0\">Input device</s>"
+    },
+    "421f14a2aa08b676f70053af708a18ad977c9a842ee935910b81df2f084ea812": {
+      "source": "设备面板",
+      "translation": "Device panel"
+    },
+    "af326561d03005dc7693702ada6220f6e2abed53082eeacd3e5ae505181eea0d": {
+      "source": "请选择输入设备",
+      "translation": "Choose input device"
+    },
+    "9139aa1a11a496170e0ac893508edbc2c1d369f32207f4f097a3dabe8da18530": {
+      "source": "手动选择；重选会重置通道角色。",
+      "translation": "Manual choice; reselection resets roles."
+    },
+    "449037ff0345f72bf18137dcc6311e44bc9c2212ec87707908fa787f416ffcc3": {
+      "source": "<s id=\"0\">扬声器 / 耳机</s>",
+      "translation": "<s id=\"0\">Speakers / Headphones</s>"
+    },
+    "feeb50dabac37d07b3c21d073c630adf0835ce9639619c4f3419e8521cbf35d3": {
+      "source": "请选择输出设备",
+      "translation": "Choose output device"
+    },
+    "6711838d4bcad2f962014d79c4551b72baf0a77ab39db44874e41860fa234233": {
+      "source": "独立选择，换输出会停止试听。",
+      "translation": "Independent choice; output changes stop audition."
+    },
+    "1a8057760232b72685e290267c57c57739127c73bd8111d282ac48b9f39972ce": {
+      "source": "<s id=\"0\">刷新设备</s>",
+      "translation": "<s id=\"0\">Refresh devices</s>"
+    },
+    "b52fbaf9e0eba42ef6a10b4c6fed4140f0c42a6ca019667d87ca493ea6ce89de": {
+      "source": "停止后手动",
+      "translation": "Manually after stopping"
+    },
+    "7635f528cafa85ddf42359ab3bf220ec76868bf04053859de24fc3b2feaeb150": {
+      "source": "停止采集／播放后刷新；失效选项清空，不自动替换。",
+      "translation": "Stop capture/playback first. Invalid choices clear without automatic replacements."
+    },
+    "3312fc1139d752cc1d0bcb49d4e9694ced0ef5901ad595b48ab9970a406a67e9": {
+      "source": "<s id=\"0\">收起</s>",
+      "translation": "<s id=\"0\">Collapse</s>"
+    },
+    "6a2dab429a3fbd241fca6fc1bbe8aada8531422f06cdfec3922d9920b867a36a": {
+      "source": "面板右上",
+      "translation": "Panel top right"
+    },
+    "a4e7b7f955a37dd305b4e383379fce428f745e1e8ab35fc7b63ac0c2bdabbf5d": {
+      "source": "展开时可用",
+      "translation": "Available when expanded"
+    },
+    "3aea3028f38fa7053700fb2dceb26b0217d2768a203cf854b5492d4940eefeab": {
+      "source": "隐藏面板，检测仍需明确停止。",
+      "translation": "Hides controls; stop monitoring explicitly."
+    },
+    "47e92da983c57e90b313ca5cf314b9db0ec6f90063d5e07eb8abaee48b2dce7e": {
+      "source": "<s id=\"0\">采样率</s>",
+      "translation": "<s id=\"0\">Sample rate</s>"
+    },
+    "5c0094c4fa86a39d220a33eb4381e347cbd5d03120d777e8604f5341413a0024": {
+      "source": "设备面板 / Hz",
+      "translation": "Device panel / Hz"
+    },
+    "c766782e2a829ab122fb3ed69bdae1872ae854d701aec13a1c6b88837019640e": {
+      "source": "可选 16000、22050、32000、44100、48000、88200、96000；设备须支持。",
+      "translation": "16000, 22050, 32000, 44100, 48000, 88200, or 96000, subject to device support."
+    },
+    "cb70b0e5623ffbcb6432781c099b97afeef6d4ccacc079a1afb1a8915715cc93": {
+      "source": "<s id=\"0\">同声卡输入通道数</s>",
+      "translation": "<s id=\"0\">Same-interface input channels</s>"
+    },
+    "027c33f7269fa1b7fe7c351bc9400bd036f7124433b756cf8005c76fd0c681f8": {
+      "source": "设备面板 / 通道",
+      "translation": "Device panel / Channels"
+    },
+    "6968da0bfc2fc2a1dd9c6b7e3ac0710eace91ef09552e7902ffa514a572cf2c3": {
+      "source": "2；单输入回退1",
+      "translation": "2; one input falls back to 1"
+    },
+    "a9606f434d69715285a669c982b1d5122f5114e80a3528473a21bf668fce715f": {
+      "source": "1 至设备能力与 8 的较小值；单道只取第一物理输入，不拼独立声卡。",
+      "translation": "1 through the lesser of device capacity and 8. Mono takes only the first physical input; separate interfaces are not combined."
+    },
+    "def4c122c36c458ea4342982fca91c95155c5fa4453c5eef204864be940acc94": {
+      "source": "<s id=\"0\">物理输入 N 角色</s>",
+      "translation": "<s id=\"0\">Physical input N role</s>"
+    },
+    "60b383b93b9cc377870ed8562d5fdb88f4690686efa69a5953ead39789964921": {
+      "source": "设备面板 / 各通道",
+      "translation": "Device panel / Each channel"
+    },
+    "b96baaeee7ab97e917adb9d758fd5844b955a81b7cf90afa21df7f2503b4d35a": {
+      "source": "音频（麦克风 / 线路）",
+      "translation": "Audio (microphone / line)"
+    },
+    "3736a91a0435bfa8b444772e7ece5345c6c9897618998d010e71f7c1a514fbff": {
+      "source": "音频／EGG／其他按接线设置；EGG／其他不可降噪或增益。",
+      "translation": "Set Audio/EGG/Other by wiring. EGG/Other cannot receive denoising or gain."
+    },
+    "7664edcf2f1f1b65eca70f0440e5e92711863328e07e09fad23dee7a6325e33a": {
+      "source": "<s id=\"0\">试听通道</s>",
+      "translation": "<s id=\"0\">Audition channel</s>"
+    },
+    "8a8c496e336047694360dfac67b27aa2db721c09ac310ff1a13a27bb9ebf9b91": {
+      "source": "通道1（左 / 唯一）",
+      "translation": "Channel 1 (left / only)"
+    },
+    "dbdb72b71116f03c4b67de207b23ee59fc6712f94519c6a796d670c209142f52": {
+      "source": "选一路试听与语谱，其他仍保存。",
+      "translation": "Chooses one channel for audition/spectrogram; others remain saved."
+    },
+    "0355c67c0c8e59e9dd45c54189ff2b4151d83bed5daeb3da60ddf9414eab5fa0": {
+      "source": "<s id=\"0\">播放音量</s>",
+      "translation": "<s id=\"0\">Playback volume</s>"
+    },
+    "5fb0497d9c650cab0505f977bdbe5f50748ca976aae3f385bca379b59bda3ed2": {
+      "source": "设备面板下排 / 线性比例",
+      "translation": "Lower device row / Linear ratio"
+    },
+    "be54098c61243c90b8c9fd13451caf3bf220245ab36c805fd658747e2a86eceb": {
+      "source": "0–1，步进 0.05，仅改试听音量。",
+      "translation": "0–1, step 0.05; audition volume only."
+    },
+    "430a5651387b8bdd8df1d63b981b96afbc5d3d02e636f18e2f6be2bc51c75709": {
+      "source": "<s id=\"0\">检测数字增益预览</s>",
+      "translation": "<s id=\"0\">Monitoring digital-gain preview</s>"
+    },
+    "1f7acca408d6830123784fe6cd04afefd0a98e8633daed99d4e79cd0e9ab8d60": {
+      "source": "播放音量右侧 / dB",
+      "translation": "Right of playback volume / dB"
+    },
+    "59f70902a95a95820e61b59bff69c03f13b467bce0a8db4fa1e77120e92513a1": {
+      "source": "−60 至 +24，只提醒增益后超幅，不改原音。",
+      "translation": "−60 to +24; warns of post-gain overflow without changing originals."
+    },
+    "4634a223e1c86be2c0968984c80037ceb5ef5c8ab748d1d96223618ad34303f9": {
+      "source": "<s id=\"0\">各路电平条、峰值及 RMS</s>",
+      "translation": "<s id=\"0\">Channel levels, peaks, and RMS</s>"
+    },
+    "1431e0e0c687a986083ba82e99a765d8773406fd31cc3190a111b2b2bf42ce95": {
+      "source": "播放音量与增益预览右侧 / dBFS",
+      "translation": "Right of volume and gain preview / dBFS"
+    },
+    "48b421d5675598f401d4808e2862ecf72475763b9137048584530ee74098234d": {
+      "source": "采集前暂无有效测量",
+      "translation": "No valid measurement before capture"
+    },
+    "26af6eb6605f9296f16f6bacf24649fa7ca0af7557f9eb1ec2431268cd6a0a17": {
+      "source": "原始峰值与均方根，最低显示 −180 dBFS；低电平需结合接线。",
+      "translation": "Raw peak and RMS, displayed down to −180 dBFS. Interpret low levels with wiring information."
+    },
+    "77b26168dc2497a77d02c1888727f83115ef52bb9ba7d5098b9bc1cbb5860fa8": {
+      "source": "<s id=\"0\">原始满幅 / 数字增益后超幅</s>",
+      "translation": "<s id=\"0\">Original full scale / Post-gain overflow</s>"
+    },
+    "a1998c6d7bf6b7e2bf5a0051b9697ad0f09e95653dc7fa3d2b8e859da1f9b3c5": {
+      "source": "设备面板 / 提示",
+      "translation": "Device panel / Notices"
+    },
+    "ca2f25817f515c82300a66185cbe15137e5f707624c14a0ba7af6ae74fe4447b": {
+      "source": "满足条件显示",
+      "translation": "Shown when conditions match"
+    },
+    "12c4c67f19346feb733e68a3a5969c4e2c489ff3396c478986b3df5b1039cfad": {
+      "source": "原值绝对值≥1／预览增益后&gt;1分别提示，不判断模拟前级削波。",
+      "translation": "Warns separately for original absolute values ≥1 and gain-preview values &gt;1; does not diagnose analog preamp clipping."
+    },
+    "2106d9c48e5520b46954fd9c5e1b0a0145c9b4a34cd0721fe5e79bb3153de312": {
+      "source": "<s id=\"0\">极低电平 / 明显 DC 偏置</s>",
+      "translation": "<s id=\"0\">Very low level / Clear DC offset</s>"
+    },
+    "09f91339351c63e16efa9d46087681b97947bc1a102b8c8b2b1a7a1c1dda14a5": {
+      "source": "RMS&lt;0.00001／绝对均值&gt;0.05时提示，按用途核查。",
+      "translation": "Warns at RMS&lt;0.00001 or absolute mean&gt;0.05; assess for your use."
+    },
+    "9e16468c7c4bd4cad7a71fd5d15357debdc3accb20a56b92f21125f44ca5cb4e": {
+      "source": "<s id=\"0\">两通道高度相似</s>",
+      "translation": "<s id=\"0\">Highly similar channels</s>"
+    },
+    "72bb97015808672941987da8fdcd40f1f7bc272d9c9ac772530a8b6b7fec9f23": {
+      "source": "双通道相关绝对值&gt;0.995时",
+      "translation": "At absolute two-channel correlation &gt;0.995"
+    },
+    "d8a93789ed05ade8d7a0949f1511e0832c47884b6372e7a848fc55d82f709ca9": {
+      "source": "相关绝对值&gt;0.995时提示，核对复制／回环或同源输入。",
+      "translation": "Warns at absolute correlation &gt;0.995; check duplicated, loopback, or common-source input."
+    },
+    "b11e66dbf6de36ed474d535255a2a847e255b5d3f2f4527498c6dfe25e929e3e": {
+      "source": "<s id=\"0\">开始录前检测（不保存音频）</s>",
+      "translation": "<s id=\"0\">Start pre-recording check (no audio saved)</s>"
+    },
+    "afd478df74e8f184d8d64c7bf1dece2e3c84dc27d2da4f8585d96ee906310d2f": {
+      "source": "设备面板下方，与停止检测并排",
+      "translation": "Below device panel, beside Stop check"
+    },
+    "2ecbca01d791522386d65f68f35e65d151713b0c5ed3a4bca373eddbc60517a8": {
+      "source": "有工程/输入且空闲",
+      "translation": "Project/input present, idle"
+    },
+    "a8bcb39d6cb59c2652255a93ee473cc793763577a31e7fc63950a1f30b8f6c60": {
+      "source": "显示电平，不建录音；占用输入，与正式录音及唇形提取互斥。",
+      "translation": "Shows levels without creating recordings. Occupies input and excludes formal recording/lip extraction."
+    },
+    "9571f829ad770b0505408cfd35580ea0dc9d8bd249b7afd4e6f944b67cf118ac": {
+      "source": "<s id=\"0\">停止检测</s>",
+      "translation": "<s id=\"0\">Stop check</s>"
+    },
+    "e2e0be6529bcc6219c59c7f5809b3aed166a0c5838a09c33962ac1cdc42a979f": {
+      "source": "开始录前检测右侧；朗读卡也可停止",
+      "translation": "Right of Start check; also on reading card"
+    },
+    "95899588b91531f75d50a65717b55e9918be6023a7ff7438179241987b5c8fb3": {
+      "source": "检测中启用",
+      "translation": "Enabled while monitoring"
+    },
+    "577f02a2d1093c29de2c12af21e1b61f7bbe08cee67d965221561468444510d5": {
+      "source": "停止并释放输入，不生成录音或 WAV。",
+      "translation": "Stops/releases input without recordings or WAV."
+    },
+    "cbedde6b82890ccbfb03603dced1e2dde4281aa94b098dd2fe597b4de11cad3e": {
+      "source": "先检查电平",
+      "translation": "Check levels first"
+    },
+    "4ed31bb82d4cd2dc92a04d0f7b49c417a5a7d830426831c17736343a1ed12cde": {
+      "source": "硬件音量在声卡或麦克风上调。dBFS 是相对数字满幅，声压级测量需另行校准。原音仍可能经过系统音效、AGC 或麦克风内部处理。",
+      "translation": "Adjust hardware volume on interface/microphone. dBFS is relative to digital full scale; SPL needs separate calibration. Original audio may still include system effects, AGC, or microphone processing."
+    },
+    "bb000f488f38afef22d13cf998b22b7a728470de604dd528018e3b6da656873e": {
+      "source": "默认不实时外放，录完保存后再试听。float32 只说明存储格式，不能增加声卡位深或修复削波。",
+      "translation": "No live monitoring by default; audition after recording saves. float32 describes storage only, without increasing hardware bit depth or repairing clipping."
+    },
+    "da347bf527546fd4dfe64d3620b07dd3dfda12d3cfef28b557b7b376c396e4ab": {
+      "source": "点 <s id=\"0\">开始录前检测（不保存音频）</s>，按正式音量发声。各路输入电平位于播放音量、检测数字增益预览的右侧，可同时核对峰值、RMS 和提醒。检测不会增加录音。",
+      "translation": "<s id=\"0\">Start pre-recording check (no audio saved)</s> and speak at recording level. Levels right of volume/gain show peaks, RMS, and notices together. No recording is added."
+    },
+    "4b9a2cbc2f94b4d22da0ad7194b14671bf3df003526d4f3623687e9841dc2c25": {
+      "source": "调硬件输入后复查。<s id=\"0\">检测数字增益预览</s> 仅提示超幅，不改图面或原始采样。",
+      "translation": "Recheck after hardware adjustment. <s id=\"0\">Monitoring digital-gain preview</s> only warns about overflow; plots and original samples stay unchanged."
+    },
+    "1f1b5ac5dd4a7439ca12a78f19d7c25cd09c38eb4063f452837b55006d9856ea": {
+      "source": "录前检测中，各路电平位于播放音量与检测增益预览右侧，开始录前检测和停止检测按钮并排。示例第二道仅演示 EGG 角色。",
+      "translation": "During checks, levels sit right of volume/gain and start/stop controls are adjacent. The second example channel demonstrates EGG role only."
+    },
+    "b68b6984079852aff264cfe9d6dddb26f960a3edf93c8341e0916fbd671f5407": {
+      "source": "双通道合成输入的录前检测，电平横排显示，开始和停止检测按钮并排",
+      "translation": "Two-channel synthesized check input with horizontal levels and adjacent start/stop controls."
+    },
+    "d91df4ef6f5426beb52e8f5dd930f88baef585ee85bd3ce25bd2665146b15502": {
+      "source": "点开始按钮旁的 <s id=\"0\">停止检测</s>，等录前检测已停止。收起面板只隐藏控件，检测仍需明确停止。",
+      "translation": "Click <s id=\"0\">Stop check</s> beside Start and wait for stopped status. Collapsing hides controls only; monitoring requires explicit stopping."
+    },
+    "56263ec7c36998286d3806bcfcb9cd37b8e3553c73f4ebb0cc6c48f85857367d": {
+      "source": "打开输入失败时，检查端点、系统麦克风权限、格式和外部占用，再重选检测。",
+      "translation": "On input-open failure, check endpoint, microphone permissions, format, and external use, then reselect and test."
+    },
+    "44c4db3833231c28dc60c1e0048f535b1efa0337562b907ad27be7a3820014f1": {
+      "source": "录音、停止与试听",
+      "translation": "Record, stop, and audition"
+    },
+    "9f3f981fc93899432748859df35deeb3aeddbe7a24a7452805bb9b66e9b7b9fa": {
+      "source": "选 <s id=\"0\">自由录音</s> 或启用任务，核对朗读卡后点 <s id=\"1\">开始录音 / 重新录音</s>。若任务有未保存修改，会先自动保存；新录音仍归属开始时所选任务。保存失败时按提示处理，再开始录音。",
+      "translation": "Choose <s id=\"0\">Free recording</s> or an enabled task, check the card, then <s id=\"1\">Start recording / Rerecord</s>. Unsaved task edits save first; the recording stays linked to its starting task. Fix saving errors before starting."
+    },
+    "05c73274c5a060093303e89e12804f094100d7b75de84cbf47f5a34dc930ac3b": {
+      "source": "录制中显示正在录音、波形和已确认帧／队列／磁盘。默认不实时外放；结束必须点 <s id=\"0\">停止录音</s>。",
+      "translation": "Recording status shows waveform and confirmed frames/queue/disk. Live monitoring is off by default. Finish with <s id=\"0\">Stop recording</s>."
+    },
+    "9c37606865e9494e59d352567d178028842c4a441ef37f3831e3c30ac12174dc": {
+      "source": "示例：合成输入正在录音，朗读卡和停止按钮显示采集中状态，已确认帧写入工程。",
+      "translation": "Example: synthesized input is recording; card/stop control show capture and confirmed frames are written to the project."
+    },
+    "1992ea62745c8f548970fb05d23419f9cfd8451daaaabe3af6a1c99bf2676862": {
+      "source": "示例录音中指示、可用停止按钮、实时波形和已确认帧数",
+      "translation": "Example recording indicator, enabled stop, live waveform, and confirmed frame count."
+    },
+    "aa3cebe52378e4461abf271ab1c1924fed453f4ec064b9c965eaf74b846944ae": {
+      "source": "读完点 <s id=\"0\">停止录音</s>。桌面端等已存入本地工程，尚未导出，网页版等已上传当前项目。新条目进入历史并显示原始版本；不完整录音先检查再决定重录。",
+      "translation": "Click <s id=\"0\">Stop recording</s> after reading. Desktop waits for Saved in local project, not yet exported; web waits for Uploaded to current project. The new history entry shows Original. Inspect incomplete takes before deciding to rerecord."
+    },
+    "6208ec3ac7c179f64f097afec59a0c7eb8e43d1e82bae46a6f553a2b50fe0218": {
+      "source": "示例：停止后第一条合成录音自动存入工程，历史与原始版本已出现，默认仅显示左声道；此时仍未导出 WAV。",
+      "translation": "Example: the first synthesized recording saves automatically, appearing in history as Original. Only the left channel shows initially; WAV has not been exported."
+    },
+    "394b34de5213823bcae4142ae55940ea2a8d3e2cb5b932c5595b554252c228af": {
+      "source": "示例的原始录音保存成功、第一条历史、单道波形和 Praat 语谱图",
+      "translation": "Example saved original, first history entry, single-channel waveform, and Praat spectrogram."
+    },
+    "53e2bd5263878af41ec05171ca1376a6b08a999b90fe3f707c7d54cbeff0d25f": {
+      "source": "选择输出和 <s id=\"0\">试听与语谱声道</s> 后点 <s id=\"1\">播放</s>。有选区听选区，无选区听整段；<s id=\"2\">停止播放</s> 或空格结束。",
+      "translation": "Select output and <s id=\"0\">Audition and spectrogram channel</s>, then <s id=\"1\">Play</s>. Plays selection if present, otherwise all. <s id=\"2\">Stop playback</s> or Space stops."
+    },
+    "453e66226b4dbfd76b4bd5c62b8d93a59bac7d51e5c3b2d3b0d9060972cbe8a5": {
+      "source": "<s id=\"0\">重新录音</s> 追加条目。查看旧条不会设为选用，要交付它需点 <s id=\"1\">标记为选用录音</s>。",
+      "translation": "<s id=\"0\">Rerecord</s> appends another take. Viewing an old take does not select it; use <s id=\"1\">Mark as selected take</s> for delivery."
+    },
+    "648f099285f036b5d472a7862467761f9b2fe04ece2ff1451322b1d5cb8801f7": {
+      "source": "示例：选择合成输出后播放已保存录音，播放按钮切换为停止播放。",
+      "translation": "Example: saved recording playing through synthesized output; Play becomes Stop playback."
+    },
+    "0ac9a3944b3f68c9caae2e424f37855e9ebd5b45d0cb03ebae4565e48eb77e43": {
+      "source": "示例录音试听中，停止播放按钮和当前版本选择",
+      "translation": "Example audition with Stop playback and current-version selector."
+    },
+    "133a3b965ddf7c8198ead33ce49307e067304fd44b0878dac969da1b670ce67f": {
+      "source": "朗读卡与试听设置",
+      "translation": "Reading card and audition settings"
+    },
+    "4981937c56add6eb725a8f7d2c7f7f801ff3f4601e4798a4002de62678034f02": {
+      "source": "<s id=\"0\">开始录音 / 重新录音</s>",
+      "translation": "<s id=\"0\">Start recording / Rerecord</s>"
+    },
+    "feaac37e52e04c0e71865a13106144004477f400b5ca9fbd384f1526713cff77": {
+      "source": "朗读卡右侧",
+      "translation": "Right of reading card"
+    },
+    "e0b39d6ae6bb42170273ac2e84b493997fa4c79439fd0e37bdb1c04d4e2ac0e6": {
+      "source": "工程/输入就绪且空闲",
+      "translation": "Project/input ready, idle"
+    },
+    "cda68229aa7ddbbc31134a5b6050884e248c7f32c2d1dce4f1520855f8b1bc5c": {
+      "source": "先自动保存任务草稿并停止软件播放，保留所选任务；每次重录追加条目。",
+      "translation": "Saves task draft first and stops software playback, retaining selected task. Rerecording appends takes."
+    },
+    "b7730101c436fa94cc2a4bd12a1bd53a0d67cedafa79b81229e784613cb31d4e": {
+      "source": "<s id=\"0\">停止录音</s>",
+      "translation": "<s id=\"0\">Stop recording</s>"
+    },
+    "6bb21777726c4e95be656d0c31b1db04a7329d831e1f1d973624ac70a0a64fca": {
+      "source": "录音中启用",
+      "translation": "Enabled during recording"
+    },
+    "a67e9ff52f62e0a9260c5ee5b3844aced57266660783e01bf4bae119de13be2d": {
+      "source": "停止并提交，不导出 WAV，也不自动下一条。",
+      "translation": "Stops/commits without WAV export or automatic next task."
+    },
+    "85ffde98a2d2c6f814ba7fe71f5ec1520d15cfec8b03d27d1a1524acb4e4ad88": {
+      "source": "<s id=\"0\">播放 / 停止播放</s>",
+      "translation": "<s id=\"0\">Play / Stop playback</s>"
+    },
+    "6844c40e178f0db7b870b63e7c8478001467e0ac4882978137f37d2ad6179294": {
+      "source": "有录音/输出且空闲",
+      "translation": "Recording/output present, idle"
+    },
+    "2db48bd2f69a7db69b85bda8128656db512512031a3a937547fc8c5ed8523421": {
+      "source": "有选区听该段，空选区听整段；空格也可停止，切页停止试听。",
+      "translation": "Plays selection or all if empty. Space also stops; switching pages stops audition."
+    },
+    "4bef9b5fc03b9249c7320a12b8cb3711a220c04d4264e28297d1eeb6aeae1e98": {
+      "source": "<s id=\"0\">下一条</s>",
+      "translation": "<s id=\"0\">Next task</s>"
+    },
+    "575869b44f9f39d370d8c271436530e2d53bbeb94505f8bbf83eb6bd8e7397cd": {
+      "source": "任务模式显示",
+      "translation": "Shown in task mode"
+    },
+    "50ec504abf401aa79814fbe1a716d34fe904412a4ea8c28ae58d33e271267648": {
+      "source": "选后续启用、未跳过任务；无后续转自由录音，不循环。",
+      "translation": "Selects the next enabled, unskipped task. Without one, enters free recording; no looping."
+    },
+    "f9bc4066a35199c1687ebc5d287e87dc3a71184788cc0c3149b3cb83c588ddcb": {
+      "source": "<s id=\"0\">跳过此条 / 恢复待录</s>",
+      "translation": "<s id=\"0\">Skip task / Restore pending</s>"
+    },
+    "469af9cc152065933ab0d16cee6c7cc74cd00cbca58ef74ff282aefbde1cb920": {
+      "source": "新任务未跳过",
+      "translation": "New tasks are not skipped"
+    },
+    "10a2c846f19f355e384e97f81ad73d6298ad9f5f6670e66fea0608dfc562b8b2": {
+      "source": "改跳过标记，需保存；录音保留，跳过项不参加任务批量。",
+      "translation": "Changes skipped status; save afterward. Recordings remain; skipped tasks are excluded from task batches."
+    },
+    "aaecb7ad6ac7bb9c5c25a7990ab66e744391b56db3272bd57adf3c4c4881d68a": {
+      "source": "<s id=\"0\">录制时的提示</s>",
+      "translation": "<s id=\"0\">Prompt at recording time</s>"
+    },
+    "51e40a50c656da94e7e93577b60638c699223d85e1d091243e5e4c8a0a2408c4": {
+      "source": "朗读卡下方",
+      "translation": "Below reading card"
+    },
+    "f1e0f85d7e22060d737feb78e116df27b2434517d4a365278292f09b173f7669": {
+      "source": "选任务录音时显示",
+      "translation": "Shown for task recordings"
+    },
+    "67e6ac8c65e5e87165ad243499b015d94897507d3b0efc96bfb97ce210d46221": {
+      "source": "显示旧录音的文字快照。",
+      "translation": "Shows the old take's text snapshot."
+    },
+    "172154cd61be3b0daae2f660c3c8b99123be2cc5ee1234d73437211e75f5409c": {
+      "source": "<s id=\"0\">试听与语谱声道</s>",
+      "translation": "<s id=\"0\">Audition and spectrogram channel</s>"
+    },
+    "efc087411b1fb13655a96cea6fa756f8fd5dbf63c4998a2d2939748abe165a94": {
+      "source": "图面下方",
+      "translation": "Below plot"
+    },
+    "2dc6b601a5bea6f82abd7084297eb814662517b71944e633b61e35e7582f1ec8": {
+      "source": "左 / 唯一声道",
+      "translation": "Left / Only channel"
+    },
+    "11fbd7996a0c3879e59bbf8939fffbe7e8ae220757526303a2919ffc41d382a4": {
+      "source": "选一路试听／语谱；其他波形需开显示所有声道。",
+      "translation": "Chooses one for audition/spectrogram. Show all channels to see other waveforms."
+    },
+    "b2cb3e1b4d2f47013743d3fb1c3c1b12be52eacc67efa998e6235ce48a128534": {
+      "source": "<s id=\"0\">试听版本</s>",
+      "translation": "<s id=\"0\">Audition version</s>"
+    },
+    "e4be7f918c740b13956b7ef353890458c02504b460ab0b489b897e5dd0f39977": {
+      "source": "当前版本",
+      "translation": "Current version"
+    },
+    "6c268ac509055324b2c698d72de6df02dcc09fc5118e089ea8c2797c341db11e": {
+      "source": "当前／原始／差分；差分限降噪或增益与同帧长直接来源。",
+      "translation": "Current/original/difference. Difference is available only for denoising/gain and an equal-length direct source."
+    },
+    "5c19aa8e1bd73c127b904c5ec6e68dceb6205ebc6f04631ff31fcb3ca88f655a": {
+      "source": "<s id=\"0\">时长、磁盘剩余、已确认帧及队列</s>",
+      "translation": "<s id=\"0\">Duration, free disk, confirmed frames, and queue</s>"
+    },
+    "dfde0560c1c68b8fdb1acce1bd5835d99d8dce743f2ed5d9c12793fc04d895c1": {
+      "source": "按当前状态",
+      "translation": "Current state"
+    },
+    "5fc8d798e2cfffd1b8f64d7f6a037e5bd7d8b403a24e06a41b88fc5916412a3b": {
+      "source": "时长=帧数÷采样率；已确认帧已保存，接收帧可能更多。",
+      "translation": "Duration = frames ÷ sample rate. Confirmed frames are saved; received count may be higher."
+    },
+    "85a261c9dab649bd4ce89a29f7342f15fe33db234c78990b63daf7a6c153557f": {
+      "source": "按任务录制和重录",
+      "translation": "Task recording and rerecording"
+    },
+    "ac0fa42661ceacf0546bfcf7f41e007730579dd977c612a46d1182079663ca2f": {
+      "source": "停止后最新条目成为任务的选用录音，默认停留原任务。可试听、重录或点 <s id=\"0\">下一条</s>；用旧条交付需在历史选择后 <s id=\"1\">标记为选用录音</s>。",
+      "translation": "The newest stopped take becomes selected for the task, staying on that task. Audition, rerecord, or <s id=\"0\">Next task</s>. For an older take, choose history then <s id=\"1\">Mark as selected take</s>."
+    },
+    "e09dbe64bbc03ad472b719e736e3a8c56d89425592621a39baa51ad553c98706": {
+      "source": "跳过项不参加下一条和任务批量，停用还禁止录音。改编号或清单不改旧快照，用 <s id=\"0\">录制时的提示</s> 核对；移出任务的录音可通过全部范围导出。",
+      "translation": "Skipped tasks are excluded from Next/batches; disabled tasks also block recording. ID/list changes do not alter old snapshots; check <s id=\"0\">Prompt at recording time</s>. Recordings removed from tasks can export under All."
+    },
+    "8910424c58d2220632fbabb136f2fccb03abb4aa6c57868e253bb24018a8dde0": {
+      "source": "图面和剪辑按钮",
+      "translation": "Plots and editing controls"
+    },
+    "ff7d63c5372959a27c51948369defcb7154082aac9afbd0ba2371354275ed163": {
+      "source": "图面与所有声道同步编辑",
+      "translation": "Plots and synchronized all-channel editing"
+    },
+    "732e4b6dabaad7f285a24f227bd35f704076a732fdbaeec7bfe358eb4f1ac073": {
+      "source": "<s id=\"0\">显示语谱图</s>",
+      "translation": "<s id=\"0\">Show spectrogram</s>"
+    },
+    "32801cab746d921c2bd05b197c4dbd3fbbb191499077f532f7ec01e77c52d78c": {
+      "source": "工具条 / 复选框",
+      "translation": "Toolbar / Checkbox"
+    },
+    "9b9ddfde98e342ff3239593bb732ec78993ef7fc14efbcad54efddc90686071d": {
+      "source": "仅控制语谱显示与计算。",
+      "translation": "Controls spectrogram display/computation only."
+    },
+    "26f36a0783a077a97efa1dd56f7f1febb78b761ff809f8a0f754c0969f7a7965": {
+      "source": "<s id=\"0\">显示所有声道</s>",
+      "translation": "<s id=\"0\">Show all channels</s>"
+    },
+    "4f90971621aee2a5e446ac530b16fa7099c2e6378293f7f0c572968f1df7cdfc": {
+      "source": "关闭",
+      "translation": "Off"
+    },
+    "d89bce043cb8383efb609c0c0b2c740e34b10c0ec893dedd81920c0bb47f3cbc": {
+      "source": "展开各道波形，不改采集、同步剪辑、处理或导出。",
+      "translation": "Expands waveforms without changing capture, synchronized edits, processing, or export."
+    },
+    "923e0dda4714391506d6372bfe92a2ee24ea3fd4d979048afd29f9abcb4b8c45": {
+      "source": "<s id=\"0\">显示倍率</s>",
+      "translation": "<s id=\"0\">Display gain</s>"
+    },
+    "55390d923643db5f92d2daf334e99dcea5e6bbc3022ce46bec6baf09f8d7c95a": {
+      "source": "图面工具条",
+      "translation": "Plot toolbar"
+    },
+    "db7133bfa840419d68c0c03020bb17c67fa0e599236a2f0e00547218c877b587": {
+      "source": "1×／2×／4×／10×，只放大画面；截顶时需结合原始电平判断削波。",
+      "translation": "1×/2×/4×/10× changes display only. Use original levels to assess clipping if the display clips."
+    },
+    "ce1505b902722193a9aac900ea21e89043112974e31d37bf3fde839f561b00f6": {
+      "source": "<s id=\"0\">放大选区</s>",
+      "translation": "<s id=\"0\">Zoom to selection</s>"
+    },
+    "c74d82a4b5f9bcfd5866f94da004eabfb1cf8bb62e1bf711ac3be3929047c85a": {
+      "source": "有非零选区可用",
+      "translation": "Nonzero selection required"
+    },
+    "70d53e7738910217064725764408a0ff1d564bb6cdef2906c82d711f4352bc6d": {
+      "source": "显示所选时间，不裁音频。",
+      "translation": "Shows selected time without cutting audio."
+    },
+    "e2aad3b3f9af1ebe9f072e4a9f375dd0df733bd0132a443871708db3346e1241": {
+      "source": "<s id=\"0\">整段总览</s>",
+      "translation": "<s id=\"0\">Full overview</s>"
+    },
+    "3a5029a4756181317f681ecabd9874953570c12c53d6eb9d4d92f19002ca9722": {
+      "source": "有录音可用",
+      "translation": "Recording required"
+    },
+    "b139411dd18453589cc8700a24e9e08eb282126da41ed1c949ba0d940a0ab0e3": {
+      "source": "回到完整时间范围。",
+      "translation": "Returns to full duration."
+    },
+    "7d5901c047a1da1c1f2176f79a57e03161784b7c691b337ea61437fe4fc34807": {
+      "source": "<s id=\"0\">版本</s>",
+      "translation": "<s id=\"0\">Version</s>"
+    },
+    "ae4c4f722d669fb48b8d8d8368772c98f871173dd3f37a616baa5f666ff54e0d": {
+      "source": "工程当前版本",
+      "translation": "Project's current version"
+    },
+    "16456de0be7bce0796410b80d15e4d31aee164b8cb4cf8708a273ecc94008c45": {
+      "source": "选择会存为工程当前版本，清空选区／缩放。",
+      "translation": "Choice is saved as project current version and clears selection/zoom."
+    },
+    "c6e3d028107d5aa9f560e8c621bb1550b7e8f140f1e7679dfa79eeeeec4f6f70": {
+      "source": "<s id=\"0\">波形 / 语谱拖动</s>",
+      "translation": "<s id=\"0\">Drag waveform / spectrogram</s>"
+    },
+    "aee7021379cdefe0a1000609691e7cabb89d0f6691bdb4668cd09693fbd850bc": {
+      "source": "图面 / 帧",
+      "translation": "Plot / Frames"
+    },
+    "a7177b79b233dd2b3883aab35e71b4207a1b81672b443b603844024a3b9630d4": {
+      "source": "空选区",
+      "translation": "Empty selection"
+    },
+    "8a5a688147593aec72dcdb2c3a64ac2bc55707adabf62a1ead5ee6293072063e": {
+      "source": "正反向均可拖选，全部声道共用切点。",
+      "translation": "Drag either direction; all channels share cut points."
+    },
+    "8756efc9fc1504379a2108a13839f790a8317d073e37f332aefb54d2cd8ee79b": {
+      "source": "<s id=\"0\">起点（帧） / 终点（帧）</s>",
+      "translation": "<s id=\"0\">Start (frames) / End (frames)</s>"
+    },
+    "cddad46ec0522a0f67e074efd72b3d8542668494c44c11125e1f13ddaa2e2238": {
+      "source": "选区工具条 / 每通道采样帧",
+      "translation": "Selection toolbar / Sample frames per channel"
+    },
+    "ee511d5e5cf2d7598b2e7b65e0339d0f638409b13dcb5dbc1dcbc3792813fbf1": {
+      "source": "整数帧，取整并限于全长；相等为空选区。",
+      "translation": "Integer frames, rounded/clamped to length. Equal endpoints mean empty selection."
+    },
+    "627087342d1220bae5c36cefce58b7686cefc5750d6d5f09bbb9a88a894ebc5d": {
+      "source": "<s id=\"0\">选区时长</s>",
+      "translation": "<s id=\"0\">Selection duration</s>"
+    },
+    "48136581cb2618e64de4d95d5edcf57c18040dc91a43293613f06d0c0c5b9427": {
+      "source": "工具条 / s",
+      "translation": "Toolbar / s"
+    },
+    "ca91f5fe1edf74ac0d9874cd4f3b2f844bc718615009cc7d06517ca0ae5a9a0f": {
+      "source": "帧差÷采样率，显示三位小数。",
+      "translation": "Frame difference ÷ sample rate, shown to three decimals."
+    },
+    "4bad818ea111909b538fde7a01d618d23c802f17a82dcc3ee76b354adb8d2d76": {
+      "source": "<s id=\"0\">全选 / 清空选区</s>",
+      "translation": "<s id=\"0\">Select all / Clear selection</s>"
+    },
+    "c1b3234ae03fe65865c7e9a3250fa581781bb5b2120df30d32fb97f8eedbb5c4": {
+      "source": "选区工具条",
+      "translation": "Selection toolbar"
+    },
+    "23008e51be2c05c10b8cc531f21b908cda4a3bf309400a152961018192dbc233": {
+      "source": "按当前版本",
+      "translation": "Current version"
+    },
+    "2c0e0d1e414d5baa5d3079a4ddd7a190ab093a753238d139d0d3e4bb6f2d2d72": {
+      "source": "全选整段／清空选择，清空不删音频。",
+      "translation": "Selects all or clears selection; clearing does not delete audio."
+    },
+    "f15ff9280aa33b2e85328e8b9312b014b420b3cf8db8da4d396afefb2f6d5ea0": {
+      "source": "<s id=\"0\">剪切</s>",
+      "translation": "<s id=\"0\">Cut</s>"
+    },
+    "a720269743854017dcc23e1f6b0f9f5e8cb4a5102c7839e7ec9fadd79db7dba3": {
+      "source": "剪辑工具条",
+      "translation": "Editing toolbar"
+    },
+    "81cc99f68f51ec85ebd04bf56c826f35f931ef9cd2eeb9db941ce9dc3a79a4da": {
+      "source": "需非零选区",
+      "translation": "Nonzero selection required"
+    },
+    "7e44ddbf1e4ef9d190df57bf55dd15a3d771a08dc2bec54b4bd6dffd8b9a7ad9": {
+      "source": "复制全部声道片段后删除，两端拼接。",
+      "translation": "Copies all-channel segments, deletes them, and joins the ends."
+    },
+    "0365038827ef987758ec03e09067ab2ab50157158e8abfc108d6b7f0d31f058e": {
+      "source": "复制模块片段引用，不改音频；选区清空。",
+      "translation": "Copies module segment references without changing audio; clears selection."
+    },
+    "5e5eda93f9bb9f6d58b1e29f05674b4d9f93cdb6bbed386a10f63de4222c7bc3": {
+      "source": "<s id=\"0\">粘贴</s>",
+      "translation": "<s id=\"0\">Paste</s>"
+    },
+    "b6dcb1f68cdce836817711d1c68642b8c89858f6de04fd2c1a761bb4c797a749": {
+      "source": "需兼容剪贴片段",
+      "translation": "Compatible clipboard segment required"
+    },
+    "fe33c5dfd2154dc557be03cdf4d12afbb9d7a4aa9b386225f2771b68bc66a231": {
+      "source": "在起点插入，不替换选区；[0,0]插开头，格式与角色须兼容。",
+      "translation": "Inserts at start without replacing selection. [0,0] inserts at the beginning; formats/roles must match."
+    },
+    "f700dfdfe9af3bdff14a4ecd376421dd606c0af808d9c9ac211b26d1d996a5c4": {
+      "source": "<s id=\"0\">删除选区</s>",
+      "translation": "<s id=\"0\">Delete selection</s>"
+    },
+    "7eacc7f0645b6f2a1b2f3ccc986c5768add0bde04ad2f8416072eadb978f713f": {
+      "source": "同步删除并拼接，不留静音，也不允许删空。",
+      "translation": "Deletes synchronously and joins ends without silence; deleting all is blocked."
+    },
+    "122eb6d71a3f9e5bb1b35746147665de123b22f11ff383558c9922d67576b842": {
+      "source": "<s id=\"0\">保留选区</s>",
+      "translation": "<s id=\"0\">Keep selection</s>"
+    },
+    "c76c390b5327e360b50fc94f3c31cebffb1bf7d13c46f9ec8757ffd506b2f7a1": {
+      "source": "只留该段，新建版本；原始保留。",
+      "translation": "Retains only that segment as a new version; original remains."
+    },
+    "976b3c7cc764981dff55efd1a6a59397ff9a8016176871b72ea9d24dbfefb7f8": {
+      "source": "<s id=\"0\">撤销 / 重做</s>",
+      "translation": "<s id=\"0\">Undo / Redo</s>"
+    },
+    "8c7cabf5e5269c9a5d263f84e061f198627e344ee46cb7092ab802a112ec707f": {
+      "source": "按历史栈",
+      "translation": "History stack"
+    },
+    "446e586dd562a1493f4198399507ec78471eae0a6b3ea65d25d957e8e1871e34": {
+      "source": "回到先前／后续状态；新编辑或选版本清空重做路径。",
+      "translation": "Returns to prior/later states. New edits or version changes clear redo."
+    },
+    "7867e7ba102f605db5cb074027174bdd08a7b6118212e86717f6e8fef5e0514a": {
+      "source": "<s id=\"0\">恢复原始</s>",
+      "translation": "<s id=\"0\">Restore original</s>"
+    },
+    "6df2f738257004cdd6685af294d8bafa417cecc656e7c55918502c577e3d0042": {
+      "source": "新建恢复版本，原始与历史保留。",
+      "translation": "Creates a restored version while retaining original/history."
+    },
+    "50f4dc931427986e0503d194c5300e8b032c7a75fbb20ff7ea0a7f042542a95a": {
+      "source": "选一段，再剪辑",
+      "translation": "Select a segment, then edit"
+    },
+    "8a1a00c90ffaafc6f7e4fc531eb781d24ff01587dfc61db49ddb11be32ed3e66": {
+      "source": "拖图或填帧数选片段，含起点、不含终点。<s id=\"0\">剪辑同步改变所有声道，包括隐藏声道。</s>",
+      "translation": "Drag plots or enter frame bounds; start inclusive, end exclusive. <s id=\"0\">Edits affect every channel synchronously, including hidden channels.</s>"
+    },
+    "4127715bf87c2c9e16a891aa9ac5ce1fd19a2d1900b6296b3e85d991fa0a779b": {
+      "source": "删除／剪切直接拼接两端；粘贴在起点插入，替换时先删再贴。模块剪贴板不能当系统 WAV 使用。接点无自动淡化，记得试听。",
+      "translation": "Delete/Cut directly joins ends; Paste inserts at start, so delete first to replace. Module clipboard is not a system WAV. Joins have no automatic fades; audition them."
+    },
+    "3e6a99716f7c0275968c7703d0a49c4243f597202f2ce80d3b3694e23426e751": {
+      "source": "选录音与版本，拖图或填 <s id=\"0\">起点（帧）／终点（帧）</s>。需要看各道时开 <s id=\"1\">显示所有声道</s>。",
+      "translation": "Choose take/version, drag or fill <s id=\"0\">Start/End (frames)</s>. Enable <s id=\"1\">Show all channels</s> when needed."
+    },
+    "ef0a611f38b99635478957a0043f9f9dd7e3d65e43e56b6c86e95c1af71b0dea": {
+      "source": "例如 48000 Hz 下填 48000、96000，即 [1,2) 秒，时长 1.000 s。<s id=\"0\">放大选区</s> 和 <s id=\"1\">显示倍率</s> 都只改画面。",
+      "translation": "At 48000 Hz, enter 48000 and 96000 for [1,2) seconds, duration 1.000 s. <s id=\"0\">Zoom to selection</s> and <s id=\"1\">Display gain</s> affect display only."
+    },
+    "fb2821d491929bf9bb73f71b81d13727cde0cb74e20e83d0ab4d772b35c01f0b": {
+      "source": "示例：显示所有声道后用整数帧设置共同选区，两道波形与语谱共用相同切点；第二道合成信号用于演示保留规则。",
+      "translation": "Example: all channels shown with common integer-frame bounds; two waveforms and spectrogram share cuts. The second synthesized signal demonstrates preservation rules."
+    },
+    "8510ee1594cc4a28c0ffe5e118bcf745173349824a49c2caa78d8bf60b66d33b": {
+      "source": "示例双通道波形中的共同选区及 48000 到 96000 帧数输入",
+      "translation": "Example shared two-channel selection and frame inputs 48000 through 96000."
+    },
+    "3210cd2870e5f5584dff946437f8bf4d0f9d3fb811136c979706296566420143": {
+      "source": "点 <s id=\"0\">删除选区</s> 后，版本新增编辑，时长缩短，左栏提示编辑已存入工程，选区和缩放清空。",
+      "translation": "<s id=\"0\">Delete selection</s> adds an edited version and shortens duration. Left status confirms project saving; selection/zoom clear."
+    },
+    "71e7e37e992eec93118a6ffaf50d9ae41846ae1471f0a255b79bb05afe6ba5b4": {
+      "source": "试听接点；误删用 <s id=\"0\">撤销</s>，或选原始版本。<s id=\"1\">恢复原始</s> 会新增恢复版本，历史仍保留。",
+      "translation": "Audition the join. <s id=\"0\">Undo</s> mistakes or choose Original. <s id=\"1\">Restore original</s> adds a restored version and retains history."
+    },
+    "575635fbe3994123718f802938f9d9296b106f968cc3e677d1815c781d1caac6": {
+      "source": "示例：删除选区后整段缩短一秒，版本下拉新增编辑版本，左侧确认编辑已保存且原始录音保留。",
+      "translation": "Example: deleting shortens the recording by one second, adds an edited version, and confirms saved editing with original retained."
+    },
+    "f4ea0e68b0a7554e9b23e1e13248ae94caac0f72df7404ccf9f95f31bc806f97": {
+      "source": "示例的同步删除结果、新编辑版本、缩短后的时长和工程保存提示",
+      "translation": "Example synchronized deletion, new version, reduced duration, and save notice."
+    },
+    "958254e264223630d05b711e65f6f6668c9ba278d2ef5a636e57fbb2177a2fd5": {
+      "source": "激活录音页、焦点离开输入框／下拉／对话框后，空格播放或停止试听；录音中、组字中或长按不触发。",
+      "translation": "With Recording active and focus outside inputs/dropdowns/dialogs, Space toggles audition. Recording, IME composition, and key holds do not trigger it."
+    },
+    "f23a60b25333c0a127b28d073b36c6305290483b038aa08e91754433d9e90afc": {
+      "source": "先点图面，再用 Ctrl／Meta＋A 全选，X／C／V 剪切／复制／粘贴，Z 撤销，Y 或 Shift＋Z 重做；Delete／Backspace 删选区。",
+      "translation": "Click the plot first, then Ctrl/Meta+A selects all; X/C/V cut/copy/paste; Z undo; Y or Shift+Z redo; Delete/Backspace removes selection."
+    },
+    "a536b44c5aac70bc9fad6615ffaa6f4af52b3037c242d4944f512d8608fee2de": {
+      "source": "操作后选区和缩放会清空，下次先核对版本与位置。",
+      "translation": "Operations clear selection/zoom; check version and position before the next."
+    },
+    "edcfeb4c7658564210ae337a0c1047881382502860ab4372d0a772ff5aae6253": {
+      "source": "跨录音粘贴限同工程、同采样率、通道数与角色顺序；换工程会清空剪贴板。",
+      "translation": "Cross-recording paste requires same project, sample rate, channels, and role order. Switching projects clears clipboard."
+    },
+    "bc4611434280d8ec327f5e7b11491ebb732e3b039708b0d5156bd1e5f2c99143": {
+      "source": "看清波形与语谱",
+      "translation": "Inspect waveforms and spectrograms"
+    },
+    "6f2e3081a7b1f51d8492d2d8e11d78375acbecd3c086fad48e715b44c1d34574": {
+      "source": "波形默认显示第一道，其他道用 <s id=\"0\">显示所有声道</s> 展开；网页版未展开时显示所选试听声道。时间轴以秒显示，选区用整数帧。显示倍率只放大幅度，Ctrl＋滚轮调整可见时间范围，二者均不改变音频。",
+      "translation": "Waveform defaults to channel one; use <s id=\"0\">Show all channels</s> for others. Web shows the chosen audition channel when collapsed. Time uses seconds and selection integer frames. Display gain changes amplitude only; Ctrl+wheel changes visible time. Neither alters audio."
+    },
+    "843ae71bd4b585c7031fca24d680cffff0ce935f19b33814f0909b422fede093": {
+      "source": "语谱用 Praat Gaussian 5 ms 窗，50 dB 相对灰度、6 dB／倍频程显示预加重，频率至 5000 Hz 或奈奎斯特频率。Gaussian 实际支撑约 10 ms，和降噪参数分别使用。",
+      "translation": "Spectrogram uses a Praat Gaussian 5 ms window, 50 dB relative grayscale, 6 dB/octave display pre-emphasis, up to 5000 Hz or Nyquist. Gaussian support is about 10 ms; denoising parameters are separate."
+    },
+    "66a289ae64b989c86376df3b07f20f1e7ab42e353ed9e57301f01668b491a372": {
+      "source": "实时显示最近约 5 秒。长视窗可能漏短事件，可选关键片段点 <s id=\"0\">放大选区</s>，或把指针停在波形、语谱图的目标时间附近，按住 <s id=\"1\">Ctrl</s> 滚动滚轮，以指针位置为中心缩放时间轴。普通滚轮用于滚动页面，点 <s id=\"2\">整段总览</s> 恢复完整时间范围。",
+      "translation": "Live view shows roughly the latest 5 seconds. Long windows may hide short events. Select a key passage and <s id=\"0\">Zoom to selection</s>, or hold <s id=\"1\">Ctrl</s> and wheel near a target time to zoom around the pointer. Ordinary wheel scrolls the page; <s id=\"2\">Full overview</s> restores all time."
+    },
+    "11ba9b32237d2dafa9d037511f7b7cee724c17a3643116663b94a5b4849e3923": {
+      "source": "波形与语谱图共用时间视窗和选区。缩放不裁剪采样，视窗改变可能影响语谱图的相对灰度；查看同一细节时先核对起止时间。",
+      "translation": "Waveform/spectrogram share viewport/selection. Zoom does not crop samples; viewport changes may affect relative grayscale. Check start/end before comparing details."
+    },
+    "d558efd63c9c243705f6061897809aa0993c8c7f3c6d4283875e112655b866b5": {
+      "source": "把指针停在目标时间附近，按住Ctrl滚动滚轮，波形与语谱图显示同一缩放时间窗。",
+      "translation": "Ctrl+wheel near the target time gives waveform/spectrogram the same zoomed window."
+    },
+    "6415b3183a1ebae5f5e1f1d604d54c5a05a46fd85a6a6c32bde7ee26cc5772bf": {
+      "source": "Ctrl滚轮缩放后的波形、语谱图和秒数时间轴",
+      "translation": "Ctrl+wheel-zoomed waveform, spectrogram, and seconds axis."
+    },
+    "0613a0772ac11831fd630095545dbb54c29cbd4e5f3fcbf05d4464d11dc4ece9": {
+      "source": "窗长、灰度和显示预加重的通用含义可参见 <s id=\"0\">Praat 官方语谱配置说明</s>。本模块固定参数与中心时间抽样由当前实现决定。",
+      "translation": "For general window/grayscale/pre-emphasis meanings, see <s id=\"0\">Praat's official spectrogram settings</s>. Fixed module parameters and center-time sampling follow the current implementation."
+    },
+    "0a0539ccc3e4a92a3b50a4e6df3ef1ce10a7d1890117f2af9f973447ad036b86": {
+      "source": "正式分析用原始 WAV 并记录独立设置，图面只供检查，不输出校准声压或正式声学参数。",
+      "translation": "Use original WAV for formal analysis and record independent settings. Plots are for checking, without calibrated SPL or formal acoustic measurements."
+    },
+    "498e69e78dc4a857fa9a88fba4b4dcd9b3c6f2608d3fd4f4057ae841d0f192a8": {
+      "source": "降噪和音量设置",
+      "translation": "Denoising and gain"
+    },
+    "6d7fa8cdbd090dc2c797de0e31e33a5a983175b878fd080ff05f6d72ef067c8a": {
+      "source": "处理对象与新版本",
+      "translation": "Processing targets and new versions"
+    },
+    "a18e90e799c6b3859274031c469beeac230174a2a1c7d91c62b6f01370289f27": {
+      "source": "<s id=\"0\">应用到</s>",
+      "translation": "<s id=\"0\">Apply to</s>"
+    },
+    "722271724ba528fc6a369c813a4c604aa1abff6b7afca6ce6ef26b099882788a": {
+      "source": "处理工具条 / 声道勾选",
+      "translation": "Processing toolbar / Channel checkboxes"
+    },
+    "d99bb4a5337fcd8feb25cf973b74bb1e9dcef3681e1271ff1dd2f1c4b55e96d1": {
+      "source": "全部音频角色勾选",
+      "translation": "All audio roles selected"
+    },
+    "0c3cb1e6e38eeb943c4bcc04b93acb095688e07576657d82b15ea2ce16088303": {
+      "source": "至少勾一路音频，EGG／其他禁用；角色变化会重新勾选。",
+      "translation": "Choose at least one audio channel. EGG/Other are disabled; role changes reselect channels."
+    },
+    "915859543d979f4c0fd357bb2278a7f82b22e9e413dfcfd6689a6f5129af91d7": {
+      "source": "<s id=\"0\">将选区设为噪声样本</s>",
+      "translation": "<s id=\"0\">Set selection as noise sample</s>"
+    },
+    "957ea3209faf9e9e5db4ec5b1bc8e89e20db1120b180083a6d9ba9bc508e01aa": {
+      "source": "处理工具条",
+      "translation": "Processing toolbar"
+    },
+    "efd1af93a4a249fd8562263fcfc732005b33717eb13683ea074e282b0dd03042": {
+      "source": "尚无样本",
+      "translation": "No sample yet"
+    },
+    "5aca06a697768b496bbbcf7481a609490728de1fd2be57d70b606e12e24c9988": {
+      "source": "从试听音频声道选 3072 帧至 60 秒，不能全静音或含异常值。",
+      "translation": "Select 3072 frames through 60 seconds from the audition audio channel, excluding all-silence or invalid values."
+    },
+    "a39b45166fa0d1ebd628829884006dae01629e8ad978ac35c9a1e2f8de768249": {
+      "source": "<s id=\"0\">噪声样本说明</s>",
+      "translation": "<s id=\"0\">Noise sample information</s>"
+    },
+    "2063b8e7685dec5e933e8f9adc2e30255b4c383c711c1639497bdd6c703d69c1": {
+      "source": "处理工具条下方",
+      "translation": "Below processing toolbar"
+    },
+    "39f7e34f0360657b9dcccbd69ff91b83599c1bb3f31b26fcf609cdef0ef547ce": {
+      "source": "设样本后显示",
+      "translation": "Shown after setting a sample"
+    },
+    "cc41388852472b78448fe26ae2b2e490bb7d199cfbea0e4c20e8fe70e7119fbe": {
+      "source": "核对来源／版本／声道／范围；变化大时需再试听。",
+      "translation": "Check source/version/channel/range; audition again after major changes."
+    },
+    "caf5bfe376edf6df5d608344ce7c694b0ac6d238ab61161f5f21191c95782bd3": {
+      "source": "<s id=\"0\">降噪强度</s>",
+      "translation": "<s id=\"0\">Denoising strength</s>"
+    },
+    "f3829fe6908eaafb4f69423be68a8f4fd47743d4f701ae2de6b9296c8a2dd50d": {
+      "source": "处理工具条 / 无量纲",
+      "translation": "Processing toolbar / Dimensionless"
+    },
+    "738185448a0df5024c031b5b4fd7393b05327682022c820988cd0619f22f457b": {
+      "source": "0.1–2.0，步进 0.1；越大谱减越强，未必更自然。",
+      "translation": "0.1–2.0, step 0.1. Larger means stronger spectral subtraction, not necessarily more natural sound."
+    },
+    "771d08860b36b2a480752e613264e6ae83e608c4b977ec9101852c4b3cd619f7": {
+      "source": "<s id=\"0\">整段降噪</s>",
+      "translation": "<s id=\"0\">Denoise whole recording</s>"
+    },
+    "b69c735f27261e8904d19777c5bb346775bc9b0a616d8d96cc52cb3c4038ae41": {
+      "source": "有样本及所选音频声道",
+      "translation": "Sample and selected audio channels required"
+    },
+    "84d458f39b97185e8247b20bbb6f89d7dd0a80358e4c89a2618af51a2c8fe3ab": {
+      "source": "处理完整当前版本，选区只取样本；同采样率，原始保留。",
+      "translation": "Processes the full current version; selection only defines the sample. Sample rates must match; original remains."
+    },
+    "a47c0acb1d4c4b62be934b35c56c56633e2050d26ebd6baa8264b1c97d3ecb82": {
+      "source": "<s id=\"0\">音量增益</s>",
+      "translation": "<s id=\"0\">Volume gain</s>"
+    },
+    "2c56486560d1a77143eca53e3139ba447ce0ba47315e980022396ff2d7abb54f": {
+      "source": "处理工具条 / dB",
+      "translation": "Processing toolbar / dB"
+    },
+    "5edbf847414769f0564e1d314862492ba97ac62f6aefc52216a4d81a87ee13de": {
+      "source": "−60 至 +24，以 10^(dB/20) 缩放，与检测预览独立。",
+      "translation": "−60 to +24, scaling by 10^(dB/20), independent of monitoring preview."
+    },
+    "247bb6cabfa38f40e0973fc43fa53e90da124d5af37fb2ceb5d3b61455b340f0": {
+      "source": "<s id=\"0\">应用增益</s>",
+      "translation": "<s id=\"0\">Apply gain</s>"
+    },
+    "332e940b6389de0fb4b356d7e9ce8669997c00c57137ee919dbece801d22d3b2": {
+      "source": "有录音与音频勾选",
+      "translation": "Recording and selected audio required"
+    },
+    "da06ee6d7d72205cca3f15ec25610a1178a9006d8e9474d01436f22eb1abd8bd": {
+      "source": "处理整段勾选音频声道，保存新版本。",
+      "translation": "Processes full selected audio channels and saves a new version."
+    },
+    "829c02ab6204e6ed4a547b136158d16910db7ce6e924855214563d330e749201": {
+      "source": "<s id=\"0\">后台处理进度</s>",
+      "translation": "<s id=\"0\">Background progress</s>"
+    },
+    "c4b6e6977d037dce5d2db9265f8403ab2616899ad67b16badf5ef769e59d9644": {
+      "source": "底部 / 0–100%",
+      "translation": "Bottom / 0–100%"
+    },
+    "66df6ae1c17398f680608ff9c799ab72fbf34e13c289e4247b83760572ddda49": {
+      "source": "任务运行时显示",
+      "translation": "Shown during tasks"
+    },
+    "a4a95bb2d656cf2882348bed65bff42a6a5ce142edc2047c9d4a7177441348d1": {
+      "source": "等待处理／导出结果提交再编辑或关闭。",
+      "translation": "Wait for processing/export commits before editing or closing."
+    },
+    "ce873c16328dc7a731b7f2e75e89bfca8fc8bfc47f029b8fbcbca6b2bb45a6d1": {
+      "source": "<s id=\"0\">× 取消处理</s>",
+      "translation": "<s id=\"0\">× Cancel processing</s>"
+    },
+    "f69679315b759fec0fcd2b68afb57fcdf4f654f23ba5c70acaae019340ce8883": {
+      "source": "进度条右侧",
+      "translation": "Right of progress bar"
+    },
+    "800ac0c9365fc8bbfd39b819a26c29fe1bc40158343eba6b4fafd8bb0f97e17d": {
+      "source": "运行可用；取消中禁用",
+      "translation": "Available while running; disabled while canceling"
+    },
+    "de5b0072bd0d4a0e7749c201ff5e590f2a9580014c4c6154f151d688905b0428": {
+      "source": "请求取消，需等确认；有效版本及已完成导出保留。",
+      "translation": "Requests cancellation; wait for acknowledgment. Valid versions/completed exports remain."
+    },
+    "4a09e82e13326d7a31f8569273202cb2a4d42b71343d0f5c8492934259efc8fb": {
+      "source": "处理后和原音比较",
+      "translation": "Compare processing with the original"
+    },
+    "5eb850cd7bdf10f5a4c1bd33d8a4c0b4ceb9bbd167f52ad9b96e0322f49dec85": {
+      "source": "选音频角色的试听声道，选纯背景噪声并先试听，点 <s id=\"0\">将选区设为噪声样本</s>。",
+      "translation": "Choose an audio-role audition channel, select/listen to pure background noise, then <s id=\"0\">Set selection as noise sample</s>."
+    },
+    "b9f93bb4f78a970580218457914adc05916b3158d08044a89d3555d50623c47c": {
+      "source": "至少 3072 帧（48 kHz 下 64 ms）、最多 60 秒，全静音不可用；选择能代表录音背景的片段。",
+      "translation": "At least 3072 frames (64 ms at 48 kHz), at most 60 seconds; not all silence. Choose representative background."
+    },
+    "d2a90f450874a55bcf3f3231e669b027f29c757132affcbdaa28bb6770b5a3bc": {
+      "source": "核对样本来源、版本、声道和范围，再勾 <s id=\"0\">应用到</s>。EGG／其他不可处理；跨条目样本需同采样率且噪声条件适用。",
+      "translation": "Check source, version, channel, and range, then select <s id=\"0\">Apply to</s> channels. EGG/Other are excluded. Cross-take samples need matching rates and applicable noise conditions."
+    },
+    "56a481ba3e537107f427d14b2c03235ce39451d635df3f5cd2c98605c8faf463": {
+      "source": "示例：取合成输入开始处的噪声作为样本，画面记录来源版本、通道及帧范围，EGG 角色默认不参与处理。",
+      "translation": "Example: noise at the synthesized input's beginning becomes the sample. Source/version/channel/frames are recorded; EGG is excluded by default."
+    },
+    "19af46d5358129743a209ab238be9408c141db7015e2fbcbb965f0e45cbd8aa2": {
+      "source": "示例的噪声样本记录、选区和仅音频道可勾选的处理选项",
+      "translation": "Example noise-sample record/selection and audio-only processing choices."
+    },
+    "02d81d3358491eea738de8e2df36cce07e66349e97f06443f45381987b7e9433": {
+      "source": "设 <s id=\"0\">降噪强度</s>，点 <s id=\"1\">整段降噪</s>，等后台处理已结束和降噪版本出现。<s id=\"2\">处理作用于整段，选区只用于取噪声样本。</s>",
+      "translation": "Set <s id=\"0\">Denoising strength</s>, <s id=\"1\">Denoise whole recording</s>, then wait for completion/new version. <s id=\"2\">Processing affects the whole take; selection only defines the noise sample.</s>"
+    },
+    "65857ad543cc887ddc345dd5751f24b924c16dbc89c9bde9f8b3d67f05d7e4f4": {
+      "source": "用 <s id=\"0\">试听版本</s> 比较当前、原始和处理前后差分。差分为直接来源减结果，可能含被改变的语音；失败／取消时先前版本保留。合成例音用噪声加 180 Hz 正弦，只听第一声道，比较开头背景噪声。",
+      "translation": "Use <s id=\"0\">Audition version</s> for current/original/difference. Difference is direct source minus result and may contain altered speech. Failures/cancellation retain prior versions. The example is noise plus a 180 Hz sine; listen to channel one and compare its initial background."
+    },
+    "c0d1f6d2cc6dde58aa319d35a67bf138c928c37b5e3790c5fd1daac4374d835c": {
+      "source": "示例：谱减处理完成后新增降噪版本，噪声样本记录仍可见；仅勾选的音频道改变，EGG 角色合成通道保持原采样。",
+      "translation": "Example: spectral subtraction creates a denoised version while retaining sample information. Only checked audio changes; synthesized EGG-role samples remain original."
+    },
+    "f6b8f33ba4dd876fe38471d63e447ad2b9807cd555f9ce92889b57d6f7d273b5": {
+      "source": "示例降噪版本的波形语谱、后台完成提示和 EGG 保留标记",
+      "translation": "Example denoised waveform/spectrogram, completion notice, and EGG-preserved mark."
+    },
+    "b155a4ddec944aec54d99ee96e017ab966176a43b0e19ad680e1418ab72be94b": {
+      "source": "降噪前：同一段合成噪声加 180 Hz 正弦，仅试听第一声道。重点比较开头的背景噪声。",
+      "translation": "Before denoising: identical synthesized noise plus 180 Hz sine, channel one only. Compare initial background noise."
+    },
+    "de26896421f2c79baadde0c16cf995e90ae1709253744f1de7d0d6595a0913d0": {
+      "source": "降噪后：同一段合成噪声加 180 Hz 正弦，仅试听第一声道。重点比较开头的背景噪声。",
+      "translation": "After denoising: identical synthesized noise plus 180 Hz sine, channel one only. Compare initial background noise."
+    },
+    "a77e073b86dff284ccd462e528720336b1fe6d06f886fdd6d99bc07ea891ce4a": {
+      "source": "设 <s id=\"0\">音量增益</s>，点 <s id=\"1\">应用增益</s>。完成后新增数字增益版本，改变整段勾选音频声道，EGG／其他及未勾选道保留。",
+      "translation": "Set <s id=\"0\">Volume gain</s> and <s id=\"1\">Apply gain</s>. A new digital-gain version changes full checked audio channels, retaining EGG/Other and unchecked channels."
+    },
+    "d0614f231d4e4e0617a288eb249fb46098ecabea03f10ee2cbd143f0006d174b": {
+      "source": "合成输入增加 +24 dB 用来演示超幅拒绝，不作录音建议。数字增益不能找回削波细节。",
+      "translation": "The synthesized +24 dB example demonstrates overflow rejection, not a recording recommendation. Digital gain cannot restore clipped detail."
+    },
+    "141660b8d28f3de079ac4902b13d0d9e4727fa725eee1212ab9364c54ff1c86f": {
+      "source": "示例：为演示超幅分支，显式应用 +24 dB 数字增益并生成新版本；正式处理时按原始峰值选择增益。",
+      "translation": "Example: explicitly applying +24 dB creates a version for overflow testing. Choose real gains from original peaks."
+    },
+    "79c83de1abe96362e425f5464f981216e75b8be727c33ce76a1a2e01d1d11972": {
+      "source": "示例的 +24 dB 数字增益新版本和原始保留提示",
+      "translation": "Example +24 dB version and original-preserved notice."
+    },
+    "4f18cc5c6c58564fd361c3760075f41d2032c47bfe8a94f79a63990e2fde527e": {
+      "source": "功率谱减法适合较稳定的背景底噪。噪声随时间明显变化，或样本中混入语音时，先重新选择有代表性的背景片段。处理可能改变气声、擦音及 HNR／CPP，强度增大还可能出现失真或颗粒感；科研分析保留原始 WAV、噪声来源与处理设置，并试听语音和差分。",
+      "translation": "Power spectral subtraction suits relatively stable background noise. If noise varies or speech enters the sample, select representative background again. Processing may alter breathy voice, fricatives, HNR/CPP; stronger settings can distort or sound granular. Retain original WAV, noise source, and settings, and audition speech/difference for research."
+    },
+    "a3b2e38670b8970f678bde40d5416e32df7df44fc9527a83ffb4158cae17e385": {
+      "source": "重开工程需重设噪声样本，已生成的处理版本与来源仍保留。",
+      "translation": "Reopening requires a new noise sample; generated processing versions and sources remain."
+    },
+    "071cf865209b5e846c582eb2bc639a236c0354809c6bf580c6f0e742c465f763": {
+      "source": "保存、导出与备份",
+      "translation": "Save, export, and back up"
+    },
+    "a96ffceef7a27700c13d1cacabac2cf29f762ffb4b5b63717d637fd1a3f04423": {
+      "source": "工程保存在哪里",
+      "translation": "Where projects are saved"
+    },
+    "2ec764a242a2719dbe9dab30c22047b823fe938049f110c3b752df64aa1bee9e": {
+      "source": "清单、剪辑和处理看成功提示；每次停止提交录音。<s id=\"0\">已存入本地工程，尚未导出仍需另导 WAV。</s>",
+      "translation": "Check success notices for lists/edits/processing; stopping commits each take. <s id=\"0\">Saved in local project, not yet exported still requires separate WAV export.</s>"
+    },
+    "7ba23dbf73cd9062a44af513056b2cb415358cd7f3cb107b8b03477bcaddc3ea": {
+      "source": "桌面工程目录内，project.json 是入口，takes/ 存原始 .f32 块，derived/ 存处理块，manifests/ 存修订，recovery/ 存恢复记录，.m16-writer.lock 防止并写。块文件不能改后缀当 WAV。",
+      "translation": "In desktop folders, project.json is the entry, takes/ holds original .f32 blocks, derived/ processed blocks, manifests/ revisions, recovery/ recovery records, and .m16-writer.lock prevents concurrent writes. Renaming blocks to WAV does not convert them."
+    },
+    "75344a6ac3b939ab4624183906e879904b0781a0e05c5fa3a9b1640575d20e2f": {
+      "source": "桌面端停止采集并等保存、后台完成，再备份完整工程。用 <s id=\"0\">打开工程</s> 续编；任务模板和 WAV 不含完整编辑历史。录音工程及正式导出由用户保留，设置中的 <s id=\"1\">清除全部缓存</s> 也会保留它们。请勿单独删除工程中的音频块、清单或锁文件。",
+      "translation": "Stop desktop capture, wait for saving/background work, then back up the full project. Continue via <s id=\"0\">Open project</s>. Templates/WAV lack full history. Users retain projects/formal exports; <s id=\"1\">Clear all caches</s> preserves them too. Do not delete individual blocks, manifests, or lock files."
+    },
+    "fa47becf09f38c0fb4750ab8c5767f5807ae052073b318b96db63870ff872a17": {
+      "source": "网页版的任务、录音、版本和恢复片段保存在当前浏览器的本机文件库，按账号与项目分别管理。服务器处理按需准备所引用的材料，服务器临时副本到期清理时，已确认保存的本机内容仍可保留。需要在其他设备继续编辑时，用备份工程下载完整工程 ZIP，解压后可由桌面端打开；仅下载 WAV 或任务模板无法保留完整历史。本机保存失败时先按提示重试，或下载本页采样后再关闭。",
+      "translation": "Web tasks, takes, versions, and recovery segments live in the browser's local file library, separated by account/project. Server processing prepares referenced materials on demand; confirmed local data may remain after server temporary copies expire. Download the complete project ZIP with Back up project, extract it, and open on desktop for continued editing elsewhere. WAV/templates omit full history. On local-save failure, retry as instructed or download this page's samples before closing."
+    },
+    "148946c3f9196b0df56282c9c589ad88d686269b14dcb7e2c34f9546f313d293": {
+      "source": "导出设置",
+      "translation": "Export settings"
+    },
+    "42da4732d3f8b3a3fb62f2e0d999bc5c3cf48b9462b0a22f1e37bec3b724265b": {
+      "source": "范围、版本与量化格式",
+      "translation": "Scope, version, and quantization"
+    },
+    "25c6c454bc84de6565f107a1f8307b29a41cf4fa5ec5f92bfbdfbd840bd37ca2": {
+      "source": "<s id=\"0\">导出范围</s>",
+      "translation": "<s id=\"0\">Export scope</s>"
+    },
+    "c49c61828c1ba00b0432a7a21abf7eea64cf70c4b9e44d554e9cea64bbc3c97d": {
+      "source": "导出弹窗",
+      "translation": "Export dialog"
+    },
+    "fa61ef2d0360fd82d093472fbdf221d301510ce71ca5d17fe291261b10878929": {
+      "source": "当前录音",
+      "translation": "Current recording"
+    },
+    "f1996634ff5e10405cd4185f631a996deabbeeb861c03e60342d7a4739f54ec9": {
+      "source": "当前录音／当前选区／未跳过任务的选用录音／全部录音的所选版本／全部录音的全部历史版本。",
+      "translation": "Current recording / Current selection / Selected takes of unskipped tasks / Chosen version of all recordings / All historical versions of all recordings."
+    },
+    "9349529281796e323d207be2f98af77b229ed0adc89cbd7d4fc19be7c5788a34": {
+      "source": "当前编辑 / 处理版本",
+      "translation": "Current edited / processed version"
+    },
+    "8c210443ec80f7c1faa47ca65f84321478d37872d529740c0e0178339efbebb2": {
+      "source": "可选原始采样版本；全部历史包含原始及所有编辑、处理版本，此时下拉禁用。",
+      "translation": "Original samples are also available. All history includes originals/edits/processing and disables this selector."
+    },
+    "f778aad58f8c927b2ecbd4deabd99fa6794840de7e9cae9b3e6eee1f1db6cc7e": {
+      "source": "<s id=\"0\">WAV 格式</s>",
+      "translation": "<s id=\"0\">WAV format</s>"
+    },
+    "6106e7186fb690bf11b02ddc81587d743f4f5dfefaa5f4a762a2b6020b3f2447": {
+      "source": "FLOAT／PCM24／PCM16，不改采样率或声道；PCM 超幅拒绝。",
+      "translation": "FLOAT/PCM24/PCM16 retain rate/channels. PCM overflow is rejected."
+    },
+    "e5768819ab7ea395fe802c0556c491d9ecef3117f1aa5291705f1d5cd91b15a9": {
+      "source": "<s id=\"0\">任务/选用/跳过计数</s>",
+      "translation": "<s id=\"0\">Task / Selected / Skipped counts</s>"
+    },
+    "b7e3069aa2d7f270596fe3af07c6a2a214ef176ae14469bdd060cd5d7d295915": {
+      "source": "当前页面清单",
+      "translation": "Current task list"
+    },
+    "36a332b03e7bfe67719a1bf34e46cb535b233e2445e33058bd90f88d3e6b4a87": {
+      "source": "缺录／跳过不出空 WAV，先保存最新清单。",
+      "translation": "Missing/skipped takes create no empty WAV. Save the latest list first."
+    },
+    "3e60bfe7185f2894476bec1a91b9aa9d55cc1ff67b4caf3a116871c0bb3d9c1e": {
+      "source": "<s id=\"0\">选择目录并导出 / 生成下载包</s>",
+      "translation": "<s id=\"0\">Choose folder and export / Generate download package</s>"
+    },
+    "7c27af9f89ff1bcf87735945e586c3214a2a62c72faefcd4c7a1ddee373f1ac6": {
+      "source": "范围有效且空闲时可用",
+      "translation": "Valid scope, idle"
+    },
+    "106fcf45519f2133e8bca3c77520daca4e72c55593bb71acf71d34c01e182c07": {
+      "source": "桌面端在工程外目录另建结果文件夹；网页版下载 ZIP。当前录音／选区范围需选条目，选区空或越界时按提示重选。",
+      "translation": "Desktop creates a result folder outside the project; web downloads ZIP. Current/selection scope needs a take; reselect empty/out-of-bounds ranges as prompted."
+    },
+    "9f40de35707b84a9242883f96c062d1efcfc7b269d0cd4cbedd44591d729f75a": {
+      "source": "关闭设置；已经启动用底部 × 请求取消。",
+      "translation": "Closes settings; use bottom × to cancel already-started work."
+    },
+    "12babf057fcbb1f55929886777f1df9ac059bd5b550bba6b84539ad59a98230d": {
+      "source": "导出 WAV",
+      "translation": "Export WAV"
+    },
+    "036a89feb7425641dabdfa44536ae97c9c30a26575732c079cdd654b3d28d986": {
+      "source": "<s id=\"0\">当前录音</s>：当前条目，导出原始或当前版本。",
+      "translation": "<s id=\"0\">Current recording</s>: selected take, original or current version."
+    },
+    "cbfb9f9677410447cdf0eeaf7a79f554128c7392efdb1b726ef15935be1b4856": {
+      "source": "<s id=\"0\">当前选区</s>：导出所选版本的指定整数帧范围。选择原始采样版本时使用原始帧轴，剪辑后需重新核对位置。空选区或超出所选版本长度的范围会被拒绝，调整选区或版本后重试。",
+      "translation": "<s id=\"0\">Current selection</s>: chosen version's integer-frame range. Original samples use the original frame axis; recheck positions after editing. Empty/out-of-bounds selections are rejected; adjust range/version and retry."
+    },
+    "4fd790f6cb1c1d1f7f032be6fc7686c975484c2761c4994282034698c20488fe": {
+      "source": "<s id=\"0\">未跳过任务的选用录音</s>：现清单中启用、未跳过且有选用条目的任务，不含自由／移出任务。",
+      "translation": "<s id=\"0\">Selected takes of unskipped tasks</s>: enabled, unskipped tasks in the current list with chosen takes, excluding free/removed tasks."
+    },
+    "0de83df04afb0316292abb865507cbaba10b53d585e229d8bdbacec3d7501aa2": {
+      "source": "<s id=\"0\">全部录音的所选版本</s>：包含自由录音、重录及移出任务的条目，每条统一导出当前编辑／处理版本或原始采样版本。",
+      "translation": "<s id=\"0\">Chosen version of all recordings</s>: includes free, rerecorded, and removed-task takes, exporting each current edited/processed or original version consistently."
+    },
+    "ebac4c134424547f3e03901b3cd36ffaa1b083fd0ca2bb7b9292af8857f5c217": {
+      "source": "<s id=\"0\">全部录音的全部历史版本</s>：逐条导出原始及所有编辑、处理版本，此时版本下拉不可用。",
+      "translation": "<s id=\"0\">All historical versions of all recordings</s>: every original/edit/processed version; version dropdown unavailable."
+    },
+    "efaa071f106f655828b2458f5deab36037e33ca91fb02ac07251c4e5d1f67fca": {
+      "source": "先 <s id=\"0\">保存清单</s>，核对启用、跳过和选用。导出当前录音或当前选区时，先在历史选择条目；当前任务尚无录音时，仍可打开导出窗，选择后三种批量范围。",
+      "translation": "<s id=\"0\">Save list</s> first; check enabled/skipped/selected state. For current/selection, choose history first. Without a take for the current task, export still opens for the latter three batch scopes."
+    },
+    "3ed7b59a456ea19db0e7b28e9edcd84d86d6c6056f2e7a28c96922944a4dda04": {
+      "source": "打开 <s id=\"0\">保存 / 批量导出</s>。保留原始浮点采样时，选原始采样版本和 FLOAT；缺录任务不会生成空文件。",
+      "translation": "Open <s id=\"0\">Save / Batch export</s>. For original floating samples, choose Original samples and FLOAT. Missing tasks produce no empty files."
+    },
+    "d354bf61bd7878b1d77d18cc616f14d84846b77681e9fa7d4b28de87f52684d6": {
+      "source": "导出范围与版本分别选择。当前录音、选区和批量所选版本可选当前编辑／处理版本或原始采样版本，并核对任务统计和 WAV 格式。",
+      "translation": "Choose scope/version separately. Current, selection, and chosen batch versions can use current edits/processing or original samples. Check task statistics and WAV format."
+    },
+    "bb4cfea7ed78e8813a2fb2ac217bc3c5db10284c38f9a60db7dc7ef5f0b59c7b": {
+      "source": "WAV 导出设置，显示五种范围、原始或当前版本选择和任务统计",
+      "translation": "WAV settings with five scopes, original/current versions, and task counts."
+    },
+    "6f4b07ad18fe777e278bdfc0742c9508cc8e14cba024c810a4e48b0dbb7f9a16": {
+      "source": "导出设置局部：核对导出范围、版本和 WAV 格式。全部历史范围会包含原始及所有编辑、处理版本，并禁用单一版本选择。",
+      "translation": "Export close-up: check scope, version, and format. All history includes every original/edit/processing version and disables single-version choice."
+    },
+    "3bc07f2ff4a322a246158c2df6a4496b4c7631b1600d839a99d20331f71a37a4": {
+      "source": "导出范围、版本和 WAV 格式控件局部，说明全部历史与版本选择的关系",
+      "translation": "Scope, version, and WAV controls showing how all-history scope affects version choice."
+    },
+    "b547175d338c56f0c67e8c8b28d7b1cd47c89b8aef82abb3eb462d5b56325297": {
+      "source": "选择全部录音的全部历史版本时，单一版本下拉不可用，导出包含原始及所有编辑、处理版本。",
+      "translation": "All historical versions disables the single-version dropdown and exports originals plus all edits/processing."
+    },
+    "7fd93dfba090cfee39a35f98d2ebd75b31592cab39a42e73c37962c363709a94": {
+      "source": "全部历史版本导出对话框，原始或当前版本下拉已禁用",
+      "translation": "All-history dialog with original/current version dropdown disabled."
+    },
+    "b1ffbf3845b2be32df6d5e29c6231c22ed87783f8891f609eeca2d8f60f168e1": {
+      "source": "桌面端点 <s id=\"0\">选择目录并导出</s>，选择工程之外的位置，工程及其子目录会被拒绝。网页版点 <s id=\"1\">生成下载包</s>。进度出现后等完成，取消也需等确认。",
+      "translation": "Desktop <s id=\"0\">Choose folder and export</s> requires a location outside the project; project/subfolders are refused. Web uses <s id=\"1\">Generate download package</s>. Wait for completion or cancellation acknowledgment."
+    },
+    "609498648b0c993498e02f46483bbd0b28f2dbd3094b172378105f4d1f4703b5": {
+      "source": "桌面端按左栏目录名，到所选位置的 <s id=\"0\">录音导出-*</s> 子文件夹查找 WAV 和清单。网页版保存下载的 ZIP，解压后查找 WAV、JSON／CSV 清单。",
+      "translation": "Desktop shows the folder name on the left. Find WAV/manifests in the destination's <s id=\"0\">录音导出-*</s> subfolder. Web saves ZIP; extract for WAV and JSON/CSV manifests."
+    },
+    "9eaa3101262819acfe946319a64b47c94a12aa756b3b8c5b66fc54ac35f06e61": {
+      "source": "核对 manifest.json／manifest.csv 的任务、版本、帧数、声道、格式、处理与错误，再检查 WAV 时长和试听。部分失败可逐条重导，成功项保留。",
+      "translation": "Check manifest.json/manifest.csv for tasks, versions, frames, channels, format, processing, and errors, then duration/audition. Re-export failures individually; successful items remain."
+    },
+    "0ccf9de59ead1058e058ec3d362ab9cc406bcfecb8c56d26ec7dac361be46f9c": {
+      "source": "示例：导出成功后左侧给出新目录和 WAV 文件名，工程内历史与降噪版本继续保留；可在导出目录查看 JSON 与 CSV 清单。",
+      "translation": "Example: success shows a new folder/WAV names on the left while project history/denoising remain. JSON/CSV manifests are in the export folder."
+    },
+    "f3ff8c3971669de85b8d87fe50296952e04a4488e3b57215eec1689a47997f20": {
+      "source": "示例的成功导出清单、结果目录、WAV 文件名和仍保留的录音工程",
+      "translation": "Example successful list, folder/WAV names, and retained recording project."
+    },
+    "2ab2a03d63011be194e29afc4c18a4d7e812bbec5f6867e41dda21f98e0825e8": {
+      "source": "WAV 保留采样率和全部声道。文件名含顺序、任务文件名、录音短 ID 和版本；长录音加 part，按连续帧分段，每段最多 16000000 帧和 256 MiB 采样数据。",
+      "translation": "WAV preserves rate and all channels. Names include order, task filename, short take ID, and version. Long takes add part, split by continuous frames, at most 16000000 frames and 256 MiB sample data per part."
+    },
+    "161d8b52ed87b308d9e31465d69f3a5cf78578d70e57bc27ea44a7cd292f0968": {
+      "source": "FLOAT 保留超 ±1 值，播放／转 PCM 仍可能截幅。PCM16／24 超范围拒绝，+1 也超正最大值，−1 可表示；改 FLOAT 或降低增益再导出。",
+      "translation": "FLOAT preserves values beyond ±1, but playback/PCM conversion may clip. PCM16/24 rejects overflow: +1 exceeds positive maximum, while −1 is representable. Choose FLOAT or lower gain."
+    },
+    "074bfc5d63d3d65be01ac1b638378a6c4db2b73d9f761a229564928e7d98d44b": {
+      "source": "每次桌面导出另建子目录。任务选用范围内，缺录、停用或跳过任务只记在清单中，不生成空 WAV。失败或取消后核对已完成项目，.wav.partial 是未完成文件。CSV 可能为文字加单引号，精确文字看 JSON。",
+      "translation": "Each desktop export creates a subfolder. Missing/disabled/skipped tasks are listed without empty WAVs. After failure/cancellation, inspect completed items; .wav.partial is incomplete. CSV may prefix text with apostrophes; exact text is in JSON."
+    },
+    "08318d7cd768f95f35e18e35bc78237dc1aff30399f090c3a66c97214b79d93e": {
+      "source": "遇到问题怎么办",
+      "translation": "Troubleshooting"
+    },
+    "3c7ddd656a6a41235a561bd5bfdbf7cce0a4560ebd0a984d4dbba2b188598be7": {
+      "source": "常见提示",
+      "translation": "Common messages"
+    },
+    "695b3c6986772429e53fe8d3a284413076dedf1eea020becb359c22dde97bd14": {
+      "source": "<s id=\"0\">按钮禁用</s>：检查工程、输入／输出、录音或非零选区；采集／后台任务中先停止或等待。",
+      "translation": "<s id=\"0\">Disabled control</s>: check project, input/output, recording, or nonzero selection. Stop capture or wait for background tasks."
+    },
+    "7bba988a9a56ff2cc1eea05014c303e5df5e98006330691e60ad80028330f1e6": {
+      "source": "<s id=\"0\">设备缺失</s>：停止采集和试听，刷新后重选。仍不出现新设备时重启工作台，别只按同名判断。",
+      "translation": "<s id=\"0\">Missing device</s>: stop capture/audition, refresh, and reselect. Restart the workbench if new devices remain absent; identical names alone are insufficient."
+    },
+    "b2782e7877fd9ca6d961ae0d0460448d355a9a77708f9f0ebce748da2532902e": {
+      "source": "<s id=\"0\">无法开始</s>：查端点启用、麦克风权限、接线、外部占用和格式，明确改设置重试。",
+      "translation": "<s id=\"0\">Cannot start</s>: check endpoint enabled state, permissions, wiring, occupancy, and format; explicitly change settings and retry."
+    },
+    "cb7c79cf0adf6d818ec884ff2f1e77ad95c9aacf0fc0994fda8537ee55492123": {
+      "source": "<s id=\"0\">电平提醒</s>：结合硬件增益、接线、角色和原始试听判断；显示截顶、EGG 基线或同源信号都需按用途解释。",
+      "translation": "<s id=\"0\">Level warning</s>: assess hardware gain, wiring, roles, and original audition. Interpret display clipping, EGG baselines, and shared sources for your use."
+    },
+    "71f50a7f28eb2ab271384c83389b2af8df7010f688f8232e703f14de0b6887ff": {
+      "source": "<s id=\"0\">采集占用</s>：回占用模块停止。唇形提取与录音不能同时采集，隐藏页面不释放设备。",
+      "translation": "<s id=\"0\">Capture occupied</s>: stop in the owning module. Lip extraction and recording cannot capture together; hiding does not release devices."
+    },
+    "f5428adf9313e40276488604aa97a0625e499f9b59f4992e0c4ddd3439d5dee9": {
+      "source": "<s id=\"0\">导入失败</s>：查 UTF-8、引号、工作表、公式、映射、次数及文件限制。已替换草稿可重导此前 JSON 模板再保存。",
+      "translation": "<s id=\"0\">Import failed</s>: check UTF-8, quotes, sheets, formulas, mappings, repeats, and limits. Restore replaced drafts by reimporting a prior JSON template and saving."
+    },
+    "221dfbf6097ec3d56264012694a47afac99a157f0d85d930fe270c1589d72f22": {
+      "source": "<s id=\"0\">保存失败</s>：保持页面，查目录权限、空间和另一窗口，再保存。收起错误只隐藏消息。",
+      "translation": "<s id=\"0\">Save failed</s>: retain page, check folder rights, space, and other windows, then retry. Dismiss only hides the message."
+    },
+    "8477abae67f2a44a80e1b4ea983c267f79ba13f9d4b5461464fc381bae2dd174": {
+      "source": "<s id=\"0\">剪辑失败</s>：查帧范围、剪贴板和格式兼容，不能删成空录音；误操作用撤销或原始版本。",
+      "translation": "<s id=\"0\">Edit failed</s>: check frames, clipboard, and compatibility; cannot delete to empty. Undo or use Original for mistakes."
+    },
+    "0485fa12924d3973b2c04636674892869abe52eb51a49ae75cae7681d1bbe995": {
+      "source": "<s id=\"0\">处理失败</s>：查音频角色、样本长度／采样率和至少一路勾选，原始及此前有效版本保留。",
+      "translation": "<s id=\"0\">Processing failed</s>: check audio roles, sample length/rate, and a selected channel. Original/prior valid versions remain."
+    },
+    "0ccb511d1eb7afaf0adb03778c2ebdae4562b6b13ba4c741d7dc8cf8a952fecd": {
+      "source": "<s id=\"0\">差分无法试听</s>：仅降噪／增益支持与同帧长直接来源比较，其他版本分别试听当前和原始。",
+      "translation": "<s id=\"0\">Difference unavailable</s>: only denoising/gain compare equal-length direct sources. Audition current/original separately for other versions."
+    },
+    "1e39bbc71c68d4220a9f8370a3c92893b2478be24ff860b0eede69e68e2c3807": {
+      "source": "导出失败：当前录音和选区范围先选历史条目，越界选区重新选择范围或版本。桌面端检查工程外目录与空间，网页版检查下载与项目额度；PCM 超幅时降低增益或改 FLOAT，逐项核对清单后重导。",
+      "translation": "Export failure: choose a history entry for current/selection; fix out-of-bounds range/version. Desktop checks external folder/space; web checks downloads/project quota. For PCM overflow, lower gain or use FLOAT, inspect manifests, and retry."
+    },
+    "5e11690987988d8718836d51c1a14a1dd98977553109324e6bee23134daf86b4": {
+      "source": "合成录音增加 +24 dB 后导出 PCM16，显示已导出 0／1 和超范围错误，工程与先前成功 WAV 保留。",
+      "translation": "Synthesized +24 dB PCM16 export reports 0/1 exported and overflow. Project and earlier successful WAV remain."
+    },
+    "641c02619da109157dcf641ac23a7437cb67e63c78337882d5508b7c2135aaf6": {
+      "source": "示例：超满幅增益版本导出 PCM16 被拒绝，左侧记录失败原因；先前成功 WAV 与工程历史保留，可降低增益或改用 FLOAT 后重试。",
+      "translation": "Example: over-full-scale PCM16 export is refused, with reason left and earlier WAV/history retained. Lower gain or use FLOAT to retry."
+    },
+    "aa2c7702c396a1af12d0d036a27b19ac8c8eb64592f77717379da08a2be2eef7": {
+      "source": "示例的 PCM 超量化范围失败清单和已保留的原始工程版本",
+      "translation": "Example PCM quantization-range failure list and retained original project versions."
+    },
+    "691fce983f46e93899ef5ea62e33b09ef1bae268286e9c4caaa50799bc4dcb6f": {
+      "source": "核对失败条目的版本。保留超幅浮点值用 FLOAT；需要 PCM 时选合适旧版本或降低数字增益。",
+      "translation": "Check the failed item's version. FLOAT retains overflow values; for PCM choose a suitable older version or lower gain."
+    },
+    "539b1a004bb2e26ecf87190abae3c69276db8e9f71f58f86da064ee525dd2883": {
+      "source": "重导到新目录，检查成功数、格式和文件；FLOAT 后续播放／转换仍可能截幅。",
+      "translation": "Export to a new folder and check success count, formats, and files. FLOAT can still clip during later playback/conversion."
+    },
+    "1cc19801cb2a734c90bd78b86be1729c97aada63dcca5f1c8173042de7442113": {
+      "source": "中断后接回录音",
+      "translation": "Reconnect interrupted recordings"
+    },
+    "bb23f328e5587aa91eee542f859400a157c2eb2b7724978b2eade569b2629de5": {
+      "source": "输入异常、队列积压、写入失败或空间不足可能导致不完整。停止后核对保存帧数，实时图末尾未必已保存。",
+      "translation": "Input faults, queue buildup, write failures, or low space can leave incomplete recordings. Check saved frames after stopping; the live plot's tail may not be saved."
+    },
+    "e4225e9d032d17c8a0cef61e7b24e5b4aa3b8cc700596891927cca0ef482a529": {
+      "source": "关闭前停止检测／录音并等保存。关闭页也会尝试停止与保存；后台未结束或写入失败时窗口保留。",
+      "translation": "Stop checks/recording and wait for saves before closing. Closing also attempts stopping/saving; the window remains if background tasks or writes fail."
+    },
+    "1c8d500748e4b68c559f145b2f387a9f184074b251537cd708ae0e4b3cf734ec": {
+      "source": "异常退出后 <s id=\"0\">打开工程</s>。恢复提示显示已保存且校验通过的连续帧数，末尾可能缺失。",
+      "translation": "After abnormal exit, <s id=\"0\">Open project</s>. Recovery shows the saved, verified continuous frame count; the tail may be missing."
+    },
+    "8d46fc532d55cfbd9d7ddfb3e9a41d3761d124b89b17abb40969576b8b8190ef": {
+      "source": "示例：重新打开含未提交前缀的工程，显示 32768 个已保存帧及末尾可能缺失提示。",
+      "translation": "Example: reopening uncommitted-prefix work shows 32768 saved frames and a possible-missing-tail notice."
+    },
+    "08e1e460c4419d7efcb8d8ff3d109efed3c5a2272d322abceef8aa3478a99a80": {
+      "source": "示例工程重新打开后发现可恢复录音、32768 帧和恢复按钮",
+      "translation": "Reopened example with recoverable recording, 32768 frames, and Recover."
+    },
+    "fc594f2d324c389e9365e329cddb9ce85239a2781b5e5234521380a6c865af4f": {
+      "source": "点 <s id=\"0\">恢复</s>，等已恢复已落盘片段。前缀成为新的不完整录音，原条目保留。",
+      "translation": "<s id=\"0\">Recover</s> and wait for disk-fragment recovery. The prefix becomes a new incomplete take; originals remain."
+    },
+    "ecde9b3bd5bf27d894ab240202cf67e20a5cbd03b9dbbb08ae62f80213bee007": {
+      "source": "在 <s id=\"0\">录音历史</s> 选恢复条目，核对时长、帧数、警告和试听，再检查选用关系，决定是否另导 WAV。",
+      "translation": "Select the recovered entry in <s id=\"0\">Recording history</s>. Check duration, frames, warnings, audition, and selected status before deciding on WAV export."
+    },
+    "d33b72f5a1e9be4922436e404eed88904fa0102fe2391f79335121e34ddb29cb": {
+      "source": "示例：点击恢复后前缀成为新的不完整录音条目，原录音继续保留，界面提示已恢复已落盘片段。",
+      "translation": "Example: Recover creates a new incomplete take, retaining original and reporting recovered disk fragments."
+    },
+    "f4571dac84cde92320777615597afc0f998dedd053671116d41e4a6173f837ec": {
+      "source": "示例恢复成功提示、两条录音历史和末尾可能缺失的警告",
+      "translation": "Recovery-success example with two history entries and possible-missing-tail warning."
+    },
+    "0e3aab724b86b3e1b9ac8005ecef4f879a77d8017daadc38f5ff041f054c9fce": {
+      "source": "坏块之后或尚在内存的尾部可能找不回，恢复不会补零伪造连续录音。",
+      "translation": "Data after corrupt blocks or still in memory may be lost. Recovery does not fabricate continuity by zero-padding."
+    },
+    "940622055d62c5ccdfa4e4397a08ffc8c0dd3f603cd0c1fd96ef81cf8079e1f6": {
+      "source": "单写者提示时，到原窗口正常关闭。锁文件保留是正常行为，不手动删除绕过保护。",
+      "translation": "For single-writer warnings, close the original window normally. Retained lock files are normal; do not delete them to bypass protection."
+    },
+    "1f78d84ac9903e2711a1f64715930e5ee1dac3b3bb2a6f646b41d7c5d8e093db": {
+      "source": "工程需目录写入权及系统音频权限。未保存尾部或损坏介质不能保证恢复。",
+      "translation": "Projects require folder-write and system-audio permission. Unsaved tails/damaged media are not guaranteed recoverable."
+    },
+    "06b949d1037c1520a85d767065f03bd8007ecc3e06890ae96886dd275aa045fb": {
+      "source": "方法与使用范围",
+      "translation": "Methods and scope"
+    },
+    "3006a9e8952eb752bdfe281f1051fc59e4d7cb1ec50509e12397adc068fcdb74": {
+      "source": "方法来源",
+      "translation": "Method sources"
+    },
+    "badefb578ce5835f526efe2dbaab804827a962408ed07f9d41e97c4ce8b0fa8c": {
+      "source": "桌面采集与试听使用 sounddevice／PortAudio，Windows 列出启用且格式检查通过的 WASAPI 设备。网页版由浏览器申请麦克风权限并采集，实际通道和采样率受设备与浏览器影响。",
+      "translation": "Desktop capture/audition uses sounddevice/PortAudio; Windows lists enabled WASAPI devices passing format checks. Web requests microphone permission and captures through the browser; channels/rate depend on devices/browser."
+    },
+    "faf9a28e7a85b460073743e4360593a6da1a9c055873c089274706226b6e8a73": {
+      "source": "设备能力和支持格式定义见 <s id=\"0\">sounddevice 官方硬件接口说明</s>，本页行为以实际实现和本机设备为准。",
+      "translation": "Device/format definitions: <s id=\"0\">official sounddevice hardware-interface documentation</s>. Actual behavior follows implementation and local hardware."
+    },
+    "811fd1ff3711580c47fc39a8129982361311ddff7cc57718604934519196f12c": {
+      "source": "语谱经 Parselmouth 调 Praat。Praat 作者为 Paul Boersma、David Weenink，Parselmouth 作者为 Yannick Jadoul、Bill Thompson、Bart de Boer 等；研究记录保留实际版本。",
+      "translation": "Spectrograms call Praat through Parselmouth. Praat authors: Paul Boersma and David Weenink; Parselmouth: Yannick Jadoul, Bill Thompson, Bart de Boer, and others. Record actual versions."
+    },
+    "f64a082ab4b0dfbe1717b43a8a93c1b8921fba39e8d30041c85e5302eac0f3f1": {
+      "source": "降噪先对所选背景噪声片段分帧，计算各频点的平均功率谱，作为噪声估计。处理录音时使用周期 Hann 窗，窗长 1024 帧、步长 256 帧；在 48000 Hz 下分别约为 21.3 ms 和 5.3 ms。此处的窗长与步长独立于语谱图显示参数。",
+      "translation": "Denoising frames the selected background and averages each frequency bin's power as the noise estimate. Processing uses periodic Hann windows, 1024 frames and 256-frame hop: approximately 21.3 ms and 5.3 ms at 48000 Hz. These are separate from spectrogram display parameters."
+    },
+    "5e253154e09ebbc23e7180e2e02d5ab854d2e3d61180da2f423bbfa884d81ab0": {
+      "source": "每个时频点的功率减去降噪强度乘以噪声均值功率，非负剩余功率与原功率之比开平方后得到幅度增益。<s id=\"0\">降噪强度</s> 为 0.1–2.0，默认 1.0。幅度增益下限为 0.15，再沿频率方向用相邻 3 个频点平滑；将增益施加到原复数频谱，保留原相位并重建音频。",
+      "translation": "At each time-frequency point, subtract strength × mean noise power. The square root of nonnegative residual/original power gives amplitude gain. <s id=\"0\">Denoising strength</s> is 0.1–2.0, default 1.0. Floor gain at 0.15, smooth across 3 adjacent frequency bins, apply to original complex spectra, retain phase, and reconstruct."
+    },
+    "6e71220f8e5073234cdfc0d856b543b4706a318b2ce75332245190841e8508e5": {
+      "source": "谱减和数字增益只处理勾选的音频角色声道。原始录音、EGG、其他角色及未勾选声道保留，结果保存为新版本，可与原始或直接来源分别试听。",
+      "translation": "Spectral subtraction/gain affect checked audio roles only. Originals, EGG, Other, and unchecked channels remain. New versions can audition separately against original/direct source."
+    },
+    "980807441d6d8cddd1b53ed184e652cdf576f1f9124126d77b60d871fda0fe5b": {
+      "source": "表格用 SheetJS CE，计算用 NumPy／SciPy，WAV 用 SoundFile／libsndfile。署名与许可见 <s id=\"0\">方法与引用</s> 及应用致谢。",
+      "translation": "Spreadsheets use SheetJS CE, computation NumPy/SciPy, WAV SoundFile/libsndfile. Credits/licenses: <s id=\"0\">Methods and references</s> and app acknowledgments."
+    },
+    "5277058e9af04ab65d332462c618d1469ad7cf3fd40c2495dc57bed49802bf45": {
+      "source": "用于研究前先确认",
+      "translation": "Check before research use"
+    },
+    "06a69f03f7c7d41f599ea18e53474bd9efc42ac40176bff2a17cea5c2b3bebf7": {
+      "source": "正式采集前完成录前检测，并按计划时长试录。Windows、macOS 与不同浏览器的设备行为需分别检查，通道数选项不能代替实体声卡与 EGG 的逐道实测。",
+      "translation": "Before formal capture, run checks and test the planned duration. Verify Windows, macOS, and browser device behavior separately. Channel settings cannot replace physical per-channel interface/EGG testing."
+    },
+    "d6f3e3d0847b8aae444caa35a73a324f126983269aeff6315ee54ebb1ee524ec": {
+      "source": "正式使用前先检验设备／EGG 接线、系统音效、削波、时延与预期时长，保留原音和设置。",
+      "translation": "Check devices/EGG wiring, system effects, clipping, latency, and duration before use. Retain originals/settings."
+    },
+    "89b11309772f9800e080a1841b300f36cdf8da5d47f92e944242262b0dd82905": {
+      "source": "参考资料",
+      "translation": "References"
+    },
+    "d4b7b11c910a6d6b0f50dd2f8d156618f81b85ea21a2c3157d48a3cb71cc98dd": {
+      "source": "参考资料说明方法和背景，结果以实际输入、参数及版本解释。",
+      "translation": "References explain methods/background; interpret results from actual input, parameters, and versions."
+    }
+  }
+}

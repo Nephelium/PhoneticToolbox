@@ -226,7 +226,14 @@ def test_inflight_recovery_settles_without_growing_and_preserves_deadline(legacy
     usage=e.storage.usage(e.owner)
     assert usage['used_bytes']==1 and usage['reserved_bytes']==1_000_000_009
     assert e.storage.list(e.owner,e.project)[0]['expires_at']==deadline
-    with pytest.raises(StorageError,match='quota_exceeded'): e.storage.append(e.owner,asset,1,b'y')
+    # The current policy permits settling already accepted reservations even
+    # after a quota decrease. It must still reject every new reservation.
+    e.storage.append(e.owner,asset,1,b'y')
+    usage=e.storage.usage(e.owner)
+    assert usage['used_bytes']==2 and usage['reserved_bytes']==1_000_000_008
+    assert e.storage.list(e.owner,e.project)[0]['expires_at']==deadline
+    with pytest.raises(StorageError,match='quota_exceeded'):
+        e.storage.create(e.owner,UploadInput(project_id=e.project,name='new.bin',expected_bytes=1,idempotency_key=uuid4().hex))
 
 
 def pipeline(e):

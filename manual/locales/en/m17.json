@@ -1,0 +1,1158 @@
+{
+  "schemaVersion": "ptb-manual-localization/1",
+  "locale": "en",
+  "entries": {
+    "6f41d06ed80e13af78944f16a3d2015468dc8caed05215f2e0c2f5d5b6fd9e7b": {
+      "source": "国际音标表Plus",
+      "translation": "IPA Chart Plus"
+    },
+    "788b70c94e8c5305a0d3c079bbaa2740c5437cb9fcc7a0cf23accd9980351a01": {
+      "source": "视频教程：<s id=\"0\">观看本章视频</s>。",
+      "translation": "Video tutorial: <s id=\"0\">watch this chapter's video</s>."
+    },
+    "119fc71ba32d342c62f808263c12ac9c46aab6c6e881351f7bc4438de8692283": {
+      "source": "用途与准备",
+      "translation": "Purpose and preparation"
+    },
+    "8d69ae6c5f65df6243d99080015cbbba70eeeb0a73befda5720cf719a2d46133": {
+      "source": "在这里浏览、查找和输入 IPA、extIPA、VoQS，也能查看记号的用法与来源。三套表共用下方文本框，可混合输入音段、附加号、声调和音质范围。文字只在本机编辑。",
+      "translation": "Browse, find, and enter IPA, extIPA, and VoQS, and inspect their usage and sources. All three charts share the text box below, where you can mix segments, diacritics, tones, and voice-quality spans. Text is edited locally only."
+    },
+    "7f58fd4d6d77faf000044c588d12a530842df2da93974aa75b4ef5b398c3183b": {
+      "source": "开始输入",
+      "translation": "Start typing"
+    },
+    "6c2692550d8bdc193684296b382a2cf4c2d44b82bfa3a3358b0a902874ecf3ec": {
+      "source": "打开<s id=\"0\">国际音标表Plus</s>，等待读取草稿结束。首次是空文本；已有草稿会恢复正文与设置。",
+      "translation": "Open <s id=\"0\">IPA Chart Plus</s> and wait for draft loading to finish. First use starts empty; an existing draft restores text and settings."
+    },
+    "f0b46c53d320207f5a2703e3a904935b255e81e9adfcac6425f622a7d05317ba": {
+      "source": "在下方文本框输入或粘贴文字，<s id=\"0\">先放好光标或选中待替换内容</s>，再点图表中的符号。",
+      "translation": "Type or paste in the lower text box. <s id=\"0\">Position the cursor or select the text to replace first</s>, then click a chart symbol."
+    },
+    "18a26a4316b642146be3c88b0b29946ad4403b3c3329c79e4e1c58ecbfc23459": {
+      "source": "选体系：一般音段和韵律用 <s id=\"0\">IPA</s>，额外构音、部分发声、无声构音或外来噪声查 <s id=\"1\">extIPA</s>，一段言语的音质设置查 <s id=\"2\">VoQS</s>。",
+      "translation": "Choose <s id=\"0\">IPA</s> for general segments and prosody, <s id=\"1\">extIPA</s> for additional articulation, partial voicing, silent articulation, or external noise, and <s id=\"2\">VoQS</s> for voice-quality settings across a speech span."
+    },
+    "9a5c3c01a9172cad1914758e27f6d57ad8bb17299291c77c7ecf3ba7edc9b912": {
+      "source": "<s id=\"0\">当前点击播放暂不可用，点符号即可输入文字。</s>",
+      "translation": "<s id=\"0\">Click-to-play is currently unavailable. Clicking a symbol enters text.</s>"
+    },
+    "8a6fca6af3d3a3753ec8fcdec3ab3804d1796ccb35ec7c77f923834242b355c5": {
+      "source": "字体与离线使用",
+      "translation": "Fonts and offline use"
+    },
+    "16d36ee5835f90d66950bfaa499b292fb3643adfcc5cca20f4d44ee6e5851f99": {
+      "source": "音标使用随模块提供的 PTB IPA Plus 字体，无须另装系统字体；中文沿用应用字体。底部显示<s id=\"0\">固定字体就绪</s>后可核对附加号。桌面资源随应用提供；网页加载完成后可断网编辑，关闭后再离线打开可能无法载入。",
+      "translation": "IPA uses the bundled PTB IPA Plus font; no system installation is needed. Chinese uses the app font. Check diacritics after <s id=\"0\">Fixed font ready</s> appears at the bottom. Desktop resources are bundled. Once the web page loads, you can disconnect and edit; reopening offline after closing may fail to load."
+    },
+    "5432a2b807b7bbd46f03e456b4f549d5d881b46fcf3c955797fef91a6de493fc": {
+      "source": "三套表有 625 个入口：IPA 351、extIPA 209、VoQS 65，入口包含组合、例示和工具。",
+      "translation": "The three charts contain 625 entries: IPA 351, extIPA 209, and VoQS 65, including combinations, examples, and tools."
+    },
+    "de9244849ac8642f8de350d1d8bd073be240644eea9d95713fac6c6c7234bc0d": {
+      "source": "界面怎么看",
+      "translation": "Understanding the interface"
+    },
+    "15924d5c7d23d850e4bceb89b259fcddb3b60ad024d90ded1d6d95715fc5af6c": {
+      "source": "IPA 基础图表：顶部工具、中部辅音矩阵、右侧元音图与下方文本框。",
+      "translation": "IPA basic chart: tools at the top, a consonant matrix in the middle, a vowel chart on the right, and the text box below."
+    },
+    "46ad697b06f07662424585c113e3904b7b2506aeaf3bd0f3396cc8806d2449ba": {
+      "source": "查表、检索和看介绍都会保留正文。表区可上下、左右滚动；文本较多时，向上拖文本框上沿的分隔条，让更多行露出来。",
+      "translation": "Browsing, searching, and reading descriptions retain your text. Scroll charts vertically or horizontally. For longer text, drag the divider above the text box upward to show more lines."
+    },
+    "51eb5cb9498480fb8317350c9c1df99abbcf99d2f8b631a70bddd377331bf270": {
+      "source": "工作区位置与用途",
+      "translation": "Workspace areas and uses"
+    },
+    "1306a68ac9c88295188807238fc4d4aa0b1290f947e0e7feb07ebc91c84ad708": {
+      "source": "位置",
+      "translation": "Area"
+    },
+    "6ad56742c5911ddebcc8cf2cdec925f06694b677be064d6c850009a001fea71a": {
+      "source": "内容与用法",
+      "translation": "Content and use"
+    },
+    "c2eba757ba293bd33043176d186e37bf13d33bc2b109ec8bab8aa68010f28528": {
+      "source": "顶部",
+      "translation": "Top"
+    },
+    "7f41debdb9898a8a660948eca870c66ebd2e84a9752a1f117bdab3fa667adec4": {
+      "source": "切体系、检索、改字号和开关悬停介绍；点击播放暂不可用，右侧是帮助和方法与引用。",
+      "translation": "Switch systems, search, change size, and toggle hover descriptions. Click-to-play is unavailable. Help and Methods and references are on the right."
+    },
+    "d5f5ee1889009e6874abefb99dce39dfad682f88034315778825d7beb4ec9a9e": {
+      "source": "表区上方",
+      "translation": "Above the chart"
+    },
+    "40b395206a24c87247411c61f0076d6e8586a49eac79e22da042c5bfdc71d379": {
+      "source": "显示表版与输入提示；IPA、extIPA 默认显示全部，也可选择分区。",
+      "translation": "Shows chart edition and input hints. IPA and extIPA initially show all sections; individual sections can be selected."
+    },
+    "9f807010b8362127481912152adefb3f524898e18f52c601aa5b16ffc73d8677": {
+      "source": "中部表区",
+      "translation": "Middle chart area"
+    },
+    "8e610147d9175dacfd0bd558d0d33af93e71e40045a1f733cb67861303adfd2d": {
+      "source": "浏览矩阵、元音图或分类记号，点击输入，右键看详情。",
+      "translation": "Browse matrices, the vowel chart, or categorized symbols. Click to enter; right-click for details."
+    },
+    "30d7dc1f85641c109d895758576035ee8f897ce9275e8c7e8f0ba528b7449b75": {
+      "source": "下方文本框",
+      "translation": "Lower text box"
+    },
+    "2ebe81355291e13098ce8566269f0ad8327edb3ce017fdf8f898dec33a3a55f8": {
+      "source": "手动输入、粘贴、选区编辑；上沿分隔条可调高度。",
+      "translation": "Type, paste, and edit selections. Resize using the divider above."
+    },
+    "7fb6d462bb5c95aeee942b454fd5104985968870d8afcf458aa054ec51d861ea": {
+      "source": "底部工具与状态",
+      "translation": "Bottom tools and status"
+    },
+    "899455be77829e9c93035520318bfbd2db82b84ec2e89d77f311ba7053e52b53": {
+      "source": "复制、全选、撤销、重做、保存、清空，以及草稿、字体和码位提示。",
+      "translation": "Copy, select all, undo, redo, save, and clear, plus draft, font, and code-point information."
+    },
+    "491394a336b1c10fda10e389712b9bd5c353d9b41a3983ea58a3f3ded2542a18": {
+      "source": "符号介绍面板",
+      "translation": "Symbol description panel"
+    },
+    "2090746312e26fd2c270a082cb09b158eb77a4325ce6e14ff87294b7c57ed202": {
+      "source": "悬停速览，右键或 Alt+Enter 固定展开；有演示素材时也在这里显示。",
+      "translation": "Hover for a preview; right-click or Alt+Enter to pin details. Demonstration media, where available, also appear here."
+    },
+    "a10ccccb5aa83a49914a74e598cafda61023eaefd081b9854b99c7004c955a40": {
+      "source": "先试一遍",
+      "translation": "Try it once"
+    },
+    "ba2d0e51c033861938095afa4264e2edb3e96da65979a0dffdb7749b63777994": {
+      "source": "输入、修改与输出",
+      "translation": "Enter, edit, and output"
+    },
+    "343714142e8be55101cf35278a868d1d65ef81ca425f29023d0995ded7411185": {
+      "source": "在 <s id=\"0\">IPA → 基础图表</s>的元音图点 <s id=\"1\">a</s>，下方出现 a。",
+      "translation": "In the vowel chart under <s id=\"0\">IPA → Basic chart</s>, click <s id=\"1\">a</s>. a appears below."
+    },
+    "7f3b0a3b2f8e6e7f1ec2c12492ffd2657498c37a06188e2ae02729768347632c": {
+      "source": "搜索<s id=\"0\">鼻化</s>。把光标放到 a 后，<s id=\"1\">取消选区</s>，点深色 ◌̃，得到 ã。",
+      "translation": "Search for <s id=\"0\">鼻化</s>. Place the cursor after a, <s id=\"1\">clear the selection</s>, then click dark ◌̃ to obtain ã."
+    },
+    "496607042c79f84467604f1e984db9401bb2855e6f559a918cd8f043afeb96d6": {
+      "source": "选中整个 ã，再点另一普通符号或完整例示，会替换这段文字。点<s id=\"0\">撤销</s>可恢复。",
+      "translation": "Select all of ã, then click another ordinary symbol or complete example to replace it. <s id=\"0\">Undo</s> restores it."
+    },
+    "a1a3e79344ae9e64d3df8b49620ec658273b13604a07778effe48d00b88ba6c8": {
+      "source": "<s id=\"0\">悬停或右键符号</s>查看用法与实际输入；看完可收起详情。",
+      "translation": "<s id=\"0\">Hover over or right-click a symbol</s> to inspect usage and actual input. Collapse details when finished."
+    },
+    "be297d72b1e21edbed320e8c129aac418a3f7ab8a4fafdd261b3ceaa31e16000": {
+      "source": "点<s id=\"0\">复制全部</s>粘贴到目标文档，或点<s id=\"1\">保存文本</s>下载 TXT。核对字符和实际文件后再离开。",
+      "translation": "Click <s id=\"0\">Copy all</s> and paste into the destination document, or <s id=\"1\">Save text</s> to download TXT. Check characters and the actual file before leaving."
+    },
+    "2829af02c7aa26ba3593249eeee66dcbca7318811311a0f66e282e08e97e6254": {
+      "source": "浅色按钮会输入完整例示。例如 ẽ 会整串写入并替换选区，不会只给原字母加鼻化。",
+      "translation": "Light buttons enter complete examples. For instance, ẽ inserts the whole string and replaces a selection; it does not merely nasalize an existing letter."
+    },
+    "943e0524f91455d62b3c5ecbf7f745ecbd6fb216802638cea0e766007b551896": {
+      "source": "搜不到时怎么找",
+      "translation": "Finding an item when search fails"
+    },
+    "2478f2f0ff525dafbf550811f9f0132310c571660d07948cab3ef2b2989c44ca": {
+      "source": "先选 <s id=\"0\">IPA / extIPA / VoQS</s>，检索只在当前体系内进行。",
+      "translation": "Choose <s id=\"0\">IPA / extIPA / VoQS</s> first. Searches are limited to the current system."
+    },
+    "1e5e60d3cebe867ea2837d90e660cd3d72e058fab511a9f76c975cd9d963ff3c": {
+      "source": "输入符号、中英文名称、<s id=\"0\">U+1DF06</s> 形式的码位或已有 CIN 别名。支持部分词匹配，不区分英文大小写。",
+      "translation": "Enter a symbol, Chinese or English name, code point such as <s id=\"0\">U+1DF06</s>, or an existing CIN alias. Partial matches are supported and English is case-insensitive."
+    },
+    "c38cdcc2404d964119a49a8c148674fe9215afa55da219355c038882eda0f19b": {
+      "source": "核对<s id=\"0\">找到项数、名称与当前体系</s>后再点结果。搜索时分区按钮隐藏。",
+      "translation": "Check the <s id=\"0\">match count, names, and current system</s> before clicking a result. Section buttons are hidden during search."
+    },
+    "3dafd1a176fa3ba1491278f8ac52dcd8b8ff884c24874b5cad323bafe441e143": {
+      "source": "<s id=\"0\">清空搜索</s>返回原分区。换体系后搜索词仍在，需要重新核对结果。",
+      "translation": "<s id=\"0\">Clear search</s> returns to the previous section. The query remains after switching systems; check the new results."
+    },
+    "2dff10b7558a1b9621dfc857d2ed606e73b031777cc427fba52484a16d2aa1a6": {
+      "source": "搜索 U+0062 后，IPA 结果显示浊双唇爆发音 b，下方选中的 ã 已替换为 b。",
+      "translation": "Searching U+0062 in IPA finds voiced bilabial plosive b. The selected ã below has been replaced by b."
+    },
+    "989079297fa8d3c201110b489d26dca787599386b832809903aef92ce5901bff": {
+      "source": "常用控件",
+      "translation": "Common controls"
+    },
+    "98c98a445425dda391fedad0e1a2cc3980b4bc66ce5ef243ea87e56e9284d669": {
+      "source": "查表与显示",
+      "translation": "Browse and display"
+    },
+    "e6c3bb8c6da35336adc48e25df83b6ef8d67cd7a5f3533ebbb5823ee7a7a95b5": {
+      "source": "下列为没有草稿时的默认值。已有草稿会恢复体系、悬停介绍、字号和文本框高度；搜索词、分区页、播放开关、详情和撤销历史不恢复。",
+      "translation": "The following defaults apply without a draft. Existing drafts restore system, hover descriptions, size, and text-box height. Query, section page, playback switch, details, and undo history are not restored."
+    },
+    "a1ac4d84985b8a42fcea2aac0a74ec6b1a189c846d535df332f723eba2edc44d": {
+      "source": "顶部工具与默认状态",
+      "translation": "Top tools and defaults"
+    },
+    "9aa63f70b1e8caf291767d2f441a4ef74eaf92208e1721fa1d21d3f44f8b05bc": {
+      "source": "控件",
+      "translation": "Control"
+    },
+    "a30ad37893b8ea70943c4517a06c8f1c41ad6e368cf3039b6ce054fca13e56f5": {
+      "source": "默认状态",
+      "translation": "Default state"
+    },
+    "de85bbf3ac0d98687ecad4ebca76c51d8864c31a240afa6d899afce349584cd8": {
+      "source": "操作",
+      "translation": "Action"
+    },
+    "e3237112ccbff6b83d4619b9709deedab362006440a73868132a9936da76fae1": {
+      "source": "换表与检索范围，保留正文、光标和当前撤销历史。",
+      "translation": "Changes chart and search scope while retaining text, cursor, and current undo history."
+    },
+    "6c586f1b4bcfff67c67438e70be5c120e45b88d59948635da854929c466bdc01": {
+      "source": "<s id=\"0\">分区按钮</s>",
+      "translation": "<s id=\"0\">Section buttons</s>"
+    },
+    "91699f95d1454aba76e7a52c9db614aa04545a660f4631bc9c8560f4685f5312": {
+      "source": "IPA 与 extIPA 均为显示全部",
+      "translation": "Show all for both IPA and extIPA"
+    },
+    "5888764019e814f5e597875656d53d483cae172c1447510b787eb413688487cd": {
+      "source": "IPA 两页、extIPA 四页；VoQS 直接分类。搜索非空时隐藏。",
+      "translation": "IPA has two pages; extIPA has four. VoQS shows categories directly. Hidden when the query is nonempty."
+    },
+    "9b4c7e9da0afd528660f56c4a5da90a6fcadef723748b86e2abba80e3cf64d8c": {
+      "source": "<s id=\"0\">符号 / 名称 / U+ / CIN</s>",
+      "translation": "<s id=\"0\">Symbol / Name / U+ / CIN</s>"
+    },
+    "fe9535fe5eee47ed51f779bfd92677e9fe5b65a08bf31942d41d1dff9411a6b3": {
+      "source": "空",
+      "translation": "Empty"
+    },
+    "c72df5e77d7455a4baee498f978205438fddb2a44e2424e577e70c6154c8cb83": {
+      "source": "查显示字符、实际输入、名称、码位和别名。",
+      "translation": "Searches display characters, actual input, names, code points, and aliases."
+    },
+    "98f3df9849f787de0e5e325b7201d45d18daf111dc3708c3ba7449564c04684c": {
+      "source": "<s id=\"0\">字号</s>",
+      "translation": "<s id=\"0\">Font size</s>"
+    },
+    "6d8f39ddb475aea4a87dacdb795ef85b3ddfe55a5762a3cb58377dc3ddbfb484": {
+      "source": "26px；18–54，步长 1",
+      "translation": "26 px; 18–54, step 1"
+    },
+    "a309e8a7ceb2afdc82a7784af26266ccb44701fa21027633f9a98b426576591b": {
+      "source": "同时调整图表和文本框。普通符号通常比设定值小 6px，例示会再缩小；名称字号不变。",
+      "translation": "Changes charts and text together. Ordinary symbols are usually 6 px smaller than the setting, and examples smaller still; name size stays unchanged."
+    },
+    "9d744c43965b8f2e4c8290bb2b2ce0670da26e005122599dbedd05dcb62aa540": {
+      "source": "<s id=\"0\">悬停介绍</s>",
+      "translation": "<s id=\"0\">Hover descriptions</s>"
+    },
+    "08f8e7374cb1dd446e98d817d9cacf05aeeec3586942c9d00cd2afa0f0783cde": {
+      "source": "开启",
+      "translation": "On"
+    },
+    "0f5e7f4310d284e028c045b54e0b50e5e0a60dd469aac97efc66ca31a842d926": {
+      "source": "自动显示说明；关闭后仍可右键或 Alt+Enter 看详情。",
+      "translation": "Shows descriptions automatically. When off, right-click or Alt+Enter still opens details."
+    },
+    "da7e9be9e05a78c0dd9f3b8fb2d4cef0e202773d44c1126d343568d468d7590e": {
+      "source": "<s id=\"0\">点击播放</s>",
+      "translation": "<s id=\"0\">Click to play</s>"
+    },
+    "241c0c3adc782a8f7815ffd9e41e9c4f2b8df92d30bf44b19b9ed69e13077752": {
+      "source": "暂不可用",
+      "translation": "Currently unavailable"
+    },
+    "0f822e57e74a58f6915ffd37b56a0ebb7c91c82b5eea9b5fd58be35b7a5b5201": {
+      "source": "演示内容正在创作中，悬停可查看提示；当前点击符号用于输入。",
+      "translation": "Demonstration content is being created. Hover for the notice; clicking symbols currently enters text."
+    },
+    "4d6dd1a5613bb097983544e6484156649e937885a3c8bd801e9fd26f2dbcc88f": {
+      "source": "<s id=\"0\">帮助</s>",
+      "translation": "<s id=\"0\">Help</s>"
+    },
+    "7a4c9d6383252e193c3f049c776fe62bd05908366bd6a2f27824d506eb7d602e": {
+      "source": "未打开",
+      "translation": "Not open"
+    },
+    "207a2343c8a796f76fd158cf93f279c82126ee13ebdd0ad21476dc20a969b6ba": {
+      "source": "进入本章，点返回 国际音标表Plus 回到原正文和选区。",
+      "translation": "Opens this chapter. Return to IPA Chart Plus restores the previous text and selection."
+    },
+    "224f04843e5506fd1d381ab9ff4cf5828f0f77215829474a618182fb335c88f3": {
+      "source": "<s id=\"0\">方法与引用</s>",
+      "translation": "<s id=\"0\">Methods and references</s>"
+    },
+    "4f90971621aee2a5e446ac530b16fa7099c2e6378293f7f0c572968f1df7cdfc": {
+      "source": "关闭",
+      "translation": "Closed"
+    },
+    "fa947aad50d8d0906843aaee5100a3842e1796df6e708f62992fdabb023d97d8": {
+      "source": "查看出处与许可、复制引用、主动打开公开链接。",
+      "translation": "View sources and licenses, copy citations, or actively open public links."
+    },
+    "fa6b49f0d5b1543d1b5ec37c49d928391f1393ea170e88fbc3821894ae34b78d": {
+      "source": "本模块说明书的目录、搜索与右上返回 国际音标表Plus 按钮。",
+      "translation": "This module's manual contents, search, and Return to IPA Chart Plus button at the upper right."
+    },
+    "0fbb7e401b92f2fce1edb70ecc3ac73a13eb9174f71adadb1ab226966ed9480c": {
+      "source": "字号提交时取整并限制在 18–54，空值或无效值恢复 26。它只改变显示，正文字符和导出编码保持原样。页面缩放与应用基础字号在全局设置中调整。",
+      "translation": "On submission, font size is rounded and clamped to 18–54. Empty or invalid input resets to 26. It affects display only; text characters and export encoding stay unchanged. Adjust page zoom and app base size in global settings."
+    },
+    "05ddac0ce1884b9961c659d9c4da4e140a1bb6ad033d40045d9905cdf66bfabb": {
+      "source": "编辑文字",
+      "translation": "Edit text"
+    },
+    "beb1c756c4f3b628d72d64b3a3e2f4c1f69bd4f3574e761757907784066e7056": {
+      "source": "文本编辑工具",
+      "translation": "Text editing tools"
+    },
+    "32a8558988b94f1738a9c45e1081bc2973a1df4b15c7ecff1553918416940904": {
+      "source": "用法与反馈",
+      "translation": "Usage and feedback"
+    },
+    "b465c851635b94dfd9a5929e2b3d67a5ab795cb118c10c7016ef60a850821fa1": {
+      "source": "<s id=\"0\">国际音标文本</s>",
+      "translation": "<s id=\"0\">IPA text</s>"
+    },
+    "3c97c7120d7e013dd8aa54cd82a33f89442e67b56911ed4b516c6df5bfd90f78": {
+      "source": "支持手动输入、粘贴、中文和换行。读取草稿时暂不可输入。",
+      "translation": "Supports typing, pasting, Chinese, and newlines. Input is temporarily disabled while loading a draft."
+    },
+    "c441c446e6299c7942fea531827086250d181b2a4d7dfa1f1f773799af77514e": {
+      "source": "<s id=\"0\">文本区分隔条</s>",
+      "translation": "<s id=\"0\">Text-area divider</s>"
+    },
+    "c0ca9deb922e1f90e5083505e43cccdcbfa5962fb40327c806a84df31bf16602": {
+      "source": "默认 120px，范围 96–360。向上拖加高；聚焦后 ↑/↓ 每次调 16px，Home 最小、End 最大。",
+      "translation": "Default 120 px, range 96–360. Drag upward to increase height. When focused, ↑/↓ changes it by 16 px, Home minimizes, and End maximizes."
+    },
+    "9ca068de6ffb6e2e2f8cbe01cba0525cbdb3bc62aba23bedd10f6768272c136e": {
+      "source": "<s id=\"0\">复制全部 / 全选</s>",
+      "translation": "<s id=\"0\">Copy all / Select all</s>"
+    },
+    "9bed61d044eaba80b79fc3ae12dad928bff1fec6d9b85c0243417ed9a9ffa041": {
+      "source": "复制整份正文；空文本给提示。全选用于替换、包围范围或手工复制。",
+      "translation": "Copies the whole text, with a notice if empty. Select all is useful for replacement, span wrapping, or manual copying."
+    },
+    "976b3c7cc764981dff55efd1a6a59397ff9a8016176871b72ea9d24dbfefb7f8": {
+      "source": "<s id=\"0\">撤销 / 重做</s>",
+      "translation": "<s id=\"0\">Undo / Redo</s>"
+    },
+    "bb5f50693a24d8d4ffc93017de4825583a1ff97dd8bc4fa2083dcf9f66599868": {
+      "source": "Ctrl/⌘+Z 撤销，Ctrl/⌘+Shift+Z 或 Ctrl+Y 重做。没有历史时禁用；撤销后新编辑会清掉重做分支。",
+      "translation": "Ctrl/⌘+Z undoes; Ctrl/⌘+Shift+Z or Ctrl+Y redoes. Disabled without history. Editing after undo clears the redo branch."
+    },
+    "268c6aed5f1fb0498d864b7d2d8b36103a3b65ff57b62ffe2917a4e5c66877c0": {
+      "source": "<s id=\"0\">保存文本</s>",
+      "translation": "<s id=\"0\">Save text</s>"
+    },
+    "c3f4f761a4ea9fd56b4d8422e6df4ee2fd042f577b6d50e88058a0278ad40324": {
+      "source": "发起 UTF-8 TXT 下载，空正文也可保存。",
+      "translation": "Starts a UTF-8 TXT download. Empty text can also be saved."
+    },
+    "7970c076493e8d46940434ba25e0b553798789d5041514615ef51daf6921682c": {
+      "source": "<s id=\"0\">清空</s>",
+      "translation": "<s id=\"0\">Clear</s>"
+    },
+    "6736c30589c2759ae2d4e3838dbcf533ce267b2920a2492c2a1068265dd3a3d1": {
+      "source": "空文本时禁用。清空可撤销，已经导出的文件保留。",
+      "translation": "Disabled for empty text. Clearing can be undone; exported files remain."
+    },
+    "8263c8e36749ecb967d48d966637ac2d35c040b0a3a6f8a472255fcd1a382208": {
+      "source": "<s id=\"0\">另存独立草稿</s>",
+      "translation": "<s id=\"0\">Save separate draft</s>"
+    },
+    "cbbfec44eb5e53fbe91393862e76322a856100d93b319c6819c59b8895b18cf2": {
+      "source": "草稿错误提示中出现，用来保护当前正文；仍需同时导出 TXT。",
+      "translation": "Appears in draft-error messages to protect current text. Export TXT as well."
+    },
+    "21dd03a8b9d8623c887039fa2d20872072b9e11a5dc485c6ba8d294dff2ae4e5": {
+      "source": "符号与介绍面板",
+      "translation": "Symbols and description panel"
+    },
+    "9bf3e77cf88e4d936b7296246c1de1e47e60513aa7c6865bdf46a69f3c528152": {
+      "source": "符号与面板操作",
+      "translation": "Symbol and panel operations"
+    },
+    "d7e9cd32d3aa3dfbe0988c8f473acccc3ef39f799f431e92ec8797bbbea416e7": {
+      "source": "入口",
+      "translation": "Entry"
+    },
+    "222b22ac29c1d4eb91a1bc3ab931617a9f567a0daa34c6c753e0913a726c4d32": {
+      "source": "用法",
+      "translation": "Usage"
+    },
+    "220cbf4f3fa4447adfffef7644fa1ec277ec8082cc3a09c5ab870a9f9255d4fb": {
+      "source": "深色符号",
+      "translation": "Dark symbols"
+    },
+    "1f5816deafa222507ea192344e2fb753a5b6d9869549717b1cb23efba7b342c5": {
+      "source": "按实际输入写入光标处或替换选区，也可能是组合记号。",
+      "translation": "Writes actual input at the cursor or replaces the selection; it may be a combined symbol."
+    },
+    "2ff2ac1262145cb545d5419b6162285bae252be79c6d68ed88c6616e4bf9a84a": {
+      "source": "浅色完整例示",
+      "translation": "Light complete examples"
+    },
+    "f0ca9c365a05409ae279d2c62993d82ecd473d03304c5d70f5e317ab89a16f7c": {
+      "source": "点击可一次输入整串组合字符。",
+      "translation": "Click to enter the entire combined string at once."
+    },
+    "59c8e8d799531d878bc03c3c30edc5a9b0e158e0da5e498aad0dc28e0f67ef72": {
+      "source": "名称简释 / 悬停介绍",
+      "translation": "Brief name gloss / Hover description"
+    },
+    "40323d57ca485374fece8e51332b195784e3fcc1f07fdc4f9cd2988bafc3e7c1": {
+      "source": "悬停名称看简释；符号悬停或键盘聚焦约 420ms 后显示介绍，可移入阅读、滚动。",
+      "translation": "Hover over a name for a brief gloss. Hovering over a symbol or focusing it for about 420 ms shows a description you can enter, read, and scroll."
+    },
+    "79c15f5fcf43afe1f4d36de77999653a85114c77ea5f20dc9a2454ab7f62fba3": {
+      "source": "<s id=\"0\">右键 / Alt+Enter</s>",
+      "translation": "<s id=\"0\">Right-click / Alt+Enter</s>"
+    },
+    "2cbaf9bd1eb5d5272b0632ae3afbc67e576fc23364568ddc520582a34e724ac5": {
+      "source": "右键符号，或 Tab 聚焦后按 Alt+Enter，固定展开详情。",
+      "translation": "Right-click a symbol, or focus with Tab and press Alt+Enter, to pin its details."
+    },
+    "30ca33f084db39d277308ae8c2bb3cf18a216682191a86f80b8ff8f9b29274ec": {
+      "source": "<s id=\"0\">输入此项</s>",
+      "translation": "<s id=\"0\">Insert this item</s>"
+    },
+    "4dfe22187bda0bf7da318d149a6729840570031a3e626a228fdd2864fad8710c": {
+      "source": "将当前项插入编辑框。",
+      "translation": "Inserts the current item into the editor."
+    },
+    "3312fc1139d752cc1d0bcb49d4e9694ced0ef5901ad595b48ab9970a406a67e9": {
+      "source": "<s id=\"0\">收起</s>",
+      "translation": "<s id=\"0\">Collapse</s>"
+    },
+    "ca3f2df91ee4cc80b10f373c56d5a153e7202ee567f075d9cc8beb2a6bfe014e": {
+      "source": "关闭详情。",
+      "translation": "Closes details."
+    },
+    "e0ec2d790bd8d5f59416daabcb5662eb183737ffb6fa3b3d09fb3f4bea8d1483": {
+      "source": "字体许可",
+      "translation": "Font license"
+    },
+    "5028bfb700a7e9a49ef80917a164a46addc15e457bcc809a689d21b7b726bc4f": {
+      "source": "左下关于 → 内置字体版权与许可 → PTB IPA Plus；窗口默认先显示 Doulos SIL。",
+      "translation": "Bottom-left About → Bundled font copyright and licenses → PTB IPA Plus. The window initially shows Doulos SIL."
+    },
+    "0c43056a88916a9f4e8cdfa95bf2e5cf13ace70c0ce5116df97851c74e55b1a7": {
+      "source": "底部提示",
+      "translation": "Bottom information"
+    },
+    "0a2f8cc4adf9d807d08451da8cf4cc15851becb5c927b89f99a7d9d62367f9e2": {
+      "source": "草稿与字符提示",
+      "translation": "Draft and character information"
+    },
+    "44dbb2fd70fddb255f2a5236eff1e6c2c3e3106fba30d0d81393513b400f4443": {
+      "source": "提示",
+      "translation": "Information"
+    },
+    "fe3f18cb7718c05a108a9194032b8dd9b9f9fa58dec7db6440cf1f4e527499e7": {
+      "source": "怎么看",
+      "translation": "Interpretation"
+    },
+    "82febad6ead68d8beffb6deeab64b12b6645fd378510cfe5570b745775f7f579": {
+      "source": "本机草稿",
+      "translation": "Local draft"
+    },
+    "3d479d89508933abfc06647199106a4becaddee71458a07cce2490799a00f813": {
+      "source": "读取结束后可编辑；改动显示未保存，写入成功才显示已保存。",
+      "translation": "Editing starts after loading. Changes show Unsaved; Saved appears only after a successful write."
+    },
+    "2a880ccfc8fc42255672ef9a1fe0463c85cd2fd7141a78004be9050310338276": {
+      "source": "字符数",
+      "translation": "Character count"
+    },
+    "36f21d0a02a66bb8a9acf78ef08ae0e9e79f46d919876ac24c74dfdbb4829d04": {
+      "source": "按 Unicode 码点计数，字母和附加号可能各占一项。",
+      "translation": "Counts Unicode code points; a letter and its diacritic may count separately."
+    },
+    "17e3491369447dc17d1a5076021c994cec41850147b1fa0eb7506492c25cc821": {
+      "source": "固定字体就绪 / 字体加载中",
+      "translation": "Fixed font ready / Loading font"
+    },
+    "35cdbe263d513fab2cca7af665385765a814113bd305393647586aab72203e35": {
+      "source": "显示字体载入状态，失败会报错。",
+      "translation": "Shows font loading status; failure produces an error."
+    },
+    "8333a3865d022202e9888c2a903d493b83613059d07f37d94fb63aecb764339b": {
+      "source": "选区码位",
+      "translation": "Selection code points"
+    },
+    "df3e45ea8ff3079bd675134fe41e3eb223c35064724bcbe0f33be3a7409d3180": {
+      "source": "选择不超过 8 个码点的短片段，底部显示 U+ 序列。",
+      "translation": "Select a short span of at most 8 code points to display its U+ sequence below."
+    },
+    "1cc1e195028134e0e96a290a1bf2d267a5226b9c15d705247502a155c0edcf06": {
+      "source": "控制 / 私用区字符",
+      "translation": "Control / Private-use characters"
+    },
+    "8f442137618bf8af75b4d6d1b59e4e201caa45115f8025c47742bbc3c0d18de5": {
+      "source": "列出数量及前几项位置，原文保留，不会自动清理。",
+      "translation": "Shows their count and the first few positions. The original text is retained without automatic cleanup."
+    },
+    "bd07ffe3ab0a9c2ff1250bc340ea154740648b0bd5c3d00f0136017463138a17": {
+      "source": "操作反馈",
+      "translation": "Action feedback"
+    },
+    "10a6b7ca0ee6c6c89bbeaef856f037a4a42d152f6555f71fc681d252ac00513d": {
+      "source": "显示复制、下载、输入法或组合操作的结果。发起下载后还需检查文件。",
+      "translation": "Shows results of copying, downloading, input-method, or combination actions. Check the file after starting a download."
+    },
+    "e2f7247104aaf5b6838e0ab7b60c160d16e9210ace90ee1911c63a15fc345aee": {
+      "source": "三套表与组合输入",
+      "translation": "The three charts and combined input"
+    },
+    "134312fcd6b35f4a17431b7abec552de428aa01dc561dfc8d3f6b06993474550": {
+      "source": "在<s id=\"0\">基础图表</s>按辅音方式与部位找符号，或到元音图定位。同格多个按钮先核对名称和清浊。",
+      "translation": "In <s id=\"0\">Basic chart</s>, locate consonants by manner and place, or locate vowels in the vowel chart. Where several buttons share a cell, check names and voicing first."
+    },
+    "0750db213560fa55e9a0c4b105da32e6c1ece37713fff0a206d5774c17cf3c7f": {
+      "source": "需要鼻化、送气、声调或韵律记号时，切到<s id=\"0\">附加符号与韵律</s>。深色附加号放在基底后，浅色按钮输入完整例示。",
+      "translation": "For nasalization, aspiration, tones, or prosodic marks, switch to <s id=\"0\">Diacritics and prosody</s>. Dark diacritics follow a base; light buttons enter complete examples."
+    },
+    "4f5bb61135f96689831f19ec8b1ff416ac9dca79d84272bef28922255afb30bd": {
+      "source": "滚动可看屏幕外的条目，右键核对实际输入与来源。分区按钮消失时，<s id=\"0\">清空搜索</s>即可恢复。",
+      "translation": "Scroll to see off-screen items and right-click to check actual input and sources. If section buttons disappear, <s id=\"0\">Clear search</s> restores them."
+    },
+    "f47ee4b86a81aabb03f890b21a59742494343a016727171fe8672876367e93a3": {
+      "source": "元音 a 的详细介绍展开，名称、码位与说明可见，下方正文为 a。",
+      "translation": "Vowel a details are open, showing name, code points, and description. The text below is a."
+    },
+    "cd7d6b3e64c12ccb26cb45248a8584f91fe7e94bd4d608aaf63a57fd25271b56": {
+      "source": "辅音矩阵按 14 个部位、13 种方式排列，包含非肺部辅音与补充组合。需要精确查找时，用名称或码位检索更省事。",
+      "translation": "The consonant matrix uses 14 places and 13 manners, including non-pulmonic consonants and supplementary combinations. Searching by name or code point is faster for precise lookup."
+    },
+    "f79e00054bd119179f5ddc387c49e59b19cc1d187f4c77f4b5a4759af493ff37": {
+      "source": "空格表示当前未收录入口。标为<s id=\"0\">组合输入示例</s>的条目由既有字母与附加号组成。",
+      "translation": "An empty cell means no entry is currently included. Items marked <s id=\"0\">Combined-input example</s> use existing letters and diacritics."
+    },
+    "55d3213d5219062b224d8b0a48661423c1290bb66fc27ac84b2ad30b20759319": {
+      "source": "IPA 两页内容",
+      "translation": "Contents of the two IPA pages"
+    },
+    "4cf1e7f5e1ae71b4b0bc679ba5a35b5727a8220d00d7fe46e924939a5e6107fc": {
+      "source": "分区",
+      "translation": "Section"
+    },
+    "321a3a9d741845f12e84df03b349f84d0ecdf3a5321f9327d557fa3eb2cc26d4": {
+      "source": "内容与输入提示",
+      "translation": "Content and input hints"
+    },
+    "5db32d29c4e377b236f842b299762c58cf132db8f69f87d39b59ad9470e112ee": {
+      "source": "辅音（186）",
+      "translation": "Consonants (186)"
+    },
+    "ffb06e2efa14bd7e697be95770c09e4ebb45059d86811b3f083a013f729f90fb": {
+      "source": "基础图表的方式×部位矩阵，同格符号分别可点。",
+      "translation": "Basic-chart manner × place matrix; symbols within the same cell can be clicked separately."
+    },
+    "65a7ceaecb621b828ae53d02cade48867b4f733fc246f7b7dcd27be3d109637c": {
+      "source": "元音（28）",
+      "translation": "Vowels (28)"
+    },
+    "ae7398bc62ec1c5983fe4f519630166f3adf30bb5399febf2a885b862ce1fa53": {
+      "source": "按前、央、后与高低排列，成对时左不圆唇、右圆唇。",
+      "translation": "Arranged by front, central, back, and height. In pairs, the left is unrounded and the right rounded."
+    },
+    "de96fcb8082c24f3ce415be7b7dc0b49110a1e5e9794a3ca32abe370cd76c421": {
+      "source": "其他符号与连音线（9）",
+      "translation": "Other symbols and tie bars (9)"
+    },
+    "7c8fba0c8e16b181c96f78acca6d65e47acdb7af1cc54080d6426b09d19cbf32": {
+      "source": "区分深色连接工具与浅色 k͡p、t͜s 等完整例示。",
+      "translation": "Distinguish dark joining tools from light complete examples such as k͡p and t͜s."
+    },
+    "a0949ba3736d208d8d6712bcabd935044cb50060ef124a80ce405af48ca10702": {
+      "source": "附加符号（80）",
+      "translation": "Diacritics (80)"
+    },
+    "dd8f490eea146f1a6850d5b4e1480e0522a521a853d5f36574bd95d3171ec37d": {
+      "source": "独立附加号与完整组合。虚线圆只显示位置。",
+      "translation": "Standalone diacritics and complete combinations. The dotted circle indicates placement only."
+    },
+    "dbda480602c651a34afdeaa7cf08178a1a60c1118420bcece2030da17e0be461": {
+      "source": "声调与词重调（34）",
+      "translation": "Tones and word accents (34)"
+    },
+    "ac054b2498518536f0376bb29960930a900e24e998b709a840438339d5b26207": {
+      "source": "独立记号与组合例示分开；调级是相对等级，不转换为 Hz。",
+      "translation": "Separate marks and combined examples are distinct. Tone levels are relative and are not converted to Hz."
+    },
+    "d5b9f0067122ec7ca1575d0994e905d7813cbb4d501f1ea83b34f37487a54b2c": {
+      "source": "超音段（14）",
+      "translation": "Suprasegmentals (14)"
+    },
+    "9c5371a6bcd0061d72246301bb251f4b70ce2a8bf632d2f42f5019acfa3ded5f": {
+      "source": "重音、长度、音节与韵律边界等，位置依条目说明。",
+      "translation": "Stress, length, syllable, and prosodic boundaries; placement follows each entry's instructions."
+    },
+    "7b53f8544a83ecd29f58cb513ebcb7729d7f74dcefa868e3444f13a20ef11ab4": {
+      "source": "宽窗的元音图与其他符号在辅音矩阵右侧，窄窗移到下方。大字号下可横向或纵向滚动。",
+      "translation": "In wide windows the vowel chart and other symbols sit right of the consonant matrix; in narrow windows they move below. Scroll vertically or horizontally at large font sizes."
+    },
+    "8dfd97de16a572c892a77ab2404cbc0e85769a9443fb114740ae365a8e36e875": {
+      "source": "extIPA 提供额外构音、部分发声、节奏、不确定片段及外来声音记号。辅音矩阵有 13 个部位、9 种方式、66 个入口。",
+      "translation": "extIPA covers additional articulation, partial voicing, rhythm, uncertain passages, and external sounds. Its consonant matrix has 13 places, 9 manners, and 66 entries."
+    },
+    "4355c4b34c2d35d0c1fa4afd6c86440b0c7124cc005e362a69861346ff842df1": {
+      "source": "extIPA 辅音矩阵、原表阴影格及上方四个分区按钮。",
+      "translation": "extIPA consonant matrix with shaded cells from the source chart and four section buttons above."
+    },
+    "d854f43c57c5eecf210b09837d34e9f4cb47d5fe2c657c7f43ef6a14402514d8": {
+      "source": "选 <s id=\"0\">extIPA → 辅音图表</s>，按方式和部位定位。灰色格表示原表判定不可能的构音，右半灰格表示浊音一侧受限；普通空格表示未收录。",
+      "translation": "Choose <s id=\"0\">extIPA → Consonant chart</s> and locate by manner and place. Gray cells mark articulations judged impossible in the source chart. A gray right half limits the voiced side; ordinary empty cells mean unlisted entries."
+    },
+    "f0cd0d66ba8922bf424ca7db6493f29dd66adf8fa1a5451df81e435e8d36d87a": {
+      "source": "在<s id=\"0\">附加符号与发声</s>找独立附加号、发声方向与例示；在<s id=\"1\">节奏与其他</s>找范围工具，先选正文再点。",
+      "translation": "Use <s id=\"0\">Diacritics and phonation</s> for standalone marks, phonation direction, and examples. Find span tools under <s id=\"1\">Rhythm and other</s>; select text first."
+    },
+    "f9299b16be4f35a627d7241e4c8d4762502873756ca8e7a7425a8e18340440b2": {
+      "source": "<s id=\"0\">补充与旧版</s>分开列现行组合与旧记号。输入前右键核对表版和实际字符。",
+      "translation": "<s id=\"0\">Supplementary and historical</s> separates current combinations from older symbols. Right-click to check edition and actual characters before inserting."
+    },
+    "1da0c205575a984b5e0475c3141bc128ffd35a46bbc84180bc5323a187636b80": {
+      "source": "extIPA 四页内容",
+      "translation": "Contents of the four extIPA pages"
+    },
+    "73f9ebc11a9ba94134fc37245d0d8362149614133ba603e19107f0addf9c143f": {
+      "source": "内容与注意点",
+      "translation": "Content and cautions"
+    },
+    "7a55a03e1aae34dd44ea0072efc0fc0884101bc32a695fe4d20933509bff2da5": {
+      "source": "辅音图表",
+      "translation": "Consonant chart"
+    },
+    "5dddf98129ca1ef206a5b3290b3ab5a9ce3b145c860faa9600ffe840981c4f96": {
+      "source": "额外辅音 66 项，分别核对清/浊成员。",
+      "translation": "66 additional consonant entries; check voiceless and voiced members separately."
+    },
+    "0cf613b2f60c845017b0165384ff8668aa7132b7ead34577abc8c1121cd619fb": {
+      "source": "附加符号与发声",
+      "translation": "Diacritics and phonation"
+    },
+    "71a4637e84b09f9d90376968327638581d2a781a9470cacfb1411f1cb9ac27a7": {
+      "source": "附加符号 26、发声与送气 32、构音部位独立附加号 12。半括号方向有用途区别，先看详情。",
+      "translation": "26 diacritics, 32 phonation and aspiration entries, and 12 standalone place diacritics. Half-bracket direction matters; read details first."
+    },
+    "ded097cefcf3350a410d5eeef4f01308ae8bbc0d20a553e4b5bb060eea8bbfa3": {
+      "source": "节奏与其他",
+      "translation": "Rhythm and other"
+    },
+    "22044c78761a6bf56570808c76f811aac816b79dfa43286c84756af288014f00": {
+      "source": "节奏/响度/速度 26，不确定性/无声构音/外来噪声 23，其他声音 18。范围工具包围选区，标签与完整例示按实际输入写入。",
+      "translation": "Rhythm/loudness/tempo 26; uncertainty/silent articulation/external noise 23; other sounds 18. Span tools wrap selections; labels and complete examples enter their actual text."
+    },
+    "f71ac7a225b9167c4866bb20b6e101bd43f4711e5ad71b0c2a18a1ff33a42a42": {
+      "source": "补充与旧版",
+      "translation": "Supplementary and historical"
+    },
+    "8afd610823ecd24242b61c4d3984fb3db76e770640feaea38cd9c3856da59490": {
+      "source": "补充构音组合 4，2002 版文献记号 2。补充组合和旧版项目都有专门提示。",
+      "translation": "4 supplementary articulatory combinations and 2 symbols from the 2002 literature, each with specific notices."
+    },
+    "71da29aa7fac26ed69d0e3a237252872cdc0a3d5c53a3f32b8c07b66ebfdc142": {
+      "source": "extIPA 附加符号与发声页：附加号、发声与送气、构音部位记号分组显示，下方保留 t͡s。",
+      "translation": "extIPA Diacritics and phonation page with grouped diacritics, phonation and aspiration, and place marks. t͡s remains below."
+    },
+    "858d61b17f9f935d58fe42843b9cef2946d4075cb4aea548a7832de39927b932": {
+      "source": "当前采用 <s id=\"0\">ICPLA 2025 表</s>，2013 年中文论文讨论的是 2002 版。旧名可用于检索，解释要对照所列版本；部分去鼻化与 VoQS 去鼻化声也需分别查看。",
+      "translation": "The current chart is <s id=\"0\">ICPLA 2025</s>; the 2013 Chinese paper discusses the 2002 edition. Older names are searchable, but interpret them against the stated edition. Partial denasalization and VoQS denasalized voice also require separate checking."
+    },
+    "b7ff0caec1504bde566f5af26247676c36673c9d370dd3b3f74fe9569fb07e41": {
+      "source": "VoQS 直接分类展示，无额外分区页。56 项原表术语采用王天恒双语译表，另有 9 个数字、括号、范围和例句入口。悬停介绍逐项说明发声特点、符号构成与相近标签的区别，重点区分耳语、耳语声、气声、嘎裂及嘎裂声。室襞性发声也称假声带发声，复音也称双音调嗓音，可在解释中对照理解。",
+      "translation": "VoQS shows categories directly without extra section pages. Its 56 original chart terms use Wang Tianheng's bilingual translation, plus 9 entries for numbers, braces, spans, and examples. Hover descriptions explain phonation, notation, and distinctions, especially whisper, whispery voice, breathy voice, creak, and creaky voice. Ventricular phonation is also called false-vocal-fold phonation, and diplophonia is also called double-pitched voice; compare these in the explanations."
+    },
+    "5927a0f8b264f9d28ba657b7b26a7d6e532b604c54cca278eef79bc37033a30f": {
+      "source": "VoQS 的发声类型、喉上形态、气流类型与范围、程度工具。",
+      "translation": "VoQS phonation types, supralaryngeal configurations, airstream types, spans, and degree tools."
+    },
+    "2a9a2d5c562a35e0bd262632fcadd9afbaff00cc345b9da806c0c6c53eab9333": {
+      "source": "选 <s id=\"0\">VoQS</s>，按发声类型、喉上形态、气流类型等分组找条目。",
+      "translation": "Choose <s id=\"0\">VoQS</s> and find items grouped by phonation type, supralaryngeal configuration, or airstream type."
+    },
+    "76e9040b38a906d7da67d10717f0332c1f47d558ae0f1161e7c92dc712702e99": {
+      "source": "<s id=\"0\">右键看详情</s>，核对相近标签。深色写入单项，浅色输入完整例句。",
+      "translation": "<s id=\"0\">Right-click for details</s> to distinguish similar labels. Dark buttons insert single items; light buttons insert complete examples."
+    },
+    "7f97af52c7fe225eef487f68b488b47bffb0f0e280fc4e4a4371f5fb9d09b63d": {
+      "source": "标记一段音质时，<s id=\"0\">先选中正文，再点带标签的大括号工具</s>。程度数字只写数字，不会判断强度。",
+      "translation": "To mark a voice-quality span, <s id=\"0\">select text first, then click a labeled brace tool</s>. Degree buttons enter only numbers and do not judge intensity."
+    },
+    "302bd40497da5c0e9a59e4b89e15d8b24a6da49fd9079994d6426176920711c3": {
+      "source": "VoQS 分类与范围工具",
+      "translation": "VoQS categories and span tools"
+    },
+    "ddf9941e52ad7773e184a79e70d0acbf2bc371a453760ba20674602013cd69d8": {
+      "source": "分类",
+      "translation": "Category"
+    },
+    "189e419fe0743dc64f20a56190cb573b7f72940160027c98f76522aec0628078": {
+      "source": "气流类型（4）",
+      "translation": "Airstream types (4)"
+    },
+    "d9eb9edefbaa98f3b8e966b83137d1fe36d0aba174ad9bd954b789b7d3e37b83": {
+      "source": "颊气流、肺部吸气言语、食管气流、气管–食管言语。",
+      "translation": "Buccal airstream, pulmonic ingressive speech, oesophageal airstream, and tracheo-oesophageal speech."
+    },
+    "ff93bd07681e9cb44ba6e5c5eaf3af0326b88046e9160b9fd9eb3fe8665b03dc": {
+      "source": "发声类型（26）",
+      "translation": "Phonation types (26)"
+    },
+    "05aeb0d36a22cfb39d41e042bdadee9cc8673201b599d8f3d715c231afe2bfda": {
+      "source": "常态浊声、假声、耳语、嘎裂、气声、糙声及组合。",
+      "translation": "Modal voice, falsetto, whisper, creak, breathy voice, harsh voice, and combinations."
+    },
+    "1374710bf2e2c010f9513aa9d51143b3509995ee3ba7a92691ec4a0104512d25": {
+      "source": "喉位高度（2）",
+      "translation": "Larynx height (2)"
+    },
+    "24d9a50e7caecd67342ddb07e7237bb3e9416dcc64d0db9b1c5d858f471f33f8": {
+      "source": "喉位偏高声、喉位偏低声。",
+      "translation": "Raised-larynx voice and lowered-larynx voice."
+    },
+    "11d051da37133243f3ccfecf683963d9d1fecea25643ac5a6fa89a65b4ebc224": {
+      "source": "喉上形态",
+      "translation": "Supralaryngeal configurations"
+    },
+    "751c5347f29c45c8bab5f81d42365a331ec095438a4c49838d890d1a8271ee23": {
+      "source": "唇部 4、舌部 12、软腭 2、颌和舌的形态 6，按范围设置解释。",
+      "translation": "Lips 4, tongue 12, velum 2, and jaw/tongue configurations 6, explained as settings across a span."
+    },
+    "17290d21282b1dfc94905b77b9f375714712b2f24edf50060c01d571893b4645": {
+      "source": "大括号与数字（9）",
+      "translation": "Braces and numbers (9)"
+    },
+    "423b31e4d3ff672705eb833f036af5b9d4b987e606600c4939c8bc87d4248615": {
+      "source": "程度 1/2/3 表示相对较弱/中等/较强；范围包围正文，完整例句整串写入。",
+      "translation": "Degrees 1/2/3 mean relatively weak/moderate/strong. Spans wrap text; complete examples insert whole strings."
+    },
+    "d2755181ac6c3edb6b514275d09b4467354b626674cf1cf2643f8740f4c31022": {
+      "source": "例如选中 aː，点<s id=\"0\">糙声范围 {V! … V!}</s>，得到 {V! aː V!}，aː 仍选中，可继续核对或嵌套。程度数字不对应统一分贝值、声学阈值或病理严重度。",
+      "translation": "For example, select aː and click <s id=\"0\">Harsh voice span {V! … V!}</s> to obtain {V! aː V!}. aː stays selected for checking or nesting. Degree numbers do not correspond to universal decibel values, acoustic thresholds, or pathological severity."
+    },
+    "5e2b6d48b9e78a6e4af770751f80b8230b51d8352eeed5f342a3fb8e6629a23f": {
+      "source": "糙声范围详情展开，文本 aː 位于左右 V! 标签之间并保持选中。",
+      "translation": "Harsh voice span details open with aː between V! labels on both sides and still selected."
+    },
+    "d3a10d6756a360d46dea856698bb53ce68187fc3098d810136a31eef5a314d27": {
+      "source": "组合与范围工具",
+      "translation": "Combination and span tools"
+    },
+    "12af39ed10f62d63ea0f7ff6fe2dc2327dd8687bf77cdce37218832f6fa79edb": {
+      "source": "附加号和完整例示",
+      "translation": "Diacritics and complete examples"
+    },
+    "fa4a429b066d7d41f6ae7f01a1bada862fc65745410104faf33e96811422c88d": {
+      "source": "要给 a 加鼻化，<s id=\"0\">光标放到 a 后并取消选区</s>，再点深色 ◌̃。虚线圆只显示位置，不会写入。<s id=\"1\">有选区时，附加号会替换整个选区。</s>操作不对就撤销，再重新放光标。",
+      "translation": "To nasalize a, <s id=\"0\">place the cursor after a and clear the selection</s>, then click dark ◌̃. The dotted circle only shows placement and is not inserted. <s id=\"1\">With a selection, the diacritic replaces the entire selection.</s> If this is wrong, undo and reposition the cursor."
+    },
+    "ca93e88f0981754a496ecd69a4d198ccdbed2f95e215620fa1e3e54325c63798": {
+      "source": "ã 保持选中，底部显示 U+0061 与 U+0303；虚线圆未写入正文。",
+      "translation": "ã remains selected, and U+0061 and U+0303 appear below. No dotted circle is inserted in the text."
+    },
+    "0007f3a5d6c9b696b841a2e3059a8bce81559354bbd4d9a4050adb0ccfead012": {
+      "source": "浅色 ẽ、b̤ 或音质例句会整串写入。显示与写入不一致时，查看详情中的<s id=\"0\">实际输入</s>。",
+      "translation": "Light ẽ, b̤, or voice-quality examples insert complete strings. If display and inserted text differ, check <s id=\"0\">Actual input</s> in the details."
+    },
+    "fa5ae4c0b2f69306f4dff3441dc92d948d5d486cb4f090607a9b743a5ff34e83": {
+      "source": "连音线与滑动箭头",
+      "translation": "Tie bars and sliding arrows"
+    },
+    "53cea210150374598035056dd16128fa5ffa619c1655451a6ca9aa10de6d1c07": {
+      "source": "输入 t 和 s，<s id=\"0\">恰好选中两个字素</s>。一个字母及其附加号通常一起算一个字素。",
+      "translation": "Enter t and s and <s id=\"0\">select exactly two graphemes</s>. A letter and its diacritics usually form one grapheme."
+    },
+    "e262cfd6e7ebc13ad4cd0e74d1a56a08ef80627602f590ebec58a6a109526bf1": {
+      "source": "点 <s id=\"0\">IPA → 其他符号与连音线</s>中的深色上连音线或下连音线，得到 t͡s 或 t͜s；extIPA 滑动构音工具同样连接两个字素。",
+      "translation": "Click the dark upper or lower tie-bar tool under <s id=\"0\">IPA → Other symbols and tie bars</s> to obtain t͡s or t͜s. extIPA sliding-articulation tools also join two graphemes."
+    },
+    "4a8cda11e26a6e38d38612dec3ff8bafffb70fec5bc688c8023a36d844bfa4c2": {
+      "source": "选区数量不对会提示且不改正文。重新选择，或点浅色完整例示。",
+      "translation": "An incorrect selection count produces a message without changing text. Reselect, or click a light complete example."
+    },
+    "f375e455d19fdb5b6001e76d894fd5cadcf6a9122fad33a4121bbe4a321f5f2d": {
+      "source": "下方 t͡s 已选中，底部可见连接字符 U+0361，右侧是连音线区域。",
+      "translation": "t͡s is selected below, with joining character U+0361 visible in the bottom status and the tie-bar area on the right."
+    },
+    "0beffe31c4555690c65d956a14af870bce0aa34aca420d82e13965c039705c9d": {
+      "source": "红框标出深色上、下连音线工具，旁边较浅的按钮为完整例示。",
+      "translation": "Red boxes mark dark upper and lower tie-bar tools. The lighter buttons beside them are complete examples."
+    },
+    "33a5fd7a2be6f48892000d23b4e19ba21d7957eefc1cb3ed4a4955c160494518": {
+      "source": "上、下连音线区域局部图，深色工具与浅色完整例示并列，红框标出工具入口",
+      "translation": "Close-up of upper and lower tie-bar area: dark tools beside light complete examples, with red boxes marking tool entries."
+    },
+    "3e6c0d627543382614b633c2b91c7835a7202f3e61ff7c8b1e5d0456a0997488": {
+      "source": "<s id=\"0\">没有选区时，连接工具只在光标处插入连接字符。</s>它不会自动寻找前后字母。插入与替换会保护字母及其附加号的边界，仍需核对转写。",
+      "translation": "<s id=\"0\">Without a selection, a joining tool only inserts its joining character at the cursor.</s> It does not find surrounding letters automatically. Insertion and replacement protect letter–diacritic boundaries, but the transcription still needs checking."
+    },
+    "06c1066a5f9ffdf2e497c3c7fef37a3dfd06ffd4333ba722d2218083b67b810d": {
+      "source": "范围与嵌套",
+      "translation": "Spans and nesting"
+    },
+    "6b26e97096b768fdbab0a4d0812d5e8c7d35fe9f2e5135df73a80a89b0a990b9": {
+      "source": "<s id=\"0\">先选中文字，再点范围工具</s>，原文保留在左右标签之间。extIPA 可用 {f … f}、{allegro … allegro}，VoQS 可用 {…}、{V! … V!}。没有选区时生成空范围，光标放在内部。继续包围选区可嵌套，最后核对每组起止标签。",
+      "translation": "<s id=\"0\">Select text first, then click a span tool</s> to retain it between matching labels. extIPA offers {f … f} and {allegro … allegro}; VoQS offers {…} and {V! … V!}. Without a selection, an empty span is created with the cursor inside. Wrapping again creates nesting; check each opening and closing label."
+    },
+    "e9b3532a703d72f3917f9bc681ca9705c1c1a5683f519fc20ac74c87f7be292a": {
+      "source": "较响范围包住 pa ta，形成 {f pa ta f}，内部文字仍选中。",
+      "translation": "A loudness span wraps pa ta as {f pa ta f}; the internal text remains selected."
+    },
+    "e1f21aac1b6b7417f7b018653e0a7942e6e392d0193311da5f89b9c8c688ba3f": {
+      "source": "输入法与撤销",
+      "translation": "Input methods and undo"
+    },
+    "a7a94a5e32798a3acaf16a116d79ee9cc716e4e9186797f11975398067b096fe": {
+      "source": "中文输入法请<s id=\"0\">先完成选词，再点符号</s>，否则会提示结束当前组合。手动输入、粘贴、符号点击和清空共用撤销历史，一次输入法提交算一步。历史保留最多 120 步，并有累计容量限制，正文不会因此截断；重开后不恢复撤销历史。",
+      "translation": "With a Chinese input method, <s id=\"0\">finish choosing characters before clicking a symbol</s>; otherwise a message asks you to finish composition. Typing, pasting, symbol clicks, and clearing share undo history. One input-method commit counts as one step. History holds at most 120 steps with a cumulative-size limit, without truncating text. Reopening does not restore history."
+    },
+    "d7e1b577eb65c8526840996ebec9a9196a4350e512530bb54fb45dffc9a4254f": {
+      "source": "看介绍与表版",
+      "translation": "Descriptions and chart editions"
+    },
+    "2e8c504f9937f143140433ad444b30cd59c4c6f76c3e8dc3d71d1b300a171db2": {
+      "source": "悬停介绍默认开启。停留后可读含义、用法、区别、码位与短来源。浮窗会在符号附近避开指针；<s id=\"0\">移入浮窗可继续阅读和滚动</s>，离开自动收起。",
+      "translation": "Hover descriptions are enabled by default. Pause to read meaning, usage, distinctions, code points, and short sources. The popover stays near the symbol while avoiding the pointer. <s id=\"0\">Move into it to continue reading and scrolling</s>; it collapses after you leave."
+    },
+    "145d92cd36904613532767976459bf3bbb8ae4de27346a9e539af2e7d96befac": {
+      "source": "关闭悬停后，<s id=\"0\">右键符号或 Tab 聚焦后按 Alt+Enter</s>仍可展开详情，并查看实际输入、例示与别名。留意组合输入示例、旧版文献记号和文本替代提示。来源链接需主动点击。",
+      "translation": "With hovering off, <s id=\"0\">right-click a symbol or focus with Tab and press Alt+Enter</s> to open details, actual input, examples, and aliases. Note combined-input examples, historical-literature symbols, and text-substitution notices. Source links require an explicit click."
+    },
+    "eff927a9ab2491718e242944d14bf5b594f82e053e79aa39ecac5e3f2a2597c9": {
+      "source": "点击播放",
+      "translation": "Click to play"
+    },
+    "d933ab5e37e8edbcf35385a1e2b22ad56650f7ea94d4e8a8a902d11f5ca7e927": {
+      "source": "点击播放暂时禁用。鼠标悬停在此按钮上可看到演示内容正在创作中，将在后续更新中开放的提示。当前点击音标用于插入文字。",
+      "translation": "Click-to-play is temporarily disabled. Hover over the button to see that demonstrations are being created for a later update. Clicking IPA symbols currently inserts text."
+    },
+    "d1733688562ec78789eb9471f8cacf1faf42650563d9ec0908cc0846c91fe6e5": {
+      "source": "<s id=\"0\">当前点击播放暂不可用，演示内容正在制作。</s>当前点击符号用于输入文字，正文编辑与保存可继续使用。",
+      "translation": "<s id=\"0\">Click-to-play is currently unavailable; demonstrations are being created.</s> Symbols currently enter text, and editing and saving remain available."
+    },
+    "3a3eec74e845c8465de9e1a91e12664d875c82d0ecc4d66d82855289be8afbe8": {
+      "source": "点击播放按钮当前禁用，悬停可查看演示内容正在创作中的提示；点击符号继续用于输入文字。",
+      "translation": "Click-to-play is currently disabled. Hovering shows that demonstration content is being created; clicking symbols continues to enter text."
+    },
+    "a74d6a19b4127994f4555a39a773273a14bee91ceab25e3c95e519fac935843f": {
+      "source": "演示内容正在制作，当前点击符号用于输入文字。",
+      "translation": "Demonstrations are being created. Clicking symbols currently enters text."
+    },
+    "d89f1fbbe07fbb3fc876890c8e9d440b7658d4df8099dd8f90187aa82b20f7ec": {
+      "source": "固定字体与圈围文本",
+      "translation": "Fixed font and enclosed text"
+    },
+    "a147ed9de9d4a414bbef79a8ab678242bcca027afcae690f0faa8512b824b3e7": {
+      "source": "PTB IPA Plus 1.000 基于 Doulos SIL 7.000，补充组合括号、圈围定位和两个文本替代分隔符。13 种单字符圈围用实际字母加 U+20DD，可复制保存。",
+      "translation": "PTB IPA Plus 1.000 is based on Doulos SIL 7.000, with added combining brackets, enclosure positioning, and two text-substitution delimiters. The 13 single-character enclosures use actual letters plus U+20DD and can be copied and saved."
+    },
+    "b0cd5588435a89821470b1e65f82367bce0df9afcd89d742361be5774ec12807": {
+      "source": "多字符圈围用 <s id=\"0\">⟅…⟆</s>、⟅n̥ã⟆ 等文本替代，详情会说明差异。任意多字串不会自动变成原图椭圆框；外部软件还需支持对应字符与字体组合。",
+      "translation": "Multi-character enclosures use text substitutes such as <s id=\"0\">⟅…⟆</s> and ⟅n̥ã⟆; details explain the difference. Arbitrary strings do not automatically become the source chart's elliptical enclosure. External software must support the characters and font combination."
+    },
+    "9bcdf6d512cec7bd587a33b2ac5ce7956224409fdf84b540d17b6d01e65c2b41": {
+      "source": "复制与保存",
+      "translation": "Copy and save"
+    },
+    "c17a794c0f42855a33974a926e4ef161b918fa5041a2d59977d91e13d57ac378": {
+      "source": "导出文本",
+      "translation": "Export text"
+    },
+    "72b3cd54682961e98988322140caf016377432ef46722bd71ecf408341a6eefd": {
+      "source": "核对附加号、范围标签和换行；选短片段可在底部读 <s id=\"0\">U+ 码位</s>。",
+      "translation": "Check diacritics, span labels, and line breaks. Select a short passage to read <s id=\"0\">U+ code points</s> at the bottom."
+    },
+    "f07274b4b8635d513c263216455f02593988c9c5d145282dd8b37b82d851c666": {
+      "source": "点<s id=\"0\">复制全部</s>，看到已复制全部文字后，到目标文档粘贴核对。复制只带纯文本。",
+      "translation": "Click <s id=\"0\">Copy all</s>. After the success message, paste into the destination document and check. Only plain text is copied."
+    },
+    "497de07507dff332092c74b8c729a4edf247b5da080d13a1bd1a36aaba8e2302": {
+      "source": "点<s id=\"0\">保存文本</s>，完成浏览器或桌面保存流程。默认文件名为 国际音标-YYYY-MM-DD.txt。",
+      "translation": "Click <s id=\"0\">Save text</s> and complete the browser or desktop save process. The default filename is 国际音标-YYYY-MM-DD.txt."
+    },
+    "1019614f173df3d36dbfe8f8899a914a0acdaeed479c5e8282e4bc2387d6aa71": {
+      "source": "<s id=\"0\">到目标目录确认 TXT 存在，并按 UTF-8 打开核对。</s>取消或未完成下载时，可重新保存。",
+      "translation": "<s id=\"0\">Confirm that the TXT exists in the destination folder and open it as UTF-8 to check.</s> If downloading was canceled or incomplete, save again."
+    },
+    "e1fd4701b8427ee531e53be331e80e07067398384691dca8d8a5c5ce9f48f31e": {
+      "source": "三行组合与范围文字可见，底部提示已复制全部文字，选区保留。",
+      "translation": "Three lines of combinations and spans are visible, with the copied-all-text notice below and the selection retained."
+    },
+    "a8ec8c935ea63f8c09c563f7c11339b45e3eda18a797c0b849a93a76e5b3836b": {
+      "source": "TXT 保存完整多行文本，不内嵌字体、字号、图表、介绍、素材或编辑历史，也不转换音标体系。Windows 剪贴板的换行形式可能变化，粘贴后核对即可。",
+      "translation": "TXT retains the entire multiline text without embedded fonts, sizes, charts, descriptions, media, or history, and does not convert transcription systems. Windows clipboard line endings may change; check after pasting."
+    },
+    "874f2af95d7babf1ca8fad032b3aad1e9c6ef569cc297a4569fc664c19120e03": {
+      "source": "底部提示已发起 UTF-8 文本下载，文本框仍保留三行正文。",
+      "translation": "The bottom notice says a UTF-8 text download has started; the text box still holds all three lines."
+    },
+    "cd0b39a37f9bba8da2370ce6d0a056ff3c3f480b407cd8926a31198bb6168723": {
+      "source": "编辑后约 450ms 自动保存。<s id=\"0\">本机草稿已保存</s>表示当前记录写入成功，包含正文、记录中的光标/选区、体系、悬停开关、字号与高度。只移动光标未必触发保存。",
+      "translation": "Edits save automatically after about 450 ms. <s id=\"0\">Local draft saved</s> means the current record was written successfully, including text, recorded cursor/selection, system, hover setting, size, and height. Moving only the cursor may not trigger saving."
+    },
+    "a481dc0e7643164d9af45f75d9af0971b354b195b680d9ffb15f73facf67ca9d": {
+      "source": "重开恢复已存草稿。已有草稿的字号与悬停偏好按记录恢复。搜索、分区页、播放、详情及撤销历史不恢复。不同浏览器、桌面实例的草稿可能不同，没有跨设备同步。",
+      "translation": "Reopening restores the saved draft, including its size and hover preferences. Search, section page, playback, details, and undo history are not restored. Drafts may differ across browsers and desktop instances; there is no cross-device synchronization."
+    },
+    "0c2114c94de7f77e4112c2bd03949583dba42d8383e03b850e91eb488bdeac78": {
+      "source": "<s id=\"0\">草稿不能代替导出备份。</s>显示未保存或存储错误时，先复制或保存 TXT；保护草稿时不要清除站点数据或替换用户数据目录。",
+      "translation": "<s id=\"0\">A draft does not replace an exported backup.</s> If unsaved or storage-error status appears, copy or save TXT first. Do not clear site data or replace the user-data directory while protecting a draft."
+    },
+    "f3cf5f4f392290c3b1ff753a545ef0aca143af335f629a2af5e5ed8244e62743": {
+      "source": "遇到问题",
+      "translation": "Troubleshooting"
+    },
+    "63f37edf51c373fbe533faca64f6a89932cf115b46cd2c29db7f6fb5b04dcbd8": {
+      "source": "草稿冲突",
+      "translation": "Draft conflicts"
+    },
+    "92326a7f9462ce73e8e1b8845f9979bfafe3a20795bc5db8c005d09844096785": {
+      "source": "出现另一窗口已经修改此草稿时，本窗口停止覆盖，文字仍在。<s id=\"0\">先保存 TXT 或复制全部</s>。",
+      "translation": "If another window has changed this draft, this window stops overwriting it and retains its text. <s id=\"0\">Save TXT or copy all first</s>."
+    },
+    "e1be8945a0cd5f93775db4de6f0ec911e955f331225429874d3cf6b25ca7ebb7": {
+      "source": "比较另一窗口的版本。要继续保存当前内容，点<s id=\"0\">另存独立草稿</s>，等待成功提示，再导出。",
+      "translation": "Compare the other window's version. To keep saving the current text, click <s id=\"0\">Save separate draft</s>, wait for success, then export."
+    },
+    "4e934cf817e049cd87e5bffef871a24fc597e54180671904073438d1009b0d07": {
+      "source": "独立草稿保留本窗口分支，原记录不覆盖。默认入口仍读原草稿，<s id=\"0\">关闭前务必确认外部文件可读。</s>",
+      "translation": "A separate draft retains this window's branch without overwriting the original. The normal entry still loads the original draft. <s id=\"0\">Verify the external file is readable before closing.</s>"
+    },
+    "c42ddadfb4bac5159c0936c889cf37b91df0ef147f6ce21e1a9d46b90c3dd19c": {
+      "source": "常见提示与恢复",
+      "translation": "Common messages and recovery"
+    },
+    "5d6b701acbf66f82275d00efbf856090daaa914f8fc9479c6513dd8b960813c6": {
+      "source": "提示或现象",
+      "translation": "Message or issue"
+    },
+    "dec47d9d037979820778704a7a6be2314b4c945d5c2ca690ec15260dbad2aafb": {
+      "source": "处理",
+      "translation": "Action"
+    },
+    "42985cc28532e57648290ef9a6af94140268ee61c8124d0d1e10c142c4d3721f": {
+      "source": "正在读取草稿",
+      "translation": "Loading draft"
+    },
+    "4d69554cd82417847a1293876d765d2d8791df249bd40d8d8b12283acd556363": {
+      "source": "等待读取结束；转为错误时先导出可见文字。",
+      "translation": "Wait until loading ends. If it becomes an error, export visible text first."
+    },
+    "34cb9667408978007832365138e13b13354aecf7b1f9cca99e041142d364193e": {
+      "source": "冲突、原草稿被移除或版本/格式未知",
+      "translation": "Conflict, original draft removed, or unknown version/format"
+    },
+    "858683aaa739f32ce31db0e5ff08ba814dbc8080a669e8b11838937260258629": {
+      "source": "原记录保留。导出可读正文，再另存独立草稿。",
+      "translation": "The original record is retained. Export readable text, then save a separate draft."
+    },
+    "8e81161a800a114e2df60cebddb65956f99d1fdfb90cec6c4decd8f00d6d0be5": {
+      "source": "存储无法打开、读取/写入失败",
+      "translation": "Storage cannot open, or reading/writing fails"
+    },
+    "18663bb03745f6fad4c81f19a72cfbbf6d2dbd2f4bc9488fb71cc52ed78db8cb": {
+      "source": "立即复制或导出。另存也可能受同一存储问题影响。",
+      "translation": "Copy or export immediately. Separate-draft saving may be affected by the same storage issue."
+    },
+    "b992c6f8b97d3e4269cc317bc2e7608459b292e50b53320433157b706cff925b": {
+      "source": "剪贴板不可用",
+      "translation": "Clipboard unavailable"
+    },
+    "07e75442a47f62cfd4f58777095c16f8ed2136404ad52488868dcc6eb6dc843d": {
+      "source": "程序会全选；按 Ctrl+C / ⌘C 手工复制，或保存 TXT。",
+      "translation": "The app selects all. Press Ctrl+C / ⌘C to copy manually, or save TXT."
+    },
+    "ed46bb238b7978cf0be8c21048fe2e3c157cc0f9765b43d51e1ee6e0d2153dc4": {
+      "source": "连线需要恰好两个字素",
+      "translation": "Joining requires exactly two graphemes"
+    },
+    "11e7613847070e4516470ef907d236507afabc76c17b3abeb5d75e7dcdce2b72": {
+      "source": "失败不改正文，重选两个完整字素，或用完整例示。",
+      "translation": "Failure leaves text unchanged. Reselect two complete graphemes or use a complete example."
+    },
+    "dd0e6f074a5450025da2a963cf00d3a73a117069a0dd6c9fb0e3f62083213495": {
+      "source": "请先结束当前输入法组合",
+      "translation": "Finish the current input-method composition first"
+    },
+    "d2f144edec6ac4ee7e1f254081b7f200c4fac39d246aca1f68768afa4ba985ee": {
+      "source": "完成选词后重试。",
+      "translation": "Finish choosing characters, then retry."
+    },
+    "44f38e41805a1508d941251a5d5a55f6f0d15290540a4c21d6955aa709044ee8": {
+      "source": "固定音标字体载入失败",
+      "translation": "Fixed IPA font failed to load"
+    },
+    "20c32968c450873ac839ba398bcad24562868c75af73b75263c00b0c05f0b0ce": {
+      "source": "文字保留。先导出，再恢复模块资源重开，不按异常字形改转写。",
+      "translation": "Text is retained. Export first, restore module resources, then reopen. Do not change transcription based on abnormal glyphs."
+    },
+    "9d07cba64fa64a1eff53fb2a7fc96917c67fc789a6ec987aeb49bdfc7b53dc30": {
+      "source": "没有匹配项目",
+      "translation": "No matching items"
+    },
+    "cb844856041f51be3177620caf8c4338580dd575671219fdd6b838f39ea336e1": {
+      "source": "换体系、改用码位、缩短词或清空搜索，正文保持。",
+      "translation": "Change systems, use code points, shorten the query, or clear search. Text remains."
+    },
+    "cb52198b00d92d5f4fbdeaf1394a1cada846eab5647b396f47e6805960902e60": {
+      "source": "点击播放不可用",
+      "translation": "Click-to-play unavailable"
+    },
+    "27faa8751dc48552284d5c6d1dacd28c4f46aa682293bcedb41f4547e63c0c4b": {
+      "source": "演示内容仍在创作中，点击播放暂不可用。当前点击符号用于输入。",
+      "translation": "Demonstrations are still being created, so click-to-play is unavailable. Clicking symbols currently enters text."
+    },
+    "d883ddbabd071171101a1006f52c31d43b69a8d4a81bd195c031f7c89bcf684b": {
+      "source": "外部显示与下载",
+      "translation": "External display and downloads"
+    },
+    "5a3879363c4964d9367fca8b25da71c39860f5a0b758eed5c85cdf9f8574dcd6": {
+      "source": "粘贴后出现空框、圈围分离或附加号错位，先核对码位，再检查目标软件字体。字形异常不一定是字符损坏；控制/私用区提示也不会自动改正文。",
+      "translation": "If pasted text shows empty boxes, separated enclosures, or misplaced diacritics, check code points first, then the destination font. Abnormal glyphs do not necessarily mean corrupted characters; control/private-use notices do not change text automatically."
+    },
+    "7b7e5c58a4e442e67df5bee467b3dd264b7a64779c47e6b155423941ff2ae4c4": {
+      "source": "下载取消、被阻止或未选好路径时，可重新保存并检查文件。离开前仍有未保存内容，环境可能提示确认关闭，<s id=\"0\">先导出再离开</s>。",
+      "translation": "If downloading is canceled, blocked, or lacks a destination, save again and check the file. The environment may ask for confirmation when leaving with unsaved content. <s id=\"0\">Export before leaving</s>."
+    },
+    "ccca1f611324913e806bba58a6b93adbaa54647ce49353aaa7b7583c8498ef9e": {
+      "source": "图表与字体的来源",
+      "translation": "Chart and font sources"
+    },
+    "3318c1c92bbd19a0e9b615d1c24ac833fe9f17e6260ded4a92d32d0f74187be3": {
+      "source": "版本与中文术语",
+      "translation": "Editions and Chinese terminology"
+    },
+    "1455c8064d4104fb0ef1a744999027767dfcc423b558d712da80f4f16bcb8523": {
+      "source": "IPA 采用 <x id=\"0\"/>，界面注明 2026 重印、内容修订至 2015/2005。中文名称参照 <x id=\"1\"/>，重印年与内容版次分开看。",
+      "translation": "IPA uses <x id=\"0\"/>. The interface identifies a 2026 reprint, with content revised through 2015/2005. Chinese names follow <x id=\"1\"/>. Distinguish reprint year from content edition."
+    },
+    "75604f1927e66a709e5888100cd3ce783901fc46c1ab4283b53b645e3533c1ac": {
+      "source": "IPA 解释参考 <x id=\"0\"/>（2008，第 9–24 页）；英文原版为 1999 年。原书与扫描页不随模块提供。",
+      "translation": "IPA explanations refer to <x id=\"0\"/> (2008, pp. 9–24); the English original is from 1999. The book and scans are not bundled."
+    },
+    "98045f3d62976ddbc0f647c0917a20e26d3304133c85a1a8f45e8a81c775d3ca": {
+      "source": "extIPA 采用 <x id=\"0\"/> 的 2025 表。<x id=\"1\"/>（2013，21(6)，665–668）讨论 2002 版，旧版另列。",
+      "translation": "extIPA uses the 2025 chart from <x id=\"0\"/>. <x id=\"1\"/> (2013, 21(6), 665–668) discusses the 2002 edition, listed separately as historical."
+    },
+    "dc39af34ea282bae502ec78f3067a29155420290bc671d6e8151679af44c1c1e": {
+      "source": "VoQS 采用 <x id=\"0\"/> 的图 2：2016 表版，2017 在线发表，2018 卷期。",
+      "translation": "VoQS uses Figure 2 in <x id=\"0\"/>: chart edition 2016, online publication 2017, volume/issue 2018."
+    },
+    "5652b29ad6c5e7b08f13589ebd5353f3f748cc607548533992eefd1438f777e1": {
+      "source": "56 项中文名称采用 <x id=\"0\"/>（Zenodo，DOI 10.5281/zenodo.10206204）。原表作者另列，软件整理为交互目录并补充用途说明。",
+      "translation": "The 56 Chinese names follow <x id=\"0\"/> (Zenodo, DOI 10.5281/zenodo.10206204). Original chart authors are listed separately. The software organizes an interactive catalog and adds usage explanations."
+    },
+    "3ed59f90206be8163c320cb69e818ea0cc8c3b0e91d23fab2409a003864e903f": {
+      "source": "音质解释另参考 <x id=\"0\"/> 的第 1–2 章；各条目保留具体来源定位。",
+      "translation": "Voice-quality explanations also refer to Chapters 1–2 of <x id=\"0\"/>. Individual entries retain specific source locations."
+    },
+    "4067f3ea1da3a9a950e07d46e4ec299c597cb6d43c11f2947ecc35ed2df416b9": {
+      "source": "查看许可",
+      "translation": "View licenses"
+    },
+    "bf9b59a3efcd8335b53e9c99e20099edd350d2c8f72fd26110cbad174c9c6c87": {
+      "source": "图表、译表与字体的许可范围",
+      "translation": "License scope for charts, translations, and fonts"
+    },
+    "7a685442abc0ed43785bc27b8da8c9c54bc3ea931f138311f20807cc50885f34": {
+      "source": "对象",
+      "translation": "Item"
+    },
+    "2de43d3edc4fb3d463a93ec2c22997ea1c42847d35fa107f8a2d2c271a5534b6": {
+      "source": "来源与范围",
+      "translation": "Source and scope"
+    },
+    "a9e5c43ac2054540d3236a512e24cfb4e37c2fd168867586eb990384810c89e9": {
+      "source": "IPA 图表",
+      "translation": "IPA chart"
+    },
+    "4fa4956fade99840861dabb70740f117887edc2e3a4f3a5d7d00e0bca3acff17": {
+      "source": "International Phonetic Association，CC BY-SA 4.0。交互表保留归属与相同许可，原 PDF 不随包。",
+      "translation": "International Phonetic Association, CC BY-SA 4.0. The interactive chart retains attribution and the same license. Original PDF is not bundled."
+    },
+    "81a68b7bd53ca6f2f0cf191a4c5c526044098277f44733f720600f661db72e78": {
+      "source": "extIPA 2025 图表",
+      "translation": "extIPA 2025 chart"
+    },
+    "47b4da643b2f8b31d706a3e83252027fbeb7e1733ac25749da1fec1f420aea16": {
+      "source": "ICPLA 资源页列 CC BY-SA 3.0及原图复制不改动要求。模块自主重排与解释，不提供原图。",
+      "translation": "The ICPLA resource page states CC BY-SA 3.0 and requires unchanged reproduction of the original image. The module independently rearranges and explains the content without providing the source image."
+    },
+    "81ca6bdf4deac1691f621a926949560df462a260f46d945973b8b43a1afa1372": {
+      "source": "VoQS 中文译表",
+      "translation": "VoQS Chinese translation"
+    },
+    "3d1c5004beea854d805563096cd9b17b9e818252e23dae292696e016b9bd8c13": {
+      "source": "王天恒，Zenodo DOI 10.5281/zenodo.10206204，CC BY 4.0。保留译者、原作者与交互改写说明。",
+      "translation": "Wang Tianheng, Zenodo DOI 10.5281/zenodo.10206204, CC BY 4.0. Translator, original authors, and interactive-adaptation notice are retained."
+    },
+    "9be68ad38881506a6e8bc07066228203562ddd73282c28afe6e2d518dad40e00": {
+      "source": "论文与书籍",
+      "translation": "Papers and books"
+    },
+    "98ce3b5e982ec5f50b44f17d38feaf37d365a48524693381a74c9e8473b804db": {
+      "source": "分享原 PDF 或图版时，需查看对应文件的分发许可。",
+      "translation": "Check each file's distribution license before sharing original PDFs or plates."
+    },
+    "49c8be9675c1010a3e6baf9904506d7653803fc4e5b76c1d31af3c8f50916241": {
+      "source": "PTB IPA Plus 字体",
+      "translation": "PTB IPA Plus font"
+    },
+    "f0b5712fdec63030d2fefcc8138241e2c0f7b8294cdbad07972d3f8dfca7fea8": {
+      "source": "Doulos SIL 7.000、Noto 及项目派生字体，SIL Open Font License 1.1。",
+      "translation": "Doulos SIL 7.000, Noto, and project-derived fonts, under SIL Open Font License 1.1."
+    },
+    "592952568c60c0fe2333d32eb0b92ba4c62a8c3be0fccdb2e90ba8856558f1ab": {
+      "source": "CIN 与历史资料",
+      "translation": "CIN and historical materials"
+    },
+    "fb0043ca22e1f2c7ed15da3ae73f7961a5f9a97e7c07bc74c175b99897259cf6": {
+      "source": "仅用于有限别名检索与现代编码核对，原文件许可单独处理。",
+      "translation": "Used only for limited alias lookup and modern-encoding checks. Original-file licenses are handled separately."
+    },
+    "680dd6697dc563bc860f5148b2fdf785c77c7bdf36c6fe83e02f9679ce2cb045": {
+      "source": "译表、图表、论文与字体的许可各自适用。公开条款可查看：<s id=\"0\">VoQS 译表 CC BY 4.0</s>、<s id=\"1\">IPA 图表 CC BY-SA 4.0</s>。",
+      "translation": "Translations, charts, papers, and fonts each have their own licenses. Public terms: <s id=\"0\">VoQS translation CC BY 4.0</s> and <s id=\"1\">IPA chart CC BY-SA 4.0</s>."
+    },
+    "401c834c62d0d0d35df8a8f02ba29c97587cee8c3aa32ce4b615946f0b5970a9": {
+      "source": "字体来源见 <x id=\"0\"/>。查看全文：<s id=\"1\">左下关于 → 内置字体版权与许可 → PTB IPA Plus</s>，包含 Doulos、Noto 与 OFL。亦可打开 <s id=\"2\">SIL Open Font License 1.1 官方文本</s>。",
+      "translation": "Font sources: <x id=\"0\"/>. Full text: <s id=\"1\">Bottom-left About → Bundled font copyright and licenses → PTB IPA Plus</s>, including Doulos, Noto, and OFL. You can also open the <s id=\"2\">official SIL Open Font License 1.1 text</s>."
+    },
+    "5edaf0be739a94bbaa242e76853f162579873fe993d9d414049a55aff827fbbc": {
+      "source": "内置字体许可窗口的 PTB IPA Plus 页签，显示版本、Doulos/Noto 来源与 OFL 原文。",
+      "translation": "PTB IPA Plus tab in the bundled-font license window, showing version, Doulos/Noto sources, and the OFL text."
+    },
+    "0a892afeb16b5658e20e05f66ee6064478077584ade9cff9dd2a81b4d374c59a": {
+      "source": "使用与结果解释",
+      "translation": "Use and interpretation"
+    },
+    "32551cdb5d45e6f74458a68bebb95b305755f2653168dd34ef67930f62b6f5a1": {
+      "source": "模块提供字符输入与用法说明。转写需结合实际言语判断，声调等级与 VoQS 程度数字按所用记音规则解释。",
+      "translation": "The module provides character entry and usage explanations. Judge transcription against actual speech, and interpret tone levels and VoQS degree numbers according to the chosen notation."
+    },
+    "9ffcf08326d708e9252302b4cbac43f11a039834dbbdc9cf228d3edc5f8158de": {
+      "source": "补充组合、旧版记号与圈围文本都有具体用途提示，复制后仍需核对目标软件显示。",
+      "translation": "Supplementary combinations, historical symbols, and enclosed text have specific usage notes. Check their display in the destination software after copying."
+    },
+    "e20ac5ceeabd4b17cb4819a28b99811957ced78ef22d0c9c18bb7786e3d1c2cd": {
+      "source": "当前点击播放暂不可用，演示内容正在制作。",
+      "translation": "Click-to-play is currently unavailable; demonstrations are being created."
+    },
+    "89b11309772f9800e080a1841b300f36cdf8da5d47f92e944242262b0dd82905": {
+      "source": "参考资料",
+      "translation": "References"
+    },
+    "ebcffb6476e8f8fec21fe0338530355d1a035737896a328986a968d699612507": {
+      "source": "完整书目如下；实际转写请对照所用图表的版次。",
+      "translation": "The full bibliography follows. Check the edition of the chart used for actual transcription."
+    }
+  }
+}

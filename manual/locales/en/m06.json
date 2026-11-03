@@ -1,0 +1,1254 @@
+{
+  "schemaVersion": "ptb-manual-localization/1",
+  "locale": "en",
+  "entries": {
+    "3d9f26183e6de3182ae2b2bec7de566272b6f885d0a8a22164d116a84eef078c": {
+      "source": "声学参数合成",
+      "translation": "Acoustic synthesis"
+    },
+    "26f493337432ce4aaa6f153d18db4e4de5b4a611bd41b7c550835e2936aed28a": {
+      "source": "按录音手动提取、元音生成后显式合成、曲线编辑、对比试听、保存及逐份材料恢复说明当前操作。",
+      "translation": "Current workflows for manual extraction from recordings, explicit synthesis after vowel generation, curve editing, comparative listening, saving, and restoring individual materials."
+    },
+    "0d464688eec67adb964c5ce6b03a0c3b912ca1074aafff49d49b5a43543e7abf": {
+      "source": "视频教程：<s id=\"0\">观看本章视频</s>。",
+      "translation": "Video tutorial: <s id=\"0\">watch this chapter's video</s>."
+    },
+    "9ad6f144073a250fdd0fde34da2378c863377bdc7ae159b3a12763dd59189b8b": {
+      "source": "准备材料，认识工作区",
+      "translation": "Prepare materials and explore the workspace"
+    },
+    "e6147404bbb2672b21a174dd59328e3e283f188432a91e517ae8ed94af3c9263": {
+      "source": "可以怎样开始",
+      "translation": "Ways to begin"
+    },
+    "f27f5279149141b91f43f22282d6103c747fa6c6353fd39ab285860cdf2287b1": {
+      "source": "声学参数合成把随时间变化的参数交给 <s id=\"0\">Klatt 合成器</s>，生成单声道音频。可以从元音规则开始，也可以从短录音提取曲线，再修改、合成和试听。",
+      "translation": "Acoustic-parameter synthesis passes time-varying parameters to the <s id=\"0\">Klatt synthesizer</s> to generate mono audio. Start from vowel rules or extract curves from a short recording, then modify, synthesize, and listen."
+    },
+    "356233d1adc9e9cc6610558190ede094e240dd4fdefa62ba32ceb8c15a96b5bf": {
+      "source": "<s id=\"0\">输入 IPA 只改变序列文本，尚未改变共振峰。生成元音和提取参数都只更新曲线。生成成功后，还须点击合成音频，播放器和音频导出才会更新为新结果。</s>",
+      "translation": "<s id=\"0\">Entering IPA changes only sequence text, not formants. Generate vowels and Extract parameters update curves only. After generation succeeds, click Synthesize audio to update playback and audio export to a new result.</s>"
+    },
+    "4bc7e4bc3fc45b7129d8fb17b1308c8c479f2c942e23ad0180c80255c7b90971": {
+      "source": "选择合成起点",
+      "translation": "Choose a synthesis starting point"
+    },
+    "088e4d3c845bd330a52256259490dc1f61a4adcf3f49dd57ee50f399a390afb6": {
+      "source": "<s id=\"0\">从录音开始</s>：准备 WAV，选择文件后手动提取。建议先用短单声道材料。多声道源试听默认使用第 1 声道，提取则取各声道平均，反相声道可能抵消。",
+      "translation": "<s id=\"0\">From a recording</s>: prepare a WAV, select it, then extract manually. Start with short mono material. Multichannel-source playback defaults to channel 1, while extraction averages channels; opposite-phase channels may cancel."
+    },
+    "485adb6e73ab4cfc647fb8bd64e4d41b3a1ee0a2ebdd1ccab789a3fdb74343eb": {
+      "source": "<s id=\"0\">从元音开始</s>：无需加载录音，输入规则表支持的 IPA 序列，生成曲线后合成。",
+      "translation": "<s id=\"0\">From vowels</s>: no recording is required. Enter an IPA sequence supported by the rule table, generate curves, then synthesize."
+    },
+    "1cbe6e3f58ccefb162981f3d519cebf67440f9e30a1b467be8f6a940ab4a6158": {
+      "source": "<s id=\"0\">继续已有参数</s>：导入本模块导出的完整 CSV 或 JSON，经确认后替换当前配置。",
+      "translation": "<s id=\"0\">Continue existing parameters</s>: import a complete CSV or JSON exported by this module; confirmation replaces the current configuration."
+    },
+    "1710670f5e224f53267b08da11c486d90af994ec3b2181a88abc343501092ee4": {
+      "source": "输入长度与文件限制",
+      "translation": "Input duration and file limits"
+    },
+    "0cba64139971e6c64834a87c2d1c6936b122e1460fddac94899febb3e2d1dffb": {
+      "source": "生成、提取和合成任务都要求当前配置 <s id=\"0\">不超过 10 秒且 480000 样本</s>。提取还检查源 WAV 本身为 0.1–10 秒、最多 480000 采样点和 8 声道，桌面源文件不超过 8 MB。<s id=\"1\">播放选区不会自动截短提取输入</s>，长录音请先另存短片段。",
+      "translation": "Generation, extraction, and synthesis all require the current configuration to be <s id=\"0\">no longer than 10 seconds and 480000 samples</s>. Extraction also requires the source WAV itself to be 0.1–10 seconds, at most 480000 samples and 8 channels, with desktop source files no larger than 8 MB. <s id=\"1\">Playback selection does not automatically shorten extraction input</s>; save a short excerpt of long recordings first."
+    },
+    "2e84bb159bf5aa7d9d1c5e0e9ae3aad7948e476d3bc4b1b13dbcadf16a72ee66": {
+      "source": "参数文件导入上限 8 MB，正式任务提交的完整参数上限 2 MB。编辑时长可保存至 100 秒，超过任务限制时仍无法计算。新配置采样率为 16000 Hz，提取后采用源采样率，页面没有采样率输入框。例如 96000 Hz 材料最多提交 5 秒。",
+      "translation": "Parameter imports are limited to 8 MB, and complete parameters submitted for a task to 2 MB. Editing duration can be saved up to 100 seconds, but computation remains unavailable above task limits. New configurations use 16000 Hz; extraction adopts the source rate. There is no sample-rate input on the page. For example, 96000 Hz material permits at most 5 seconds per submission."
+    },
+    "83ded2dcee17e3b1a873fe8808d460200ccb8013516a6c5f72c8206f54629d87": {
+      "source": "找到常用操作",
+      "translation": "Find common actions"
+    },
+    "ff546aa469442bf357d2e51f4b412f6df54bcf7154d34b5c407f87119709993a": {
+      "source": "三栏与底部播放条",
+      "translation": "Three panels and the bottom playback bar"
+    },
+    "ee5e7e5a35cc20f262108bea3294460471d37bdfef4a8515a4aca48849259cbd": {
+      "source": "<s id=\"0\">顶部</s>：打开音频目录、刷新文件、F0 算法、提取参数、参数导入/导出、发声预设和保存草稿。帮助与方法引用也在这里。网页入口显示加载音频。",
+      "translation": "<s id=\"0\">Top</s>: Open audio directory, Refresh files, F0 algorithm, Extract parameters, parameter import/export, phonation presets, and Save draft, plus Help and Methods and references. The web interface shows Load audio."
+    },
+    "af7fcaac34b2e808cced751fbaeaf9709462415b29a2cbd86d410feb2681dc3c": {
+      "source": "<s id=\"0\">左栏</s>：最上方选择音频文件，下面设置时长、淡入淡出、平滑和 F0 范围，再选择要编辑的参数。",
+      "translation": "<s id=\"0\">Left</s>: choose an audio file at the top, then set duration, fades, smoothing, and F0 range, and select a parameter to edit."
+    },
+    "19662cc9766379a7b56bf796fa595dc20f9bf086efbd3adfd34b7aad615348bb": {
+      "source": "<s id=\"0\">中栏</s>：上方编辑一条曲线，下方查看源音频或合成结果的波形/语谱图。",
+      "translation": "<s id=\"0\">Center</s>: edit one curve above and view the source or synthesized audio's waveform/spectrogram below."
+    },
+    "b1ef2e7bffbc9ce66a6379c4f9bf2afef5ad9452a95f2c9334387a31c0b73e31": {
+      "source": "<s id=\"0\">右栏</s>：输入 IPA、查看元音规则、生成元音、合成和导出音频，查看提示与任务状态。底栏负责当前预览音频的选区、播放、停止、进度和音量。",
+      "translation": "<s id=\"0\">Right</s>: enter IPA, inspect vowel rules, generate vowels, synthesize and export audio, and view messages and task status. The bottom bar controls selection, playback, stopping, position, and volume for the current preview audio."
+    },
+    "63517416fc69ab78933abc005beade65c625f1494a7377a9b28ab48fd995558a": {
+      "source": "分清曲线、源音与结果",
+      "translation": "Distinguish curves, source, and result"
+    },
+    "0586ec0a82cc03e8edfd0b82f2ecced4803fed27990220278edcd7edbb51d21c": {
+      "source": "曲线是<s id=\"0\">当前编辑参数</s>，源音频是原录音，合成结果是最后一次成功并采用的 WAV。有合成结果时，输入新 IPA、生成或提取曲线后，右栏会提示旧结果，原 WAV 仍可试听和保存。重新合成成功才会替换它。源预览按原音真实时长显示，改变编辑时长不会改变旧音频，超出旧音频尾部的区域留空。",
+      "translation": "Curves are the <s id=\"0\">currently edited parameters</s>; source audio is the original recording, and synthesis result is the last successful WAV adopted. If a result exists, entering new IPA or generating/extracting curves marks it as old, but the old WAV can still be played and saved. Only successful resynthesis replaces it. Source preview follows its true duration; changing editing duration does not change old audio, and areas beyond its end remain blank."
+    },
+    "f05c1599b4cbfb4578be63c7131f3b72b3a9f7bbcfee8461fe3f71a6fd85803a": {
+      "source": "选择录音并提取参数",
+      "translation": "Select a recording and extract parameters"
+    },
+    "66564e11e68a7570fe763222167b1fc30ce28b6a54f393f8f717b54c996e70ba": {
+      "source": "加载源音频",
+      "translation": "Load source audio"
+    },
+    "9e3f667b9a27eb84bb4046edab23ecf2f915390435b2df89ad1d5c2752470e4a": {
+      "source": "先<s id=\"0\">导出参数</s>保留需要的编辑。点击<s id=\"1\">打开音频目录</s>，再从左栏音频文件选择 WAV。网页先点加载音频添加文件。",
+      "translation": "First <s id=\"0\">Export parameters</s> to retain needed edits. Click <s id=\"1\">Open audio directory</s>, then choose a WAV from Audio files on the left. On the web, click Load audio to add files first."
+    },
+    "68fd4aca91a7ee96b3bb3eb6b33314af9915c3968df66cfaf0a3d021d246b54a": {
+      "source": "等到音频已加载提示出现，在底栏点全部并试听，确认材料正确。此时只载入源波形，曲线和编辑时长保持原值。",
+      "translation": "Wait for Audio loaded, then click All at the bottom and listen to confirm the material. Only the source waveform has loaded; curves and editing duration retain their values."
+    },
+    "8db5f4537853fe936cd997c69c00d34b48e9d4c1035e868e4eb2a0b3a363f8df": {
+      "source": "WAV 仅加载时，源波形已经出现，编辑时长仍为 2 秒、F0 仍为 120 Hz；右栏提示手动提取。",
+      "translation": "WAV loaded only: source waveform appears, editing duration remains 2 seconds and F0 120 Hz, with a manual-extraction prompt on the right."
+    },
+    "e696029a484ba93a13d19ad8e221d2c7fabdbc302b266e297a923993b2183f30": {
+      "source": "最大化工作台中选定短 WAV，F0 初始水平线与源波形同时可见，右栏显示音频已加载。",
+      "translation": "Maximized workbench with a short WAV selected, initial flat F0 and source waveform visible together, and Audio loaded on the right."
+    },
+    "3143ae7f6f822044e27a964fa6a8758b159dd1dd05000da8c6d2e4a13335eda1": {
+      "source": "设置范围，点击提取",
+      "translation": "Set the range and extract"
+    },
+    "b58fa0e721a3543d6d88ddfc40143f615f37aafb10a211819681ec3cb9f308f0": {
+      "source": "填写左栏 F0 下限、上限，点击<s id=\"0\">应用 F0 范围</s>。初始范围为 50–500 Hz。",
+      "translation": "Enter left-panel F0 bounds and click <s id=\"0\">Apply F0 range</s>. Initial range is 50–500 Hz."
+    },
+    "58527c067ff3d8811cdba4b407caacd5bbc8844ce18fca0f8b38cbc7c036a9a0": {
+      "source": "顶部选择 F0 算法：Praat 互相关（CC）、Praat 自相关（AC）或 REAPER，初始为 CC。改变算法只影响下一次提取。",
+      "translation": "Choose the F0 algorithm at the top: Praat cross-correlation (CC), Praat autocorrelation (AC), or REAPER. CC is initial. Changing the algorithm affects the next extraction only."
+    },
+    "43be9fc2a1b5fa6f79cede912edda4dd5a90db5a0f5123e339fd579f783dab68": {
+      "source": "点击<s id=\"0\">提取参数</s>。<s id=\"1\">提取直接更新曲线，没有再次覆盖确认。</s> 成功后时长和采样率改为源录音的值，旧静音区、元音边界和 F0 平移清除，源语谱图可用。",
+      "translation": "Click <s id=\"0\">Extract parameters</s>. <s id=\"1\">Extraction directly updates curves without another overwrite confirmation.</s> On success, duration and sample rate adopt the source recording's values; old silence regions, vowel boundaries, and F0 shifts are cleared, and source spectrogram becomes available."
+    },
+    "3fd0d27ff4a0b770c09160deb28a9fd722533367292826eb60d1283486bb9ad2": {
+      "source": "提取成功后，编辑时长变为源录音长度，F0 曲线已更新，导出音频仍不可用。",
+      "translation": "After extraction, editing duration matches the source recording and F0 is updated; Export audio remains unavailable."
+    },
+    "47649b7b00b57416cae2823d743d2a9d284c10f6b31fb01cacab0a1fe2187573": {
+      "source": "提取完成状态，左栏时长约 0.672 秒，F0 曲线已更新，下方为源波形，导出音频按钮禁用。",
+      "translation": "Extraction complete: duration about 0.672 seconds on the left, updated F0 curve and source waveform below, Export audio disabled."
+    },
+    "c4f2827d4796f4b49b657669beedc7cc6a8e0ba008a89d2fae463c78e2f109c9": {
+      "source": "提取后仍显示的 IPA 文本和发声类型选项不会自动再次生成或应用。需要它们时，另点对应按钮。",
+      "translation": "IPA text and phonation-type options still shown after extraction are not automatically regenerated or applied. Click their respective buttons when needed."
+    },
+    "f4b38a4175db895e0c2c3bef6931413c466e60c99a472966ca342f46736de5bf": {
+      "source": "检查提取后的曲线",
+      "translation": "Inspect extracted curves"
+    },
+    "8acbf5c3734f785bb250b660fd6cc24b8e63d2c2a0e25012e4426a02e0a5d086": {
+      "source": "逐项查看 <s id=\"0\">F0、AV、共振峰和声质曲线</s>。F0 编辑曲线可能填补了缺值，测得轨迹及有声掩码请查看提取结果记录。提取帧移固定为 10 ms。",
+      "translation": "Inspect <s id=\"0\">F0, AV, formants, and voice-quality curves</s> individually. The editable F0 curve may have missing values filled; see extraction-result records for the measured track and voicing mask. Extraction frame shift is fixed at 10 ms."
+    },
+    "5da12406520b404307172c685684b2f826ec73e85deee011c0eeb8699f8f9b56": {
+      "source": "AV 按有声部分的相对能量初始化，未检出有声的帧 AV 为 0，<s id=\"0\">AH 初始为 0</s>。原音中的清音或气流噪声需要另行检查和调整。",
+      "translation": "AV is initialized from relative energy in voiced portions; frames without detected voicing have AV 0. <s id=\"0\">AH starts at 0</s>. Check and adjust unvoiced sounds or airflow noise in the original separately."
+    },
+    "b4d02007c9a4df59a3928caf5b891198d6925f9904c66cd9f15f913b62419c2f": {
+      "source": "所选算法用于主 F0 提取。缺少 REAPER 或运行失败会报错，可明确改选 Praat 后重试。参数提取与参数估计模块的处理设置有差异，研究比较请独立分析原音和输出。",
+      "translation": "The selected algorithm extracts primary F0. Missing REAPER or execution failure produces an error; explicitly select Praat and retry. Extraction settings differ from the Parameter estimation module; independently analyze original and output for research comparisons."
+    },
+    "6116129178e22c9a500002d559cf52d8ed9f5d60251a8ec0c80b343445122a4f": {
+      "source": "修改参数和时间曲线",
+      "translation": "Edit parameters and time curves"
+    },
+    "6ab0aa7b26a8a2a38e67de57f57aba264891f1326b0f1f319b5a1f6d4f333d07": {
+      "source": "先选要改变的参数",
+      "translation": "Select the parameter to change first"
+    },
+    "48deb81cade795da8a96ada81cad9f326552c48742e828e3352fbd7c15f3273b": {
+      "source": "点击左栏参数按钮，中栏显示该曲线的名称、单位和范围。参数很多时，可以先从 F0、AV/AH 和 F1–F3 开始，每次只改一项，再合成对比。以下初值指未恢复草稿的新配置。",
+      "translation": "Click a parameter on the left to show its curve name, unit, and range in the center. With many parameters, start with F0, AV/AH, and F1–F3; change one at a time and synthesize to compare. Initial values below refer to a new configuration without a restored draft."
+    },
+    "0ad08e42dc13c26ffd84d08ac5f25dcf180932edcfe15a45a8aed4388b1d39fb": {
+      "source": "参数单位、初值与调整范围",
+      "translation": "Parameter units, initial values, and ranges"
+    },
+    "cf2b9939631b8f51a0b276a591b2fe6feeb5324f486c9b88aeafeff21cc615dd": {
+      "source": "参数",
+      "translation": "Parameter"
+    },
+    "be27a3095ecdb9ac4d3511532168c73918e8096cfed5a331ce5bdb9c88ded35d": {
+      "source": "初值",
+      "translation": "Initial value"
+    },
+    "c18e5a169ff7bfff61c53ded9cc309e3c09a5581683a2f97f670f48f15a9ab19": {
+      "source": "范围与用途",
+      "translation": "Range and purpose"
+    },
+    "92d804e51a22d3044c860ee233274e1c2889f5dfcea5f5ea4f7ee061e7c2ad5d": {
+      "source": "初始 50–500，范围可调整。控制周期声源的音高。",
+      "translation": "Initial 50–500; adjustable range. Controls periodic-source pitch."
+    },
+    "1e90319551dd756768d7ff89bf17603e1805247f86814771e92a6c544b8d4f09": {
+      "source": "各 0–80，分别控制周期声源和气流噪声，0 关闭对应声源。",
+      "translation": "Each 0–80, controlling periodic source and airflow noise respectively; 0 turns off that source."
+    },
+    "ad68ea78156d609db175d04f726fb044b7114c57855433bb78aa254705e75979": {
+      "source": "依次为 200–1000、500–2500、1500–4000、2500–5000、3000–6000。控制共振位置。",
+      "translation": "Respectively 200–1000, 500–2500, 1500–4000, 2500–5000, and 3000–6000. Control resonance locations."
+    },
+    "8f9ebf017e2a2dba66b2991c5b90706b8ed6258efee37d457b4147bf1df2526c": {
+      "source": "B1–B3 为 10–500，B4–B5 为 10–1000，控制共振峰带宽。",
+      "translation": "B1–B3: 10–500; B4–B5: 10–1000. Control formant bandwidths."
+    },
+    "cf021b70dda7c3ba895c3eab653b22cdf2e87acf16ae557252b9cf7977e5a1c5": {
+      "source": "各 0–80，为并联幅度参数。当前串联合成不使用 A1–A5，界面显示未启用；旧参数文件中的数值仍保留。",
+      "translation": "Each 0–80, for parallel amplitudes. Current cascade synthesis does not use A1–A5, marked inactive in the interface; values in old parameter files are retained."
+    },
+    "1efbc3d29f1d1c77da623970e28810d13dbbbc0babc3bfbf2affb0c88e0313cd": {
+      "source": "均为 0",
+      "translation": "All 0"
+    },
+    "565ccacbf84902d3c1acc32ca10236bb4b9107f17544e5a284560a7ab0cb58a7": {
+      "source": "各 0–10，分别控制周期与幅度扰动。Shimmer 在文件中用比例，3% 保存为 0.03。",
+      "translation": "Each 0–10, controlling period and amplitude perturbation respectively. Shimmer is stored as a ratio: 3% becomes 0.03."
+    },
+    "e3450f7975c45ae1661b7464973f4810abc843b41bf973958db7a2c7386a7b14": {
+      "source": "0–1，次谐波相关控制。",
+      "translation": "0–1; subharmonic-related control."
+    },
+    "e3387a11fd3e601999e040a3403b62a4f76c061ce24e49440a82bd6c3df1fa3c": {
+      "source": "HNR 新编辑范围为 0–60，H1H2 为 −20–30，分别调节噪声相关处理和前两谐波相对幅度。旧文件中 HNR 大于 60 的数值仍保留，效果与 60 相同。",
+      "translation": "New HNR editing range is 0–60; H1H2 is −20–30. They adjust noise-related processing and relative amplitudes of the first two harmonics respectively. Old HNR values above 60 are retained, with the same effect as 60."
+    },
+    "6247cb11a072dac6d5e63169e46ce149e2472b3e9351bbfc520c61b25a54b409": {
+      "source": "−50–20，谱倾斜控制，通常先从负值小步调整。",
+      "translation": "−50–20; spectral-tilt control. Usually start with small adjustments from negative values."
+    },
+    "04e19813f88f211797bb25696b8328f3e0ef861593e2d359dd6a3dd57a21bb7e": {
+      "source": "这些是<s id=\"0\">合成控制值</s>，输入值可能与输出重新测得的值不同。AV/AH 使用工具内数字参考，实际声压级需另行测量和标定。",
+      "translation": "These are <s id=\"0\">synthesis controls</s>; input values may differ from values remeasured in the output. AV/AH uses internal numerical references; actual sound-pressure level requires separate measurement and calibration."
+    },
+    "c39775b4831097a2a1a75195643997fcbe29c5bd343dd0ff90bb8d2d0c530adf": {
+      "source": "手绘、局部恢复和缩放",
+      "translation": "Draw, locally restore, and zoom"
+    },
+    "b12a3148d9ca75d95ccdd799c09ec6fd1792011f7ecbb429deb01131c011f759": {
+      "source": "选中目标参数。F1–F5 的实线可编辑，其他共振峰虚线只供参考。若提示覆盖生效，先点<s id=\"0\">清除覆盖</s>。",
+      "translation": "Select the target parameter. Solid F1–F5 curves are editable; other formants' dashed lines are references. If an override is active, click <s id=\"0\">Clear override</s> first."
+    },
+    "fc3c75498973378f970f5858191abd1034b861e64b27af1c7dd78ed48359c619": {
+      "source": "按住 <s id=\"0\">Shift + 鼠标左键</s>拖动绘制。只修改当前参数，值受当前范围限制。",
+      "translation": "Hold <s id=\"0\">Shift + left mouse button</s> and drag to draw. Only the current parameter changes, constrained to its current range."
+    },
+    "ca5f1fd2d34b9f539ecec52310cce444fb606058f6823db7e375a8401279df06": {
+      "source": "Shift 左键拖动后，F0 已成为手绘轨迹；此时仅改曲线，尚未合成。",
+      "translation": "After Shift-left-dragging, F0 follows a drawn track. Only the curve has changed; synthesis has not run."
+    },
+    "3b522540e2e179767b2d38df9f455c56114875c2ce6f82bdacdb6556d802a3a0": {
+      "source": "最大化工作台的 F0 从 120 Hz 水平线变为上升后下降的手绘曲线，元音边界与静音区仍保留。",
+      "translation": "Maximized workbench with F0 changed from a flat 120 Hz line to a rising/falling hand-drawn curve; vowel boundaries and silence regions remain."
+    },
+    "d1c12f253e368854974b5050c94d3ab46b138c47e6a382f4fe14127e435c4404": {
+      "source": "按住 <s id=\"0\">Ctrl + 鼠标左键</s>拖动，将经过的时间段恢复为该参数默认值。F0 有预设平移时，恢复值包含平移量。",
+      "translation": "Hold <s id=\"0\">Ctrl + left mouse button</s> and drag to restore the traversed time span to the parameter's default. For F0 with a preset shift, the restored value includes that shift."
+    },
+    "2218e269c7a85361d6b77fdbc454a5c0c65d0daae39e42ccb8ebba38341945c6": {
+      "source": "Ctrl 左键拖过中间时段后，该区恢复 120 Hz，两侧手绘形状保留。",
+      "translation": "After Ctrl-left-dragging across the middle, that region returns to 120 Hz while both sides retain their drawn shapes."
+    },
+    "a6d459846d655aacbdf0e9714cefe300dff1a6602a0dbb233634f0ea23f0611b": {
+      "source": "F0 手绘曲线的中间部分恢复为默认水平线，其余曲线点仍在，右栏提示元音曲线已生成。",
+      "translation": "Middle of the hand-drawn F0 curve restored to its default horizontal line, other curve points retained, with Vowel curves generated on the right."
+    },
+    "27b9867f16abf61cf977a75597ddba55233dd5786aca943b1caa27daf3d82e7c": {
+      "source": "普通左键拖动平移时间窗，<s id=\"0\">Ctrl + 滚轮</s>缩放时间轴，纵轴保持。下方音频预览跟随观察范围，点<s id=\"1\">重置范围</s>回到全段。波形拖动用于播放选区，双击可复位波形视野。",
+      "translation": "Ordinary left-drag pans time; <s id=\"0\">Ctrl + mouse wheel</s> zooms time without changing the vertical axis. The lower audio preview follows the view. Click <s id=\"1\">Reset range</s> for full duration. Waveform dragging selects playback; double-click resets its view."
+    },
+    "d6e469104f45417630b0f5e7929a4f6afff455293a3f088e512df536f63a6fb2": {
+      "source": "覆盖与清空的区别",
+      "translation": "Override versus clearing parameters"
+    },
+    "e1ff0270bffa537b13533efadd5f1a215a061094a7c5f47f80420b93d3ae02bc": {
+      "source": "常见曲线操作",
+      "translation": "Common curve actions"
+    },
+    "de85bbf3ac0d98687ecad4ebca76c51d8864c31a240afa6d899afce349584cd8": {
+      "source": "操作",
+      "translation": "Action"
+    },
+    "6b9309e13533d654cc2b49ffb10fc590124d2087575b5bdf81668ea7e7159648": {
+      "source": "会改变什么",
+      "translation": "What changes"
+    },
+    "7795dca10e51445ac22efb890ec82c90e5cf02eaf1fb3157ebb1267882abbd91": {
+      "source": "应用覆盖",
+      "translation": "Apply override"
+    },
+    "c0bb54c9cf9a02ad111dbd5441b85913d28bd3fce6f3ee9f1ed666ba267b3b21": {
+      "source": "采用当前覆盖框的数值或表达式。非法输入保留原有效曲线并报错。切换参数也会尝试应用原参数的覆盖输入。",
+      "translation": "Apply the current override value or expression. Invalid input retains the valid curve and shows an error. Switching parameters also attempts to apply the previous parameter's override input."
+    },
+    "10e78e9a5318d18f8ff50e8a61134d5170346a28aac88446fa7b81956a97b5fd": {
+      "source": "清除覆盖",
+      "translation": "Clear override"
+    },
+    "683c85152bf145ee4646b5ad2b4346e8c0d6375e55253a8008779b5229667f47": {
+      "source": "取消单个常量，恢复其下保存的曲线点。<s id=\"0\">不能撤回已应用的渐变/分段序列</s>。",
+      "translation": "Remove a single constant and restore the curve points saved beneath it. <s id=\"0\">Applied ramp/segmented sequences cannot be undone this way</s>."
+    },
+    "91f30a4e33b758840a38268ba6865445130453e91a50c7cee0e2b216b0cc60f9": {
+      "source": "重置范围",
+      "translation": "Reset range"
+    },
+    "95c1f7008d441604730acd2f3b01eb15bc326da40f892e467585ecae585555bc": {
+      "source": "恢复全段观察，参数值、音频和播放选区保持。",
+      "translation": "Restore the full-duration view; parameter values, audio, and playback selection remain."
+    },
+    "0cf4e2dc954fd6094410dfdc5c3ac0b175bcbe903bc5536516c3fed8df30cbb3": {
+      "source": "清空参数",
+      "translation": "Clear parameters"
+    },
+    "28f1bb571baff093369ed4ed4c869e69d5f70aa71543653cfc40ac1edab3a221": {
+      "source": "确认后恢复全部曲线初值，清除静音区、边界、覆盖和 F0 平移，范围回到 50–500。时长、采样率、IPA 文本、淡入淡出和平滑设置保留。",
+      "translation": "After confirmation, restore all curves to initial values, clear silence regions, boundaries, overrides, and F0 shifts, and restore range 50–500. Duration, sample rate, IPA text, fades, and smoothing settings remain."
+    },
+    "eaac7f92ec46e33b67867c4ffe78d026927249822e743b30430a7b8a1a1377ec": {
+      "source": "<s id=\"0\">曲线区没有撤销/重做。大幅改图、序列覆盖、缩小 F0 范围或清空前，请先导出参数。</s>",
+      "translation": "<s id=\"0\">The curve editor has no undo/redo. Export parameters before major edits, sequence overrides, narrowing the F0 range, or clearing.</s>"
+    },
+    "7a7e2e4473cac6125d3d0c04edef5edb5ba0cad7ba26a073b482c867f925a839": {
+      "source": "用表达式快速画曲线",
+      "translation": "Draw curves quickly with expressions"
+    },
+    "654a24bbc1ba3d450531e871a9db58b620d5cd947fe68d486fdccbb3107c1cfa": {
+      "source": "在曲线覆盖输入表达式后点击<s id=\"0\">应用覆盖</s>。逗号连接渐变节点，分号划分等长区段，全角逗号和分号也可用。单个数会锁定手绘，序列生成后输入框清空，可以接着手绘。",
+      "translation": "Enter an expression in Curve override and click <s id=\"0\">Apply override</s>. Commas join ramp nodes; semicolons separate equal-duration sections. Full-width commas and semicolons also work. A single number locks drawing; a sequence clears the input after generation so drawing can continue."
+    },
+    "626250c5017cb66d9483e1cbdf5c40a4207dfe28def51841b58441253a17158e": {
+      "source": "常用表达式",
+      "translation": "Common expressions"
+    },
+    "3d028f41b0bd4c03811fd64c72b2ea7c1e2594f63ea2bc97d0408c4a0f6091d2": {
+      "source": "输入示例",
+      "translation": "Example input"
+    },
+    "1e2074643989b5d14b56afa31d2737405ed3e94a54f6cd986554a9cef7144c6e": {
+      "source": "效果",
+      "translation": "Effect"
+    },
+    "c19ecfdc607b57dfef773f4bd5bf288443db54b11854916f07997ba8dfe4e2d7": {
+      "source": "F0 全段固定 180 Hz。",
+      "translation": "F0 fixed at 180 Hz throughout."
+    },
+    "40fc3ce35c2b83ca3c74222fc5f3327aa616cfbe70390ecaf1138b30411e4a1f": {
+      "source": "起点、中点、末点为 120、250、100 Hz，线性连接。",
+      "translation": "Start, midpoint, and end are 120, 250, and 100 Hz, joined linearly."
+    },
+    "dd00e2f777b8bb0f2275b3c387db33c82ed349477ad8045d40b55e320d699dea": {
+      "source": "三个等长平台，值分别为 100、220、150 Hz。",
+      "translation": "Three equal-duration plateaus at 100, 220, and 150 Hz."
+    },
+    "3c91a5bc4c66cf4ca00dfd2d6fba0b543dbf34b15b3e53db56828d0794d6c9d0": {
+      "source": "前半段上升，后半段下降，交界有跳变。",
+      "translation": "Rising first half, falling second half, with a jump at the boundary."
+    },
+    "7206fef9c7c4d1c541620941506b026cd3683c78b79a75282f9303b23259d167": {
+      "source": "Shimmer 输入 3",
+      "translation": "Enter 3 for Shimmer"
+    },
+    "eee82bb9eeffb51dd32381e90bfc5d311d4b76b22e74eeccd74074473bb654a6": {
+      "source": "表示 3%。",
+      "translation": "Means 3%."
+    },
+    "a8508736b6cc44e7e000652db514bcfe40b61e71c9065330efd0becf0771ded7": {
+      "source": "全段常量",
+      "translation": "Full-duration constant"
+    },
+    "224b8baea4b6a78891fd0e2ce89be986b03e215997d9f8d398d4a4f7ae905d33": {
+      "source": "选择 F0，输入 <s id=\"0\">180</s> 并应用。曲线变为覆盖色水平线。点清除覆盖即可返回此前曲线。",
+      "translation": "Select F0, enter <s id=\"0\">180</s>, and apply. The curve becomes a horizontal line in the override color. Clear override restores the previous curve."
+    },
+    "0f4c5a6ba08aeab345f1e994ca0dd71334e9a203cce89c797b43d552e72ea97c": {
+      "source": "180 的常量覆盖保持整段水平，图上提示清除覆盖后才能编辑。",
+      "translation": "Constant override 180 keeps the entire span flat; a message says to clear the override before editing."
+    },
+    "f45cf363740f87f2fe29cca734390f91071997cf2f6e9cf13e9eab573f64cb97": {
+      "source": "F0 常量覆盖为 180 Hz，覆盖框显示 180，曲线为覆盖色。",
+      "translation": "F0 constant override at 180 Hz, with 180 in the input and the curve in the override color."
+    },
+    "f81fe95b7e83fc5ec234fb6f8ea06ca5b6e2e3e5f29ce5f8f1e8316ac4580412": {
+      "source": "逗号连接渐变",
+      "translation": "Comma-linked ramps"
+    },
+    "830230b286f52f5b089d5666fceae3a8dcec4e9e28ff64efb4bb8be701bfc73a": {
+      "source": "输入 <s id=\"0\">120,250,100</s> 并应用。总时长 2 秒时，在 0、1、2 秒分别取这三个值。",
+      "translation": "Enter <s id=\"0\">120,250,100</s> and apply. With duration 2 seconds, these values occur at 0, 1, and 2 seconds."
+    },
+    "8dcecdc14896cbddc9713844164df78491748f37b671113a4245209152d3352d": {
+      "source": "三个节点用逗号连接，F0 在 1 秒达到 250 Hz，再下降到 100 Hz。",
+      "translation": "Three comma-linked nodes: F0 reaches 250 Hz at 1 second, then falls to 100 Hz."
+    },
+    "51838025ca74e6f19df997b8c02a3bf4714e0ada8403d6f772d7472911ee60c0": {
+      "source": "F0 呈三节点的上升下降折线，覆盖输入框为空。",
+      "translation": "F0 follows a three-node rise/fall polyline; the override input is empty."
+    },
+    "66f6b1bcbb3dabfbaed237e5234f85d5388636a8c2fbff0202660648437e83cb": {
+      "source": "在红框输入数值或分段序列，再按应用覆盖当前选中的曲线。",
+      "translation": "Enter values or a segmented sequence in the red box, then apply the override to the selected curve."
+    },
+    "2e8fa5d6a7e8a510a6b8f90e5f933e573d054bec90c16343cbd9ebe3cbbc6ecb": {
+      "source": "分号建立平台",
+      "translation": "Semicolon-separated plateaus"
+    },
+    "4aa85fcf1c730ed130691da7408219361a561e90a75c03f137f40a653d9865f9": {
+      "source": "输入 <s id=\"0\">100;220;150</s> 并应用。三个平台各占总时长三分之一，平台边界与元音边界独立。",
+      "translation": "Enter <s id=\"0\">100;220;150</s> and apply. Each plateau takes one third of total duration; plateau boundaries are independent of vowel boundaries."
+    },
+    "30ea0311ef434298363ee8bac9c658282d005ea4e2b357a8715cf7b3a7b3c76f": {
+      "source": "分号形成三个等长 F0 平台；平台切换点与原元音边界独立。",
+      "translation": "Semicolons form three equal-duration F0 plateaus, whose transitions are independent of original vowel boundaries."
+    },
+    "ac4541fa184ffa0f2aef4075924e38ca60318775542cd1e7fcc0012d1890bd5d": {
+      "source": "F0 分为 100、220、150 Hz 三个平台，图中同时保留此前元音边界。",
+      "translation": "F0 split into plateaus at 100, 220, and 150 Hz, with earlier vowel boundaries retained."
+    },
+    "f57c45f1ec72cb93cd3a6ed3d8433bf756501fec9db0e924e429f33a709e585e": {
+      "source": "组合渐变和分段",
+      "translation": "Combine ramps and sections"
+    },
+    "596f0b2fae1cf8eaf2e9ab3ea86309184ce61490f0cf01b24117d25907d6ddda": {
+      "source": "输入 <s id=\"0\">120,240;180,120</s> 并应用。2 秒内，0–1 秒从 120 升至 240 Hz，1–2 秒从 180 降至 120 Hz，交界保留跳变。改好曲线后须重新合成试听。",
+      "translation": "Enter <s id=\"0\">120,240;180,120</s> and apply. Across 2 seconds, 0–1 seconds rises from 120 to 240 Hz and 1–2 seconds falls from 180 to 120 Hz, retaining a boundary jump. Resynthesize to hear the edited curve."
+    },
+    "88edfbf4913f98abded5c8c906b274472dfe944e63d629396ac77a5705c51b97": {
+      "source": "两段分别渐变，1 秒交界从 240 Hz 跳到 180 Hz。",
+      "translation": "Two separate ramps, jumping from 240 Hz to 180 Hz at 1 second."
+    },
+    "4a360c6cb4913be746dc358840150f24466e0b6077a0a5fbc1b13c0cb7b84b70": {
+      "source": "F0 两段线性轨迹在中点存在跳变，元音静音标记仍在图上。",
+      "translation": "Two linear F0 sections with a midpoint jump; vowel-silence markings remain."
+    },
+    "9cc2bea31fbeed594a6bd173c954706849c36b0e3ba499ca1fc24d208c1a7443": {
+      "source": "用 Klatt 合成音频",
+      "translation": "Synthesize audio with Klatt"
+    },
+    "b8e222e88389ce1d597e73844495a606d76c239b4066977dcc54fac2cae6e03b": {
+      "source": "从元音规则建立曲线",
+      "translation": "Build curves from vowel rules"
+    },
+    "bd27f792982900d8bca67dfbbb1646a3e6b4c27f418fcbca02c7152a7b01eb14": {
+      "source": "左栏输入总时长，点击<s id=\"0\">应用时长</s>。右栏输入 <s id=\"1\">a* i</s>，点击<s id=\"2\">生成元音</s>。2 秒时，a、空格静音、i 分别占 1、0.5、0.5 秒。单个元音可输入 <s id=\"3\">a</s>。",
+      "translation": "Enter duration on the left and click <s id=\"0\">Apply duration</s>. Enter <s id=\"1\">a* i</s> on the right and click <s id=\"2\">Generate vowels</s>. At 2 seconds, a, space silence, and i occupy 1, 0.5, and 0.5 seconds. For a single vowel, enter <s id=\"3\">a</s>."
+    },
+    "e581693e1d7189f011a28e7c4da0c162e4a4fb893919d063968b2a235de671df": {
+      "source": "等待元音曲线已生成提示，检查 F1–F3、边界虚线和静音底色。此时尚无新音频。",
+      "translation": "Wait for Vowel curves generated, then check F1–F3, dashed boundaries, and silence shading. No new audio exists yet."
+    },
+    "34aa5b358cad4bcaa01ac597f19d602f67813d7a6af592e9d29311f72dbc5e60": {
+      "source": "a* i 生成后，F1 从 a 的规则值过渡到 i 的规则值，1–1.5 秒为静音底色；下方尚无合成音频。",
+      "translation": "After generating a* i, F1 moves from the rule value for a to that for i, with silence shading at 1–1.5 seconds; no synthesized audio appears below yet."
+    },
+    "227feff8640895d5731b5b3cf45fce0b0e663a77590ca8f36816f47cd778ca59": {
+      "source": "最大化工作台，右栏为 a* i，F1 实线与两条元音边界可见，下方显示暂无合成音频。",
+      "translation": "Maximized workbench with a* i on the right, solid F1 and two vowel boundaries visible, and No synthesized audio below."
+    },
+    "c7be7d7b9bcc7f386e1515bc9847222e63d2eb6e00fd6ad5044596ec02be9fe4": {
+      "source": "下面三例从同一新配置基线分别制作，共用常态浊声预设、F0 控制值 150 Hz 和 0.8 秒时长，分别生成 a、i、u 的共振峰曲线再合成。可按以下顺序制作一组对照。",
+      "translation": "The next three examples are made separately from the same new-configuration baseline, sharing modal voice preset, F0 control 150 Hz, and duration 0.8 seconds. Generate a, i, and u formant curves separately before synthesis. Follow this sequence to make a comparison set."
+    },
+    "8ff2cbf064045adbc45b27e7ad6df0faf321621aa411887e813f8236fb455a9b": {
+      "source": "先导出需要保留的当前参数。将总时长设为 <s id=\"0\">0.8</s> 秒并点击<s id=\"1\">应用时长</s>。下列例音采用淡入 50 ms、淡出 100 ms、平滑点数 5。",
+      "translation": "Export current parameters that need retaining. Set duration to <s id=\"0\">0.8</s> seconds and click <s id=\"1\">Apply duration</s>. These examples use fade-in 50 ms, fade-out 100 ms, and 5 smoothing points."
+    },
+    "0f1fd7812f900d969399d7368849cf1e8aa8b104f7e525d5f1344b7f9442c51d": {
+      "source": "顶部选择<s id=\"0\">常态浊声</s>，点击<s id=\"1\">应用预设</s>并在确认窗点击<s id=\"2\">应用并覆盖</s>。选择左栏 F0，在曲线覆盖输入 <s id=\"3\">150</s>，点击<s id=\"4\">应用覆盖</s>。",
+      "translation": "Select <s id=\"0\">Modal voice</s> at the top, click <s id=\"1\">Apply preset</s>, then <s id=\"2\">Apply and overwrite</s> in the confirmation. Select F0 on the left, enter <s id=\"3\">150</s> in Curve override, and click <s id=\"4\">Apply override</s>."
+    },
+    "5f234dd4f793c036e1eaf26aed2960557cece7c3663408305ae3fc717ab5dad5": {
+      "source": "右栏 IPA 元音序列输入 <s id=\"0\">a</s>，点击<s id=\"1\">生成元音</s>，等到元音曲线已生成提示。依次选择 F1、F2、F3，核对曲线值与下表一致。",
+      "translation": "Enter <s id=\"0\">a</s> under IPA vowel sequence, click <s id=\"1\">Generate vowels</s>, and wait for success. Select F1, F2, and F3 in turn and compare their values with the following table."
+    },
+    "312e6e6c668ec2f93bcac875108bb2322925a9c92d66724fe01d69c971b11210": {
+      "source": "点击<s id=\"0\">合成音频</s>，等到合成完成提示，再选择<s id=\"1\">合成结果</s>试听和导出这次音频。",
+      "translation": "Click <s id=\"0\">Synthesize audio</s>, wait for completion, then select <s id=\"1\">Synthesis result</s> to listen and export this audio."
+    },
+    "7aa0311ca8262c5f83eeeef82f0b22583e66dc791215faaea4ab6a142ba4b856": {
+      "source": "保持基础设置和声源参数，改输入 <s id=\"0\">i</s>，先重新点击<s id=\"1\">生成元音</s>并核对 F1–F3，再点击<s id=\"2\">合成音频</s>。改输入 <s id=\"3\">u</s>时也分别完成这两个任务。每次成功合成后再试听、保存对应结果。",
+      "translation": "Retain basic settings and source parameters, change input to <s id=\"0\">i</s>, click <s id=\"1\">Generate vowels</s> again and check F1–F3, then click <s id=\"2\">Synthesize audio</s>. Complete both tasks again for <s id=\"3\">u</s>. Listen and save the corresponding result after each successful synthesis."
+    },
+    "17cdd8cebeb0c1e512cfb0bba528e8862237e4bcd7fd36c2658b52af13ca4d78": {
+      "source": "三组例音的 F1–F3 合成控制值",
+      "translation": "F1–F3 synthesis controls for three example sounds"
+    },
+    "cfd2ce4e5e75c1bc4a2091cd8fea8cbf4a4867e5284bc75f19e2f1d518123436": {
+      "source": "只修改 IPA 文本后直接合成，会继续使用现有共振峰曲线。生成成功后，播放器和音频导出仍绑定上一次成功合成的 WAV，须再次合成成功才会更新。上述 F0 和表中的 F1–F3 均为合成控制值，输出重新测得的值可能不同。",
+      "translation": "Changing only IPA text and immediately synthesizing continues to use existing formant curves. Even after generation, playback and export remain bound to the last successful WAV until synthesis succeeds again. The F0 and tabulated F1–F3 values above are synthesis controls; remeasured output values may differ."
+    },
+    "d4d6c540cc7d5db4c2f72a5bd03aa3063bf261b48a83973b9ad62ba8d4e456f2": {
+      "source": "a：F1/F2/F3 控制值 730/1090/2440 Hz，常态浊声，F0 控制值 150 Hz，时长 0.8 秒。",
+      "translation": "a: F1/F2/F3 controls 730/1090/2440 Hz, modal voice, F0 control 150 Hz, duration 0.8 seconds."
+    },
+    "1a9e4102408690c886a61473d85770a28105609339a09fe331069aa0c734efa1": {
+      "source": "a 元音合成状态，F0 曲线覆盖为 150 Hz，总时长为 0.8 秒。",
+      "translation": "Vowel a synthesis with F0 overridden to 150 Hz and total duration 0.8 seconds."
+    },
+    "c6646325ba2cadd9404a9616615fdd83f4830a855259c9594b03d8cbcd67c6b3": {
+      "source": "i：F1/F2/F3 控制值 270/2290/3010 Hz，常态浊声，F0 控制值 150 Hz，时长 0.8 秒。",
+      "translation": "i: F1/F2/F3 controls 270/2290/3010 Hz, modal voice, F0 control 150 Hz, duration 0.8 seconds."
+    },
+    "1035e4d3096b69526c14db1d2c77410bebe46bc03200418c7d2f676eb4f746df": {
+      "source": "u：F1/F2/F3 控制值 300/870/2240 Hz，常态浊声，F0 控制值 150 Hz，时长 0.8 秒。",
+      "translation": "u: F1/F2/F3 controls 300/870/2240 Hz, modal voice, F0 control 150 Hz, duration 0.8 seconds."
+    },
+    "1a1e24541a2bbe009b94ccc4fe5275b1e174f096195538c0164aa55aad7e5b88": {
+      "source": "保持试听音量一致，依次听 a、i、u，留意元音音色的变化，也可在语谱图中对照共振频带的位置。三例的 F0 控制值相同，这组对照展示元音规则带来的音色与共振频带差异。",
+      "translation": "Keep listening volume consistent and listen to a, i, and u in order, noting vowel-timbre differences. Compare resonance-band locations in the spectrogram too. All three share the same F0 control; this comparison illustrates timbre and resonance-band differences from vowel rules."
+    },
+    "4ffe4de28dc5a93ba11b4f8641b5a550668e7256fcf45f9a39e4d25a672f087b": {
+      "source": "生成会重建 F1–F3、静音区和边界，F4/F5 恢复初值，完整保留 AV 曲线、覆盖、F0 和其余声源控制。静音由序列分段独立控制，移除空格并重新生成后，不残留上一序列的静音。短于曲线网格的静音仍按音频采样位置处理。<s id=\"0\">需要手绘共振峰时，先生成再编辑</s>，再次生成可能替换这些编辑。",
+      "translation": "Generation rebuilds F1–F3, silence regions, and boundaries, resets F4/F5, and fully retains AV curves, overrides, F0, and other source controls. Silence is controlled independently by sequence segments: removing spaces and regenerating leaves no silence from the previous sequence. Silence shorter than the curve grid is still handled at audio-sample positions. <s id=\"0\">Generate first, then hand-edit formants</s>; generating again may replace those edits."
+    },
+    "404e9002718396be86443e59b99d8316ac45b148222d27b223459fb2415e3cdc": {
+      "source": "停顿与相对时长",
+      "translation": "Pauses and relative duration"
+    },
+    "b5b2685a2bcd3a8b97612bb78312dc276a5df8765eb020fb1e81ebfef29e19e5": {
+      "source": "内部普通空格生成静音段，元音和空格的初始权重均为 1，两端空格会裁去。紧跟元音或空格的 <s id=\"0\">+ - * /</s> 依次将权重乘以 1.1、0.9、2、0.5，可叠加。默认无修饰的元音和内部普通空格都占权重 1，各段按最终权重分配总时长。<s id=\"1\">e++</s> 为 1.21 倍，连续三个 <s id=\"2\">/</s> 为 0.125 倍。",
+      "translation": "Internal ordinary spaces create silence. Vowels and spaces both start with weight 1; leading/trailing spaces are trimmed. <s id=\"0\">+ - * /</s> immediately after a vowel or space multiply its weight by 1.1, 0.9, 2, or 0.5, respectively, and can accumulate. Unmodified vowels and internal ordinary spaces each have weight 1; final weights distribute total duration. <s id=\"1\">e++</s> is 1.21 times; three consecutive <s id=\"2\">/</s> give 0.125 times."
+    },
+    "9a85504d584df8c80da70e27697994b3a90974fc6ec6d52820985cba0035cbeb": {
+      "source": "先看三个简单输入",
+      "translation": "Start with three simple inputs"
+    },
+    "9718e67eff436815a64f3a190427317a71d293848d2fa0b204f20953bcbe6fcc": {
+      "source": "组合修饰符，生成一段元音序列",
+      "translation": "Combine modifiers into a vowel sequence"
+    },
+    "e4b697e983bba3ad4c8d550f682ce63d87b52d225e9ba10ae475642e1d194f08": {
+      "source": "用下面这串输入练习连续修饰符。<s id=\"0\">i/-</s> 后只有一个普通空格，紧随空格的三个 <s id=\"1\">/</s> 修饰静音段。各符号从左到右作用于当时的权重，<s id=\"2\">+</s> 后再接 <s id=\"3\">-</s> 得到 1.1 × 0.9 = 0.99，不会恰好恢复原权重。",
+      "translation": "Practice consecutive modifiers with the sequence below. After <s id=\"0\">i/-</s> there is one ordinary space; the three <s id=\"1\">/</s> immediately after it modify the silence. Symbols act left to right on the current weight: <s id=\"2\">+</s> followed by <s id=\"3\">-</s> gives 1.1 × 0.9 = 0.99, not exactly the original weight."
+    },
+    "9fd4c788c90ad434e28f25d3d6796b9d1582fe8b775f4a80d86843fdd6e5f268": {
+      "source": "总时长设为 2 秒时，总权重为 3.685。每段时长 = 2 × 该段权重 ÷ 3.685，累计得到以下时间位置。",
+      "translation": "At total duration 2 seconds, total weight is 3.685. Segment duration = 2 × segment weight ÷ 3.685; accumulation gives the following time positions."
+    },
+    "8fc329c1dcd73dc5a98070c925de2c705153c03c774b5d07d2a79ba43775ba0a": {
+      "source": "复杂元音序列的权重与时间分配",
+      "translation": "Weights and timing of a complex vowel sequence"
+    },
+    "0cdc25155cc04893a82e81875a6c1afb208d0edcca9a2adf513627ee37ec86eb": {
+      "source": "输入段",
+      "translation": "Input segment"
+    },
+    "bb034b543bce86f1bc5a4c39223722f327e6153ab62846438811f1db338ccde9": {
+      "source": "权重计算",
+      "translation": "Weight calculation"
+    },
+    "b0bf49abac0546c0baf3f1679ace4c95c69c332be50238d590be8b40502f8442": {
+      "source": "最终权重",
+      "translation": "Final weight"
+    },
+    "07093b52043d9f760c76c4c1f2df73fb40165f56e836b638fa590aa0ef56c66c": {
+      "source": "时长 / s",
+      "translation": "Duration / s"
+    },
+    "0f927d57fae7f29bc35ed4890d67376561bf881fda3ed8d8f1f3667a149c9214": {
+      "source": "起点 / s",
+      "translation": "Start / s"
+    },
+    "dca59aaa6b744ba5af7da87679ccc75f3bfacbf1f212b6d1411cadebe2940cb2": {
+      "source": "终点 / s",
+      "translation": "End / s"
+    },
+    "ec29fa5f401f183c0cb785fd5cadbd81b2711b2d280d964039fe0f1e7073c4cf": {
+      "source": "空格///",
+      "translation": "Space///"
+    },
+    "256f1f67e343a138a6e7314f6f14c585f9209a1993d79683b0d975ca9ba50099": {
+      "source": "表中秒数显示三位小数，时长和累计边界分别从未舍入值计算后显示。四舍五入可能造成显示段长合计或起终点相减与实际值略有不同，复算时请使用权重公式。该序列只有 <s id=\"0\">0.733–0.801 秒</s> 附近这一段静音，实际边界约为 0.732700 秒和 0.800543 秒。",
+      "translation": "Times in the table show three decimal places; durations and cumulative boundaries are displayed after calculation from unrounded values. Rounding may slightly change displayed duration sums or end-minus-start differences; use the weight formula to recalculate. This sequence has only one silence near <s id=\"0\">0.733–0.801 seconds</s>, with actual boundaries approximately 0.732700 and 0.800543 seconds."
+    },
+    "475e69ad96eba79f6187f2cc8f28fc2e0466eb0520edc00085ea0c9a8b2c04ae": {
+      "source": "输入总时长 <s id=\"0\">2</s> 秒并点<s id=\"1\">应用时长</s>。应用<s id=\"2\">常态浊声</s>预设并确认，将 F0 曲线覆盖设为 <s id=\"3\">150</s> Hz 并应用。",
+      "translation": "Enter total duration <s id=\"0\">2</s> seconds and click <s id=\"1\">Apply duration</s>. Apply and confirm the <s id=\"2\">Modal voice</s> preset, then set F0 override to <s id=\"3\">150</s> Hz and apply."
+    },
+    "5b121674f0c768448aa6f7540dc9d63aeff80bf93cf6e9ef0ea376a18be132a0": {
+      "source": "在右栏输入上述完整序列，点击<s id=\"0\">生成元音</s>。成功后选择 F1，核对共振峰轨迹、分界虚线和空格静音底色。单个元音之后的修饰符只改变相对时长，不单独改变 F0。",
+      "translation": "Enter the entire sequence above on the right and click <s id=\"0\">Generate vowels</s>. On success, select F1 and check formant tracks, dashed boundaries, and space-silence shading. Modifiers after a vowel change relative duration only, not F0 independently."
+    },
+    "f74ee60d4720a1d4306cb36e8bd3a6a14bb26dc38e9d43b91d6e2381afa45396": {
+      "source": "点击<s id=\"0\">合成音频</s>并等待合成完成，再查看 2 秒结果波形或语谱图。试听时按 a、i、短停顿、u、e、o 的顺序观察，停顿两侧的淡化设置也会影响声音包络。",
+      "translation": "Click <s id=\"0\">Synthesize audio</s>, wait for completion, then inspect the 2-second waveform or spectrogram. Listen in order to a, i, short pause, u, e, o; fading around pauses also affects the sound envelope."
+    },
+    "e5d7b28c11de47163811da38eacbf34e93ddd6466d223cb82ed54b3704f8cce5": {
+      "source": "a-i/- ///u+/e++o/-：总时长 2 秒，F0 控制值 150 Hz，常态浊声；共振峰与分段边界对应下方结果。",
+      "translation": "a-i/- ///u+/e++o/-: total duration 2 seconds, F0 control 150 Hz, modal voice; formants and segment boundaries correspond to the result below."
+    },
+    "7e36dc26d25dea5a2cd10c58733397cbbf950743e0feac635dc2096827e7a7f4": {
+      "source": "复杂 IPA 序列生成后的 F1、其他共振峰参考曲线、分界虚线与静音底色，下方显示 2 秒合成结果。",
+      "translation": "F1, reference curves for other formants, dashed boundaries, and silence shading after complex IPA generation, with a 2-second synthesis result below."
+    },
+    "ab7da5c0fda65831a5de34e362d60e7e6713bb5623a72da6853f643e24c313dd": {
+      "source": "a-i/- ///u+/e++o/-：总时长 2 秒，F0 控制值 150 Hz，常态浊声；比较元音次序、相对长短与短静音。",
+      "translation": "a-i/- ///u+/e++o/-: total duration 2 seconds, F0 control 150 Hz, modal voice; compare vowel order, relative durations, and brief silence."
+    },
+    "b6394fc27a3867ba99c20d73a9bacded7f991dc7cb44f423ebd78537255562e6": {
+      "source": "输入规则表符号和 ASCII 修饰符。非法字符会提示位置，修正后重试。平滑点数只影响重新生成的 F1–F3，修改后需再点生成元音。",
+      "translation": "Use rule-table symbols and ASCII modifiers. Invalid characters are reported with positions; correct and retry. Smoothing points affect regenerated F1–F3 only; click Generate vowels again after changing them."
+    },
+    "a68f99b98d9537ca0b2284307b17cb1f8df9a31208dced6dc2bb50efadd5e953": {
+      "source": "规则窗滚至末尾，ɹ、ɻ 的历史规则和空格静音、乘法权重说明可见。",
+      "translation": "Bottom of the rules dialog, showing legacy ɹ/ɻ rules and explanations of space silence and multiplicative weights."
+    },
+    "82764eba6b18c7176099438a0b2b197afed1f814e3c973b25ab7608ea467241c": {
+      "source": "最大化工作台的元音规则对话框滚动到底部，显示后部 IPA 规则及 +、-、*、/ 的时长乘法。",
+      "translation": "Vowel-rules dialog at the bottom in the maximized workbench, showing later IPA rules and +, -, *, / duration multipliers."
+    },
+    "72743af5735233652f7db62984785943474baf8d58bb7479bea1bcbec632218b": {
+      "source": "查看和复制规则",
+      "translation": "Inspect and copy rules"
+    },
+    "891a13e0123311f2291c724d721465835563c5d2e309c86906191009ab66b6c3": {
+      "source": "点击右栏<s id=\"0\">元音规则</s>，单击音标按钮复制，关闭弹窗后粘贴到 IPA 输入区。复制失败时按弹窗提示选中音标，按 Ctrl+C。可在弹窗内滚动查看全部条目和末尾时长说明。",
+      "translation": "Click <s id=\"0\">Vowel rules</s> on the right and click a phonetic-symbol button to copy. Close the dialog and paste into the IPA input. If copying fails, select the symbol as instructed and press Ctrl+C. Scroll to see all entries and final duration notes."
+    },
+    "5c3f268fb9f72eb00161564b9776d9e2751faa124c2fcbe09729064ccb494c43": {
+      "source": "规则窗上部列出 IPA 与 F1–F3；右侧滚动条用于继续查看余下条目。",
+      "translation": "Upper rules dialog lists IPA and F1–F3; use the right scrollbar for remaining entries."
+    },
+    "064116b34964e65ae5002b91676edec7f7a88adddcd60f7b700674dfae6e46b6": {
+      "source": "元音规则对话框上部，IPA 音标按钮与三个共振峰数值列可见。",
+      "translation": "Upper vowel-rules dialog showing IPA buttons and three formant-value columns."
+    },
+    "59f1fc82171659b951989f9efc5b9986287c7bbc97d47e5215c4b3fd6a42f67a": {
+      "source": "规则窗提供 F1–F3 参考值和音标复制按钮；复制后关闭弹窗，在右栏输入序列并生成。",
+      "translation": "The rules dialog provides reference F1–F3 and symbol-copy buttons. After copying, close it and enter and generate the sequence on the right."
+    },
+    "2d0a6a3f0340d544e90daf7ad441ba674968952934f059b5241eeb23f0490a21": {
+      "source": "完整规则表有 30 条，数值是工具内合成起点，生成后可调整。上方 a、i、u 对照列出了其中三条。ɹ、ɻ 是保留的舌尖音近似规则，它们在 IPA 中属于近音符号。",
+      "translation": "The complete rule table has 30 entries. Values are synthesis starting points within the tool and can be adjusted after generation. The a/i/u comparison above shows three of them. ɹ and ɻ are retained approximations for apical sounds; IPA classifies them as approximants."
+    },
+    "9bab5c2f4eb55d84d95368852b7920a3ce576b7c2c94abc9550c7bf6174f44ed": {
+      "source": "确认基础设置",
+      "translation": "Confirm basic settings"
+    },
+    "a13a3302ac71dffbb6d3cef9a199287e11014ba872b902e57a9f0e1a74cfb478": {
+      "source": "基础设置与初值",
+      "translation": "Basic settings and initial values"
+    },
+    "2e8ddbf2320ed3328995a64828e8651b7081a01810f085ca95777dfa9888c393": {
+      "source": "设置",
+      "translation": "Setting"
+    },
+    "44af4866f5bf4fd7ea71d2feafc75afcecd2a642928cfec2073334bfebcf648d": {
+      "source": "应用方式",
+      "translation": "How to apply"
+    },
+    "c81801ad1a1cf240a94d51a7e3d2804065d1c2871aba9893a0323835cd58d9f4": {
+      "source": "总时长 / s",
+      "translation": "Total duration / s"
+    },
+    "eecec8662ddbce83921e153a860c2e8607f9f96499937f71e6b0cc077dbfb0ae": {
+      "source": "输入后点应用时长，曲线时间、静音区和边界按比例缩放。",
+      "translation": "Click Apply duration after entering; curve times, silence regions, and boundaries scale proportionally."
+    },
+    "2ede3a408ebb21fa4b6ec3f3e0c5b8ceb3c2168a46d575ed21502c1bcf37d26d": {
+      "source": "淡入、淡出 / ms",
+      "translation": "Fade-in, fade-out / ms"
+    },
+    "4c988367e389e60a0f3463c494decda32a03deeaa214a5f03eea4463bd9d0fef": {
+      "source": "各 0–1000 整数，直接采用。作用于非静音片段两端，短片段可能明显减弱。",
+      "translation": "Each an integer 0–1000, used directly. Applies to both ends of nonsilent segments; short segments may weaken considerably."
+    },
+    "edcea89a6f2cb2a9745df10af48334497afa5010fcabd037706f6c5e22dfedc6": {
+      "source": "平滑点数",
+      "translation": "Smoothing points"
+    },
+    "7b7ef746a20856d5a684e3d9a3ec28fc432ada9ad6ca00d13f05bf7c49ea722a": {
+      "source": "1–50 整数，修改后重新生成元音。",
+      "translation": "Integer 1–50; regenerate vowels after changing."
+    },
+    "eafa63b3f6a961ac83ad761f8c63a20d2ee8194a1ff48da089fece23ccea570c": {
+      "source": "F0 下限、上限 / Hz",
+      "translation": "F0 minimum, maximum / Hz"
+    },
+    "097a2f78f0a3b66b853d4ea18c23b248f2dafb69c596654a4cb5393f504a4ed0": {
+      "source": "输入后点应用 F0 范围，须满足 1≤下限&lt;上限≤3000。缩小范围会裁到边界。",
+      "translation": "Click Apply F0 range after entering; require 1≤minimum&lt;maximum≤3000. Narrowing the range clips values to the boundaries."
+    },
+    "fc1999d947f85633356fa89509fd84a46877e6daa74f4a084b59e3fe85e47e79": {
+      "source": "比较淡入和淡出",
+      "translation": "Compare fade-in and fade-out"
+    },
+    "19871c52bbc48d0864fc4e20449174d556251fd6a2106613f407bee3f5f935b2": {
+      "source": "淡入、淡出控制连续有声段起止处的振幅包络，单位为毫秒。用 <s id=\"0\">a a</s>、总时长 1 秒作对照，两枚 a 和中间普通空格的权重均为 1，各占三分之一秒。中间约 0.333–0.667 秒是静音，静音两侧的 a 分别淡入和淡出，包含整段音频的首尾。",
+      "translation": "Fades control the amplitude envelope at the start and end of continuous voiced segments, in milliseconds. Compare <s id=\"0\">a a</s> at total duration 1 second: both a vowels and the ordinary space each have weight 1 and occupy one third of a second. Approximately 0.333–0.667 seconds is silence. The a on either side fades in and out, including the whole audio's beginning and end."
+    },
+    "fc2205e408a4974cd63ee8fbf2b2740d0373c5b47fc04eee1b38835a76e15c25": {
+      "source": "应用总时长 <s id=\"0\">1</s> 秒，显式应用<s id=\"1\">常态浊声</s>预设并确认，应用 F0 常量 <s id=\"2\">150</s> Hz。右栏输入 <s id=\"3\">a a</s>，点击<s id=\"4\">生成元音</s>，确认两个分界线和中间静音段。",
+      "translation": "Apply total duration <s id=\"0\">1</s> second, explicitly apply and confirm <s id=\"1\">Modal voice</s>, and apply constant F0 <s id=\"2\">150</s> Hz. Enter <s id=\"3\">a a</s> on the right, click <s id=\"4\">Generate vowels</s>, and check two boundaries and the central silence."
+    },
+    "d2142c31a14b5dc0fdeb67580c73ea561f84dc6bb8889eb43ea5dce228fa2b67": {
+      "source": "将淡入设为 <s id=\"0\">100</s> ms，淡出设为 <s id=\"1\">100</s> ms。这两个数值直接采用，点击<s id=\"2\">合成音频</s>并等待完成，试听和导出第一组。",
+      "translation": "Set fade-in to <s id=\"0\">100</s> ms and fade-out to <s id=\"1\">100</s> ms. These values are used directly. Click <s id=\"2\">Synthesize audio</s>, wait for completion, then listen and export the first version."
+    },
+    "246e3044ec747f98cfd2066d0ca1556b6f0a74c4bf54e3a8aee6f0e5b8568632": {
+      "source": "保持元音曲线、F0 和总时长，将淡入改为 <s id=\"0\">30</s> ms，淡出改为 <s id=\"1\">80</s> ms，再次点击<s id=\"2\">合成音频</s>并等待完成。只改淡化设置时无需再生成元音，新的 WAV 仍须重新合成。",
+      "translation": "Retain vowel curves, F0, and total duration; change fade-in to <s id=\"0\">30</s> ms and fade-out to <s id=\"1\">80</s> ms, then click <s id=\"2\">Synthesize audio</s> again and wait. Fade-only changes need no vowel regeneration, but a new WAV still requires resynthesis."
+    },
+    "d800bb0f2d403f062a780e25c4f9696e484c5a8530328d528908f409e8b6972c": {
+      "source": "a a：总时长 1 秒，F0 控制值 150 Hz，常态浊声，淡入 100 ms、淡出 100 ms。",
+      "translation": "a a: total duration 1 second, F0 control 150 Hz, modal voice, fade-in 100 ms, fade-out 100 ms."
+    },
+    "d826d6a13e41f378fd1ebedd3108a27ee75e74bf430da2a45257a45fcf05bb2a": {
+      "source": "a a 合成波形中两个有声段由中间静音隔开，左栏显示淡入 100 ms 和淡出 100 ms。",
+      "translation": "Two voiced segments in the a a waveform separated by central silence; the left panel shows fade-in 100 ms and fade-out 100 ms."
+    },
+    "13350e80b23d0f1a229ea1d47690ff67dc964d19cd68ff49fa509bdb1cdce03a": {
+      "source": "a a：总时长 1 秒，F0 控制值 150 Hz，常态浊声，淡入 30 ms、淡出 80 ms。",
+      "translation": "a a: total duration 1 second, F0 control 150 Hz, modal voice, fade-in 30 ms, fade-out 80 ms."
+    },
+    "0444034a2df4538f4cc34d8bcc7091b2aa39692a94c3e5ad7e56836f3dc7e5b3": {
+      "source": "同一 a a 序列与相同时长、F0，左栏淡入 30 ms 和淡出 80 ms，下方波形可对照包络变化。",
+      "translation": "Same a a sequence, duration, and F0, with fade-in 30 ms and fade-out 80 ms on the left; compare envelope changes in the waveform below."
+    },
+    "6746e93c143df939f0e3059fb0b370bae35dec0bc4123d1b1ae2b446a0049a22": {
+      "source": "保持相同试听音量，先比较两组波形的起止包络，再听每段 a 的进入和结束。淡化时间超过某一有声段长度时，程序将该次淡化截到段长，包络覆盖这整段。淡入和淡出的作用范围重叠时，两种包络相乘，整段可能明显减弱。",
+      "translation": "Keep playback volume equal, compare onset/offset envelopes, then listen to each a's entry and ending. If a fade exceeds a voiced segment's length, it is clipped to that length and spans the entire segment. When fade-in and fade-out overlap, their envelopes multiply, potentially weakening the entire segment substantially."
+    },
+    "e40623f87a0e0a7ae30ae02588fc08fa7e5374251c5b94104c0cb238f4aa6324": {
+      "source": "分界虚线表示元音和空格的分段位置。淡入、淡出调振幅包络，平滑点数则用于重新生成 F1–F3 的过渡曲线。相邻元音间没有静音时，元音分界线本身不会触发新的淡化；淡化也不延长有声段或调整段长权重。",
+      "translation": "Dashed boundaries mark vowel/space segments. Fades adjust amplitude envelopes; smoothing points shape regenerated F1–F3 transitions. Without silence between adjacent vowels, their boundary alone triggers no new fade. Fades do not extend voiced segments or alter duration weights."
+    },
+    "8b2d331d465c41a3cd93f1aab67762ab328b771494003cc525e04a330a295222": {
+      "source": "应用发声预设",
+      "translation": "Apply phonation presets"
+    },
+    "a398e15ee022692cf3c1f18eb158fb09d0b47f169df7f223cf52f2fab30c6539": {
+      "source": "顶部选择发声类型，点击<s id=\"0\">应用预设</s>，再点<s id=\"1\">应用并覆盖</s>。只改变选项不会应用，初始常态浊声也未自动采用。应用会覆盖 AV、AH、HNR、Slope、H1H2、SHR、Jitter、Shimmer，可在此基础上继续编辑。",
+      "translation": "Select a phonation type at the top, click <s id=\"0\">Apply preset</s>, then <s id=\"1\">Apply and overwrite</s>. Selecting alone does not apply it, and initial Modal voice is not automatically adopted. Application overwrites AV, AH, HNR, Slope, H1H2, SHR, Jitter, and Shimmer; editing can continue afterward."
+    },
+    "2392bff94917a4388348e4085c08deb1bec381f6ed19ce2cf61bbe15f80156a4": {
+      "source": "气声预设应用前出现覆盖确认；取消保留配置，应用并覆盖才会采用该预设。",
+      "translation": "Breathy voice preset overwrite confirmation: Cancel retains the configuration; Apply and overwrite adopts the preset."
+    },
+    "923f354050204b67532518b52cf992896a6dec7509ed3683b2ff7d87d95933b5": {
+      "source": "气声预设的覆盖参数确认对话框，显示保留 F0 曲线形状及两个操作按钮。",
+      "translation": "Breathy voice-preset confirmation dialog showing that the F0 curve shape is retained and two action buttons."
+    },
+    "fac21b2c03fd51c1d7616099727bf7cfcda91e0e1c40463e5072a1bfc41dac59": {
+      "source": "确认后预设会覆盖相关曲线，保留当前设置时按取消。",
+      "translation": "Confirmation overwrites related curves; choose Cancel to retain current settings."
+    },
+    "27f6f88e181f787d803d2fd3a0683ac28610e13b8730b615a76cb768cb0ba8bf": {
+      "source": "发声预设的主要差异",
+      "translation": "Main differences between phonation presets"
+    },
+    "32feb62cecc6d30c57970f2375eaa2f400678b410fd0a02ff7032adafb4fa081": {
+      "source": "预设",
+      "translation": "Preset"
+    },
+    "199a9a678e01459b337adc0abe146a70e847074066a884a143922a55b5ad9953": {
+      "source": "主要声源控制",
+      "translation": "Main source controls"
+    },
+    "49484d3ed8c190acadc76f0dc8809cda7cb0bf7d5763d228ea369169408353f3": {
+      "source": "F0 变化",
+      "translation": "F0 change"
+    },
+    "34217557739a3a595ffd32875093c12b64291118e7bb1fc76737ff6ca70abb14": {
+      "source": "常态浊声",
+      "translation": "Modal voice"
+    },
+    "0d39fa0f1b7293e160ad87d3a7bc5685ca93c7dfde2b04e7227bac4d58691d7a": {
+      "source": "使用基础曲线。",
+      "translation": "Uses the baseline curve."
+    },
+    "686566aaecb124e60c9bac57f305c645e1839f66c3b4b77b5568f1bfac0ee862": {
+      "source": "耳语",
+      "translation": "Whisper"
+    },
+    "8c2918571d7df10ec199b39767421728cadaf4a1dda466893e5ea8e3e7948329": {
+      "source": "AV0、AH40，其余同常态，Jitter0%",
+      "translation": "AV0, AH40, otherwise modal, Jitter0%"
+    },
+    "cce18497a718af64fe6e0ca48b151b2cf050e6709d2ab2ff351226dc023f0de2": {
+      "source": "使用基础曲线，周期声源关闭。",
+      "translation": "Uses the baseline curve; periodic source off."
+    },
+    "2164ba2f828f558eae2db45bc1659fdf5728af0fa207aa7db166e7e1bc4f7b00": {
+      "source": "气声",
+      "translation": "Breathy voice"
+    },
+    "c7abac3af89a41863ea04aa61db86eb0ee0357fbc2127baa6e9c605efc75837c": {
+      "source": "AV65、AH35、H1H2 10，其余同常态，Jitter0%",
+      "translation": "AV65, AH35, H1H2 10, otherwise modal, Jitter0%"
+    },
+    "11daf93c64ab45c9c2c90b10b7030632f6e197a01ad650dc12e8726f52b6c4c1": {
+      "source": "嘎裂",
+      "translation": "Creaky voice"
+    },
+    "d10a3dad387f79371b5d2214cdb4ff477c180e01b3097404e109a1cca7fa9a04": {
+      "source": "AV70、AH0、H1H2−10、SHR0.8、Jitter3%，其余同常态",
+      "translation": "AV70, AH0, H1H2−10, SHR0.8, Jitter3%, otherwise modal"
+    },
+    "418fc8d985d10c142cfc0a53ec33792ff9dce166aaec1741a05ad940e30ef4ba": {
+      "source": "整体下移，目标均值约 70 Hz，最低点保护约 20 Hz。",
+      "translation": "Shifts down overall; target mean about 70 Hz, minimum-point protection about 20 Hz."
+    },
+    "583755756ec302bee8590f7984be89dfaafd5d1262d164e110058177cef5bf4f": {
+      "source": "假声",
+      "translation": "Falsetto"
+    },
+    "c33c4e6551d6c3e0e67a3513ff348c5f8f34f6bad0cfbd9de8262f05e2d965f7": {
+      "source": "AV70、AH0、Slope−15，其余同常态，Jitter0%",
+      "translation": "AV70, AH0, Slope−15, otherwise modal, Jitter0%"
+    },
+    "fcba6f19bfdc1ff6c9e46e98ddefda50e15e94b403adf86296a0066a6512b4ad": {
+      "source": "整体上移，目标均值至少约 300 Hz。",
+      "translation": "Shifts up overall; target mean at least about 300 Hz."
+    },
+    "7ac20df2d1474f144fc999abd5b73a85b49d4a3f519aa4aabb47c44270b87bb3": {
+      "source": "再听同一 a 元音规则的气声预设。确认 F1–F3 仍为 730、1090、2440 Hz 后，应用气声预设，保留 F0 控制值 150 Hz 和 0.8 秒时长，再点击合成音频。可与上面的常态浊声 a 对照，留意噪声和音色变化。应用预设后可继续编辑相关参数，每次修改后需重新合成。",
+      "translation": "Now listen to the breathy voice preset with the same a vowel rule. Check F1–F3 remain 730, 1090, and 2440 Hz, apply Breathy voice, retain F0 control 150 Hz and duration 0.8 seconds, and synthesize again. Compare against the modal a above for noise and timbre. Related parameters remain editable after applying a preset; resynthesize after every change."
+    },
+    "4e5d1c0ac70ffb7c15c4ee2db238ae7ce716fc54e7019755296da02d675c92cd": {
+      "source": "a 的气声预设：F1/F2/F3 控制值 730/1090/2440 Hz，F0 控制值 150 Hz，时长 0.8 秒。",
+      "translation": "Breathy voice a: F1/F2/F3 controls 730/1090/2440 Hz, F0 control 150 Hz, duration 0.8 seconds."
+    },
+    "7d15ed3d715b6bd89d7458bb8687110a7a9019d53f5e4f6bd7d170e8d5a45147": {
+      "source": "同一 a 元音规则，应用气声预设，F0 150 Hz；预设只是可编辑起点。",
+      "translation": "Same a vowel rule with Breathy voice applied and F0 150 Hz; the preset is an editable starting point."
+    },
+    "68dc0f2ed5c9b2c0041291687e9e6b8f82da7e531ce9b6ed340e1f017924a1d0": {
+      "source": "假声和嘎裂保留 F0 形状，重复应用同类不累加平移。切回其他类别撤去偏移，期间的编辑仍保留。范围保护可能限制目标均值。要手绘预设参数，先清除对应常量覆盖。",
+      "translation": "Falsetto and Creaky voice preserve F0 shape; repeated application of the same type does not accumulate shifts. Switching to other types removes the shift while retaining intervening edits. Range protection may constrain the target mean. Clear the relevant constant override before hand-drawing preset parameters."
+    },
+    "acdaf64ec3f30156d4a01c3b0bc7e2e06671b491fc99e537ccceaf8a57db0bc1": {
+      "source": "气声预设应用后选择 AH，覆盖框为 35 dB，全段为噪声源常量。",
+      "translation": "After Breathy voice, selecting AH shows override 35 dB, a constant noise source across the entire duration."
+    },
+    "a43c9f1552f83a8e42bf6ea4985fbab674caf4bcf423692dc3380eb8d3fea5e9": {
+      "source": "气声预设已应用，AH 按钮选中，曲线覆盖为 35，主图显示全段水平线。",
+      "translation": "Breathy voice applied, AH selected, override 35, and a full-duration horizontal line in the main plot."
+    },
+    "7901dc9113d77a19de39ed647833d7a2497c11908a68ee5cab65f756ad2b9799": {
+      "source": "例如气声应用后，选 AH 可看到 35 dB。预设只是编辑起点，合成后请试听并检查输出。",
+      "translation": "For example, selecting AH after Breathy voice shows 35 dB. Presets are editing starting points; listen and inspect the output after synthesis."
+    },
+    "838ca6a3c8d3067a1cc616c52248b1493aea11140d3d88b6a75ca6163c5d0d7b": {
+      "source": "生成新的合成结果",
+      "translation": "Generate a new synthesis result"
+    },
+    "1ce42cc632e44a90943aa11d62c7180d2268493a4a854acb5287876fe3a42334": {
+      "source": "确认时长、F0 范围和曲线覆盖已应用，淡入淡出等数值有效。",
+      "translation": "Confirm duration, F0 range, and curve overrides are applied and fades and other values are valid."
+    },
+    "f82633729b760a058c2adfff22d5345272cc7b7762a7d4aecc703e12d418196f": {
+      "source": "点击右栏<s id=\"0\">合成音频</s>，等待合成完成。无需已有 IPA 序列，只要当前完整配置合法即可合成。",
+      "translation": "Click <s id=\"0\">Synthesize audio</s> on the right and wait. An IPA sequence is unnecessary if the current complete configuration is valid."
+    },
+    "806a87c01a576b13dda81ae6b2eecc940af440a6c0ce34e55d8b6158ded7c042": {
+      "source": "若提示输出超过安全幅度，程序已整体衰减，衰减量随结果记录。切换合成结果查看和试听。",
+      "translation": "If output exceeds safe amplitude, the app attenuates it globally and records the attenuation with the result. Switch to Synthesis result to inspect and listen."
+    },
+    "fb6265e3db8024a5906890104af30d1b33b0481d338275c0cfa1f3da5b68df43": {
+      "source": "将录音提取曲线转成音频",
+      "translation": "Convert extracted curves to audio"
+    },
+    "f4eb79f4a52167480c6d8a091e4e8d0c1cb307e9810ce619d99f3ca48e70299a": {
+      "source": "采用录音提取起点时，按需要编辑后直接点击合成音频即可。<s id=\"0\">不用再生成元音</s>，否则会替换提取后的共振峰等曲线。",
+      "translation": "Starting from recording extraction, edit as needed and click Synthesize audio directly. <s id=\"0\">Do not generate vowels again</s>; doing so would replace extracted formant curves and related data."
+    },
+    "7dafd1026279827a501fdfcb318be6916dbd71161bf7782002a545eaf43c253d": {
+      "source": "从短 WAV 提取参数并显式合成后，中栏显示结果波形，右栏显示合成完成。",
+      "translation": "After extraction from a short WAV and explicit synthesis, the center shows the result waveform and the right reports Synthesis complete."
+    },
+    "c709fbe06abf7f2762dd522f15d02777dd611bc7d8fddb9f9d9aa96feffc047f": {
+      "source": "最大化工作台显示提取后 F0 与 Klatt 合成波形，导出音频可用，右栏显示合成完成。",
+      "translation": "Maximized workbench showing extracted F0 and the Klatt waveform, Export audio available, and Synthesis complete on the right."
+    },
+    "75faee907117542702128da28de9b121f6a50cca7d928e240d055e7ee621a2c8": {
+      "source": "对比试听并保存",
+      "translation": "Compare by listening and save"
+    },
+    "5f3a5d855c1e6f6c4a1bd7e17ae57b41de875da045a15fdd08d7cd872f5afc41": {
+      "source": "比较源音和合成结果",
+      "translation": "Compare source and synthesis result"
+    },
+    "a594c0ea81788bf8e02ef4e308f16bed180cc1e60993ac65e253e397f24d2730": {
+      "source": "中栏选择<s id=\"0\">源音频</s>或<s id=\"1\">合成结果</s>，切换波形/语谱图。源波形加载后可用，源语谱图须提取成功。",
+      "translation": "Select <s id=\"0\">Source audio</s> or <s id=\"1\">Synthesis result</s> in the center and switch waveform/spectrogram. Source waveform is available after loading; source spectrogram requires successful extraction."
+    },
+    "3289f0e2333d7edf7e7c438937691badf23d0288862804dd3f57dbb209b03958": {
+      "source": "语谱图窗长可选 5、10、20、40 ms，默认 20 ms。短窗便于看快速时间变化，长窗通常更易看频率细节，这只改变显示。",
+      "translation": "Spectrogram window lengths are 5, 10, 20, and 40 ms; default 20 ms. Short windows show rapid timing changes, while longer windows usually reveal frequency detail better. This changes display only."
+    },
+    "c2facfad1f08109a6b5a7caf0911d6b797310beddfc3283a0121ac45986c0974": {
+      "source": "切到波形拖出播放选区，或填写底栏起点/终点，点击播放选区。点全部试听完整音频。源音和结果各自保留选区，切换时重新确认。",
+      "translation": "In Waveform, drag a playback selection or enter bottom start/end times and click Play selection. Click All for full audio. Source and result retain separate selections; recheck when switching."
+    },
+    "949c6a6835c0d63495b2454bcb53d30c2d070f0ddcc839508cc5db4fdc7d4b9e": {
+      "source": "提取完成后切到源语谱图，窗长为 20 ms；顶部算法与左栏 F0 范围仍供下次提取使用。",
+      "translation": "After extraction, Source spectrogram with window 20 ms. The top algorithm and left F0 range still control the next extraction."
+    },
+    "15af9233655c7de10ce3d48511273a920130807f90ed836a90e1feb97b10185d": {
+      "source": "最大化工作台中源语谱图和提取 F0 同时显示，窗长下拉为 20 ms，右栏为参数提取完成。",
+      "translation": "Maximized workbench with source spectrogram and extracted F0 together, window dropdown 20 ms, and extraction-complete status on the right."
+    },
+    "119bb4c28938569b0347f4b0015827e802e97a0c5d14acc43184e8f1f9a00643": {
+      "source": "先听原音，再听由同一原音实际提取、合成的 Klatt 结果，留意音高轮廓、元音音色和噪声差异。下列 MP3 是试听副本，声音结果可能与原音明显不同。",
+      "translation": "Listen first to the original, then the Klatt result actually extracted and synthesized from it. Note pitch contour, vowel timbre, and noise differences. The MP3s below are listening copies; the result may sound substantially different from the original."
+    },
+    "3e9f60960f48479f389ab2582c105a4ec3ad6ccddb60419a27fe4af829ecb696": {
+      "source": "原音：作者指定的自然单音节录音。",
+      "translation": "Original: author-designated natural monosyllabic recording."
+    },
+    "4288b8fef6c127163894576f70a95576d28293bbfa8c8df9d7e47382749d621f": {
+      "source": "Klatt 结果：由上述同一自然单音节提取参数后实际合成，供听辨差异。",
+      "translation": "Klatt result: actually synthesized after parameter extraction from the same natural monosyllable above, for auditory comparison."
+    },
+    "443852f47a00fc610c5c3351be33747d223c4aa2e22df850f2adbd3f89dd2e49": {
+      "source": "需要比较 A/B 设置时，先导出 A，再修改一项、重新合成并导出 B。试听音量仅影响播放，波形幅度会自动适配视野，研究幅度差异请分析保存的 WAV。",
+      "translation": "To compare A/B settings, export A first, modify one item, resynthesize, and export B. Playback volume affects listening only. Waveform amplitude automatically fits the view; analyze saved WAVs for amplitude research."
+    },
+    "78dfcfe01da8bad6b35dceb99322007676b090954f9878cfd3b29bbd3b09922c": {
+      "source": "保存音频及对应参数",
+      "translation": "Save audio and matching parameters"
+    },
+    "6910de9ec8b8fcbc42c0e47c7ee495ea08b607548f7e522d43a9f02453133a72": {
+      "source": "确认合成成功。<s id=\"0\">出现参数已修改提示时，试听和音频导出仍对应旧结果。需要当前参数的声音，请先重新合成。</s>",
+      "translation": "Confirm synthesis succeeded. <s id=\"0\">When Parameters modified is shown, playback and audio export still use the old result. Resynthesize first for audio from current parameters.</s>"
+    },
+    "078dcabccbd70a3da91f7ef3f4b8d4c9f0763a2edefadb84ddc693024e095ab3": {
+      "source": "点击右栏<s id=\"0\">导出音频</s>，桌面选择目录，保存 <s id=\"1\">synthesis.wav</s>、<s id=\"2\">m06.ptb.json</s>、<s id=\"3\">parameters.csv</s> 三件套。",
+      "translation": "Click <s id=\"0\">Export audio</s> on the right. On desktop, choose a directory to save the three-file set: <s id=\"1\">synthesis.wav</s>, <s id=\"2\">m06.ptb.json</s>, and <s id=\"3\">parameters.csv</s>."
+    },
+    "f2fbc4542a2b3184a3c6d725d5312e78499f3aec60b1967c88bad012c7c6b95c": {
+      "source": "三份文件一起保留。同名同内容会复用，不同内容会加前缀保护已有文件，核对实际文件名。取消或保存失败不会清空结果，可更换可写目录重试。",
+      "translation": "Keep all three together. Same-name identical content is reused; differing content gets a prefix to protect existing files. Check actual filenames. Cancelled or failed saving does not clear results; retry in a writable directory."
+    },
+    "cc85dc357d93c728c878b5f03628b45cf1645a21e4dbe2ab52ad266211c247da": {
+      "source": "桌面目录保存完成后，右栏显示已导出合成结果；展开任务状态可查看结果标识与随机种子。",
+      "translation": "After desktop-directory saving, the right reports Synthesis result exported. Expand task status to inspect the result identifier and random seed."
+    },
+    "50d04a7c950b632576019f04aef3dd129008a0a247133ad77142e1e9c8eb9022": {
+      "source": "最大化工作台中导出成功提示、展开的任务结果标识与随机种子以及合成波形可见。",
+      "translation": "Maximized workbench showing export success, expanded task result identifier and random seed, and synthesized waveform."
+    },
+    "b3e87851e6639af69e24eed75618af2457fb3988a800f4e50b5ce068a649d692": {
+      "source": "WAV 为实际单声道 PCM16 输出，JSON 记录该次配置、随机种子和诊断，CSV 对应该次合成。界面没有种子输入框，重复合成可能得到不同波形。网页导出音频只下载 WAV，目录和重名规则由浏览器管理。",
+      "translation": "WAV is the actual mono PCM16 output; JSON records that configuration, random seed, and diagnostics; CSV corresponds to that synthesis. There is no seed input, and repeated synthesis may produce different waveforms. Web audio export downloads WAV only; browser rules govern directory and name collisions."
+    },
+    "06eb668b9dcd9d8cfe49ad1750fdf245f11bb3eac0158649e2f3915b8e9fb3e6": {
+      "source": "另存当前编辑参数",
+      "translation": "Save current parameter edits separately"
+    },
+    "6879c9d8827264a6e0265d450c17ea9837d8a698a498e58e7652d825ba1c06d9": {
+      "source": "应用待修改的时长、F0 范围和覆盖，点击顶部<s id=\"0\">导出参数</s>，保存 <s id=\"1\">声学参数合成参数.csv</s>，无需先合成。",
+      "translation": "Apply pending duration, F0 range, and overrides, then click <s id=\"0\">Export parameters</s> at the top to save <s id=\"1\">声学参数合成参数.csv</s>. Synthesis is not required first."
+    },
+    "976fbd9b1667d7ef55f32e61cd3313179b457a98772c166503eb1d9aac7d812b": {
+      "source": "继续编辑时点<s id=\"0\">导入参数</s>，选择完整 CSV 或 JSON，检查确认窗后点<s id=\"1\">应用并覆盖</s>。导入只恢复配置，之后还须重新合成。",
+      "translation": "To continue editing, click <s id=\"0\">Import parameters</s>, choose a complete CSV or JSON, inspect the confirmation, and click <s id=\"1\">Apply and overwrite</s>. Import restores configuration only; synthesis is still required."
+    },
+    "b65adf9c576468ef95e9b7bb867f703e57c1c2703e7c3b2cfeb478766ef3a01e": {
+      "source": "完整 CSV 回读后恢复提取曲线，已生成 WAV 仍保留，右栏提醒音频对应旧结果。",
+      "translation": "Reimporting complete CSV restores extracted curves while retaining the generated WAV; the right warns that audio corresponds to an old result."
+    },
+    "3908b73f3d006100b97d8499a1b6e7a7b8c95c90bb5ab8b69877d5a91ac2edaa": {
+      "source": "完整参数 CSV 导入后恢复 F0 点曲线，旧合成波形保留，右栏显示参数已修改需重新合成。",
+      "translation": "Complete parameter CSV import restores F0 points and retains the old synthesis waveform; the right says parameters changed and resynthesis is required."
+    },
+    "f4348260005c39a12f84ad575a48c1ddff64431acfdf9f0399652d144204b215": {
+      "source": "<s id=\"0\">当前参数导出包含现有编辑；归档旧 WAV 时请保留它自带的 parameters.csv。</s> 完整 CSV 的 <s id=\"1\">__PTB_CONFIG__</s> 行用于恢复配置，只修改普通参数行不会改变重新导入的曲线。请保留整份导出文件。",
+      "translation": "<s id=\"0\">Current parameter export includes present edits; when archiving an old WAV, retain its own parameters.csv.</s> The complete CSV's <s id=\"1\">__PTB_CONFIG__</s> row restores configuration; editing ordinary parameter rows alone does not change reimported curves. Keep the whole export."
+    },
+    "0fe9a98bcf30b3c163c7e49ce8d766cf7fde0e9cab50381e97c6f56de6b90c0e": {
+      "source": "保存草稿，下次继续",
+      "translation": "Save a draft to continue later"
+    },
+    "060f7165b8e1b9d596c293f6590030327a31fedb92c91281f6683a188d7d879c": {
+      "source": "点击<s id=\"0\">保存参数草稿</s>，下次进入同一工作区恢复编辑。草稿不保存源音频和上次 WAV，需重新选择源或重新合成。网页设置恢复会同步缩放曲线并恢复一致的 F0 平移状态；跨设备或独立归档完整曲线请另存参数和结果。网页合成结果保存失败时，可点重试保存结果，复用本次计算，不重复合成。待保存结果保留在当前页面，重试前请保持页面打开。关闭未保存标签时可选择保存、放弃或取消，保存失败会保留页面。",
+      "translation": "Click <s id=\"0\">Save parameter draft</s> to restore editing next time in the same workspace. Drafts contain neither source audio nor the last WAV; reselect the source or resynthesize. Web settings restoration scales curves and restores consistent F0-shift state. Save parameters and results separately for cross-device use or independent full-curve archives. If saving web synthesis results fails, Retry saving result reuses the current computation without resynthesis. Pending results stay on this page; keep it open until retry. Closing an unsaved tab offers Save, Discard, or Cancel; save failure retains the page."
+    },
+    "41808953d55c8190ee0d0fd2d08a9b315df442ad7dedb095ee32f375fca9bbcf": {
+      "source": "读取旧参数",
+      "translation": "Read older parameters"
+    },
+    "dc339f0e3e38a7903305b120cf09f5e5e78868542fec335f18bc3668c72aec9a": {
+      "source": "旧 m06/2 缺 F0 算法时采用 CC，旧 Klatt 配置可读。旧 m06/1 的 AV 标尺、缺完整快照的旧 CSV，以及已移除方法或 Harvest 的配置会被拒绝。保留原文件，重新提取或使用当前 Klatt 参数，勿靠删版本字段强行导入。历史四文件结果可保留，当前新结果为三件套。",
+      "translation": "Old m06/2 without an F0 algorithm uses CC; older Klatt configurations are readable. Old m06/1 AV scales, legacy CSVs without a complete snapshot, and configurations using removed methods or Harvest are rejected. Keep originals and reextract or use current Klatt parameters; do not force import by deleting version fields. Historical four-file results can be retained; new results use a three-file set."
+    },
+    "bf1361df12281bdc4ebb0530618df7180fe2c126b1b6affcba44182f9c8339b5": {
+      "source": "多份材料与任务速查",
+      "translation": "Multiple materials and task quick reference"
+    },
+    "9c7a79990cf74d8ebc7d5e3d1c5fe217f0e7c42a02c906380d981dda88c3b276": {
+      "source": "逐份生成和归档",
+      "translation": "Generate and archive one material at a time"
+    },
+    "17afd2468734bfcdef69ffbe7ff27b4edd3a903d1698112275c65839963e4ac4": {
+      "source": "需要多份材料时，逐份选择录音或导入配置、检查参数、合成，再按材料和设置分目录保存。每份 WAV 使用自己的 JSON/CSV，完成一份后再继续下一份。",
+      "translation": "For multiple materials, select a recording or import configuration, inspect parameters, synthesize, and save in directories by material and settings. Each WAV must use its own JSON/CSV. Finish one before continuing to the next."
+    },
+    "8cf049a0a852b63c13df0442380fe0ae372048f227f1d57c26e39509a7bf16ae": {
+      "source": "文件与参数的常见操作",
+      "translation": "Common file and parameter actions"
+    },
+    "5c823f52a4ce7c6199ead7355c7307735fd675181556a063f016a0b4b3707ec2": {
+      "source": "需要做什么",
+      "translation": "Goal"
+    },
+    "c55d1187aef2a33df745bd9d48ef45086624c3ef405941729054cc6d1d22f40e": {
+      "source": "使用哪个操作",
+      "translation": "Action to use"
+    },
+    "a5d64181e7d6cd4fa7ae48ef1e2b9402717b84d8669c66d0684f0514ada0d277": {
+      "source": "换录音",
+      "translation": "Change recording"
+    },
+    "085ca24be7312dd57f7e95b08103c60c4ff2abb7a73315482467a04fb1138b81": {
+      "source": "打开音频目录或加载音频，再从左栏选择。文件变化后刷新并重选。",
+      "translation": "Open audio directory or Load audio, then select on the left. Refresh and reselect after file changes."
+    },
+    "ddfccdbebbfa2f76bc0ec35d87ff49519fce1762c6853df124eefe99830e6bdd": {
+      "source": "换提取算法",
+      "translation": "Change extraction algorithm"
+    },
+    "59626430b91aa5aa18637053c15dd1fbacbe5e636d26d55a4b5b328101c7cd0a": {
+      "source": "顶部 F0 算法，再点击提取参数。",
+      "translation": "Choose F0 algorithm at the top, then Extract parameters."
+    },
+    "836d4c274952502a96efc5b813a173d0542cece9c0471895e2683748b2f84b2a": {
+      "source": "接着修改旧配置",
+      "translation": "Continue editing an old configuration"
+    },
+    "c15ca417a3ff11215a181c7c58be171517441cbe32258efe38c20a6f2e67dfd1": {
+      "source": "导入参数，或进入同一工作区恢复已保存草稿。",
+      "translation": "Import parameters or return to the same workspace to restore its saved draft."
+    },
+    "9ad050f9908a96722eef2ce1b6b64c22ba00df0259e1995921f776b86fa528cd": {
+      "source": "查方法或操作",
+      "translation": "Find methods or instructions"
+    },
+    "8f73f33b5af1d31d65ae17e8c7184afd7cab8a388f34b690f5d883d2ac53c81f": {
+      "source": "顶部方法与引用、帮助。",
+      "translation": "Methods and references or Help at the top."
+    },
+    "748586f98ea3707bac5bbc9897407e191a57b655e53eeb11f3ceeca9b9a08f68": {
+      "source": "任务状态与历史结果",
+      "translation": "Task status and historical results"
+    },
+    "50405efed8d30d4eda65002ae07736ee5485c63ebd796032b9035a0fe1b4dd76": {
+      "source": "展开右栏<s id=\"0\">合成任务状态</s>查看进度、结果标识和随机种子。页面只保留最后一次采用的结果，没有多结果历史切换列表。需要保留多个版本时及时导出，重新导入旧参数可以再次合成。",
+      "translation": "Expand <s id=\"0\">Synthesis task status</s> on the right for progress, result identifier, and random seed. The page retains only the last adopted result, with no multi-result history switcher. Export promptly to keep multiple versions; reimporting old parameters allows synthesis again."
+    },
+    "4ef4c967219d8eacb29720298acb207802f25b4af96955b10afaf7ac109cceca": {
+      "source": "任务与结果处理",
+      "translation": "Handling tasks and results"
+    },
+    "da74047b39cbe839bc05c43c2c7a2d0b6ca021520a3f0bbf197e64b2dafeb856": {
+      "source": "状态",
+      "translation": "Status"
+    },
+    "d14e4431a26a03a1460ebe2a0a96651caf98b3bdd3f83f14f5260fbcc64fdaf4": {
+      "source": "下一步",
+      "translation": "Next step"
+    },
+    "9e796b2efbba3269012c2f42dba9f18eabdca1addc1e81104d1b3d77e73f4b2e": {
+      "source": "正在运行",
+      "translation": "Running"
+    },
+    "ee32ab37032dca1e03215f199ba08a6904777b7d5ab007fdb7e61b9cf9144fc5": {
+      "source": "可点击取消任务，等待收尾后再提交。",
+      "translation": "Click Cancel task and wait for finalization before submitting again."
+    },
+    "2c5a328a00e3c528d07a15d003635b1901d69bec443309200eb6b8d0413dda86": {
+      "source": "运行中又修改参数",
+      "translation": "Parameters edited while running"
+    },
+    "d12a88aea2d8bd28e28b8f82ed3a76f8e70a8e0e432c0d0950c9cb284efd406d": {
+      "source": "完成的迟到结果不会自动替换当前编辑，按最终配置重新合成。",
+      "translation": "Late completed results do not automatically replace current edits. Resynthesize using the final configuration."
+    },
+    "932ec773a5148f97520dbc3627855d1d546b6f09aa3ff4b371e5ff03d8bf8da5": {
+      "source": "失败或取消",
+      "translation": "Failed or cancelled"
+    },
+    "b6f90fbab0e56ead6750f76a5b83e90a85288e0d51fa99bf797fc84b212203aa": {
+      "source": "当前配置与此前结果保留，查看错误并修正输入后重试。",
+      "translation": "Current configuration and previous results remain. Inspect the error, correct input, and retry."
+    },
+    "79ac8eb11c464270ea17889bad373292b225d187bf89c773b6e4d7221055080e": {
+      "source": "底栏试听快捷操作",
+      "translation": "Bottom-bar listening shortcuts"
+    },
+    "17c846b3f9aa56fc263168d27c5929c9cbb15285ba7cf9167a2d454b28e2e625": {
+      "source": "播放栏操作",
+      "translation": "Playback-bar actions"
+    },
+    "9aa63f70b1e8caf291767d2f441a4ef74eaf92208e1721fa1d21d3f44f8b05bc": {
+      "source": "控件",
+      "translation": "Control"
+    },
+    "47a203a189364f43c07bf00b9a288b2546655b26b6c470763f794eb3054fe3c4": {
+      "source": "用途",
+      "translation": "Purpose"
+    },
+    "96b5e3693c18c65b944a9754d81857ef33ac48fdb9f1762ada6137aed99fbacb": {
+      "source": "起点、终点",
+      "translation": "Start, end"
+    },
+    "5bda60753d26a78fc30c432cecfc737523ebdffa0442c3cbd9f4f212b48d6958": {
+      "source": "设置试听区间，不裁切源文件或导出的 WAV。",
+      "translation": "Set playback range; neither source files nor exported WAVs are trimmed."
+    },
+    "468816d066bc12b4432c1ff43a84a92ccecf1de25b9cc9f1b88172bb1edb9650": {
+      "source": "全部",
+      "translation": "All"
+    },
+    "a056e5116156ae7b9598f4828c6da8d903ed0acb372bb5d699e5dc66592e2ac1": {
+      "source": "选择当前音频全段，不复位图窗缩放。",
+      "translation": "Select all current audio without resetting plot zoom."
+    },
+    "f9dc27273e2dd47a978f0f1e8a52c732141d33105d210ec2188d6a19130bda10": {
+      "source": "播放选区、暂停、停止",
+      "translation": "Play selection, Pause, Stop"
+    },
+    "fd2a9e0848347d032a6de77738892d9e6f6ed1575461ffd80b3c807f101d899d": {
+      "source": "在选区内播放，暂停继续或停止。无音频或空选区时无法播放。",
+      "translation": "Play within the selection, pause/resume, or stop. Playback is unavailable without audio or with an empty selection."
+    },
+    "ec275e9525506ff1ef0ae4501a0f33a8e9e3c9b9e031026b4221e875545b0922": {
+      "source": "播放进度",
+      "translation": "Playback position"
+    },
+    "0cf937975f73e3b46cc01eb3ad193831e665ff492a242a98e6267f53121f8b12": {
+      "source": "拖动定位选区内时刻。",
+      "translation": "Drag to a time within the selection."
+    },
+    "4b0a460dcb5bfc76195327491e0df13f5b8c43af2cd04be4edc0ade4f6c72f1b": {
+      "source": "播放音量",
+      "translation": "Playback volume"
+    },
+    "e21b5dd2c444f83d76db6aaeddd4977f40d48cda49d248afdc503c7d2ca8787e": {
+      "source": "初始共享值 70%，只调试听增益。",
+      "translation": "Initial shared value 70%; adjusts listening gain only."
+    },
+    "c596f4afac9a175da5f6d07557b997b7e4c42ae63cad28a1a47ca2f3acc476e4": {
+      "source": "空格键",
+      "translation": "Space key"
+    },
+    "fee4b6620493872b3b69ee3c9f274383d5022e4df8f2b5c03ed9b7045f6fe80a": {
+      "source": "图窗等非输入区域可用空格播放/停止，按钮和链接保留自身键盘操作。输入框可正常输入空格；弹窗打开时本章底栏不响应。",
+      "translation": "In plots and other noninput areas, Space plays/stops; buttons and links retain their own keyboard actions. Text inputs accept normal spaces. This chapter's bottom bar does not respond while a dialog is open."
+    },
+    "ad862f273dc02d1d958a5fb6b3eb048cc11c69ae13efd9c24f5ffdc4dce84a31": {
+      "source": "遇到提示时怎样继续",
+      "translation": "How to continue after a message"
+    },
+    "25b18d3dadb6f0bb6c58acc0c456fc6981217421c85d3e8aaa3dea04c60c790e": {
+      "source": "加载与输入",
+      "translation": "Loading and input"
+    },
+    "a8ce54ef3bbde58591d19d9a5f1cef28c8fa208f7e542736bd83c2a4936fb6d2": {
+      "source": "<s id=\"0\">提取按钮禁用</s>：确认 WAV 已选中且加载完成，当前没有任务。仅有波形时仍须点提取。文件变化后刷新并重选。",
+      "translation": "<s id=\"0\">Extract disabled</s>: confirm WAV selection and completed loading, with no current task. Even with a waveform, click Extract. Refresh and reselect after file changes."
+    },
+    "68776a2dbe9e4acd4709b356f2d5596819d61f1e71d7b7d3da572046a3b87dfa": {
+      "source": "<s id=\"0\">请先应用时长、F0 范围或覆盖</s>：点对应应用按钮。覆盖不需要时点清除覆盖。非法表达式按提示修正。",
+      "translation": "<s id=\"0\">Apply duration, F0 range, or override first</s>: click the corresponding Apply button. Clear override if unnecessary. Correct invalid expressions as instructed."
+    },
+    "6be452553b78992fbe13ff0537c1bb95bead736e843506efa3e4c403d2bcba63": {
+      "source": "<s id=\"0\">请先清除覆盖</s>：当前参数是全段常量，取消覆盖后才可手绘。序列覆盖已替换曲线，恢复旧曲线需导入先前配置。",
+      "translation": "<s id=\"0\">Clear override first</s>: the parameter is a full-duration constant. Clear it before drawing. Sequence overrides have replaced curves; import an earlier configuration to restore old curves."
+    },
+    "e4c4f38d5af94f646333e5695ff5fcfb23b391a8d997b2adabf80f465a83f798": {
+      "source": "<s id=\"0\">IPA 字符无效</s>：按提示位置核对规则表符号、普通空格和 ASCII 修饰符。复制失败时在规则窗选中文字后按 Ctrl+C。",
+      "translation": "<s id=\"0\">Invalid IPA character</s>: inspect the indicated position for rule-table symbols, ordinary spaces, and ASCII modifiers. If copy fails, select the text in the rules dialog and press Ctrl+C."
+    },
+    "72d5c0f906a0b2e3ede92439f0f70641a3e5d72acf4d3d10a93a14332ec9c9b1": {
+      "source": "<s id=\"0\">换了 IPA 却仍听到相近的元音</s>：先查看 F1–F3 是否已更新到目标规则值。只填写 IPA 会保留已有曲线，须生成元音成功后再合成。检查当前预览是否为合成结果，并确认已出现新的合成完成提示。",
+      "translation": "<s id=\"0\">Similar vowel after changing IPA</s>: first check F1–F3 updated to the target rule values. IPA text alone retains existing curves; generate vowels successfully, then synthesize. Check the current preview is Synthesis result and a new synthesis-complete message appeared."
+    },
+    "41c96fb02886078c255851da55f5f4a11d5f1ddf5198caee1f7351500b25f4db": {
+      "source": "提取与合成",
+      "translation": "Extraction and synthesis"
+    },
+    "fe7f4b4abaf8ef0f27991fefcc827817d71f47a3a3f2520be007469035317ab6": {
+      "source": "<s id=\"0\">未检出有声帧或结果静音</s>：核对原音、F0 范围和算法，重新提取。检查 AV/AH 是否均为 0、静音段和淡入淡出。原始测得轨迹和有声掩码请查看提取结果记录。",
+      "translation": "<s id=\"0\">No voiced frames or silent result</s>: inspect original audio, F0 range, and algorithm, then reextract. Check whether AV/AH are both 0, silence segments, and fades. Consult extraction-result records for the original measured track and voicing mask."
+    },
+    "eb9f3a9bb7acb1edf5348b059f3d4ada4062988016c37912c0ddc3860655631f": {
+      "source": "<s id=\"0\">REAPER 不可用或失败</s>：核查环境，或明确选 Praat 后重试，程序不会自动换算法。",
+      "translation": "<s id=\"0\">REAPER unavailable or failed</s>: check the environment or explicitly select Praat and retry. The app does not switch algorithms automatically."
+    },
+    "e5d09290eed75a7807d817b522d6a8af52d709b00b353c2dcc853f76a9a090b9": {
+      "source": "<s id=\"0\">任务超限</s>：分别检查源文件、当前时长和采样率、参数文件大小，准备符合限制的短片段。播放选区不会代替切分。",
+      "translation": "<s id=\"0\">Task limit exceeded</s>: check source file, current duration and sample rate, and parameter-file size separately, preparing a short segment within limits. Playback selection does not replace splitting."
+    },
+    "f7231a7658631178eee21b785b3fe987130bcee83e43d51a206543a9fcd34d1d": {
+      "source": "<s id=\"0\">失败、超时或取消</s>：查看任务状态，等待收尾。此前音频保留，修正后重试。若配置已改变导致迟到结果未应用，按最终配置重新提交。",
+      "translation": "<s id=\"0\">Failure, timeout, or cancellation</s>: inspect task status and wait for finalization. Previous audio remains; correct and retry. If configuration changes prevented adopting a late result, resubmit the final configuration."
+    },
+    "9e13e00ab07899442b15adefee4433bb5cda40d5aff0a5d6620e701594955714": {
+      "source": "保存与恢复",
+      "translation": "Saving and restoration"
+    },
+    "ac05c4d276f18b7d7d6d7509fd952080711580d2e4e7fabaf812b9bb268d9e30": {
+      "source": "<s id=\"0\">旧结果提示</s>：重新合成后再保存新音频，或直接导出旧结果并保留其对应参数。",
+      "translation": "<s id=\"0\">Old-result message</s>: resynthesize before saving new audio, or export the old result directly and retain its matching parameters."
+    },
+    "497010f942a195f480714d1fa2805fa71aff845650f7afce49357bda23b622d3": {
+      "source": "<s id=\"0\">未保存或写入失败</s>：更换可写目录重试，检查实际文件名。",
+      "translation": "<s id=\"0\">Unsaved or write failure</s>: retry in a writable directory and check actual filenames."
+    },
+    "da0cf8ca99ae482ccd5e1782df5911ac75dd1ffdf4222e29dd7e5cd9077f13e0": {
+      "source": "<s id=\"0\">参数文件或草稿无效</s>：保留原文件，使用完整有效导出。草稿恢复失败时原存储保留并采用默认参数。保存草稿失败时先导出当前参数。",
+      "translation": "<s id=\"0\">Invalid parameter file or draft</s>: keep originals and use a valid complete export. Failed draft restoration retains original storage and uses defaults. If draft saving fails, export current parameters first."
+    },
+    "84358dcbeddfc61e7c79b8280a4fff417373f085bc657b04da778f1569042a69": {
+      "source": "方法与结果解释",
+      "translation": "Methods and interpreting results"
+    },
+    "db890cd4e8ab114f3f1a944993150d5a49d1fa3540dd2e85d1397130be507763": {
+      "source": "查看来源",
+      "translation": "Inspect sources"
+    },
+    "7fef9c38fa40d858060603e6c95f9d33450736a6670ad8c15ffe75b6b4cc032f": {
+      "source": "本模块采用 Klatt 参数合成方法，代码改编自 tdklatt / TrackDraw，提取使用 Praat/Parselmouth 和可选 REAPER。点击<s id=\"0\">方法与引用</s>查看论文、代码来源、许可和适配说明。",
+      "translation": "This module uses Klatt parameter synthesis with code adapted from tdklatt / TrackDraw; extraction uses Praat/Parselmouth and optional REAPER. Click <s id=\"0\">Methods and references</s> for papers, code sources, licenses, and adaptation notes."
+    },
+    "8cdbded38d3b910eb9624fe98d945fed1b0b0f58fbabd88c0adcc294f1a932a6": {
+      "source": "幅度与声质参数",
+      "translation": "Amplitude and voice-quality parameters"
+    },
+    "533a356d1c33f038851194696f89fb2bc61b3c550ca931fb79024f617a215509": {
+      "source": "AV/AH 的 60 dB 是工具内数字参考，0 表示关闭。AH 噪声源与 HNR 扩展处理各有作用。HNR、H1H2、Slope、扰动和共振峰相互影响，输出重测值可能与输入控制值不同。",
+      "translation": "AV/AH 60 dB is an internal numerical reference; 0 means off. AH noise and HNR extension processing have separate roles. HNR, H1H2, Slope, perturbation, and formants interact; remeasured output may differ from input controls."
+    },
+    "b74039e27aaaa5a8c876f83d465ba246e3780b3557fccd9711cf460ac674da56": {
+      "source": "保存可复核的材料",
+      "translation": "Save verifiable materials"
+    },
+    "c5d75095e45b38984d3168432c31d53d79e6824a7a2a269f5822e98609d2db60": {
+      "source": "归档原 WAV 和每次三件套。需要研究比较时，对原音和输出使用一致的独立分析设置，并按研究目的验证听辨效果。正式研究中的自然度、发声类别和感知效果请通过材料检查与听辨预测试核对。",
+      "translation": "Archive the original WAV and each three-file result set. For research comparisons, use consistent independent analysis settings on original and output, and verify auditory effects against the research purpose. Check naturalness, phonation category, and perceptual effects through material inspection and listening pilots before formal research."
+    },
+    "89b11309772f9800e080a1841b300f36cdf8da5d47f92e944242262b0dd82905": {
+      "source": "参考资料",
+      "translation": "References"
+    },
+    "842e24a2dbfe33da09cc1a0171af3b65af0dca52605dd2b16a4bd068f009cc76": {
+      "source": "<s id=\"0\">tdklatt / TrackDraw：具体代码来源</s>",
+      "translation": "<s id=\"0\">tdklatt / TrackDraw: specific code sources</s>"
+    },
+    "10a89f34012b381aad87ef4455e85ae115c92ff5d3537adac3407a6b9ec34eab": {
+      "source": "元音规则局部的 IPA 复制按钮与 F1–F3 共振峰数值列。",
+      "translation": "Detail of the vowel rules: IPA copy buttons and F1–F3 formant value columns."
+    }
+  }
+}

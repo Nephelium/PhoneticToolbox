@@ -1,0 +1,33 @@
+/* International Phonetic Alphabet input method downloads. */
+.ime-download{width:min(440px,100%);max-width:440px;margin:22px 0 0;color:var(--ink,#271335);font-family:inherit}
+.ime-download>summary{list-style:none;display:flex;align-items:center;gap:12px;padding:15px 20px;border:2px solid #8d70ac;border-radius:18px;background:#eee4fa;box-shadow:0 4px 0 #d2c1e4;cursor:pointer;font-weight:750;font-size:17px;transition:background .18s,transform .18s,box-shadow .18s}
+.ime-download>summary::-webkit-details-marker{display:none}
+.ime-download>summary>svg{width:25px;height:25px;fill:none;stroke:currentColor;stroke-width:1.8;flex-shrink:0}
+.ime-download>summary .ime-expand{margin-left:auto;font-size:25px;font-weight:400;transition:transform .2s}
+.ime-download[open]>summary .ime-expand{transform:rotate(45deg)}
+.ime-download>summary:hover{background:#e4d7f6;transform:translateY(-1px);box-shadow:0 5px 0 #d2c1e4}
+.ime-download>summary:focus-visible,.ime-download a:focus-visible{outline:3px solid #725295;outline-offset:4px}
+.ime-download-body{margin-top:12px;padding:18px;border:1.5px solid #d9c9e7;border-radius:18px;background:#fffdf7;box-shadow:0 5px 0 #eee7da}
+.ime-download-intro{margin:0 0 14px;font-size:13px;line-height:1.7;color:#766483}
+.ime-download-intro strong{color:#392348;font-weight:700}
+.ime-platforms{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.ime-platform{display:flex;flex-direction:column;align-items:flex-start;gap:5px;padding:13px 14px;border:1px solid #e6dccd;border-radius:12px;background:#fff9e9;color:var(--ink,#271335);text-decoration:none;min-width:0;transition:background .18s,border-color .18s,transform .18s}
+.ime-platform:nth-child(2){background:#eee5f8}.ime-platform:nth-child(3){background:#fff1e9}.ime-platform:nth-child(4){background:#eaf1e5}
+.ime-platform:hover{border-color:#9071a6;transform:translateY(-2px)}
+.ime-platform strong{display:flex;width:100%;align-items:center;gap:8px;font-size:16px}.ime-platform strong svg{margin-left:auto;width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2}
+.ime-platform span{font-size:12px;line-height:1.5;color:#756a7c;overflow-wrap:anywhere}
+.ime-download-footer{display:flex;align-items:center;flex-wrap:wrap;gap:10px 20px;margin:14px 0 0;font-size:12px;line-height:1.5}.ime-download-footer a{color:#725295;text-underline-offset:3px}
+@media(max-width:600px){.ime-download{max-width:none;margin-top:18px}.ime-download>summary{padding:13px 15px;font-size:16px}.ime-download-body{padding:12px}.ime-platform{padding:12px 10px}.ime-platform strong{font-size:15px}}
+@media(prefers-reduced-motion:reduce){.ime-download>summary,.ime-download>summary .ime-expand,.ime-platform{transition:none}.ime-platform:hover,.ime-download>summary:hover{transform:none}}
+
+/* Floating download panel: hovering previews, clicking pins it open. */
+.ime-download{position:relative;z-index:35}
+.ime-download-body{position:absolute;top:calc(100% + 10px);left:0;width:100%;box-sizing:border-box;margin:0;z-index:40;max-height:var(--ime-panel-height,calc(100dvh - 24px));overflow:auto;overscroll-behavior:contain;box-shadow:0 10px 28px #39234826,0 4px 0 #eee7da;animation:ime-popover-in .16s ease-out}
+.ime-download[open]::after{content:"";position:absolute;left:0;right:0;top:100%;height:12px}
+.ime-download[data-placement="above"] .ime-download-body{top:auto;bottom:calc(100% + 10px)}
+.ime-download[data-placement="above"][open]::after{top:auto;bottom:100%}
+.hero:has(.ime-download[open]){overflow:visible;z-index:20}
+@keyframes ime-popover-in{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){.ime-download-body{animation:none}}
+
+.ime-download-footer .ime-guide-button{display:inline-flex;align-items:center;justify-content:center;gap:8px;box-sizing:border-box;min-height:40px;padding:8px 14px;border:1.5px solid #9b80b5;border-radius:10px;background:#eee4fa;color:#392348;font-size:13px;font-weight:700;text-decoration:none;box-shadow:0 2px 0 #d8c9e6}.ime-guide-button svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linejoin:round}.ime-download-footer .ime-guide-button:hover{background:#e4d7f6;border-color:#725295}

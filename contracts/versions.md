@@ -90,4 +90,10 @@ M03-E3：微观输入范围恢复为 5–5000 ms。`egg-preview/1.micro_sample_s
 
 M06 任务请求和结果外层传输仍 m06/1；CSV `__PTB_CONFIG__` 及 JSON config 改为 m06/2，新增 AH 曲线、`f0_transform={preset:null|假声|嘎裂,offset_hz:number}`。结果元数据新增 `computation_revision=klatt/2`、diagnostics（内部率、数字源参考、固定输出增益、最终防溢出衰减）。这些为受控资源内部文档，不改变 API 请求或数据库 schema。旧 m06/1 科学配置及无新完整快照的旧 CSV 明确拒绝，避免不可靠的 AV200 换算。见 [ADR](../docs/decisions/ADR-M06-R2.md)。
 
+## 2026-11-02 审查修正增量
+
+经确认，新声学结果使用 `acoustic/3`、`reviewed-numeric/1`，有界结果使用 `acoustic-bounded/2`。Intensity 改为 20 μPa 参考值，同一正均方输入降低约 5.0309 dB，数字静音及无效 Iseli 带宽为缺失值。新单位为 `dB_re_20uPa_assuming_samples_in_Pa_not_measured_SPL`，旧单位/版本继续读取，历史文件不重写。详见[科研决定](../docs/decisions/ADR-acoustic-review-20261102.md)。
+
+本机保留策略增加 `clean_unused_inputs`，默认 false。启用后仅清理应用管理的无引用导入副本，保护活动任务、待处理批次、存活结果及依赖链。旧请求省略该字段仍保持关闭，无数据库 schema 变化。
+
 2026-10-15 M09 自动重建：增加algorithm、frequency_axis、auto_parameters以及reconstruction_profile=legacy/calibrated、phase_initialization=auto/pulse/random、inference_device=auto/cpu/cuda。旧快照省略新增默认字段保持幂等哈希；旧neural缺省auto_parameters仍为true。新UI先显式预测再以false提交当前值，固定calibrated避免编辑值切换算法。新笔迹size_unit=px、size范围1–200；旧笔迹不带单位仍保留旧栅格化。GL上限256。输出率0在新UI表示ceil(2*fmax)，比较PNG按输入频带与shape生成。GPU Python仅通过原生文件选择授权，不接受HTTP或前端原始路径，不修改数据库schema。

@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {manualForHost,manualIntroduction,webIntroductionChapter} from '../src/app/manual-project.ts';
-import {moduleHelpTarget} from '../src/manual/help-navigation.ts';
+import {moduleHelpTarget,isModuleHelpLabel} from '../src/manual/help-navigation.ts';
 import {parseManualProject,chapterSearchEntries,searchManual} from '../src/manual/content.ts';
 
 const project=parseManualProject(JSON.parse(readFileSync(new URL('../../manual/project.json',import.meta.url),'utf8')));
@@ -33,4 +33,12 @@ test('general help opens the host introduction and every module keeps its stable
     }
   }
   assert.deepEqual(moduleHelpTarget(),{chapterId:'getting-started'});
+});
+
+test('legacy Chinese, English and Japanese help labels resolve to the same stable module targets',()=>{
+  for(const label of ['帮助','使用说明','帮助与来源','帮助与说明','Help','User manual','Help and sources','Help and instructions','ヘルプ','マニュアル','ユーザーマニュアル','ヘルプと出典','ヘルプと説明','  HELP  ']){
+    assert(isModuleHelpLabel(label),label);
+    for(let i=1;i<=19;i++)assert.equal(moduleHelpTarget('M'+String(i).padStart(2,'0')).chapterId,'m'+String(i).padStart(2,'0'));
+  }
+  for(const label of ['Methods and references','ヘルプを閉じる','关闭帮助','Export','Helpful tools','Help with export'])assert(!isModuleHelpLabel(label),label);
 });

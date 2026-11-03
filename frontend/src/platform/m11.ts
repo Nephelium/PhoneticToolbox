@@ -1,43 +1,45 @@
+import {uiMessage,uiError,localized} from '../modules/module-localization.ts';
+import {tr} from '../i18n/index.ts';
 import type {AssetFetch} from './local-asset-transport.ts';
 import type {M11Port,CorpusItem,Catalog,Grant} from '../modules/mfa/port.ts';
 import type {JobView} from './research.ts';
 import {sha256} from './research.ts';
 import {pairFiles} from '../modules/mfa/state.ts';
 
-const messages:Record<string,string>={
- m11_download_not_uploaded:'服务器尚未提供此版本组件。可从发布者网盘下载后选择组件压缩包安装。',
- m11_download_failed:'组件下载失败，请检查网络后重试；也可从网盘下载并导入压缩包。',
- m11_download_incomplete:'组件尚未下载完整，请重试以继续下载。',
- m11_download_resume_rejected:'服务器不支持从上次位置续传。请从网盘下载完整组件压缩包后导入。',
- m11_delivery_folder_required:'请选择组件压缩包解压后的根文件夹，其中应包含 env 和 models。旧版环境请从高级选项导入。',
- m11_folder_files_changed:'组件文件夹有缺失或额外文件，请重新解压原始组件包后选择文件夹。',
- m11_file_hash_mismatch:'组件文件已损坏或被修改，请重新下载原始组件包。',
- m11_component_busy:'正在安装另一个 MFA 组件，请等待完成。',
- m11_component_disk_full:'安装空间不足，请释放磁盘空间后重试。当前组件保留。',
- m11_runtime_missing:'运行环境已不存在，请重新选择并检查。',m11_model_missing:'登记模型或词典已不存在，请重新检查并导入资源。',m11_version_mismatch:'当前支持 MFA 3.3.8，请选择此版本。',m11_bootstrap_missing:'MFA 自动标注暂时无法启动。可在关于页反馈此问题。',
- m11_install_path_too_long:'组件安装路径过长，Windows 原生库无法可靠加载。请使用说明中的较短便携组件目录，原可用版本保留。',
- m11_transcript_tiers:'TextGrid 缺少可用转写层，或有多份 words 层无法确定。请提供独立转写区间层、唯一 words 层或同名 LAB / TXT。phones 层不能作为词转写。',
- m11_no_alignments:'当前模型与默认搜索参数未能得到有效对齐。请检查转写与音频，不会自动修改 Beam、模型或截断音频。',
- m11_oov_words:'转写中有词典未收录的词。请核对汉字 / 拼音与声调格式，并在下方 MFA 日志查看具体词；任务未发布完整结果。',
- m11_model_mismatch:'声学模型与词典音素集不匹配。',m11_dictionary_mismatch:'词典格式或内容不适用于当前模型。',
- m11_waiting_verified_node:'正在等待可用的计算服务。',
- m11_web_disabled:'网页版暂不支持MFA在线对齐，请下载桌面应用。',
- m11_download_not_published:'组件暂时无法在线下载，可导入离线组件包。',
- m11_timeout:'对齐达到 180 秒期限，已停止本任务进程树。本机部分输出与诊断保留，未作为完整结果发布。',
- m11_component_not_registered:'所选组件或模型尚未登记，请先检查运行环境与模型。',
- m11_temp_budget:'临时文件达到当前 512 MB 预算，任务已停止；请使用已验证的较小输入范围。',
- m11_audio_budget:'当前单文件支持上限为 120 秒、单/双声道。超范围输入未截断。',
- m11_self_test_required:'此组件需要完成实际小任务检查。',m11_feature_failed:'MFA 特征提取失败，请检查运行环境和音频格式。',
- m11_execution_failed:'MFA 执行失败。输入和配置保留，可检查组件后重试。',
- m11_probe_word_unavailable:'此词典缺少组件检查所需的 a、啊 或 a1 词条，请使用配套词典。',
- m11_process_crashed:'MFA 子进程异常退出，已回收本任务进程树。',m11_runtime_changed:'运行环境发生变化，请重新检查。',
- m11_model_changed:'模型或词典发生变化，请重新检查。',m11_missing_transcript:'音频缺少已有转写。',
- m11_manifest_hash_mismatch:'离线清单摘要与独立可信来源不一致，未安装。',
- m11_archive_hash_mismatch:'组件包摘要不匹配，当前版本保留。',m11_component_failed:'组件检查或安装失败，原可用版本保留。',
- progress:'任务阶段更新',failed:'任务失败',
- cancelled:'任务已取消。本机部分输出保留，完整结果未发布。',
- m11_preparing:'正在准备音频与转写',m11_runtime_checked:'外部运行环境检查通过',m11_aligning:'MFA 正在对齐',m11_exporting:'正在生成 TextGrid',m11_complete:'TextGrid 已生成',queued:'已进入任务队列',running:'任务运行中',succeeded:'完整结果已发布',cancel_requested:'正在停止任务',
-};
+const messages:Record<string,string>=localized(()=>({
+ m11_download_not_uploaded:tr('platform.the_server_does_not_yet_provide_this_component_version'),
+ m11_download_failed:tr('platform.component_download_failed_check_your_connection_and_retry_or'),
+ m11_download_incomplete:tr('platform.the_component_download_is_incomplete_retry_to_resume_it'),
+ m11_download_resume_rejected:tr('platform.the_server_cannot_resume_this_download_download_the_complete'),
+ m11_delivery_folder_required:tr('platform.select_the_root_folder_extracted_from_the_component_archive'),
+ m11_folder_files_changed:tr('platform.the_component_folder_has_missing_or_extra_files_extract'),
+ m11_file_hash_mismatch:tr('platform.component_files_are_damaged_or_modified_download_the_original'),
+ m11_component_busy:tr('platform.another_mfa_component_is_being_installed_wait_for_it'),
+ m11_component_disk_full:tr('platform.not_enough_installation_space_free_disk_space_and_retry'),
+ m11_runtime_missing:tr('platform.the_runtime_no_longer_exists_select_and_check_it'),m11_model_missing:tr('platform.a_registered_model_or_dictionary_no_longer_exists_check'),m11_version_mismatch:tr('platform.mfa_3_3_8_is_currently_supported_select_this'),m11_bootstrap_missing:tr('platform.mfa_alignment_cannot_start_right_now_you_can_report'),
+ m11_install_path_too_long:tr('platform.the_component_path_is_too_long_for_reliable_loading'),
+ m11_transcript_tiers:tr('platform.the_textgrid_has_no_usable_transcription_tier_or_has'),
+ m11_no_alignments:tr('platform.the_current_model_and_default_search_parameters_did_not'),
+ m11_oov_words:tr('platform.the_transcription_contains_words_missing_from_the_dictionary_check'),
+ m11_model_mismatch:tr('platform.the_acoustic_model_and_dictionary_use_incompatible_phone_sets'),m11_dictionary_mismatch:tr('platform.the_dictionary_format_or_content_is_unsuitable_for_the'),
+ m11_waiting_verified_node:tr('platform.waiting_for_an_available_computation_service'),
+ m11_web_disabled:tr('platform.online_mfa_alignment_is_not_available_in_the_web'),
+ m11_download_not_published:tr('platform.the_component_cannot_currently_be_downloaded_online_import_an'),
+ m11_timeout:tr('platform.alignment_reached_the_180_second_limit_this_task_s'),
+ m11_component_not_registered:tr('platform.the_selected_component_or_model_is_not_registered_check'),
+ m11_temp_budget:tr('platform.temporary_files_reached_the_current_512_mb_limit_and'),
+ m11_audio_budget:tr('platform.the_current_single_file_limit_is_120_seconds_and'),
+ m11_self_test_required:tr('platform.this_component_requires_a_real_small_task_check'),m11_feature_failed:tr('platform.mfa_feature_extraction_failed_check_the_runtime_and_audio'),
+ m11_execution_failed:tr('platform.mfa_execution_failed_inputs_and_configuration_are_retained_check'),
+ m11_probe_word_unavailable:tr('platform.this_dictionary_has_no_a_or_a1_entry_needed'),
+ m11_process_crashed:tr('platform.the_mfa_subprocess_exited_unexpectedly_this_task_s_process'),m11_runtime_changed:tr('platform.the_runtime_has_changed_check_it_again'),
+ m11_model_changed:tr('platform.the_model_or_dictionary_has_changed_check_it_again'),m11_missing_transcript:tr('platform.the_audio_has_no_existing_transcription'),
+ m11_manifest_hash_mismatch:tr('platform.the_offline_manifest_checksum_differs_from_the_independently_trusted'),
+ m11_archive_hash_mismatch:tr('platform.the_component_archive_checksum_does_not_match_the_current'),m11_component_failed:tr('platform.component_checking_or_installation_failed_the_previous_working_version'),
+ progress:tr('platform.task_stage_update'),failed:tr('platform.task_failed'),
+ cancelled:tr('platform.task_cancelled_partial_local_outputs_are_retained_no_complete'),
+ m11_preparing:tr('platform.preparing_audio_and_transcription'),m11_runtime_checked:tr('platform.external_runtime_check_passed'),m11_aligning:tr('platform.mfa_alignment_in_progress'),m11_exporting:tr('platform.generating_textgrid'),m11_complete:tr('platform.textgrid_generated'),queued:tr('platform.queued'),running:tr('platform.task_running'),succeeded:tr('platform.complete_results_published'),cancel_requested:tr('platform.stopping_task'),
+}));
 export const m11Message=(code:string)=>messages[code]??code;
 interface Transport {
  log?:M11Port['log'];
@@ -52,11 +54,11 @@ export function m11Port(t:Transport):M11Port {
   async import(files,signal,source){const pairs=pairFiles(files,source),items:CorpusItem[]=[];for(const p of pairs){if(signal.aborted)throw Error('cancelled');const audio=await t.upload(p.audio,'audio',signal),transcript=await t.upload(p.transcript,'transcript',signal);items.push({name:p.name,audio,transcript,transcript_format:/\.textgrid$/i.test(p.transcript.name)?'.TextGrid':/\.txt$/i.test(p.transcript.name)?'.txt':'.lab'});}return items;},
   dictionary:(file,signal)=>t.upload(file,'dictionary',signal),dictionaryFromGrant:t.dictionaryFromGrant,
   create:body=>t.create({...body,project_id:t.project,idempotency_key:crypto.randomUUID(),schema_version:'m11/1'}),
-  async download(job,id){const m=job.result_manifest;if(!m||!('files'in m))throw Error('结果不可用。');const f=m.files.find(f=>f.id===id);if(!f)throw Error('结果不可用。');const raw=await t.read(job.id,id,f.sha256);if(raw.byteLength!==f.size_bytes||await sha256(raw)!==f.sha256)throw Error('结果完整性检查失败。');const url=URL.createObjectURL(new Blob([raw]));const a=document.createElement('a');a.href=url;a.download=f.name;a.click();setTimeout(()=>URL.revokeObjectURL(url),2000);},
+  async download(job,id){const m=job.result_manifest;if(!m||!('files'in m))throw uiError(uiMessage('platform.results_are_unavailable'));const f=m.files.find(f=>f.id===id);if(!f)throw uiError(uiMessage('platform.results_are_unavailable'));const raw=await t.read(job.id,id,f.sha256);if(raw.byteLength!==f.size_bytes||await sha256(raw)!==f.sha256)throw uiError(uiMessage('platform.result_integrity_verification_failed'));const url=URL.createObjectURL(new Blob([raw]));const a=document.createElement('a');a.href=url;a.download=f.name;a.click();setTimeout(()=>URL.revokeObjectURL(url),2000);},
   save:t.save,chooseOutput:t.chooseOutput,pick:t.pick,corpus:t.corpus,component:t.component};
 }
 export function serverM11(owner:string,project:string,csrf:()=>string,onInvalid:()=>void,signal:AbortSignal,assetFetch:AssetFetch=(path,init)=>fetch('/api/v1/'+path,init)):M11Port {
- async function request(path:string,method='GET',body?:unknown,raw?:ArrayBuffer){const r=await assetFetch(path,{method,signal,credentials:'same-origin',cache:'no-store',headers:{'X-PTB-Account':owner,...(method!=='GET'?{'X-CSRF-Token':csrf()}:{}),...(raw?{'Content-Type':'application/octet-stream'}:body?{'Content-Type':'application/json'}:{})},body:raw??(body?JSON.stringify(body):undefined)});if(!r.ok){if(r.status===401)onInvalid();const e=await r.json().catch(()=>({}));throw Error(m11Message(typeof e.detail==='string'?e.detail:'请求失败。'));}return r;}
+ async function request(path:string,method='GET',body?:unknown,raw?:ArrayBuffer){const r=await assetFetch(path,{method,signal,credentials:'same-origin',cache:'no-store',headers:{'X-PTB-Account':owner,...(method!=='GET'?{'X-CSRF-Token':csrf()}:{}),...(raw?{'Content-Type':'application/octet-stream'}:body?{'Content-Type':'application/json'}:{})},body:raw??(body?JSON.stringify(body):undefined)});if(!r.ok){if(r.status===401)onInvalid();const e=await r.json().catch(()=>({}));throw uiError(m11Message(typeof e.detail==='string'?e.detail:uiMessage('platform.request_failed')));}return r;}
  return m11Port({local:false,project,catalog:async()=> (await request('jobs/m11/catalog')).json(),history:async()=> (await (await request('jobs?project_id='+project)).json()).jobs.filter((j:JobView)=>j.operation==='mfa_alignment'),
   async upload(file,_role,abort){const bytes=await file.arrayBuffer(),hash=await sha256(bytes),a=await(await request('uploads','POST',{project_id:project,name:file.name,expected_bytes:bytes.byteLength,idempotency_key:'m11-'+crypto.randomUUID()})).json();for(let offset=0;offset<bytes.byteLength;offset+=262144){if(abort.aborted)throw Error('cancelled');await request(`uploads/${a.id}/blocks?offset=${offset}`,'PUT',undefined,bytes.slice(offset,offset+262144));}const ready=await(await request('uploads/'+a.id+'/finalize','POST',{sha256:hash})).json();return {asset_id:ready.id,sha256:ready.sha256};},
   create:async body=>(await request('jobs/m11/create','POST',body)).json(),job:async id=>(await request('jobs/'+id)).json(),cancel:async id=>(await request('jobs/'+id+'/cancel','POST')).json(),events:async id=>(await request('jobs/'+id+'/events')).json(),read:async(_job,id)=>(await request('assets/'+id+'/content')).arrayBuffer()});

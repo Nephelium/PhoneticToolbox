@@ -1,8 +1,9 @@
+import {messageText,type MessageDescriptor} from '../../i18n/index.ts';
 import type {PaperAnnotation} from '../../platform/papers.ts';
 
 export interface AnnotationChange {before:PaperAnnotation|null;after:PaperAnnotation|null}
 export type AnnotationDirection='undo'|'redo';
-type Entry={label:string;changes:AnnotationChange[]};
+type Entry={label:string|MessageDescriptor;changes:AnnotationChange[]};
 type Write=(item:PaperAnnotation,remove:boolean)=>Promise<boolean>;
 
 export function copyAnnotation(item:PaperAnnotation):PaperAnnotation{
@@ -17,10 +18,12 @@ export class AnnotationHistory {
  constructor(limit=100){this.limit=limit;}
  get canUndo(){return this.past.length>0;}
  get canRedo(){return this.future.length>0;}
- get undoLabel(){return this.past.at(-1)?.label??'';}
- get redoLabel(){return this.future.at(-1)?.label??'';}
+ get undoMessage(){return this.past.at(-1)?.label??'';}
+ get redoMessage(){return this.future.at(-1)?.label??'';}
+ get undoLabel(){return messageText(this.past.at(-1)?.label??'');}
+ get redoLabel(){return messageText(this.future.at(-1)?.label??'');}
  clear(){this.past=[];this.future=[];}
- record(label:string,changes:AnnotationChange[]){
+ record(label:string|MessageDescriptor,changes:AnnotationChange[]){
   const copy=changes.map(c=>({before:c.before?copyAnnotation(c.before):null,after:c.after?copyAnnotation(c.after):null}))
    .filter(c=>JSON.stringify(c.before)!==JSON.stringify(c.after));
   if(!copy.length)return;

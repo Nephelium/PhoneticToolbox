@@ -28,13 +28,14 @@ from ptb_worker.executor import run_worker
 from ptb_worker.store import PostgresJobStore
 from test_p07_policy_postgres import legacy, migrate, MIGRATIONS, ROOT
 from web_postgres_support import cluster, artifacts
+from web_candidate_support import prepare_frontend, verify_frontend_unchanged
 
 
 @pytest.mark.parametrize('browser', ['chrome', 'edge'])
 def test_real_browser_science_and_logout(legacy, monkeypatch, browser):
     e = legacy
     migrate(e)
-    for name in ('008_web_identity.sql', '009_web_workspaces.sql','010_web_capacity.sql'):
+    for name in ('008_web_identity.sql', '009_web_workspaces.sql','010_web_capacity.sql','011_account_preferences.sql'):
         e.conn.execute((MIGRATIONS / name).read_text('utf-8'))
     monkeypatch.setenv('PTB_EGG_PYTHON', str(ROOT / '.venv/m03-compatible/python.exe'))
     # The worker changes cwd into its owned scratch; relative PYTHONPATH entries
@@ -49,6 +50,7 @@ def test_real_browser_science_and_logout(legacy, monkeypatch, browser):
     AcousticBatches(jobs, files)
     with artifacts.verification_run('web-launch', 'compute-' + browser,
             'Visible browser, real HTTP/PG/native science; EGG-SYN-PCM16.npz; synthetic mail captured locally') as (out, scratch):
+        frontend,frontend_identity=prepare_frontend(ROOT,scratch,out)
         from ptb_worker import acoustic_executor
         original_error = acoustic_executor.public_error
         def diagnose(error):
@@ -75,7 +77,7 @@ def test_real_browser_science_and_logout(legacy, monkeypatch, browser):
             signing_key='isolated-compute-check-' * 3, allow_insecure_loopback=True),
             job_store=jobs, storage=e.storage, workspace_service=e.workspaces,
             registration_service=RegistrationService(accounts, MailCapture(), origin))
-        app.mount('/server', StaticFiles(directory=ROOT / 'output/validation/web-launch/frontend', html=True))
+        app.mount('/server', StaticFiles(directory=frontend, html=True))
         server = uvicorn.Server(uvicorn.Config(app, log_level='warning', access_log=False, proxy_headers=False))
         http = threading.Thread(target=lambda: server.run(sockets=[sock]), daemon=True)
         stop = threading.Event()
@@ -144,6 +146,7 @@ def test_real_browser_science_and_logout(legacy, monkeypatch, browser):
             http.join(15)
             sock.close()
             assert not worker.is_alive() and not http.is_alive()
+            verify_frontend_unchanged(frontend,frontend_identity,out)
 
 
 def test_preview_entry_owns_worker_and_stops_on_stdin_close(legacy, monkeypatch):
@@ -160,6 +163,7 @@ def test_preview_entry_owns_worker_and_stops_on_stdin_close(legacy, monkeypatch)
     monkeypatch.setenv('PTB_EGG_PYTHON',str(ROOT/'.venv/m03-compatible/python.exe'))
     with artifacts.verification_run('web-launch','preview-entry',
             'Real server.py managed subprocess, own PG, LPC and EOF shutdown') as (out,scratch):
+        frontend,frontend_identity=prepare_frontend(ROOT,scratch,out)
         with socket.socket() as s:s.bind(('127.0.0.1',0));port=s.getsockname()[1]
         config=dict(dsn=e.dsn,signing_key='preview-synthetic-only-'*3,storage_root=str(e.root),
             enable_jobs=True,enable_file_jobs=True,enable_acoustic_batches=True,
@@ -167,7 +171,7 @@ def test_preview_entry_owns_worker_and_stops_on_stdin_close(legacy, monkeypatch)
             reaper_binary=str(ROOT/'phonetic_toolbox/core/acoustic/reaper.exe'))
         with (out/'server.log').open('w',encoding='utf-8') as log:
             child=subprocess.Popen([sys.executable,'-B','-m','ptb_api.server','--managed','--port',str(port),
-                '--frontend',str(ROOT/'output/validation/web-launch/frontend')],stdin=subprocess.PIPE,
+                '--frontend',str(frontend)],stdin=subprocess.PIPE,
                 stdout=log,stderr=log,text=True,encoding='utf-8',creationflags=getattr(subprocess,'CREATE_NO_WINDOW',0))
             try:
                 child.stdin.write(json.dumps(config)+'\n');child.stdin.flush()
@@ -208,3 +212,4 @@ def test_preview_entry_owns_worker_and_stops_on_stdin_close(legacy, monkeypatch)
                 if child.poll() is None:
                     try:child.wait(timeout=30)
                     except subprocess.TimeoutExpired:child.terminate();child.wait(timeout=10)
+                verify_frontend_unchanged(frontend,frontend_identity,out)

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import {tr} from '../i18n/index.ts';
 import { ref,onMounted,onBeforeUnmount,onUnmounted,useId } from 'vue';
 import AppIcon from './AppIcon.vue';
 defineProps<{title:string;wide?:boolean;closeDisabled?:boolean;variant?:'update'|'confirm'|'feedback'}>();const emit=defineEmits<{close:[]}>();const dialog=ref<HTMLDialogElement>();const titleId=useId();let previous:HTMLElement|null=null;
@@ -10,7 +11,7 @@ onUnmounted(()=>{if(previous?.isConnected)previous.focus();});
 <dialog ref="dialog" :class="{wide,'update-dialog':variant==='update','confirm-dialog':variant==='confirm','feedback-dialog':variant==='feedback'}" :aria-labelledby="titleId" @cancel.prevent="!closeDisabled&&emit('close')">
 <header class="dialog-header">
 <h2 :id="titleId">{{title}}</h2>
-<button class="icon-button" aria-label="关闭对话框" :disabled="closeDisabled" @click="emit('close')">
+<button class="icon-button" :aria-label="tr('components.close_dialog')" :disabled="closeDisabled" @click="emit('close')">
 <AppIcon name="close"/>
 </button>
 </header>

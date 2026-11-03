@@ -27,13 +27,15 @@ def create_preview_router(mode,token,origin,*,egg_preview=None,spectrogram_sessi
         import shutil
         scratch=tempfile.TemporaryDirectory(prefix='ptb-egg-source-')
         path=Path(scratch.name)/'source.wav';size=0
+        def write_chunk(output,chunk):
+            if shutil.disk_usage(scratch.name).free<len(chunk)+64_000_000:raise HTTPException(413,'disk_space_low')
+            output.write(chunk)
         try:
             with path.open('xb') as output:
                 async for chunk in request.stream():
                     size+=len(chunk)
                     if size>2_000_000_000:raise HTTPException(413,'egg_input_budget')
-                    if shutil.disk_usage(scratch.name).free<len(chunk)+64_000_000:raise HTTPException(413,'disk_space_low')
-                    output.write(chunk)
+                    await run_in_threadpool(write_chunk,output,chunk)
             if not size:raise HTTPException(413,'egg_input_budget')
             return await run_in_threadpool(egg_preview.open,'local',b'',source_path=path,source_scratch=scratch)
         except BaseException:
@@ -58,11 +60,11 @@ def create_preview_router(mode,token,origin,*,egg_preview=None,spectrogram_sessi
         if request.headers.get('origin')!=origin or not hmac.compare_digest(request.headers.get('authorization','').encode(),('Bearer '+token).encode()):
             raise HTTPException(403,'permission_denied')
         from ptb_worker.parameter_preview import render as table_render,MAX_BYTES as table_limit
+        data=bytearray()
+        async for chunk in request.stream():
+            if len(data)+len(chunk)>table_limit:raise HTTPException(413,'parameter_input_budget')
+            data.extend(chunk)
         with preview_slot():
-            data=bytearray()
-            async for chunk in request.stream():
-                if len(data)+len(chunk)>table_limit:raise HTTPException(413,'parameter_input_budget')
-                data.extend(chunk)
             return await run_in_threadpool(table_render,bytes(data),name)
 
     @router.post('/spectrogram',response_model=SpectrogramPreview,operation_id='local_spectrogram_preview')
@@ -72,11 +74,11 @@ def create_preview_router(mode,token,origin,*,egg_preview=None,spectrogram_sessi
         if request.headers.get('origin')!=origin or not hmac.compare_digest(request.headers.get('authorization','').encode(),('Bearer '+token).encode()):
             raise HTTPException(403,'permission_denied')
         if request.headers.get('content-type')!='application/octet-stream':raise HTTPException(415,'binary_audio_required')
+        data=bytearray()
+        async for chunk in request.stream():
+            if len(data)+len(chunk)>MAX_BYTES:raise HTTPException(413,'preview_too_large')
+            data.extend(chunk)
         with preview_slot():
-            data=bytearray()
-            async for chunk in request.stream():
-                if len(data)+len(chunk)>MAX_BYTES:raise HTTPException(413,'preview_too_large')
-                data.extend(chunk)
             raw=bytes(data);del data
             renderer=spectrogram_session.render if spectrogram_session is not None else render
             value=await run_in_threadpool(renderer,raw,channel=channel,start=start,end=end,width=width)

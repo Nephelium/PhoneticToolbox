@@ -1,0 +1,4 @@
+{
+  "platform.recording.recovered_partial": "异常中断恢复，仅包含已落盘且哈希通过的前缀，末尾可能缺失",
+  "platform.recording.noise_nonstationary": "噪声段统计变化较大，可能含语音或非定常噪声，请试听确认"
+}

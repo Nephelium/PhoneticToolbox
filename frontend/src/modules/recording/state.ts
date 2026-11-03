@@ -1,3 +1,4 @@
+import {tr} from '../../i18n/index.ts';
 import type {Task,Take,Role,Project} from './types.ts';
 export function projectSelection(project:Project|null,taskId:string,takeId:string,restoreLatest=false){
   if(!project)return {taskId:'',takeId:''};
@@ -16,8 +17,8 @@ export function zoomTimeRange(range:[number,number],total:number,ratio:number,de
   return [left,left+length];
 }
 export function channelName(index:number,roles:Role[]){
-  const position=roles.length===1?'单声道':roles.length===2?(index===0?'左声道':'右声道'):`通道 ${index+1}`;
-  return position+(roles[index]==='egg'?' · EGG':roles[index]==='other'?' · 其他':'');
+  const position=roles.length===1?tr('modules.recording.text.d64650de26d2'):roles.length===2?(index===0?tr('modules.recording.text.3467d9b77a89'):tr('modules.recording.text.f909791cb76a')):tr('modules.recording.text.6751bc97f70f',{v0:index+1});
+  return position+(roles[index]==='egg'?' · EGG':roles[index]==='other'?tr('modules.recording.text.79f7350d48a4'):'');
 }
 export function newTask(index:number):Task{return {id:`T${String(index).padStart(3,'0')}`,title:'',prompt:'',filename_stem:`recording-${String(index).padStart(3,'0')}`,group:'',note:'',enabled:true,skipped:false};}
 export function nextTask(tasks:Task[],id:string){const at=tasks.findIndex(t=>t.id===id);return tasks.slice(at+1).find(t=>t.enabled&&!t.skipped)?.id??'';}

@@ -5,6 +5,7 @@ import threading
 from queue import Queue,Empty,Full
 import numpy as np
 from .storage import iter_audio,read_range
+from ..native_i18n import native_error
 from phonetic_core.playback_gain import peak_gain,sample_peak
 
 
@@ -59,7 +60,7 @@ class Playback:
         self.backend=backend;self.root=root;self.spans=spans;self.reference_spans=reference_spans;self.channel=channel;self.volume=volume;self.queue=Queue(16)
         if type(auto_gain) is not bool:raise ValueError('试听自动增益须为开关值')
         self.auto_gain=auto_gain
-        self.done=threading.Event();self.finished=threading.Event();self.error='';self.position=0;self.stream=None;self.current=np.empty(0,np.float32);self.offset=0
+        self.done=threading.Event();self.finished=threading.Event();self.error='';self.error_display=None;self.position=0;self.stream=None;self.current=np.empty(0,np.float32);self.offset=0
         self.worker=threading.Thread(target=self._read,daemon=True,name='ptb-m16-play-reader');self.worker.start()
         try:
             # Preload before opening the stream, bounded to one block wait.
@@ -69,7 +70,7 @@ class Playback:
             self.stream.start()
         except BaseException as exc:
             try:self.stop()
-            except Exception as cleanup:raise PlaybackStartError('试听启动失败且输出流尚未释放，请重试停止：'+str(cleanup),self) from exc
+            except Exception as cleanup:raise native_error(PlaybackStartError('试听启动失败且输出流尚未释放，请重试停止：'+str(cleanup),self),'errors.recording.playbackStartCleanup',reason=str(cleanup)) from exc
             raise
 
     def _read(self):
@@ -90,19 +91,19 @@ class Playback:
                     try:self.queue.put((block[:,self.channel]*self.volume*peak_gain(peak,self.auto_gain)).copy(),timeout=.1);break
                     except Full:pass
                 if self.done.is_set():break
-        except BaseException as exc:self.error=str(exc)
+        except BaseException as exc:self.error=str(exc);self.error_display=getattr(exc,'display',None)
         finally:self.finished_read=True
 
     def _callback(self,out,frames,clock,status):
         out.fill(0)
-        if status:self.error='播放设备发生欠载或中断：'+str(status);raise self.backend.CallbackAbort
+        if status:self.error='播放设备发生欠载或中断：'+str(status);self.error_display=native_error(RuntimeError(self.error),'errors.recording.playbackStreamStatus',reason=str(status)).display;raise self.backend.CallbackAbort
         pos=0
         while pos<frames:
             if self.offset>=len(self.current):
                 try:self.current=self.queue.get_nowait();self.offset=0
                 except Empty:
                     if getattr(self,'finished_read',False):raise self.backend.CallbackStop
-                    self.error='试听缓冲不足，已停止';raise self.backend.CallbackAbort
+                    self.error='试听缓冲不足，已停止';self.error_display=None;raise self.backend.CallbackAbort
             count=min(frames-pos,len(self.current)-self.offset);out[pos:pos+count,0]=self.current[self.offset:self.offset+count];pos+=count;self.offset+=count;self.position+=count
 
     def stop(self):
@@ -111,10 +112,10 @@ class Playback:
         if self.stream:
             stream=self.stream
             try:stream.abort()
-            except Exception as exc:self.error='试听中止异常：'+str(exc)
+            except Exception as exc:self.error='试听中止异常：'+str(exc);self.error_display=native_error(RuntimeError(self.error),'errors.recording.playbackAbortFailed',reason=str(exc)).display
             finally:
                 try:stream.close();self.stream=None
-                except Exception as exc:failure=exc;self.error='输出流关闭失败：'+str(exc)
+                except Exception as exc:failure=exc;self.error='输出流关闭失败：'+str(exc);self.error_display=native_error(RuntimeError(self.error),'errors.recording.playbackCloseFailed',reason=str(exc)).display
         if hasattr(self,'worker'):self.worker.join(2)
         if failure is not None:raise RuntimeError('输出流仍未释放，请重试停止') from failure
         if hasattr(self,'worker') and self.worker.is_alive():raise RuntimeError('试听读取线程尚未结束，请重试停止')

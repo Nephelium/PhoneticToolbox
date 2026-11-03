@@ -31,7 +31,9 @@ def validate_web_operation(runtime,op,body):
         if round(sum(f['duration'] for f in frames),9)>WEB_SEQUENCE_SECONDS:
             raise ValueError('网页版单次关键帧播放和视频导出最多 5 秒，请缩短序列或下载桌面版。')
     if op=='video/begin' and float(body.get('duration',0))>WEB_VIDEO_SECONDS:
-        raise ValueError(f'单次视频导出最多 {WEB_VIDEO_SECONDS:g} 秒，请缩短序列。')
+        error=ValueError(f'单次视频导出最多 {WEB_VIDEO_SECONDS:g} 秒，请缩短序列。')
+        error.display={'key':'native.errors.vocalWeb.videoLimit','values':{'duration':f'{WEB_VIDEO_SECONDS:g}'}}
+        raise error
 
 
 class MemoryProfile(LibraryProfile):

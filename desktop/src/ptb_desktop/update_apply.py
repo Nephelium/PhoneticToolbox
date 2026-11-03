@@ -400,7 +400,10 @@ def run_handoff(request, token, handle, *, root=None, executable=None, wait=wait
             if not executable_magic(package):
                 fail('APPLY_LAYOUT', '安装程序格式无效。')
             installer = launch([str(package), '/CURRENTUSER', '/VERYSILENT', '/SUPPRESSMSGBOXES', '/SP-', '/NORESTART', '/DIR=' + str(origin.parent)], cwd=str(package.parent))
-            if installer.wait() != 0:
+            try:installer_code=installer.wait(timeout=1800)
+            except subprocess.TimeoutExpired:
+                fail('INSTALL_TIMEOUT', '安装等待超时，请检查安装进程；下载包与用户数据保留。')
+            if installer_code != 0:
                 fail('INSTALL_FAILED', '安装未成功完成，下载包与用户数据保留。')
             exe = release_layout(origin.parent, plan['version'])
         else:

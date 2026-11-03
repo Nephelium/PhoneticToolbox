@@ -6,15 +6,15 @@
     "doi": "10.1250/ast.44.186",
     "url": "https://doi.org/10.1250/ast.44.186"
   },
-  "processing": "四路32次：固定10ms/60dB原始GL、固定参数动量GL、预测窗宽/dB的动量GL、同一预测GL的PCM接NAFNet与BigVGAN。随机相位/seed/帧移固定，无Aoki，等RMS播放衰减。",
-  "source_report_sha256": "d4c0dc575de0d6aec3743e15a25cfa8e80d93e374600d2a48b2cf1d074fceb68",
+  "processing": "五路32次：原始GL、固定参数动量GL、预测参数动量GL、预测参数青木初始化动量GL、同一第四路PCM接80带NAFNet与BigVGAN。前三路沿用原字节，等RMS播放衰减。",
+  "source_report_sha256": "b0f48aa2e4d8736c0a2b99f8320f386633a6291ae84c50db28c60f103c521821",
   "pairs": [
     {
       "id": "smith",
       "before": "spectrum-before-32i-smith.wav",
-      "after": "spectrum-predicted-vocoder-32i-smith.wav",
+      "after": "spectrum-predicted-aoki-vocoder-32i-smith.wav",
       "before_sha256": "ec9e14b220afff12241b384d7aff75bc02e7889af3fb4f8bcc37f72b86813888",
-      "after_sha256": "5a74b1da2897f762c7e4d9b6a7c477b49babfb6d2a0d4751c888c40058aecdc4",
+      "after_sha256": "2ae3e256e565790bf811c9832534085b72e0a03fb545a31ac819cc25dd0fa43b",
       "source": "Julius O. Smith III (2007). Mathematics of the Discrete Fourier Transform (DFT), 2nd ed., Fig. 8.10.",
       "url": "https://www.dsprelated.com/freebooks/mdft/Spectrogram_Speech.html",
       "seconds": 1.48,
@@ -42,7 +42,8 @@
         "spectrum-before-32i-smith": 0.9992948911168557,
         "spectrum-fast-32i-smith": 1.0,
         "spectrum-predicted-fast-32i-smith": 0.9999938048505133,
-        "spectrum-predicted-vocoder-32i-smith": 0.9999965681700488
+        "spectrum-predicted-aoki-fast-32i-smith": 0.99999149805205,
+        "spectrum-predicted-aoki-vocoder-32i-smith": 0.9999988401446227
       },
       "display": {
         "title": "Hi, this is Steve Jobs.",
@@ -187,14 +188,145 @@
         "nfft": 512,
         "hop": 24,
         "seed": 20261015
+      },
+      "four_way_history": {
+        "after": "spectrum-predicted-vocoder-32i-smith.wav",
+        "after_sha256": "5a74b1da2897f762c7e4d9b6a7c477b49babfb6d2a0d4751c888c40058aecdc4",
+        "playback_volumes": {
+          "spectrum-before-32i-smith": 0.9992948911168557,
+          "spectrum-fast-32i-smith": 1.0,
+          "spectrum-predicted-fast-32i-smith": 0.9999938048505133,
+          "spectrum-predicted-vocoder-32i-smith": 0.9999965681700488
+        }
+      },
+      "pulse": "spectrum-predicted-aoki-fast-32i-smith.wav",
+      "pulse_sha256": "0d5f66b3418ebc77e7cea6d53638975914e8bcb6de1e7d243752608761290d91",
+      "pulse_settings": {
+        "window_ms": 22,
+        "window": "Hann",
+        "dynamic_range_db": 61.10734558105469,
+        "phase_initialization": "aoki-pulse",
+        "momentum": 0.99,
+        "iterations": 32,
+        "sampling_rate": 16000,
+        "nfft": 512,
+        "hop": 24,
+        "seed": 20261015
+      },
+      "spectrograms": {
+        "before": {
+          "image": "assets/spectrogram-examples/five-smith-before.png",
+          "sha256": "a6a4c472b474cdfea12ea712b0f68db5383104f887086c17cabc90992ba47474",
+          "audio_sha256": "ec9e14b220afff12241b384d7aff75bc02e7889af3fb4f8bcc37f72b86813888",
+          "display": {
+            "sample_rate": 24000,
+            "window_ms": 10,
+            "window": "Hann",
+            "hop": 36,
+            "nfft": 1024,
+            "dynamic_range_db": 60,
+            "level": "equal playback RMS; shared peak reference per example"
+          },
+          "frequency_range": [
+            0.0,
+            4000
+          ],
+          "reference_magnitude": 14.209992920571155,
+          "width": 768,
+          "height": 104
+        },
+        "accelerated": {
+          "image": "assets/spectrogram-examples/five-smith-accelerated.png",
+          "sha256": "b7433f5d0eb97427df70ce5d5a775a57964184c334bcd0f5fb0acb92fd632c5c",
+          "audio_sha256": "ca19efc258e05e7813b4fd156b7825cb02a4d8b39bbc0a5942503175acba8f15",
+          "display": {
+            "sample_rate": 24000,
+            "window_ms": 10,
+            "window": "Hann",
+            "hop": 36,
+            "nfft": 1024,
+            "dynamic_range_db": 60,
+            "level": "equal playback RMS; shared peak reference per example"
+          },
+          "frequency_range": [
+            0.0,
+            4000
+          ],
+          "reference_magnitude": 14.209992920571155,
+          "width": 768,
+          "height": 104
+        },
+        "predicted": {
+          "image": "assets/spectrogram-examples/five-smith-predicted.png",
+          "sha256": "e9cf9583bc354ba2f662282e7e6c470a9ec70c880f1c8d2e20c64c8f34f7ee76",
+          "audio_sha256": "c01ca3fbd58708b0de6bb2dfc2c06154e6e6abcc1f650465a59d36a5337d150c",
+          "display": {
+            "sample_rate": 24000,
+            "window_ms": 10,
+            "window": "Hann",
+            "hop": 36,
+            "nfft": 1024,
+            "dynamic_range_db": 60,
+            "level": "equal playback RMS; shared peak reference per example"
+          },
+          "frequency_range": [
+            0.0,
+            4000
+          ],
+          "reference_magnitude": 14.209992920571155,
+          "width": 768,
+          "height": 104
+        },
+        "pulse": {
+          "image": "assets/spectrogram-examples/five-smith-pulse.png",
+          "sha256": "eaf2b28403e8bcfda47a7c07a0d3f5506838541b1c2ebc4e86d659833a53d531",
+          "audio_sha256": "0d5f66b3418ebc77e7cea6d53638975914e8bcb6de1e7d243752608761290d91",
+          "display": {
+            "sample_rate": 24000,
+            "window_ms": 10,
+            "window": "Hann",
+            "hop": 36,
+            "nfft": 1024,
+            "dynamic_range_db": 60,
+            "level": "equal playback RMS; shared peak reference per example"
+          },
+          "frequency_range": [
+            0.0,
+            4000
+          ],
+          "reference_magnitude": 14.209992920571155,
+          "width": 768,
+          "height": 104
+        },
+        "after": {
+          "image": "assets/spectrogram-examples/five-smith-after.png",
+          "sha256": "19e753ff634832ec008d7db6e60d0a5c56d75ba0326b4120f11df86d728d5a9e",
+          "audio_sha256": "2ae3e256e565790bf811c9832534085b72e0a03fb545a31ac819cc25dd0fa43b",
+          "display": {
+            "sample_rate": 24000,
+            "window_ms": 10,
+            "window": "Hann",
+            "hop": 36,
+            "nfft": 1024,
+            "dynamic_range_db": 60,
+            "level": "equal playback RMS; shared peak reference per example"
+          },
+          "frequency_range": [
+            0.0,
+            4000
+          ],
+          "reference_magnitude": 14.209992920571155,
+          "width": 768,
+          "height": 104
+        }
       }
     },
     {
       "id": "levantan",
       "before": "spectrum-before-32i-levantan.wav",
-      "after": "spectrum-predicted-vocoder-32i-levantan.wav",
+      "after": "spectrum-predicted-aoki-vocoder-32i-levantan.wav",
       "before_sha256": "6c6d5404c6da97c0550423812f07963f67cbfc51962929e23609e3ace08015f0",
-      "after_sha256": "5acf155f35a5b124de4abf8064e9451cbf62c56d871ee78356b90ff935bfc09b",
+      "after_sha256": "f245c17f5ce9ee3fe237818ae873524364f81545c26121fce6f573f75f391547",
       "source": "Whitney Chappell (2021). /s/ weakening in Nicaragua. In E. Núñez-Méndez (ed.), Sociolinguistic Approaches to Sibilant Variation in Spanish, pp. 217–245. Fig. 7.4, p. 228.",
       "url": "https://doi.org/10.4324/9781003153948-11",
       "seconds": 0.9334,
@@ -222,7 +354,8 @@
         "spectrum-before-32i-levantan": 1.0,
         "spectrum-fast-32i-levantan": 0.8820468343717687,
         "spectrum-predicted-fast-32i-levantan": 0.9909526745332934,
-        "spectrum-predicted-vocoder-32i-levantan": 0.7977654081454505
+        "spectrum-predicted-aoki-fast-32i-levantan": 0.924664533339535,
+        "spectrum-predicted-aoki-vocoder-32i-levantan": 0.7977678609141144
       },
       "display": {
         "title": "Levantan las olas",
@@ -367,14 +500,145 @@
         "nfft": 512,
         "hop": 24,
         "seed": 20261015
+      },
+      "four_way_history": {
+        "after": "spectrum-predicted-vocoder-32i-levantan.wav",
+        "after_sha256": "5acf155f35a5b124de4abf8064e9451cbf62c56d871ee78356b90ff935bfc09b",
+        "playback_volumes": {
+          "spectrum-before-32i-levantan": 1.0,
+          "spectrum-fast-32i-levantan": 0.8820468343717687,
+          "spectrum-predicted-fast-32i-levantan": 0.9909526745332934,
+          "spectrum-predicted-vocoder-32i-levantan": 0.7977654081454505
+        }
+      },
+      "pulse": "spectrum-predicted-aoki-fast-32i-levantan.wav",
+      "pulse_sha256": "3100152f4333c3068ad021a1779021efc6172245d452b54d665b7d712380d848",
+      "pulse_settings": {
+        "window_ms": 5,
+        "window": "Hann",
+        "dynamic_range_db": 49.43039321899414,
+        "phase_initialization": "aoki-pulse",
+        "momentum": 0.99,
+        "iterations": 32,
+        "sampling_rate": 16000,
+        "nfft": 512,
+        "hop": 24,
+        "seed": 20261015
+      },
+      "spectrograms": {
+        "before": {
+          "image": "assets/spectrogram-examples/five-levantan-before.png",
+          "sha256": "63f7368b726f8e2f995dc8bcf63d30dd5eba9565335a326d9d3bd41f84ea426a",
+          "audio_sha256": "6c6d5404c6da97c0550423812f07963f67cbfc51962929e23609e3ace08015f0",
+          "display": {
+            "sample_rate": 24000,
+            "window_ms": 10,
+            "window": "Hann",
+            "hop": 36,
+            "nfft": 1024,
+            "dynamic_range_db": 60,
+            "level": "equal playback RMS; shared peak reference per example"
+          },
+          "frequency_range": [
+            0.0,
+            5000
+          ],
+          "reference_magnitude": 11.583297783723435,
+          "width": 768,
+          "height": 104
+        },
+        "accelerated": {
+          "image": "assets/spectrogram-examples/five-levantan-accelerated.png",
+          "sha256": "564b94f08eefbeb05c9f688552e7b561c2d82c52230cd9777fa9205096f8ca78",
+          "audio_sha256": "517701b29cfd7c38c4380b0b923aaa758b10098088efc1b2acf6580c21f89156",
+          "display": {
+            "sample_rate": 24000,
+            "window_ms": 10,
+            "window": "Hann",
+            "hop": 36,
+            "nfft": 1024,
+            "dynamic_range_db": 60,
+            "level": "equal playback RMS; shared peak reference per example"
+          },
+          "frequency_range": [
+            0.0,
+            5000
+          ],
+          "reference_magnitude": 11.583297783723435,
+          "width": 768,
+          "height": 104
+        },
+        "predicted": {
+          "image": "assets/spectrogram-examples/five-levantan-predicted.png",
+          "sha256": "f4254bc35d3171b0d9ecaf40b652123747ad3172f0137ba596a83fbe1f901d85",
+          "audio_sha256": "f7bbb03e6576d999f87e305acee7dcf1c09184b2601cb04be774b923aca5c54b",
+          "display": {
+            "sample_rate": 24000,
+            "window_ms": 10,
+            "window": "Hann",
+            "hop": 36,
+            "nfft": 1024,
+            "dynamic_range_db": 60,
+            "level": "equal playback RMS; shared peak reference per example"
+          },
+          "frequency_range": [
+            0.0,
+            5000
+          ],
+          "reference_magnitude": 11.583297783723435,
+          "width": 768,
+          "height": 104
+        },
+        "pulse": {
+          "image": "assets/spectrogram-examples/five-levantan-pulse.png",
+          "sha256": "7fedd7260c87b7113cd4bdb4c0e261879896616c72b84c31084da4e8420c11e1",
+          "audio_sha256": "3100152f4333c3068ad021a1779021efc6172245d452b54d665b7d712380d848",
+          "display": {
+            "sample_rate": 24000,
+            "window_ms": 10,
+            "window": "Hann",
+            "hop": 36,
+            "nfft": 1024,
+            "dynamic_range_db": 60,
+            "level": "equal playback RMS; shared peak reference per example"
+          },
+          "frequency_range": [
+            0.0,
+            5000
+          ],
+          "reference_magnitude": 11.583297783723435,
+          "width": 768,
+          "height": 104
+        },
+        "after": {
+          "image": "assets/spectrogram-examples/five-levantan-after.png",
+          "sha256": "d0084667086eba6a89ab2fb3a6bd34d8ed1661059ff8d37214778b695006f64a",
+          "audio_sha256": "f245c17f5ce9ee3fe237818ae873524364f81545c26121fce6f573f75f391547",
+          "display": {
+            "sample_rate": 24000,
+            "window_ms": 10,
+            "window": "Hann",
+            "hop": 36,
+            "nfft": 1024,
+            "dynamic_range_db": 60,
+            "level": "equal playback RMS; shared peak reference per example"
+          },
+          "frequency_range": [
+            0.0,
+            5000
+          ],
+          "reference_magnitude": 11.583297783723435,
+          "width": 768,
+          "height": 104
+        }
       }
     },
     {
       "id": "observo",
       "before": "spectrum-before-32i-observo.wav",
-      "after": "spectrum-predicted-vocoder-32i-observo.wav",
+      "after": "spectrum-predicted-aoki-vocoder-32i-observo.wav",
       "before_sha256": "e5b0ffeb488a2e75b2818d312db619096a437f48b9f3f2555b5fa6e378660152",
-      "after_sha256": "5260f991759fb084d197e26ff4a96b66c34bebc79d6f2d0a512a120c3c30d18c",
+      "after_sha256": "9c863a617e69e1ea33fb4ef67304cd4344c7302b51d1988f9ad05c9e0c20de85",
       "source": "Whitney Chappell (2021). /s/ weakening in Nicaragua. In E. Núñez-Méndez (ed.), Sociolinguistic Approaches to Sibilant Variation in Spanish, pp. 217–245. Fig. 7.3, p. 226.",
       "url": "https://doi.org/10.4324/9781003153948-11",
       "seconds": 0.7278,
@@ -399,10 +663,11 @@
         "vocoder": false
       },
       "playback_volumes": {
-        "spectrum-before-32i-observo": 0.9991348553287493,
-        "spectrum-fast-32i-observo": 0.9999908261055844,
-        "spectrum-predicted-fast-32i-observo": 1.0,
-        "spectrum-predicted-vocoder-32i-observo": 0.9999988130035615
+        "spectrum-before-32i-observo": 0.9991340210038667,
+        "spectrum-fast-32i-observo": 0.9999899910659257,
+        "spectrum-predicted-fast-32i-observo": 0.9999991649526806,
+        "spectrum-predicted-aoki-fast-32i-observo": 0.9999981682178918,
+        "spectrum-predicted-aoki-vocoder-32i-observo": 1.0
       },
       "display": {
         "title": "observo",
@@ -547,13 +812,144 @@
         "nfft": 512,
         "hop": 24,
         "seed": 20261015
+      },
+      "four_way_history": {
+        "after": "spectrum-predicted-vocoder-32i-observo.wav",
+        "after_sha256": "5260f991759fb084d197e26ff4a96b66c34bebc79d6f2d0a512a120c3c30d18c",
+        "playback_volumes": {
+          "spectrum-before-32i-observo": 0.9991348553287493,
+          "spectrum-fast-32i-observo": 0.9999908261055844,
+          "spectrum-predicted-fast-32i-observo": 1.0,
+          "spectrum-predicted-vocoder-32i-observo": 0.9999988130035615
+        }
+      },
+      "pulse": "spectrum-predicted-aoki-fast-32i-observo.wav",
+      "pulse_sha256": "418568160859f8fc59b60e253091eac511d470130b507d4f7c4d1956bfc9d2b6",
+      "pulse_settings": {
+        "window_ms": 5,
+        "window": "Hann",
+        "dynamic_range_db": 56.279598236083984,
+        "phase_initialization": "aoki-pulse",
+        "momentum": 0.99,
+        "iterations": 32,
+        "sampling_rate": 16000,
+        "nfft": 512,
+        "hop": 24,
+        "seed": 20261015
+      },
+      "spectrograms": {
+        "before": {
+          "image": "assets/spectrogram-examples/five-observo-before.png",
+          "sha256": "93efec4c586f62d110d7629065f91c7059b4164fcf5d7ff0920ba3e993c158c4",
+          "audio_sha256": "e5b0ffeb488a2e75b2818d312db619096a437f48b9f3f2555b5fa6e378660152",
+          "display": {
+            "sample_rate": 24000,
+            "window_ms": 10,
+            "window": "Hann",
+            "hop": 36,
+            "nfft": 1024,
+            "dynamic_range_db": 60,
+            "level": "equal playback RMS; shared peak reference per example"
+          },
+          "frequency_range": [
+            0.0,
+            5000
+          ],
+          "reference_magnitude": 15.648621103935797,
+          "width": 768,
+          "height": 104
+        },
+        "accelerated": {
+          "image": "assets/spectrogram-examples/five-observo-accelerated.png",
+          "sha256": "3fe268148494c31686340ed4790c3965dd8ddbb8fe2ddd59a705bbe1392ce045",
+          "audio_sha256": "c39bd60efd03e1509e0ec32aece3bdb66cd4e8c67d98520200d4012fa765acd2",
+          "display": {
+            "sample_rate": 24000,
+            "window_ms": 10,
+            "window": "Hann",
+            "hop": 36,
+            "nfft": 1024,
+            "dynamic_range_db": 60,
+            "level": "equal playback RMS; shared peak reference per example"
+          },
+          "frequency_range": [
+            0.0,
+            5000
+          ],
+          "reference_magnitude": 15.648621103935797,
+          "width": 768,
+          "height": 104
+        },
+        "predicted": {
+          "image": "assets/spectrogram-examples/five-observo-predicted.png",
+          "sha256": "e6a52cdfca797e30d5f8ed4068954490db4f244088eda054e5213ce96113215f",
+          "audio_sha256": "d2eaf0ca4875d1a3391ed01dc595df5023515b08305e94ad790b028ceb4804ab",
+          "display": {
+            "sample_rate": 24000,
+            "window_ms": 10,
+            "window": "Hann",
+            "hop": 36,
+            "nfft": 1024,
+            "dynamic_range_db": 60,
+            "level": "equal playback RMS; shared peak reference per example"
+          },
+          "frequency_range": [
+            0.0,
+            5000
+          ],
+          "reference_magnitude": 15.648621103935797,
+          "width": 768,
+          "height": 104
+        },
+        "pulse": {
+          "image": "assets/spectrogram-examples/five-observo-pulse.png",
+          "sha256": "29d29cad6be5f26b07e07af56e9597674eefcfd1c0c4691e8e81a40159acdbe4",
+          "audio_sha256": "418568160859f8fc59b60e253091eac511d470130b507d4f7c4d1956bfc9d2b6",
+          "display": {
+            "sample_rate": 24000,
+            "window_ms": 10,
+            "window": "Hann",
+            "hop": 36,
+            "nfft": 1024,
+            "dynamic_range_db": 60,
+            "level": "equal playback RMS; shared peak reference per example"
+          },
+          "frequency_range": [
+            0.0,
+            5000
+          ],
+          "reference_magnitude": 15.648621103935797,
+          "width": 768,
+          "height": 104
+        },
+        "after": {
+          "image": "assets/spectrogram-examples/five-observo-after.png",
+          "sha256": "1688cb18172f0678addb562bdc5e1527459c650025d84554ea396186fb054444",
+          "audio_sha256": "9c863a617e69e1ea33fb4ef67304cd4344c7302b51d1988f9ad05c9e0c20de85",
+          "display": {
+            "sample_rate": 24000,
+            "window_ms": 10,
+            "window": "Hann",
+            "hop": 36,
+            "nfft": 1024,
+            "dynamic_range_db": 60,
+            "level": "equal playback RMS; shared peak reference per example"
+          },
+          "frequency_range": [
+            0.0,
+            5000
+          ],
+          "reference_magnitude": 15.648621103935797,
+          "width": 768,
+          "height": 104
+        }
       }
     },
     {
       "id": "lu2025-modal",
       "before": "spectrum-before-32i-lu2025-modal.wav",
-      "after": "spectrum-predicted-vocoder-32i-lu2025-modal.wav",
-      "after_sha256": "c3c15fb63d1282500030394649c5ca90dff5d9d0aba2b523c7f1a68d746c0be7",
+      "after": "spectrum-predicted-aoki-vocoder-32i-lu2025-modal.wav",
+      "after_sha256": "2627612c59fb7867ad13eba19fca04cd11c8f194286d7b56845d125e446bfecf",
       "source": "Lu, Liang & Kong (2025), Journal of Phonetics 110,101413",
       "url": "https://doi.org/10.1016/j.wocn.2025.101413",
       "seconds": 0.5102,
@@ -590,10 +986,11 @@
         5000.0
       ],
       "playback_volumes": {
-        "spectrum-before-32i-lu2025-modal": 0.9992654051858894,
-        "spectrum-fast-32i-lu2025-modal": 0.9999898600426345,
-        "spectrum-predicted-fast-32i-lu2025-modal": 0.9999922064593804,
-        "spectrum-predicted-vocoder-32i-lu2025-modal": 1.0
+        "spectrum-before-32i-lu2025-modal": 0.9992586123999341,
+        "spectrum-fast-32i-lu2025-modal": 0.9999830623319949,
+        "spectrum-predicted-fast-32i-lu2025-modal": 0.9999854087327903,
+        "spectrum-predicted-aoki-fast-32i-lu2025-modal": 0.9999853700513441,
+        "spectrum-predicted-aoki-vocoder-32i-lu2025-modal": 1.0
       },
       "hop_ms": 1.5,
       "repair_model_sha256": "a60a3587139ffdc79b69978615b2079c66a43282cb2b77ab99d276717b433ab2",
@@ -727,13 +1124,144 @@
         "nfft": 512,
         "hop": 24,
         "seed": 20261015
+      },
+      "four_way_history": {
+        "after": "spectrum-predicted-vocoder-32i-lu2025-modal.wav",
+        "after_sha256": "c3c15fb63d1282500030394649c5ca90dff5d9d0aba2b523c7f1a68d746c0be7",
+        "playback_volumes": {
+          "spectrum-before-32i-lu2025-modal": 0.9992654051858894,
+          "spectrum-fast-32i-lu2025-modal": 0.9999898600426345,
+          "spectrum-predicted-fast-32i-lu2025-modal": 0.9999922064593804,
+          "spectrum-predicted-vocoder-32i-lu2025-modal": 1.0
+        }
+      },
+      "pulse": "spectrum-predicted-aoki-fast-32i-lu2025-modal.wav",
+      "pulse_sha256": "2165dbdb8628cccc9c9bbf1f082390fb830477e1e25f5612e88016357874e624",
+      "pulse_settings": {
+        "window_ms": 4,
+        "window": "Hann",
+        "dynamic_range_db": 83.423828125,
+        "phase_initialization": "aoki-pulse",
+        "momentum": 0.99,
+        "iterations": 32,
+        "sampling_rate": 16000,
+        "nfft": 512,
+        "hop": 24,
+        "seed": 20261015
+      },
+      "spectrograms": {
+        "before": {
+          "image": "assets/spectrogram-examples/five-lu2025-modal-before.png",
+          "sha256": "061f6c103cbcef49ab73a67cb6827aba235e6b6767621b879ec7997ede92ee38",
+          "audio_sha256": "de748fdf69c5dabaee12d1d29647da2e8d3c3420c6837cfb0b606f9985088c86",
+          "display": {
+            "sample_rate": 24000,
+            "window_ms": 10,
+            "window": "Hann",
+            "hop": 36,
+            "nfft": 1024,
+            "dynamic_range_db": 60,
+            "level": "equal playback RMS; shared peak reference per example"
+          },
+          "frequency_range": [
+            0.0,
+            5000.0
+          ],
+          "reference_magnitude": 10.704388138772929,
+          "width": 768,
+          "height": 104
+        },
+        "accelerated": {
+          "image": "assets/spectrogram-examples/five-lu2025-modal-accelerated.png",
+          "sha256": "064670516f859ce7d0b4f3f60b3b58b59271da71fd2f0610736cdbe2a5c87791",
+          "audio_sha256": "ab8174475192c4ab4590f8dd8e8a611c77c18e39047bbbee9bc52b772096f4bf",
+          "display": {
+            "sample_rate": 24000,
+            "window_ms": 10,
+            "window": "Hann",
+            "hop": 36,
+            "nfft": 1024,
+            "dynamic_range_db": 60,
+            "level": "equal playback RMS; shared peak reference per example"
+          },
+          "frequency_range": [
+            0.0,
+            5000.0
+          ],
+          "reference_magnitude": 10.704388138772929,
+          "width": 768,
+          "height": 104
+        },
+        "predicted": {
+          "image": "assets/spectrogram-examples/five-lu2025-modal-predicted.png",
+          "sha256": "1bc848cfab245da102d484dee38aa337150b9aefbd8af40364e97829dafb6e42",
+          "audio_sha256": "eae01f419450486928b99d007d87acf26ae4e688b98d51c50f41604e60b65a1f",
+          "display": {
+            "sample_rate": 24000,
+            "window_ms": 10,
+            "window": "Hann",
+            "hop": 36,
+            "nfft": 1024,
+            "dynamic_range_db": 60,
+            "level": "equal playback RMS; shared peak reference per example"
+          },
+          "frequency_range": [
+            0.0,
+            5000.0
+          ],
+          "reference_magnitude": 10.704388138772929,
+          "width": 768,
+          "height": 104
+        },
+        "pulse": {
+          "image": "assets/spectrogram-examples/five-lu2025-modal-pulse.png",
+          "sha256": "0e8bff8030d80ccfab2be6a667a264d83fd0f1e8725bc3e5f63f3317b5250fbf",
+          "audio_sha256": "2165dbdb8628cccc9c9bbf1f082390fb830477e1e25f5612e88016357874e624",
+          "display": {
+            "sample_rate": 24000,
+            "window_ms": 10,
+            "window": "Hann",
+            "hop": 36,
+            "nfft": 1024,
+            "dynamic_range_db": 60,
+            "level": "equal playback RMS; shared peak reference per example"
+          },
+          "frequency_range": [
+            0.0,
+            5000.0
+          ],
+          "reference_magnitude": 10.704388138772929,
+          "width": 768,
+          "height": 104
+        },
+        "after": {
+          "image": "assets/spectrogram-examples/five-lu2025-modal-after.png",
+          "sha256": "89328e587710a3e16e8bce6298cc1e3176a50a160ca9e27d9066ec7765b3b3e4",
+          "audio_sha256": "2627612c59fb7867ad13eba19fca04cd11c8f194286d7b56845d125e446bfecf",
+          "display": {
+            "sample_rate": 24000,
+            "window_ms": 10,
+            "window": "Hann",
+            "hop": 36,
+            "nfft": 1024,
+            "dynamic_range_db": 60,
+            "level": "equal playback RMS; shared peak reference per example"
+          },
+          "frequency_range": [
+            0.0,
+            5000.0
+          ],
+          "reference_magnitude": 10.704388138772929,
+          "width": 768,
+          "height": 104
+        }
       }
     },
     {
       "id": "lu2025-pressed",
       "before": "spectrum-before-32i-lu2025-pressed.wav",
-      "after": "spectrum-predicted-vocoder-32i-lu2025-pressed.wav",
-      "after_sha256": "92723c70e523422f7bcf88f97db272b6f356183bfc072522ca7db26f217f8fd2",
+      "after": "spectrum-predicted-aoki-vocoder-32i-lu2025-pressed.wav",
+      "after_sha256": "55bb8931d399f16db2e750b0fd3d5a1c7f32384b6a44dc7f23a2fa92ceaf8402",
       "source": "Lu, Liang & Kong (2025), Journal of Phonetics 110,101413",
       "url": "https://doi.org/10.1016/j.wocn.2025.101413",
       "seconds": 0.5236,
@@ -770,10 +1298,11 @@
         5000.0
       ],
       "playback_volumes": {
-        "spectrum-before-32i-lu2025-pressed": 0.9992547093932982,
-        "spectrum-fast-32i-lu2025-pressed": 0.9999785516932036,
-        "spectrum-predicted-fast-32i-lu2025-pressed": 0.9999763692076533,
-        "spectrum-predicted-vocoder-32i-lu2025-pressed": 1.0
+        "spectrum-before-32i-lu2025-pressed": 0.9992512251376015,
+        "spectrum-fast-32i-lu2025-pressed": 0.999975064913574,
+        "spectrum-predicted-fast-32i-lu2025-pressed": 0.9999728824356338,
+        "spectrum-predicted-aoki-fast-32i-lu2025-pressed": 0.999975043959049,
+        "spectrum-predicted-aoki-vocoder-32i-lu2025-pressed": 1.0
       },
       "hop_ms": 1.5,
       "repair_model_sha256": "a60a3587139ffdc79b69978615b2079c66a43282cb2b77ab99d276717b433ab2",
@@ -907,13 +1436,144 @@
         "nfft": 512,
         "hop": 24,
         "seed": 20261015
+      },
+      "four_way_history": {
+        "after": "spectrum-predicted-vocoder-32i-lu2025-pressed.wav",
+        "after_sha256": "92723c70e523422f7bcf88f97db272b6f356183bfc072522ca7db26f217f8fd2",
+        "playback_volumes": {
+          "spectrum-before-32i-lu2025-pressed": 0.9992547093932982,
+          "spectrum-fast-32i-lu2025-pressed": 0.9999785516932036,
+          "spectrum-predicted-fast-32i-lu2025-pressed": 0.9999763692076533,
+          "spectrum-predicted-vocoder-32i-lu2025-pressed": 1.0
+        }
+      },
+      "pulse": "spectrum-predicted-aoki-fast-32i-lu2025-pressed.wav",
+      "pulse_sha256": "a2e220075d61370d02753ab93214d8a900afc370cbffe74f2249cec8a030ea9f",
+      "pulse_settings": {
+        "window_ms": 5,
+        "window": "Hann",
+        "dynamic_range_db": 87.35749816894531,
+        "phase_initialization": "aoki-pulse",
+        "momentum": 0.99,
+        "iterations": 32,
+        "sampling_rate": 16000,
+        "nfft": 512,
+        "hop": 24,
+        "seed": 20261015
+      },
+      "spectrograms": {
+        "before": {
+          "image": "assets/spectrogram-examples/five-lu2025-pressed-before.png",
+          "sha256": "5848408b9642dd0222b069fd1e957fa7535dc4a813b4d6b5166448f4353c3aa6",
+          "audio_sha256": "dd9308a90b63905c3be0b6c81fb66c52e02768c9f44ab7f0e74f7318b78719d9",
+          "display": {
+            "sample_rate": 24000,
+            "window_ms": 10,
+            "window": "Hann",
+            "hop": 36,
+            "nfft": 1024,
+            "dynamic_range_db": 60,
+            "level": "equal playback RMS; shared peak reference per example"
+          },
+          "frequency_range": [
+            0.0,
+            5000.0
+          ],
+          "reference_magnitude": 16.372374027590052,
+          "width": 768,
+          "height": 104
+        },
+        "accelerated": {
+          "image": "assets/spectrogram-examples/five-lu2025-pressed-accelerated.png",
+          "sha256": "9493195c58c588c0b216eb74673aaa755feaea5e6c33fbd189721c5af089fa9b",
+          "audio_sha256": "27e8a59247605ea965d7489920f5409f2c01abc71cb69ceb4c111fbb72c26e9c",
+          "display": {
+            "sample_rate": 24000,
+            "window_ms": 10,
+            "window": "Hann",
+            "hop": 36,
+            "nfft": 1024,
+            "dynamic_range_db": 60,
+            "level": "equal playback RMS; shared peak reference per example"
+          },
+          "frequency_range": [
+            0.0,
+            5000.0
+          ],
+          "reference_magnitude": 16.372374027590052,
+          "width": 768,
+          "height": 104
+        },
+        "predicted": {
+          "image": "assets/spectrogram-examples/five-lu2025-pressed-predicted.png",
+          "sha256": "d62df57bb3d5aa362015d2bcef92168b3b0b08ffb5ea7e8958de6f7369655828",
+          "audio_sha256": "93f3b73a2cb5e4cea1d86174c2a44b8bacf86dbf612dfd2ae22132a40f1d7d9f",
+          "display": {
+            "sample_rate": 24000,
+            "window_ms": 10,
+            "window": "Hann",
+            "hop": 36,
+            "nfft": 1024,
+            "dynamic_range_db": 60,
+            "level": "equal playback RMS; shared peak reference per example"
+          },
+          "frequency_range": [
+            0.0,
+            5000.0
+          ],
+          "reference_magnitude": 16.372374027590052,
+          "width": 768,
+          "height": 104
+        },
+        "pulse": {
+          "image": "assets/spectrogram-examples/five-lu2025-pressed-pulse.png",
+          "sha256": "3f2a4e81f3c81f02ee2d08cf25a4aa55e3d965f2b06d9a4872a94a33920c4fff",
+          "audio_sha256": "a2e220075d61370d02753ab93214d8a900afc370cbffe74f2249cec8a030ea9f",
+          "display": {
+            "sample_rate": 24000,
+            "window_ms": 10,
+            "window": "Hann",
+            "hop": 36,
+            "nfft": 1024,
+            "dynamic_range_db": 60,
+            "level": "equal playback RMS; shared peak reference per example"
+          },
+          "frequency_range": [
+            0.0,
+            5000.0
+          ],
+          "reference_magnitude": 16.372374027590052,
+          "width": 768,
+          "height": 104
+        },
+        "after": {
+          "image": "assets/spectrogram-examples/five-lu2025-pressed-after.png",
+          "sha256": "bb99c5df26ba083ad2b5c5b0cbc9c490c3c46a276eff5671e7c83e6d0a78d9ce",
+          "audio_sha256": "55bb8931d399f16db2e750b0fd3d5a1c7f32384b6a44dc7f23a2fa92ceaf8402",
+          "display": {
+            "sample_rate": 24000,
+            "window_ms": 10,
+            "window": "Hann",
+            "hop": 36,
+            "nfft": 1024,
+            "dynamic_range_db": 60,
+            "level": "equal playback RMS; shared peak reference per example"
+          },
+          "frequency_range": [
+            0.0,
+            5000.0
+          ],
+          "reference_magnitude": 16.372374027590052,
+          "width": 768,
+          "height": 104
+        }
       }
     },
     {
       "id": "uploaded",
       "before": "spectrum-before-32i-uploaded.wav",
-      "after": "spectrum-predicted-vocoder-32i-uploaded.wav",
-      "after_sha256": "9278a09c088a77df45ed19af6974760d74a72e13bf3aeda5806c78242209f9a7",
+      "after": "spectrum-predicted-aoki-vocoder-32i-uploaded.wav",
+      "after_sha256": "13d45b3dc5138dbf6e4405e9377938b5366b06c971d048f7f899f1e9eb774fcc",
       "source": "用户上传图的既有裁剪与处理版本；未使用上方波形",
       "url": null,
       "seconds": 2,
@@ -950,10 +1610,11 @@
         6000
       ],
       "playback_volumes": {
-        "spectrum-before-32i-uploaded": 0.9993453188634481,
-        "spectrum-fast-32i-uploaded": 0.9999721381148915,
-        "spectrum-predicted-fast-32i-uploaded": 0.999982035583611,
-        "spectrum-predicted-vocoder-32i-uploaded": 1.0
+        "spectrum-before-32i-uploaded": 0.9993458291537509,
+        "spectrum-fast-32i-uploaded": 0.9999726487252637,
+        "spectrum-predicted-fast-32i-uploaded": 0.999982546199037,
+        "spectrum-predicted-aoki-fast-32i-uploaded": 0.99998341803254,
+        "spectrum-predicted-aoki-vocoder-32i-uploaded": 1.0
       },
       "hop_ms": 1.5,
       "repair_model_sha256": "a60a3587139ffdc79b69978615b2079c66a43282cb2b77ab99d276717b433ab2",
@@ -1087,6 +1748,137 @@
         "nfft": 512,
         "hop": 24,
         "seed": 20261015
+      },
+      "four_way_history": {
+        "after": "spectrum-predicted-vocoder-32i-uploaded.wav",
+        "after_sha256": "9278a09c088a77df45ed19af6974760d74a72e13bf3aeda5806c78242209f9a7",
+        "playback_volumes": {
+          "spectrum-before-32i-uploaded": 0.9993453188634481,
+          "spectrum-fast-32i-uploaded": 0.9999721381148915,
+          "spectrum-predicted-fast-32i-uploaded": 0.999982035583611,
+          "spectrum-predicted-vocoder-32i-uploaded": 1.0
+        }
+      },
+      "pulse": "spectrum-predicted-aoki-fast-32i-uploaded.wav",
+      "pulse_sha256": "29b337980b2ea43c528109bcb36f8722902e67cbab9e2a4dbbda7981b642e333",
+      "pulse_settings": {
+        "window_ms": 5,
+        "window": "Hann",
+        "dynamic_range_db": 55.03804016113281,
+        "phase_initialization": "aoki-pulse",
+        "momentum": 0.99,
+        "iterations": 32,
+        "sampling_rate": 16000,
+        "nfft": 512,
+        "hop": 24,
+        "seed": 20261015
+      },
+      "spectrograms": {
+        "before": {
+          "image": "assets/spectrogram-examples/five-uploaded-before.png",
+          "sha256": "022336afdd75926f603701a3642855e32abcba806f6d128c87b51c84435b4595",
+          "audio_sha256": "14200f0eb74d160ff41b86906aee780ee984bfdc09cb87f3c01026bee9c1aad2",
+          "display": {
+            "sample_rate": 24000,
+            "window_ms": 10,
+            "window": "Hann",
+            "hop": 36,
+            "nfft": 1024,
+            "dynamic_range_db": 60,
+            "level": "equal playback RMS; shared peak reference per example"
+          },
+          "frequency_range": [
+            0,
+            6000
+          ],
+          "reference_magnitude": 15.471147506575075,
+          "width": 768,
+          "height": 104
+        },
+        "accelerated": {
+          "image": "assets/spectrogram-examples/five-uploaded-accelerated.png",
+          "sha256": "ad855797cb57cca4c41642f65f98a4987ba9f8cd926890aad864b830a4c963d5",
+          "audio_sha256": "a6e4da0884db861fbc6dcfe71c59e7aee75587290e5106fefb5fd7705bff62d0",
+          "display": {
+            "sample_rate": 24000,
+            "window_ms": 10,
+            "window": "Hann",
+            "hop": 36,
+            "nfft": 1024,
+            "dynamic_range_db": 60,
+            "level": "equal playback RMS; shared peak reference per example"
+          },
+          "frequency_range": [
+            0,
+            6000
+          ],
+          "reference_magnitude": 15.471147506575075,
+          "width": 768,
+          "height": 104
+        },
+        "predicted": {
+          "image": "assets/spectrogram-examples/five-uploaded-predicted.png",
+          "sha256": "056d6742c63d9b40aab24a31944d74ce1b6955fec530a4ba3b23c918592d4e9c",
+          "audio_sha256": "d370a036b24437f9be3333c09b9596f4779776adf0da45ce6f69d62b9d027f3a",
+          "display": {
+            "sample_rate": 24000,
+            "window_ms": 10,
+            "window": "Hann",
+            "hop": 36,
+            "nfft": 1024,
+            "dynamic_range_db": 60,
+            "level": "equal playback RMS; shared peak reference per example"
+          },
+          "frequency_range": [
+            0,
+            6000
+          ],
+          "reference_magnitude": 15.471147506575075,
+          "width": 768,
+          "height": 104
+        },
+        "pulse": {
+          "image": "assets/spectrogram-examples/five-uploaded-pulse.png",
+          "sha256": "014033a58e005bc0853a14d6b464696450fee2579c2cdd0bc361c5f9d37beed3",
+          "audio_sha256": "29b337980b2ea43c528109bcb36f8722902e67cbab9e2a4dbbda7981b642e333",
+          "display": {
+            "sample_rate": 24000,
+            "window_ms": 10,
+            "window": "Hann",
+            "hop": 36,
+            "nfft": 1024,
+            "dynamic_range_db": 60,
+            "level": "equal playback RMS; shared peak reference per example"
+          },
+          "frequency_range": [
+            0,
+            6000
+          ],
+          "reference_magnitude": 15.471147506575075,
+          "width": 768,
+          "height": 104
+        },
+        "after": {
+          "image": "assets/spectrogram-examples/five-uploaded-after.png",
+          "sha256": "2ef0d39b8e09d484986fa755728b13e1e0e8be7de77ec08391b1414890cf20dc",
+          "audio_sha256": "13d45b3dc5138dbf6e4405e9377938b5366b06c971d048f7f899f1e9eb774fcc",
+          "display": {
+            "sample_rate": 24000,
+            "window_ms": 10,
+            "window": "Hann",
+            "hop": 36,
+            "nfft": 1024,
+            "dynamic_range_db": 60,
+            "level": "equal playback RMS; shared peak reference per example"
+          },
+          "frequency_range": [
+            0,
+            6000
+          ],
+          "reference_magnitude": 15.471147506575075,
+          "width": 768,
+          "height": 104
+        }
       }
     }
   ],
@@ -1094,7 +1886,7 @@
   "parameter_model_sha256": "7ac61f075259099e0c58e743818b2b61a1ec42d5a125eab6ef9fc9216182a86e",
   "before_source_report_sha256": "eee82c3b5bcd49174a6d6044186f5103f5ad53e8cfbb4451ef78ddb271353ded",
   "additional_source_report_sha256": "400f78daecf0e3f864ad1f7a0499d926c2014ec72fc75150bfcc73896599417d",
-  "comparison_schema": "ptb-four-way/1",
+  "comparison_schema": "ptb-five-way/1",
   "previous_source_report_sha256": "077b9598f0ccaa4d53eeb4336813c3cd2c37d7018864265051ca14c337eda880",
   "previous_three_way_source_report_sha256": "b1ff2fabd948a7df6d795afacb5d356826d3b0c655622c871561126de54bdc04"
 }

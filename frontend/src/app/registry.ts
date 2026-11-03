@@ -1,24 +1,26 @@
-export const groups = ['分析与采集', '合成与操控', '标注与实验', '文献与学习'] as const;
+import {localized} from '../modules/module-localization.ts';
+import {tr} from '../i18n/index.ts';
+export const groups = localized(()=>([tr('workbench.analysis_and_recording'), tr('workbench.synthesis_and_manipulation'), tr('workbench.annotation_and_experiments'), tr('workbench.literature_and_learning')] as const));
 export interface Module {id:string;title:string;description:string;icon:string;group:0|1|2|3}
 // Persisted workspace keys use these IDs. Display order must never assign identity.
-export const modules:Module[] = [
-  {id:'M16',title:'录音',description:'本机采集、任务录音与可恢复剪辑',icon:'microphone',group:0},
-  {id:'M05',title:'唇形提取',description:'视频采集、识别与对齐',icon:'lip',group:0},
-  {id:'M01',title:'参数估计',description:'批量提取声学与唇形参数',icon:'sliders',group:0},
-  {id:'M02',title:'参数显示',description:'多轨参数对照与时间选区',icon:'chart',group:0},
-  {id:'M03',title:'EGG 信号分析',description:'双声道信号与声门事件',icon:'wave',group:0},
-  {id:'M04',title:'LPC 谱图',description:'联动波形与共振峰频谱',icon:'bars',group:0},
-  {id:'M06',title:'声学参数合成',description:'Klatt 参数化语音合成',icon:'speaker',group:1},
-  {id:'M10',title:'生理参数合成',description:'声道建模与动态发音',icon:'tract',group:1},
-  {id:'M07',title:'发声类型合成',description:'探索发声方式连续统',icon:'glottis',group:1},
-  {id:'M08',title:'变速变调',description:'独立调整语速与基频',icon:'time-pitch',group:1},
-  {id:'M09',title:'语谱图转音频',description:'从谱图重建声音',icon:'spectrum-audio',group:1},
-  {id:'M17',title:'国际音标表Plus',description:'IPA、extIPA 与 VoQS 全表输入',icon:'ipa-keyboard',group:2},
-  {id:'M13',title:'汉字转国际音标',description:'汉字与国际音标转换',icon:'ipa',group:2},
-  {id:'M11',title:'MFA 自动标注',description:'模型驱动的强制对齐',icon:'forced-alignment',group:2},
-  {id:'M12',title:'TextGrid标注',description:'TextGrid 编辑与唇形对齐',icon:'textgrid',group:2},
-  {id:'M14',title:'音系归纳',description:'调查字表与同音字表',icon:'nodes',group:2},
-  {id:'M15',title:'感知实验',description:'实验设计、配置与运行',icon:'headphones',group:2},
-  {id:'M18',title:'语音学论文精读',description:'按日期获取论文、原文与中文译文对照阅读',icon:'book',group:3},
-  {id:'M19',title:'语言地图',description:'语言特征、县级方言分布与可编辑研究地图',icon:'map',group:3},
-];
+export const modules:Module[] = localized(()=>([
+  {id:'M16',title:tr('workbench.recording_157'),description:tr('workbench.local_capture_task_recordings_and_recoverable_editing'),icon:'microphone',group:0},
+  {id:'M05',title:tr('workbench.lip_tracking'),description:tr('workbench.video_capture_tracking_and_alignment'),icon:'lip',group:0},
+  {id:'M01',title:tr('workbench.parameter_estimation'),description:tr('workbench.batch_extraction_of_acoustic_and_lip_parameters'),icon:'sliders',group:0},
+  {id:'M02',title:tr('workbench.parameter_display'),description:tr('workbench.compare_parameter_tracks_and_select_time_ranges'),icon:'chart',group:0},
+  {id:'M03',title:tr('workbench.egg_signal_analysis'),description:tr('workbench.two_channel_signals_and_glottal_events'),icon:'wave',group:0},
+  {id:'M04',title:tr('workbench.lpc_spectrum'),description:tr('workbench.linked_waveforms_and_formant_spectra'),icon:'bars',group:0},
+  {id:'M06',title:tr('workbench.acoustic_synthesis'),description:tr('workbench.klatt_parametric_speech_synthesis'),icon:'speaker',group:1},
+  {id:'M10',title:tr('workbench.articulatory_synthesis'),description:tr('workbench.vocal_tract_modeling_and_dynamic_articulation'),icon:'tract',group:1},
+  {id:'M07',title:tr('workbench.phonation_synthesis'),description:tr('workbench.explore_continua_of_phonation_types'),icon:'glottis',group:1},
+  {id:'M08',title:tr('workbench.time_and_pitch_manipulation'),description:tr('workbench.adjust_speaking_rate_and_f0_independently'),icon:'time-pitch',group:1},
+  {id:'M09',title:tr('workbench.spectrogram_to_audio'),description:tr('workbench.reconstruct_audio_from_a_spectrogram'),icon:'spectrum-audio',group:1},
+  {id:'M17',title:tr('workbench.ipa_chart_plus'),description:tr('workbench.complete_ipa_extipa_and_voqs_input_charts'),icon:'ipa-keyboard',group:2},
+  {id:'M13',title:tr('workbench.chinese_to_ipa_transcription'),description:tr('workbench.convert_chinese_characters_to_ipa'),icon:'ipa',group:2},
+  {id:'M11',title:tr('workbench.mfa_forced_alignment'),description:tr('workbench.model_based_forced_alignment'),icon:'forced-alignment',group:2},
+  {id:'M12',title:tr('workbench.textgrid_annotation'),description:tr('workbench.textgrid_editing_and_lip_sync_alignment'),icon:'textgrid',group:2},
+  {id:'M14',title:tr('workbench.phonological_analysis'),description:tr('workbench.character_tables_and_homophone_groupings'),icon:'nodes',group:2},
+  {id:'M15',title:tr('workbench.perceptual_experiments'),description:tr('workbench.experiment_design_configuration_and_execution'),icon:'headphones',group:2},
+  {id:'M18',title:tr('workbench.phonetics_paper_reader'),description:tr('workbench.retrieve_papers_by_date_and_read_originals_alongside_chinese'),icon:'book',group:3},
+  {id:'M19',title:tr('workbench.language_maps'),description:tr('workbench.language_features_county_level_dialect_distributions_and_editable_research'),icon:'map',group:3},
+]));

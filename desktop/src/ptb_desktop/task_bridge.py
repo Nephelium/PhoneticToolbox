@@ -3,11 +3,13 @@ import hashlib
 import json
 import os
 import struct
+import threading
 from contextlib import ExitStack
 from pathlib import Path
 from uuid import UUID,uuid4
 from .file_provider import checked_path,FileAccessError,identity,open_locked
 from .directory_io import pin_directory
+from .native_i18n import native_error
 
 PROJECT='00000000-0000-4000-8000-000000000001'
 
@@ -41,8 +43,10 @@ def parameter_export_paths(files,root,output,sha):
 
 
 class TaskBridge:
-    def __init__(self,provider,service):
+    def __init__(self,provider,service,*,cache_context=None,manual_pack_root=None):
         self.provider,self.service=provider,service
+        self.cache_context=cache_context
+        self.manual_pack_root=manual_pack_root
         self.batch_sources={}
         self.egg_preview_sources={}
         self.stream_sources={}
@@ -62,15 +66,41 @@ class TaskBridge:
         self.m06=M06Bridge(self)
         from .m09_bridge import M09Bridge
         self.m09=M09Bridge()
+        self._manual_packs=None
+        self._manual_packs_lock=threading.Lock()
+        self._closing=False
+
+    def close(self):
+        with self._manual_packs_lock:
+            self._closing=True
+            if self._manual_packs is not None:self._manual_packs.close()
 
     def invoke(self,body):
         op=body.get('op')
+        if op=='file_list':return self.provider.list(body.get('id'))
+        if op in ('file_read','file_textgrid'):
+            payload,sha=self.provider.read(body.get('id'))
+            if op=='file_read':
+                import base64
+                return {'base64':base64.b64encode(payload).decode('ascii'),'sha256':sha}
+            from dataclasses import asdict
+            from phonetic_core.textgrid import parse_textgrid
+            text=payload.decode('utf-16' if payload[:2] in (b'\xff\xfe',b'\xfe\xff') else 'utf-8-sig')
+            return {'sha256':sha,'tiers':[asdict(t) for t in parse_textgrid(text)]}
+        if op=='manual_packs':
+            from .manual_packs import ManualPackManager,ManualPackError
+            with self._manual_packs_lock:
+                if getattr(self,'_closing',False):raise FileAccessError('manual.pack.cancelled')
+                if self._manual_packs is None:self._manual_packs=ManualPackManager(root=self.manual_pack_root)
+            try:return self._manual_packs.invoke(body.get('action'),{key:value for key,value in body.items() if key not in ('op','action')})
+            except ManualPackError as exc:raise FileAccessError(str(exc)) from None
+            except OSError:raise FileAccessError('manual.pack.storageFailed') from None
         if op in ('cache_candidates','clean_cache_candidate'):
             from .legacy_cache import inspect_candidates, clean_candidate
             try:
-                if op=='cache_candidates':return inspect_candidates()
+                if op=='cache_candidates':return inspect_candidates(self.cache_context)
                 if set(body)-{'op','id','confirmed'}:raise ValueError('不支持的缓存清理请求。')
-                return clean_candidate(body.get('id'),body.get('confirmed'))
+                return clean_candidate(body.get('id'),body.get('confirmed'),self.cache_context)
             except (OSError,ValueError) as exc:raise FileAccessError(str(exc)) from None
         if op=='m09_check_python':return self.m09.check(body.get('grant'))
         if op=='m09_vocoder_status':return self.service.get('/api/v1/jobs/spec2wav/vocoder')
@@ -141,7 +171,8 @@ class TaskBridge:
             except HTTPError as exc:
                 code=json.load(exc).get('detail')
                 message={'invalid_spectrogram_audio':'音频需为 30 秒内、8000–96000 Hz 的单声道或双声道文件。','invalid_image_corners':'四点须按左上、右上、右下、左下围成有效区域。','spectrogram_budget':'输入或笔迹超过预算，请缩小图片、缩短音频或减少笔迹。','preview_busy':'另一个预览正在处理，请稍后重试。','preview_timeout':'频谱预览超时，请缩小输入后重试。','input_unavailable':'源文件已失效，请重新选择。'}.get(code if isinstance(code,str) else '', '频谱参数或输入无效，请检查范围后重试。')
-                raise FileAccessError(message) from None
+                key={'invalid_spectrogram_audio':'invalidAudio','invalid_image_corners':'invalidCorners','spectrogram_budget':'inputBudget','preview_busy':'previewBusy','preview_timeout':'previewTimeout','input_unavailable':'inputUnavailable'}.get(code if isinstance(code,str) else '', 'invalidInput')
+                raise native_error(FileAccessError(message),'errors.reconstruction.'+key) from None
         if op=='reconstructions':return [j for j in self.service.get('/api/v1/jobs?project_id='+PROJECT)['jobs'] if j['operation']=='spectrogram_to_audio']
         if op=='cancel_job':return self.service.request('/api/v1/jobs/'+str(UUID(body['id']))+'/cancel','POST')
         if op=='save_job':return self.save(str(UUID(body['id'])),body['directory'],single=True)
@@ -230,7 +261,9 @@ class TaskBridge:
                 with sf.SoundFile(stream,closefd=False) as source:
                     try:validate_source(source.frames,source.samplerate,source.channels)
                     except ValueError as error:
-                        raise FileAccessError(entry.name+'：'+('最长支持 30 分钟，请先切分音频。' if str(error)=='m01_duration_limit' else '音频采样率或声道格式不受支持。')) from None
+                        duration=str(error)=='m01_duration_limit'
+                        message=entry.name+'：'+('最长支持 30 分钟，请先切分音频。' if duration else '音频采样率或声道格式不受支持。')
+                        raise native_error(FileAccessError(message),'errors.audio.'+('durationLimit' if duration else 'invalidFormat'),name=entry.name) from None
                 stream.seek(0)
             result=self.service.import_stream(stream,entry.name,role,entry.fingerprint[2])
         self.stream_sources[(key,role)]=result

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import {tr,message,messageRef} from '../i18n/index.ts';
 import {computed,nextTick,onBeforeUnmount,onDeactivated,onMounted,ref,shallowRef,watch} from 'vue';
 import type {AssetResolver,ChapterLoader,ManualChapter,ManualLocation,ManualProject,ManualTarget} from './types.ts';
 import {chapterSearchEntries,chapterSections,fetchChapter,manualAnchor,searchManual} from './content.ts';
@@ -8,15 +9,19 @@ import {manualPlayback} from './playback.ts';
 import ManualDocument from './ManualDocument.vue';
 import AppIcon from '../components/AppIcon.vue';
 import {vResizablePanels} from '../layout/resizablePanels.ts';
-const props=withDefaults(defineProps<{project:ManualProject;chapterIcons?:Record<string,string>;target?:ManualTarget;requestKey?:number;chapterLoader?:ChapterLoader;assetBaseUrl?:string;assetResolver?:AssetResolver;playbackAllowed?:boolean;active?:boolean;returnLabel?:string;initialLocation?:ManualLocation}>(),{assetBaseUrl:'./manual/',playbackAllowed:true,active:true});
-const emit=defineEmits<{navigate:[target:ManualTarget];location:[location:ManualLocation];returnTool:[]}>();
-const root=ref<HTMLElement>(),navigation=ref<HTMLElement>(),scroll=ref<HTMLElement>(),query=ref(''),drawer=ref(false),loading=ref(false),error=ref(''),notice=ref(''),currentId=ref(''),targetId=ref<string>();
+const props=withDefaults(defineProps<{project:ManualProject;repositoryScope?:string;chapterIcons?:Record<string,string>;target?:ManualTarget;requestKey?:number;chapterLoader?:ChapterLoader;assetBaseUrl?:string;assetResolver?:AssetResolver;playbackAllowed?:boolean;active?:boolean;returnLabel?:string;initialLocation?:ManualLocation}>(),{assetBaseUrl:'./manual/',playbackAllowed:true,active:true});
+const emit=defineEmits<{navigate:[target:ManualTarget];location:[location:ManualLocation];chapterAssets:[ids:string[]];returnTool:[]}>();
+const root=ref<HTMLElement>(),navigation=ref<HTMLElement>(),scroll=ref<HTMLElement>(),query=ref(''),drawer=ref(false),loading=ref(false),error=messageRef(),notice=messageRef(),currentId=ref(''),targetId=ref<string>();
 const chapter=shallowRef<ManualChapter>(),cacheRevision=ref(0);
 const expandedChapter=ref<string>(),outlineClick=shallowRef<ManualTarget>();
 let request=0,abort:AbortController|undefined,observer:ResizeObserver|undefined,frame:number|undefined,jumpTop:number|undefined;
 let locationTimer:ReturnType<typeof setTimeout>|undefined,pendingLocation:ManualLocation|undefined,lastLocation:ManualLocation|undefined;
 let repository=new ManualChapterRepository((descriptor,signal)=>props.chapterLoader?props.chapterLoader(descriptor,signal):fetchChapter(props.assetBaseUrl,descriptor,signal));
+const repositories=new Map<string,ManualChapterRepository>();
+function repositoryKey(){return [props.repositoryScope,props.project.id,props.project.version,props.project.sourceDigest,props.project.language,props.project.chapters.map(item=>item.path).join('|')].join(':');}
+repositories.set(repositoryKey(),repository);
 const positions=new Map<string,number>();
+function announceAssets(value:ManualChapter){const ids=new Set<string>();const visit=(node:ManualChapter['body'])=>{if(typeof node.attrs?.assetId==='string')ids.add(node.attrs.assetId);for(const child of node.content??[])visit(child);};visit(value.body);emit('chapterAssets',[...ids]);}
 const currentIndex=computed(()=>props.project.chapters.findIndex(item=>item.id===currentId.value));
 const currentDescriptor=computed(()=>props.project.chapters[currentIndex.value]);
 const sections=computed(()=>chapter.value?chapterSections(chapter.value):[]);
@@ -89,7 +94,7 @@ async function locate(target:ManualTarget,restore=false,generation=request){
   const node=target.targetId?targetNode(target.targetId):undefined;
   jumpTop=undefined;
   if(restore){container.scrollTop=positions.get(target.chapterId)??0;headingInView();}
-  else if(target.targetId&&!node){notice.value='目标小节已调整，当前显示所在章节。';container.scrollTop=0;targetId.value=undefined;}
+  else if(target.targetId&&!node){notice.value=message('manual.reader.movedSection');container.scrollTop=0;targetId.value=undefined;}
   else if(node){container.scrollTop+=node.getBoundingClientRect().top-container.getBoundingClientRect().top-20;targetId.value=target.targetId;node.classList.add('manual-target-highlight');setTimeout(()=>node.classList.remove('manual-target-highlight'),1600);}
   else {container.scrollTop=0;targetId.value=undefined;}
   if(!restore)jumpTop=container.scrollTop;
@@ -97,7 +102,7 @@ async function locate(target:ManualTarget,restore=false,generation=request){
 }
 async function navigate(target:ManualTarget,notify=true,restore=false,fromOutline=false){
   const descriptor=props.project.chapters.find(item=>item.id===target.chapterId);
-  if(!descriptor){notice.value='此章节尚未收录，请从目录选择已有章节。';return;}
+  if(!descriptor){notice.value=message('manual.reader.missingChapter');return;}
   outlineClick.value=fromOutline?target:undefined;
   if(!fromOutline){if(target.targetId)expandedChapter.value=target.chapterId;else if(expandedChapter.value!==target.chapterId)expandedChapter.value=undefined;}
   // Reuse the mounted chapter for outline/search/link jumps. A cleared repository
@@ -106,6 +111,7 @@ async function navigate(target:ManualTarget,notify=true,restore=false,fromOutlin
   remember(true);manualPlayback.pause();abort?.abort();abort=new AbortController();const generation=++request;
   error.value='';notice.value='';drawer.value=false;stopTracking();jumpTop=undefined;
   if(sameChapter){
+    announceAssets(chapter.value!);
     targetId.value=target.targetId;
     if(notify)emit('navigate',target);
     await locate(target,restore,generation);return;
@@ -114,10 +120,10 @@ async function navigate(target:ManualTarget,notify=true,restore=false,fromOutlin
   try{
     const loaded=await repository.load(descriptor,abort.signal);
     if(generation!==request)return;
-    chapter.value=loaded;currentId.value=descriptor.id;targetId.value=target.targetId;loading.value=false;cacheRevision.value++;
+    announceAssets(loaded);chapter.value=loaded;currentId.value=descriptor.id;targetId.value=target.targetId;loading.value=false;cacheRevision.value++;
     if(notify)emit('navigate',target);
     await locate(target,restore,generation);
-  }catch(reason){if(generation!==request)return;loading.value=false;if(reason instanceof DOMException&&reason.name==='AbortError')return;chapter.value=undefined;currentId.value=descriptor.id;error.value=reason instanceof Error&&/^(章节|正文)/.test(reason.message)?reason.message:'章节暂时无法打开，请重试。仍无法打开时，可在关于页反馈此问题。';}
+  }catch(reason){if(generation!==request)return;loading.value=false;if(reason instanceof DOMException&&reason.name==='AbortError')return;chapter.value=undefined;currentId.value=descriptor.id;error.value=message('manual.reader.loadError');}
 }
 function outlineNavigate(target:ManualTarget){
   expandedChapter.value=!target.targetId&&expandedChapter.value===target.chapterId?undefined:target.chapterId;
@@ -128,18 +134,24 @@ function next(){const item=props.project.chapters[currentIndex.value+1];if(item)
 watch(()=>[props.target?.chapterId,props.target?.targetId,props.requestKey] as const,()=>{if(props.target)void navigate(props.target,false);});
 watch(()=>[currentId.value,readingPath.value.sectionId,readingPath.value.subsectionId,outlineSelection.value,expandedChapter.value,searching.value,drawer.value],()=>{void revealCurrent();});
 watch(()=>props.active,active=>{if(!active){manualPlayback.pause();remember(true);stopTracking();}else if(chapter.value)void locate({chapterId:currentId.value},true);});
-watch(()=>[props.project.id,props.project.version,props.project.chapters.map(item=>item.id+':'+item.path).join('|')] as const,()=>{repository.clear();const target=props.target??{chapterId:props.project.chapters[0]?.id};if(target.chapterId)void navigate(target,false);});
+watch(()=>[props.repositoryScope,props.project.id,props.project.version,props.project.sourceDigest,props.project.language,props.project.chapters.map(item=>item.id+':'+item.path).join('|')] as const,()=>{
+  const key=repositoryKey();
+  repository=repositories.get(key)??new ManualChapterRepository((descriptor,signal)=>props.chapterLoader?props.chapterLoader(descriptor,signal):fetchChapter(props.assetBaseUrl,descriptor,signal));
+  repositories.delete(key);repositories.set(key,repository);
+  while(repositories.size>3)repositories.delete(repositories.keys().next().value!);
+  const target=props.target??{chapterId:currentId.value||props.project.chapters[0]?.id};if(target.chapterId)void navigate(target,false,true);
+});
 onMounted(()=>{window.addEventListener('pagehide',pageHidden);document.addEventListener('visibilitychange',visibilityChanged);const location=props.initialLocation;if(location)positions.set(location.chapterId,location.scrollTop);const target=props.target??location??{chapterId:props.project.chapters[0]?.id};if(target.chapterId)void navigate(target,false,!!location&&!props.target);});
 onBeforeUnmount(()=>{remember(true);request++;abort?.abort();stopTracking();manualPlayback.pause();window.removeEventListener('pagehide',pageHidden);document.removeEventListener('visibilitychange',visibilityChanged);});
 onDeactivated(()=>{remember(true);stopTracking();manualPlayback.pause();});
 defineExpose({navigate,pause:()=>manualPlayback.pause()});
 </script>
 <template>
-  <section ref="root" class="manual-reader" aria-label="使用说明" :class="{'manual-drawer-open':drawer}" v-resizable-panels="{key:'manual:reader',center:'.manual-reading-pane',centerMin:420,panels:[{selector:'.manual-navigation',side:'left',label:'说明书目录',initial:250,min:190,max:420}]}">
-    <nav ref="navigation" class="manual-navigation" aria-label="说明书目录">
-      <header><strong>{{project.title}}</strong><button class="manual-drawer-close" type="button" @click="drawer=false">收起目录</button></header>
-      <label class="manual-search-label">搜索说明书<input v-model="query" type="search" placeholder="输入控件、参数或关键词" aria-label="搜索说明书"/></label>
-      <div v-if="searching" class="manual-search-results" role="region" aria-label="搜索结果"><p class="manual-search-count">{{hits.length}} 条结果<span v-if="hits.length>=80">，请缩小搜索范围</span></p><p v-if="!project.searchIndex?.length" class="manual-index-warning">当前搜索范围包含目录及已打开的章节。</p><button v-for="(hit,index) in hits" :key="index" type="button" @click="navigate(hit)"><strong>{{hit.title||project.chapters.find(item=>item.id===hit.chapterId)?.title}}</strong><span>{{hit.excerpt}}</span></button><p v-if="!hits.length" class="manual-empty">未找到匹配内容。</p></div>
+  <section ref="root" class="manual-reader" :aria-label="tr('manual.reader.title')" :class="{'manual-drawer-open':drawer}" v-resizable-panels="{key:'manual:reader',center:'.manual-reading-pane',centerMin:420,panels:[{selector:'.manual-navigation',side:'left',label:tr('manual.reader.toc'),initial:250,min:190,max:420}]}">
+    <nav ref="navigation" class="manual-navigation" :aria-label="tr('manual.reader.toc')">
+      <header><strong>{{project.title}}</strong><button class="manual-drawer-close" type="button" @click="drawer=false">{{tr('manual.reader.collapse')}}</button></header>
+      <label class="manual-search-label">{{tr('manual.reader.search')}}<input v-model="query" type="search" :placeholder="tr('manual.reader.searchPlaceholder')" :aria-label="tr('manual.reader.search')"/></label>
+      <div v-if="searching" class="manual-search-results" role="region" :aria-label="tr('manual.reader.searchResults')"><p class="manual-search-count">{{tr('manual.reader.searchCount',{count:hits.length})}}<span v-if="hits.length>=80">{{tr('manual.reader.narrowSearch')}}</span></p><p v-if="!project.searchIndex?.length" class="manual-index-warning">{{tr('manual.reader.partialIndex')}}</p><button v-for="(hit,index) in hits" :key="index" type="button" @click="navigate(hit)"><strong>{{hit.title||project.chapters.find(item=>item.id===hit.chapterId)?.title}}</strong><span>{{hit.excerpt}}</span></button><p v-if="!hits.length" class="manual-empty">{{tr('manual.reader.noResults')}}</p></div>
       <ol v-else class="manual-toc">
         <li v-for="entry in numberedToc" :key="entry.item.id">
           <button type="button" :data-manual-chapter="entry.item.id" :class="{active:selectedOutline(entry.item.id)}" :aria-current="selectedOutline(entry.item.id)?'page':undefined" :aria-expanded="entry.sections.length?expandedChapter===entry.item.id:undefined" :aria-controls="entry.sections.length?manualAnchor(entry.item.id,'chapter-toc'):undefined" @click="outlineNavigate({chapterId:entry.item.id})"><AppIcon :name="chapterIcons?.[entry.item.id]??'book'" class="manual-toc-chapter-icon"/><span class="manual-toc-number">{{entry.number}}</span><span class="manual-toc-title">{{entry.item.title}}</span><AppIcon v-if="entry.sections.length" name="arrow" class="manual-toc-toggle" :class="{expanded:expandedChapter===entry.item.id}"/></button>
@@ -153,18 +165,18 @@ defineExpose({navigate,pause:()=>manualPlayback.pause()});
           </ol>
         </li>
       </ol>
-      <p v-if="project.version" class="manual-version">手册 {{project.version}}<span v-if="project.softwareVersion"> · 适用软件 {{project.softwareVersion}}</span></p>
+      <p v-if="project.version" class="manual-version">{{tr('manual.reader.version',{version:project.version})}}<span v-if="project.softwareVersion"> · {{tr('manual.reader.softwareVersion',{version:project.softwareVersion})}}</span></p>
     </nav>
-    <button v-if="drawer" class="manual-drawer-shade" aria-label="收起目录" type="button" @click="drawer=false"/>
+    <button v-if="drawer" class="manual-drawer-shade" :aria-label="tr('manual.reader.collapse')" type="button" @click="drawer=false"/>
     <div class="manual-reading-pane">
-      <header class="manual-reading-toolbar"><button type="button" class="manual-drawer-toggle" @click="drawer=!drawer">目录与搜索</button><span class="manual-breadcrumb">{{currentDescriptor?.title||'使用说明'}}</span><button v-if="returnLabel" type="button" @click="manualPlayback.pause();emit('returnTool')">{{returnLabel}}</button></header>
-      <div ref="scroll" class="manual-reading-scroll" tabindex="0" aria-label="说明书正文" @scroll.passive="onScroll">
+      <header class="manual-reading-toolbar"><button type="button" class="manual-drawer-toggle" @click="drawer=!drawer">{{tr('manual.reader.tocSearch')}}</button><span class="manual-breadcrumb">{{currentDescriptor?.title||tr('manual.reader.title')}}</span><button v-if="returnLabel" type="button" @click="manualPlayback.pause();emit('returnTool')">{{returnLabel}}</button></header>
+      <div ref="scroll" class="manual-reading-scroll" tabindex="0" :aria-label="tr('manual.reader.body')" @scroll.passive="onScroll">
         <p v-if="notice" class="manual-notice" role="status">{{notice}}</p>
-        <p v-if="loading" class="manual-loading" role="status">正在加载章节…</p>
-        <div v-else-if="error" class="manual-load-error" role="alert"><p>{{error}}</p><button type="button" @click="navigate({chapterId:currentId})">重新加载</button></div>
+        <p v-if="loading" class="manual-loading" role="status">{{tr('manual.reader.loadingChapter')}}</p>
+        <div v-else-if="error" class="manual-load-error" role="alert"><p>{{error}}</p><button type="button" @click="navigate({chapterId:currentId})">{{tr('manual.reader.reload')}}</button></div>
         <ManualDocument v-else-if="chapter" :chapter="chapter" :chapter-number="currentIndex+1" :assets="project.assets" :references="project.references" :asset-base-url="assetBaseUrl" :asset-resolver="assetResolver" :playback-allowed="playbackAllowed&&active" @navigate="navigate($event)"/>
-        <p v-else class="manual-empty">说明书尚未收录章节。</p>
-        <footer v-if="chapter&&!loading" class="manual-chapter-pagination"><button type="button" :disabled="currentIndex<=0" @click="previous">上一章</button><span>{{currentIndex+1}} / {{project.chapters.length}}</span><button type="button" :disabled="currentIndex>=project.chapters.length-1" @click="next">下一章</button></footer>
+        <p v-else class="manual-empty">{{tr('manual.reader.empty')}}</p>
+        <footer v-if="chapter&&!loading" class="manual-chapter-pagination"><button type="button" :disabled="currentIndex<=0" @click="previous">{{tr('manual.reader.previous')}}</button><span>{{currentIndex+1}} / {{project.chapters.length}}</span><button type="button" :disabled="currentIndex>=project.chapters.length-1" @click="next">{{tr('manual.reader.next')}}</button></footer>
       </div>
     </div>
   </section>

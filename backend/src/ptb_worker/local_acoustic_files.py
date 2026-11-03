@@ -44,6 +44,9 @@ class LocalAcousticFiles:
         return path
 
     def _save(self,state):
+        # Deleted files no longer require an asset row. Historical job manifests
+        # retain their IDs; looking them up continues to report unavailable.
+        state['assets']={key:a for key,a in state['assets'].items() if a['state']!='deleted'}
         path=self.root/'.ptb-local-next.json';no_links(path)
         raw=canonical(state).encode()
         if len(raw)>16_000_000:raise StorageError('local_metadata_limit',413)
@@ -75,6 +78,16 @@ class LocalAcousticFiles:
                     state=json.loads(marker.read_text('utf-8'))
                     if state['version']!=1:raise StorageError('local_schema_mismatch',503)
                     self.state=state
+                    # Upload byte counts are recoverable from owned files. Keep
+                    # the durable reservation until seal/finish publishes them.
+                    for a in state['assets'].values():
+                        if a['state']=='uploading' and a.get('sha256') is None:
+                            asset_path=self._path(a['id'])
+                            if asset_path.exists():
+                                actual=asset_path.stat().st_size
+                                if actual>a['expected_bytes']:raise StorageError('output_budget_exceeded',413)
+                                a['size_bytes']=actual
+                                a['reserved_bytes']=a['expected_bytes']-actual
                     yield state
                 finally:lock.seek(0);release(lock)
 
@@ -89,7 +102,7 @@ class LocalAcousticFiles:
 
     def _budget(self,extra):
         reserved=sum(a['reserved_bytes'] for a in self.state['assets'].values())
-        if len(self.state['assets'])>=10000:raise StorageError('asset_limit_reached',413)
+        if sum(a['state']!='deleted' for a in self.state['assets'].values())>=10000:raise StorageError('asset_limit_reached',413)
         if shutil.disk_usage(self.root).free-reserved-extra<1_000_000_000:raise StorageError('disk_space_low',507)
 
     def import_input(self,raw,name,role):
@@ -101,6 +114,7 @@ class LocalAcousticFiles:
         with self.locked() as state:
             for a in state['assets'].values():
                 if a['state']=='ready' and a['kind']=='input' and (a['sha256'],a['name'],a['role'])==(sha,name,role):
+                    a['retention_touched_at']=time.time();self._save(state)
                     return dict(asset_id=a['id'],sha256=sha)
             self._budget(len(raw));asset_id=str(uuid4())
             row=dict(id=asset_id,name=name,role=role,kind='input',state='uploading',sha256=sha,size_bytes=0,
@@ -153,21 +167,34 @@ class LocalAcousticFiles:
             if a['state']!='uploading' or a['kind']!='input' or not 0<len(raw)<=1_048_576 or a['size_bytes']+len(raw)>a['expected_bytes']:
                 raise JobError('invalid_local_input',422)
             with self._path(key).open('ab') as f:f.write(raw)
-            a['size_bytes']+=len(raw);a['reserved_bytes']-=len(raw);self._save(self.state)
+            # Reconstructed under the asset lock on the next call, including
+            # after a crash; publication still requires finish_stream_input.
+            a['size_bytes']+=len(raw);a['reserved_bytes']-=len(raw)
 
     def finish_stream_input(self,key):
         with self.locked():
             a=self._asset(key)
             if a['state']!='uploading' or a['size_bytes']!=a['expected_bytes']:raise JobError('invalid_local_input',422)
-            h=hashlib.sha256()
-            with self._path(key).open('rb') as f:
-                for raw in iter(lambda:f.read(1048576),b''):h.update(raw)
-            if a['role']=='audio':
-                import soundfile as sf
-                from phonetic_core.models.audio_bounds import validate_source
-                try:
-                    with sf.SoundFile(self._path(key)) as snd:validate_source(snd.frames,snd.samplerate,snd.channels)
-                except ValueError as exc:raise JobError(str(exc),422) from None
+            path=self._path(key);before=path.stat();role=a['role']
+        # Hash/format validation can take minutes for parameter archives. Do not
+        # hold the global asset lock while reading a completed immutable upload.
+        h=hashlib.sha256()
+        with path.open('r+b') as f:
+            # Chunk writes avoid per-chunk fsync; seal makes all bytes durable
+            # before publishing a ready metadata record.
+            f.flush();os.fsync(f.fileno())
+            for raw in iter(lambda:f.read(1048576),b''):h.update(raw)
+        if role=='audio':
+            import soundfile as sf
+            from phonetic_core.models.audio_bounds import validate_source
+            try:
+                with sf.SoundFile(path) as snd:validate_source(snd.frames,snd.samplerate,snd.channels)
+            except ValueError as exc:raise JobError(str(exc),422) from None
+        with self.locked():
+            a=self._asset(key);after=self._path(key).stat()
+            if (a['state']!='uploading' or a['size_bytes']!=a['expected_bytes'] or
+                    (before.st_ino,before.st_size,before.st_mtime_ns)!=(after.st_ino,after.st_size,after.st_mtime_ns)):
+                raise JobError('invalid_local_input',422)
             a.update(state='ready',reserved_bytes=0,sha256=h.hexdigest());self._save(self.state)
             return dict(asset_id=key,sha256=a['sha256'])
 
@@ -230,7 +257,7 @@ class LocalAcousticFiles:
             if a['state']!='uploading' or a['sha256'] is not None or offset!=a['size_bytes'] or not 0<len(raw)<=1_048_576 or offset+len(raw)>a['expected_bytes']:
                 raise StorageError('invalid_output_chunk',409)
             with self._path(asset_id).open('ab') as f:f.write(raw);f.flush();os.fsync(f.fileno())
-            a['size_bytes']+=len(raw);a['reserved_bytes']-=len(raw);self._save(self.state)
+            a['size_bytes']+=len(raw);a['reserved_bytes']-=len(raw)
 
     def read_input(self,identity,asset_id,offset,size):
         with self.batch_transaction() as tx:
@@ -329,6 +356,7 @@ class LocalAcousticFiles:
     def read_result(self,owner,asset_id,offset,size):
         if owner!='local' or offset<0 or not 0<size<=1_048_576:raise StorageError('invalid_read',403)
         with self.batch_transaction() as tx:
+            if str(asset_id) not in self.state['assets']:raise StorageError('input_unavailable',410)
             a=self._asset(asset_id);self._readable(tx,a)
             now=tx.now()
             if now-a.get('retention_touched_at',0)>=3600:

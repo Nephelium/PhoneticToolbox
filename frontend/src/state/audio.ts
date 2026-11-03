@@ -1,9 +1,12 @@
+import {messageRef} from '../i18n/index.ts';
+import {uiMessage,uiError,uiErrorMessage,localized,messageProperty,setMessageProperty} from '../modules/module-localization.ts';
+import {tr} from '../i18n/index.ts';
 import { reactive,shallowRef,toRaw,watch } from 'vue';
 import {automaticAudioGain} from './audition.ts';
 import {peakGain,samplePeak} from '../platform/playback-gain.ts';
 import type { AudioAsset } from '../platform/types.ts';
 import {assertPlaybackAllowed} from '../platform/capture-lease.ts';
-export const playback=reactive({playing:false,position:0,volume:0.7,error:''});
+export const playback=reactive(messageProperty({playing:false,position:0,volume:0.7,error:''},'error'));
 const currentAudio=shallowRef<{asset:AudioAsset;channel:number}>();
 export function isCurrentAudio(asset:AudioAsset|null,selectedChannel:number){return !!asset&&currentAudio.value?.asset===toRaw(asset)&&currentAudio.value?.channel===selectedChannel;}
 let context:AudioContext|undefined, source:AudioBufferSourceNode|undefined,gain:GainNode|undefined;
@@ -29,7 +32,7 @@ export async function play(asset:AudioAsset,start:number,end:number,selectedChan
     assertPlaybackAllowed();
     context??=new AudioContext();await context.resume();
     if(request!==generation)return;
-    if(context.state!=='running')throw Error('音频设备未就绪，请重新点击播放。');
+    if(context.state!=='running')throw uiError(uiMessage('state.the_audio_device_is_not_ready_click_play_again'));
     channel?.postMessage('pause-other-windows');
     const buffer=context.createBuffer(1,asset.frames,asset.sampleRate);
     buffer.copyToChannel(new Float32Array(asset.channels[selectedChannel]),0);
@@ -40,5 +43,5 @@ export async function play(asset:AudioAsset,start:number,end:number,selectedChan
     origin=Math.max(audioOrigin,start);limit=Math.min(end,asset.duration,audioOrigin+asset.frames/asset.sampleRate);started=context.currentTime;
     source.onended=()=>{playback.playing=false;playback.position=limit;cancelAnimationFrame(raf);source?.disconnect();source=undefined;gain?.disconnect();gain=undefined;};
     source.start(0,origin-audioOrigin,Math.max(0,limit-origin));playback.position=origin;playback.playing=true;tick();
-  }catch(error){if(request!==generation)return;stop();playback.error=error instanceof Error?error.message:'播放失败，请检查输出设备。';}
+  }catch(error){if(request!==generation)return;stop();setMessageProperty(playback,'error',error instanceof Error?uiErrorMessage(error):uiMessage('state.playback_failed_check_your_output_device'));}
 }

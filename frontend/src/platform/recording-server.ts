@@ -1,3 +1,5 @@
+import {uiMessage,uiError,localized} from '../modules/module-localization.ts';
+import {tr} from '../i18n/index.ts';
 import type {ResearchFile,JobView} from './research.ts';
 import type {Project,Spectrum,Config,Task} from '../modules/recording/types.ts';
 export type RecordingAsset=ResearchFile & {sha256:string};
@@ -19,6 +21,6 @@ export interface RecordingServer {
 }
 export function recordingSpectrum(raw:any):Spectrum {
  const bytes=Uint8Array.from(atob(raw.pixels_base64),c=>c.charCodeAt(0)),height=raw.frequencies.length;
- if(bytes.length!==raw.columns*height)throw Error('语谱图尺寸不一致。');
+ if(bytes.length!==raw.columns*height)throw uiError(uiMessage('platform.the_spectrogram_dimensions_do_not_match'));
  return {...raw,rows:Array.from({length:raw.columns},()=>[]),pixels:Array.from({length:raw.columns},(_,i)=>Array.from(bytes.slice(i*height,(i+1)*height)))};
 }

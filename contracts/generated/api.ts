@@ -2357,9 +2357,9 @@ export interface components {
             /**
              * Algorithm Version
              * @default legacy-numeric/1
-             * @constant
+             * @enum {string}
              */
-            algorithm_version: "legacy-numeric/1";
+            algorithm_version: "legacy-numeric/1" | "reviewed-numeric/1";
             /** Backends */
             backends: components["schemas"]["AcousticBackendObservation"][];
             /**
@@ -2367,7 +2367,7 @@ export interface components {
              * @default acoustic/1
              * @enum {string}
              */
-            computation_revision: "acoustic/1" | "acoustic/2";
+            computation_revision: "acoustic/1" | "acoustic/2" | "acoustic/3";
             config: components["schemas"]["AcousticConfigSnapshot"];
             /** Config Sha256 */
             config_sha256: string;
@@ -4675,6 +4675,11 @@ export interface components {
         };
         /** RetentionPolicy */
         RetentionPolicy: {
+            /**
+             * Clean Unused Inputs
+             * @default false
+             */
+            clean_unused_inputs: boolean;
             /** Days */
             days: number;
             /** Enabled */

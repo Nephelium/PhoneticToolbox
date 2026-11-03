@@ -1,0 +1,60 @@
+/* The language control follows the site's paper, ink and rounded-button style. */
+.site-header{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px}
+.site-header nav{justify-content:flex-end;min-width:0}
+.header-actions{display:flex;align-items:center;justify-content:flex-end;gap:10px;min-width:0}
+.header-actions .header-github{display:inline-flex;align-items:center;gap:7px;padding:10px 12px;background:#f3eafa;border:1.5px solid #d4bce7;border-radius:18px;box-shadow:0 3px 0 #e1cfe9;font-size:14px;font-weight:750;white-space:nowrap}
+.header-actions .header-github svg{width:20px;height:20px}
+.language-picker{position:relative;flex:none}
+.language-switch{cursor:pointer;list-style:none}
+.language-switch::-webkit-details-marker{display:none}
+.language-chevron{font-size:14px;line-height:1}
+.language-options{position:absolute;z-index:100;right:0;top:calc(100% + 10px);min-width:166px;padding:7px;background:#fffdf7;border:1.5px solid #d4bce7;border-radius:17px;box-shadow:0 9px 24px #3e23451c}
+.language-option{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:10px 12px;border-radius:11px;font-size:14px;font-weight:650;white-space:nowrap}
+.language-option:hover,.language-option:focus-visible{background:#fff0a4}
+.language-option[aria-current="page"]{background:#eee2f8}
+.language-switch{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:10px 12px;border:1.5px solid #d4bce7;border-radius:18px;background:#f3eafa;color:#34203f;font-size:14px;font-weight:750;white-space:nowrap;text-decoration:none;box-shadow:0 3px 0 #e1cfe9;transition:background .15s,transform .15s}
+.language-switch svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.language-switch:hover{background:#fff0a4;transform:translateY(-1px)}
+.language-switch:focus-visible{outline:3px solid #8d62ad;outline-offset:4px}
+.en-heading{font-size:clamp(68px,6.3vw,112px)!important;font-weight:900;letter-spacing:-.055em;line-height:.99!important;margin-bottom:30px!important;color:#3c2049}
+.localized-heading em{font-style:normal;text-decoration:underline;text-decoration-color:#ffe148;text-underline-offset:12px;text-decoration-thickness:6px}
+.language-note{font-size:14px;line-height:1.6;max-width:360px;color:#715f76;margin:0 0 22px}
+.feedback-file-button{margin:4px 0 8px}.feedback-file-name{display:block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px;color:#715f76;margin-bottom:9px}.feedback-file-name[hidden]{display:none}
+html[lang="en"] .site-header nav>a{padding:10px 6px;font-size:14px}
+html[lang="en"] .showcase-copy h2{font-size:clamp(32px,3.5vw,56px);line-height:1.15}
+html[lang="en"] .web-entry{font-size:22px}
+html[lang="en"] .reference-filters label,html[lang="en"] .feedback-inline{min-width:0}
+html[lang="en"] .sound-play{white-space:normal}
+html[lang="en"] .next-sounds .sound-play{font-size:12px;line-height:1.35;min-height:54px}
+html[lang="en"] .reference-source-links{flex-wrap:wrap}
+@media(max-width:1550px){.site-header{grid-template-columns:minmax(0,1fr) auto;row-gap:8px}.site-header .brand{justify-self:start}.header-actions{grid-column:2;grid-row:1}.site-header nav{grid-column:1/-1;grid-row:2;width:100%;display:grid;grid-template-columns:repeat(8,minmax(0,1fr));align-items:stretch;grid-auto-rows:1fr;gap:4px}.site-header nav>a,html[lang="en"] .site-header nav>a{display:flex;align-items:center;justify-content:center;text-align:center;white-space:normal;line-height:1.35;min-height:44px;padding:8px 5px;font-size:14px;transform:none}.site-header nav>a:before{display:none}.site-header nav>a[href]{transform:none}}
+@media(max-width:800px){.site-header{gap:8px;align-items:center}.site-header .brand{font-size:20px}.site-header nav{grid-template-columns:repeat(4,minmax(0,1fr));gap:4px}.language-switch{padding:9px 10px;font-size:13px}.en-heading{font-size:clamp(65px,13vw,94px)!important;text-align:center}.language-note{margin:0 auto 24px;text-align:center}html[lang="en"] .showcase-copy h2{font-size:38px}html[lang="en"] .web-entry{font-size:21px}}
+@media(max-width:600px){.header-actions{gap:7px}.header-actions .header-github{font-size:0;padding:9px;gap:0}.header-actions .header-github svg{width:20px;height:20px}.header-actions .header-github .nav-tooltip{font-size:13px}.site-header .brand{font-size:18px;gap:6px;letter-spacing:-.8px}.site-header .brand img{width:32px;height:32px}.language-switch{padding:9px 8px;gap:5px}}
+@media(max-width:360px){.site-header{column-gap:6px}.site-header .brand{font-size:15px;gap:5px;letter-spacing:-.9px}.site-header .brand img{width:28px;height:28px}.header-actions{gap:5px}.header-actions .header-github{padding:7px}.header-actions .header-github svg{width:17px;height:17px}.language-switch{padding:8px 6px;font-size:11px;gap:4px}.language-switch svg{width:16px;height:16px}.language-chevron{font-size:11px}.site-header nav>a,html[lang="en"] .site-header nav>a{font-size:12px;padding:7px 3px}html[lang="en"] .download{font-size:13px;padding:0 10px}html[lang="en"] .web-entry{font-size:19px}}
+html[lang="ja"]{font-family:'Yu Gothic UI','Yu Gothic',Meiryo,'Hiragino Kaku Gothic ProN',sans-serif}
+html[lang="ja"] .upcoming-section,html[lang="ja"] .upcoming-section h2,html[lang="ja"] .upcoming-section h3{font-family:'Yu Gothic UI','Yu Gothic',Meiryo,sans-serif}
+.ja-heading{font-size:clamp(46px,5.5vw,82px)!important;font-weight:900;line-height:1.3!important;letter-spacing:-.035em;margin-bottom:22px!important;color:#3c2049}
+html[lang="ja"] .showcase-copy h2{font-size:clamp(30px,3.2vw,51px);line-height:1.45}
+html[lang="ja"] .sound-play{white-space:normal;line-height:1.5}
+@media(max-width:800px){.ja-heading{text-align:center;font-size:clamp(40px,11.8vw,80px)!important}html[lang="ja"] .showcase-copy h2{font-size:34px}}
+
+/* Navigation pills keep their content width, including intermediate viewports. */
+@media(min-width:801px) and (max-width:1550px){.site-header nav{display:flex;flex-wrap:nowrap;justify-content:center;gap:5px}.site-header nav>a,html[lang="en"] .site-header nav>a{width:max-content;flex:0 1 auto;min-width:0;padding:8px 9px;font-size:13px}}
+.site-header[data-layout="single"]{grid-template-columns:auto minmax(0,1fr) auto}
+.site-header[data-layout="single"] .brand{grid-column:1;grid-row:1}
+.site-header[data-layout="single"] .header-actions{grid-column:3;grid-row:1}
+.site-header[data-layout="single"] nav{grid-column:2;grid-row:1;display:flex;flex-wrap:nowrap;justify-content:flex-end;width:auto}
+.site-header[data-layout="single"] nav>a{flex:none;width:max-content;white-space:nowrap}
+.site-header[data-layout="stacked"]{grid-template-columns:minmax(0,1fr) auto}
+.site-header[data-layout="stacked"] .brand{grid-column:1;grid-row:1}
+.site-header[data-layout="stacked"] .header-actions{grid-column:2;grid-row:1}
+.site-header[data-layout="stacked"] nav{grid-column:1/-1;grid-row:2;justify-content:center;width:100%}
+@media(max-width:800px){.site-header nav{justify-items:center}.site-header nav>a{width:fit-content;max-width:100%;min-width:0}.site-header nav>a[href]{transform:none}}
+
+/* All Japanese prose uses one Japanese font family, including emphasized text.
+   The Chinese handwriting fonts contain only some Japanese glyphs. */
+html[lang="ja"]{--ja-font:'Yu Gothic UI','Yu Gothic',Meiryo,'Hiragino Kaku Gothic ProN',sans-serif}
+html[lang="ja"] :is(h1,h2,h3,h4,h5,h6,p,a,span,small,strong,em,b,summary,label,li,figcaption,cite,th,td,time,output,button,input,textarea,select){font-family:var(--ja-font)!important}
+html[lang="ja"] code,html[lang="ja"] code *{font-family:Consolas,monospace!important}
+html[lang="ja"] .intervals span{font-family:PTB-IPA,Georgia,serif!important}
+@media(max-width:800px){html[lang="ja"] .site-header nav>a{font-size:12px;padding-left:2px;padding-right:2px}html[lang="ja"] .download{font-size:12px;gap:4px;padding-left:8px;padding-right:8px}}

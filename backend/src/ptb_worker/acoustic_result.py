@@ -42,7 +42,8 @@ def build_acoustic_result(result,audio,request: AcousticRequest,inputs,*,native_
             resource_sha256=native_sha256 if event['actual']=='native_reaper' else None))
     if request.config.backend_policy.reaper=='disabled':
         backends.append(AcousticBackendObservation(stage='reaper',actual='disabled'))
-    metadata=AcousticMetadata(core_version=core_version,computation_revision=result.computation_revision,project_id=request.project_id,inputs=inputs,decoded=decoded,
+    metadata=AcousticMetadata(core_version=core_version,computation_revision=result.computation_revision,
+        algorithm_version='reviewed-numeric/1' if result.computation_revision=='acoustic/3' else 'legacy-numeric/1',project_id=request.project_id,inputs=inputs,decoded=decoded,
         config=request.config,config_sha256=config_digest(request.config),source_ids=list(SOURCE_IDS),backends=backends)
     frame=result.to_dataframe()
     if (len(frame)+1)*len(frame.columns)>MAX_CELLS:raise ValueError('Result cell budget exceeded')
@@ -59,6 +60,7 @@ def build_acoustic_result(result,audio,request: AcousticRequest,inputs,*,native_
             mask=0 if math.isfinite(value) else 1 if math.isnan(value) else 2 if value>0 else 3
             values.append(value if mask==0 else None);masks.append(mask)
             reasons.append(None if mask==0 else 'legacy_nonfinite_unknown')
-        numeric.append(AcousticNumericColumn(key=key,label=PARAMETER_MAPPING.get(key,key),unit=parameter_unit(key),
+        unit='dB_re_20uPa_assuming_samples_in_Pa_not_measured_SPL' if key=='Intensity' and result.computation_revision=='acoustic/3' else parameter_unit(key)
+        numeric.append(AcousticNumericColumn(key=key,label=PARAMETER_MAPPING.get(key,key),unit=unit,
             scope='catalog' if key in PARAMETER_MAPPING else 'legacy_service_extension',values=values,nonfinite=masks,reason=reasons))
     return AcousticResult(metadata=metadata,times_s=result.time_axis.tolist(),numeric=numeric,text=text,column_order=list(frame.columns))

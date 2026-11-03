@@ -1,3 +1,6 @@
+import {uiMessage,uiErrorMessage} from '../module-localization.ts';
+import {messageText} from '../../i18n/index.ts';
+import {tr} from '../../i18n/index.ts';
 /** Unauthorised browsers expose an incomplete list with empty device names. */
 export function audioDevicesHidden(devices:Pick<MediaDeviceInfo,'kind'|'label'>[]){
  return !devices.some(d=>d.kind==='audioinput'&&d.label);
@@ -17,11 +20,13 @@ export async function readCaptureDevices(media:Pick<MediaDevices,'enumerateDevic
  }finally{stream.getTracks().forEach(track=>track.stop());}
 }
 
-export function deviceAccessError(error:unknown){
+export function deviceAccessErrorMessage(error:unknown){
  const e=error as Error;
- if(e.name==='NotAllowedError'||e.name==='SecurityError')return '未获得麦克风权限。请检查系统或浏览器权限，再点击授权并刷新设备并选择允许。';
- if(e.name==='NotFoundError')return '未找到音频输入，请连接麦克风或声卡后重新刷新设备。';
- if(e.name==='NotReadableError')return '无法读取麦克风，请检查设备是否被其他程序占用后重试。';
- if(e.name==='AbortError'||e.name==='InvalidStateError')return '音频设备读取已中断，请重新点击授权并刷新设备。';
- return e.message||'读取设备失败，请重新刷新设备。';
+ if(e.name==='NotAllowedError'||e.name==='SecurityError')return uiMessage("modules.lip-extraction.microphone_permission_was_not_granted_check_system_or_browser");
+ if(e.name==='NotFoundError')return uiMessage("modules.lip-extraction.no_audio_input_found_connect_a_microphone_or_sound");
+ if(e.name==='NotReadableError')return uiMessage("modules.lip-extraction.cannot_read_microphone_check_whether_another_program_is_using");
+ if(e.name==='AbortError'||e.name==='InvalidStateError')return uiMessage("modules.lip-extraction.audio_device_reading_was_interrupted_click_authorize_and_refresh");
+ return e.message?uiErrorMessage(e):uiMessage("modules.lip-extraction.failed_to_read_devices_refresh_devices_again");
 }
+
+export const deviceAccessError=(error:unknown):string=>messageText(deviceAccessErrorMessage(error));

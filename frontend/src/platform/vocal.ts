@@ -1,3 +1,6 @@
+import {joinMessages,uiErrorMessage,messageSnapshot} from '../modules/module-localization.ts';
+import {uiMessage,uiError,localized} from '../modules/module-localization.ts';
+import {tr,messageText,type MessageDescriptor} from '../i18n/index.ts';
 /** VTL web host: unchanged protocol, local Wasm preferred, native server fallback. */
 import {BrowserVocal,type LocalVocalExecutor} from './browser-vocal.ts';
 import {LocalAssets} from './local-assets.ts';
@@ -11,13 +14,16 @@ async function openDocument(pack=false){
 }
 
 export class VocalPlayback {
- context:AudioContext|null=null;nodes=new Set<AudioBufferSourceNode>();epoch=0;active=false;completed=false;buffering=false;start=0;next=0;duration=0;positionAtStop=0;mode='idle';error:string|null=null;underflows=0;initialLead=1;refillLead=.85;
+ context:AudioContext|null=null;nodes=new Set<AudioBufferSourceNode>();epoch=0;active=false;completed=false;buffering=false;start=0;next=0;duration=0;positionAtStop=0;mode='idle';private errorDisplay:string|MessageDescriptor|null=null;
+ get errorDescriptor(){return this.errorDisplay;}
+ get error():string|null{return this.errorDisplay===null?null:messageText(this.errorDisplay);}
+ set error(value:string|null){this.errorDisplay=value;}underflows=0;initialLead=1;refillLead=.85;
  segments:{time:number;offset:number;duration:number;rms?:number;peak?:number}[]=[];
  private pull:(body:any)=>Promise<any>;
  constructor(pull:(body:any)=>Promise<any>){this.pull=pull;}
  position(){if(!this.active||!this.context)return this.positionAtStop;const now=this.context.currentTime;while(this.segments.length>1&&this.segments[1]!.time<=now)this.segments.shift();const part=this.segments[0];return part?part.offset+Math.max(0,Math.min(part.duration,now-part.time)):0;}
  levels(){const now=this.context?.currentTime,part=this.active&&now!==undefined?this.segments.find(s=>s.time<=now&&now<s.time+s.duration):undefined;return {rms:part?.rms??0,peak:part?.peak??0};}
- async unlock(){this.context??=new AudioContext({sampleRate:48000});await this.context.resume();if(this.context.state!=='running')throw Error('请允许浏览器播放声音。');}
+ async unlock(){this.context??=new AudioContext({sampleRate:48000});await this.context.resume();if(this.context.state!=='running')throw uiError(uiMessage('platform.allow_the_browser_to_play_audio'));}
  async play(mode:string){
   this.stop();const epoch=++this.epoch;
   // A newly assigned server generation must never receive the previous clip's
@@ -46,7 +52,7 @@ export class VocalPlayback {
      this.segments.push({time:this.next,offset:this.duration,duration:buffer.duration,rms:Math.sqrt(sum/pcm.length),peak});node.start(this.next);this.next+=buffer.duration;this.duration+=buffer.duration;
     };
     for(const packet of prepared)schedule(packet);
-    if(!this.duration)throw Error('未收到可播放的音频，请重新测试发声。');
+    if(!this.duration)throw uiError(uiMessage('platform.no_playable_audio_was_received_test_phonation_again'));
     this.buffering=false;
     while(this.active&&epoch===this.epoch){
      if(!finished){
@@ -60,7 +66,7 @@ export class VocalPlayback {
       return;
      }
     }
-   }catch(e){if(epoch===this.epoch){this.stop();this.error=e instanceof Error?e.message:'音频传输失败';}}
+   }catch(e){if(epoch===this.epoch){this.stop();this.errorDisplay=e instanceof Error?uiErrorMessage(e):uiMessage('platform.audio_transfer_failed');}}
   };void pump();
  }
  stop(){this.positionAtStop=this.position();++this.epoch;for(const node of this.nodes){node.onended=null;try{node.stop();}catch{}node.disconnect();}this.nodes.clear();this.active=false;this.buffering=false;this.mode='idle';}
@@ -82,7 +88,9 @@ export function webVocalPort(transport:Transport,project:string,storageKey:strin
   const saved=await storage.read();rawSaved=saved??null;
   let legacy:string|null=null;if(saved===undefined)try{legacy=sessionStorage.getItem(key);}catch{}
   recoveryRaw=saved??legacy??undefined;
-  profile=recoveryRaw===undefined?{}:parseVocalProfile(recoveryRaw);loaded=true;
+  try{profile=recoveryRaw===undefined?{}:parseVocalProfile(recoveryRaw);}
+  catch(error){if(error instanceof Error)throw Object.assign(error,{recoveryAvailable:true});throw error;}
+  loaded=true;
  }
  async function commit(value:any){const raw=JSON.stringify(value);await storage.write(rawSaved,raw);rawSaved=raw;profile=value;}
  async function restoreModel(value:any){
@@ -96,7 +104,7 @@ export function webVocalPort(transport:Transport,project:string,storageKey:strin
    if(profile.speaker&&profile.speaker!==meta.speaker&&meta.speaker_options){await remote('speaker/select',{speaker:profile.speaker});meta=await remote('meta');}
    const saved=profile.models?.[profile.speaker||'JD2']??profile;
    try{await restoreModel(saved);if(profile.audio)await remote('audio/settings',profile.audio);}
-   catch(error){throw Error((error instanceof Error?error.message:'保存记录无效')+'。原数据已保留，请导出恢复副本。');}
+   catch(error){throw Object.assign(uiError(joinMessages(uiErrorMessage(error),uiMessage('platform.original_data_is_preserved_export_a_recovery_copy'))),{recoveryAvailable:true});}
    if(rawSaved===null&&recoveryRaw!==undefined)await commit(profile);
    hydrated=true;
   }
@@ -120,34 +128,34 @@ export function webVocalPort(transport:Transport,project:string,storageKey:strin
      if(op==='speaker/select')await remote('speaker/select',{speaker});
      await remote('library/save',previousLibrary);await remote('keyframes',previousSequence);
      if(op==='audio/settings'&&previousAudio)await remote('audio/settings',previousAudio);
-    }catch{hydrated=false;throw Error('保存未完成且计算状态恢复失败，请导出草稿后重新打开工作区。');}
+    }catch{hydrated=false;throw uiError(uiMessage('platform.saving_did_not_finish_and_restoring_computation_state_failed'));}
    }
    throw error;
   }
  }
  const route=(id:string)=>'vocal/sessions/'+id+'?project_id='+encodeURIComponent(project);
  async function server(op:string,body:any={}){
-  if(closed)throw Error('声道工作区已关闭。');
+  if(closed)throw uiError(uiMessage('platform.the_vocal_tract_workspace_is_closed'));
   session??=transport('POST','vocal/sessions?project_id='+encodeURIComponent(project),{});
   const {id}=await session;sessionId=id;return transport('POST',route(id),{op,body});
  }
  async function remote(op:string,body:any={}){
-  if(closed)throw Error('声道工作区已关闭。');
+  if(closed)throw uiError(uiMessage('platform.the_vocal_tract_workspace_is_closed'));
   selection??=(async()=>{
    const candidate=createLocal();if(!candidate)return;local=candidate;
    try{await candidate.request('meta');if(closed){candidate.close();return;}}
-   catch(error){candidate.close();local=undefined;if(closed)throw error;console.info('浏览器声道运行组件未就绪，使用服务器计算。');}
+   catch(error){candidate.close();local=undefined;if(closed)throw error;console.info(tr('platform.the_browser_vocal_tract_runtime_is_not_ready_using'));}
   })();await selection;
-  if(closed)throw Error('声道工作区已关闭。');
+  if(closed)throw uiError(uiMessage('platform.the_vocal_tract_workspace_is_closed'));
   // Existing WebCodecs packets retain the original server H.264/AAC encoder.
   // Geometry, acoustic synthesis, pictures, audio and monitoring stay local.
   return local&&!op.startsWith('video/')?local.request(op,body):server(op,body);
  }
  const player=new VocalPlayback(body=>remote('audio/pull',{...body,playback_generation:streamGeneration}));
  const playbackBody=()=>({position:player.position(),completed:player.completed,playback_generation:streamGeneration});
- const state=(s:any)=>({...s,active:player.active,buffering:player.buffering,mode:player.mode,audio_error:player.error||s.audio_error,audio:{...s.audio,...player.levels(),underflows:player.underflows,device:'浏览器音频输出'}});
+ const state=(s:any)=>({...s,active:player.active,buffering:player.buffering,mode:player.mode,audio_error:player.error||s.audio_error,...(player.errorDescriptor?{audio_error_display:messageSnapshot(player.errorDescriptor)}:{}),audio:{...s.audio,...player.levels(),underflows:player.underflows,device:tr('platform.browser_audio_output')}});
  async function request(op:string,body:any={}){
-  if(op==='profile/recovery'){await readProfile().catch(()=>{});if(recoveryRaw===undefined)throw Error('没有可导出的保存记录');download(recoveryRaw,'声道保存记录-恢复副本.json','application/json');return {saved:true};}
+  if(op==='profile/recovery'){await readProfile().catch(()=>{});if(recoveryRaw===undefined)throw uiError(uiMessage('platform.no_saved_data_is_available_for_export'));download(recoveryRaw,'声道保存记录-恢复副本.json','application/json');return {saved:true};}
   const starts=['preview','animation/play','audio/test'].includes(op)||op==='live'&&body.active;
   const run=starts?++playGeneration:playGeneration;
   if(player.completed&&streamGeneration>acknowledgedCompletion&&['pose','preview','audio/test','audio/settings','animation/prepare','animation/play'].includes(op)){
@@ -157,20 +165,20 @@ export function webVocalPort(transport:Transport,project:string,storageKey:strin
   if(op==='meta'){
    const meta=await serialized(hydrate);
    if(meta.execution==='browser-wasm'){player.initialLead=.24;player.refillLead=.2;}
-   const devices=[{id:'browser',name:'浏览器默认输出设备'}];
+   const devices=[{id:'browser',name:tr('platform.browser_default_output_device')}];
    if('setSinkId' in AudioContext.prototype){
     const listed=await navigator.mediaDevices?.enumerateDevices().catch(()=>[])??[];
-    for(const d of listed)if(d.kind==='audiooutput'&&d.deviceId&&d.deviceId!=='default')devices.push({id:d.deviceId,name:d.label||'音频输出设备'});
-    if('selectAudioOutput' in (navigator.mediaDevices??{}))devices.push({id:'choose',name:'选择其他输出设备…'});
+    for(const d of listed)if(d.kind==='audiooutput'&&d.deviceId&&d.deviceId!=='default')devices.push({id:d.deviceId,name:d.label||tr('platform.audio_output_device')});
+    if('selectAudioOutput' in (navigator.mediaDevices??{}))devices.push({id:'choose',name:tr('platform.choose_another_output_device')});
    }
    return {...meta,host:'web',output_devices:devices,audio_settings:{device:'browser',volume:profile.audio?.volume??.8,gain_db:profile.audio?.gain_db??0}};
   }
   if(op==='document/open'||op==='preset-pack/open'){
-   const pack=op==='preset-pack/open',file=await openDocument(pack);if(!file)return {cancelled:true};if(file.size>8_000_000)throw Error('关键帧文件超过 8 MB');
+   const pack=op==='preset-pack/open',file=await openDocument(pack);if(!file)return {cancelled:true};if(file.size>8_000_000)throw uiError(uiMessage('platform.the_keyframe_file_exceeds_8_mb'));
    return {document:await remote(pack?'preset-pack/validate':'document/validate',JSON.parse((await file.text()).replace(/^\uFEFF/,''))),name:file.name};
   }
   if(op==='document/save'||op==='preset-pack/save'){
-   const pack=op==='preset-pack/save',doc=await remote(pack?'preset-pack/create':'document/create',body),raw=JSON.stringify(doc,null,2);if(new TextEncoder().encode(raw).length>8_000_000)throw Error('关键帧文件超过 8 MB');
+   const pack=op==='preset-pack/save',doc=await remote(pack?'preset-pack/create':'document/create',body),raw=JSON.stringify(doc,null,2);if(new TextEncoder().encode(raw).length>8_000_000)throw uiError(uiMessage('platform.the_keyframe_file_exceeds_8_mb'));
    const name=pack?'声道构型包.ptb-poses.json':'声道关键帧.ptb-vocal.json';download(raw,name,'application/json');return {saved:true,name};
   }
    if(op==='shutdown'){await close();return {closed:true};}
@@ -182,7 +190,7 @@ export function webVocalPort(transport:Transport,project:string,storageKey:strin
     const media=navigator.mediaDevices as MediaDevices&{selectAudioOutput:()=>Promise<MediaDeviceInfo>};
     id=(await media.selectAudioOutput()).deviceId;
    }
-   if(id!=='browser'&&!(player.context as any).setSinkId)throw Error('当前浏览器不支持切换输出设备，请在系统声音设置中选择。');
+   if(id!=='browser'&&!(player.context as any).setSinkId)throw uiError(uiMessage('platform.this_browser_cannot_switch_output_devices_choose_one_in'));
    if((player.context as any).setSinkId)await (player.context as any).setSinkId(id==='browser'?'':id);
    body={...body,device:'browser'};
   }
@@ -190,12 +198,12 @@ export function webVocalPort(transport:Transport,project:string,storageKey:strin
   if(op==='speaker/select'){++playGeneration;player.stop();}
   let result=mutations.has(op)?await serialized(()=>persist(op,body)):
    ['keyframes/load','presets/load','favorites/load','library/load'].includes(op)?await serialized(()=>remote(op,body)):await remote(op,body);
-  if(closed)throw Error('声道工作区已关闭。');
+  if(closed)throw uiError(uiMessage('platform.the_vocal_tract_workspace_is_closed'));
   if(['heartbeat','status'].includes(op)&&body.completed===true)acknowledgedCompletion=Math.max(acknowledgedCompletion,body.playback_generation);
   if(typeof result.playback_generation==='number')streamGeneration=Math.max(streamGeneration,result.playback_generation);
   if(op==='video/finish'){download(bytes(result.base64),'声道动作.mp4','video/mp4');delete result.base64;return result;}
   if(starts){if(run===playGeneration)await player.play(op==='animation/play'?'animation':op==='audio/test'?'test':op==='live'?'live':'preview');else await remote('deactivate');return state(result);}
-  if(op==='animation/frame')return {...result,active:player.active,completed:player.completed,audio_error:player.error};
+  if(op==='animation/frame')return {...result,active:player.active,completed:player.completed,audio_error:player.error,...(player.errorDescriptor?{audio_error_display:messageSnapshot(player.errorDescriptor)}:{})};
   if(op==='heartbeat'||op==='status')return state(result);
   return result;
  }

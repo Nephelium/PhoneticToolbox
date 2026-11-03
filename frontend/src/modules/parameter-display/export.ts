@@ -1,3 +1,5 @@
+import {uiError,uiErrorMessage,uiMessage,joinMessages} from '../module-localization.ts';
+import {tr} from '../../i18n/index.ts';
 import {exportSize,png300dpi} from './png.ts';
 import {paintSvg} from '../../design/svg-fonts.ts';
 import {withFigureTitle} from '../../design/figure-title.ts';
@@ -43,10 +45,10 @@ export function wholeFigureSvg(input:WholeFigure){
   const width=chart.viewBox.baseVal.width,chartHeight=chart.viewBox.baseVal.height;
   const fontScale=(parseFloat(getComputedStyle(chart).getPropertyValue("--figure-size"))||12)/12;
   const waves=[...waveform.querySelectorAll<SVGSVGElement>('.wave-track > svg')];
-  if(!waves.length||!Number.isFinite(start)||end<=start)throw Error('波形尚未就绪，请读取音频后重试。');
+  if(!waves.length||!Number.isFinite(start)||end<=start)throw uiError(uiMessage("modules.parameter-display.waveform_is_not_ready_load_the_audio_and_retry"));
   const spec=waveform.querySelector<HTMLElement>('.spectrogram-view');
   const canvas=spec?.querySelector<HTMLCanvasElement>('canvas');
-  if(spec&&(!canvas||spec.querySelector('[role=status],[role=alert]')))throw Error('语谱图尚未就绪，请等待完成或关闭语谱图后导出。');
+  if(spec&&(!canvas||spec.querySelector('[role=status],[role=alert]')))throw uiError(uiMessage("modules.parameter-display.spectrogram_is_not_ready_wait_for_it_to_finish"));
   const trackHeight=150+60*fontScale,specHeight=canvas?210+70*fontScale:0,chartY=48*fontScale+waves.length*trackHeight+specHeight,height=chartY+chartHeight+12;
   exportSize(width,height);
   const root=node('svg',{xmlns:ns,width,height,viewBox:`0 0 ${width} ${height}`});
@@ -56,7 +58,7 @@ export function wholeFigureSvg(input:WholeFigure){
   function ticks(y:number){for(let i=0;i<5;i++)root.append(node('text',{x:plotLeft+i*(plotRight-plotLeft)/4,y,fill:palette['--muted'],'font-size':12*fontScale,'text-anchor':'middle'},(start+(end-start)*i/4).toFixed(3)));}
   waves.forEach((wave,index)=>{
     const y=48*fontScale+index*trackHeight,copy=printed(wave);
-    root.append(node('text',{x:width/2,y:y+14*fontScale,'text-anchor':'middle',fill:palette['--text'],'font-size':12*fontScale},wave.parentElement?.querySelector('.track-label span')?.textContent??`声道 ${index+1}`));
+    root.append(node('text',{x:width/2,y:y+14*fontScale,'text-anchor':'middle',fill:palette['--text'],'font-size':12*fontScale},wave.parentElement?.querySelector('.track-label span')?.textContent??tr("modules.parameter-display.channel_value",{v0:(index+1)})));
     // Accept both legacy normalized geometry and the pixel-coordinate annotation
     // surface. Keep print glyphs undistorted while scaling each track's geometry.
     const trackWidth=plotRight-plotLeft,labels=[...copy.querySelectorAll('text')];
@@ -71,7 +73,7 @@ export function wholeFigureSvg(input:WholeFigure){
   });
   if(canvas){
     const y=48*fontScale+waves.length*trackHeight;
-    root.append(node('text',{x:width/2,y:y+14*fontScale,'text-anchor':'middle',fill:palette['--text'],'font-size':12*fontScale},'语谱图'));
+    root.append(node('text',{x:width/2,y:y+14*fontScale,'text-anchor':'middle',fill:palette['--text'],'font-size':12*fontScale},tr("modules.parameter-display.spectrogram")));
     root.append(node('image',{x:plotLeft,y:y+25*fontScale,width:plotRight-plotLeft,height:210,preserveAspectRatio:'none',href:canvas.toDataURL('image/png')}));
     const labels=[...spec!.querySelectorAll('.frequency-axis span')].map(e=>e.textContent??'');
     labels.forEach((label,i)=>root.append(node('text',{x:plotLeft-6,y:y+33*fontScale+i*100,'text-anchor':'end','font-size':11*fontScale,fill:palette['--muted']},label)));
@@ -87,18 +89,18 @@ export async function wholeFigurePng(input:WholeFigure){
   const canvas=document.createElement('canvas');canvas.width=size.width;canvas.height=size.height;
   try{
     await paintSvg(canvas,snapshot.text,snapshot.width,snapshot.height);
-    const blob=await new Promise<Blob>((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(Error('PNG 编码失败。')),'image/png'));
+    const blob=await new Promise<Blob>((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(Error(tr("modules.parameter-display.png_encoding_failed"))),'image/png'));
     return new Blob([png300dpi(new Uint8Array(await blob.arrayBuffer()))],{type:'image/png'});
   }finally{canvas.width=canvas.height=1;}
 }
 
-export async function currentFigurePng(chart:SVGSVGElement,title=chart.closest('.parameter-figure')?.querySelector('h3')?.textContent??'参数图'){
+export async function currentFigurePng(chart:SVGSVGElement,title=chart.closest('.parameter-figure')?.querySelector('h3')?.textContent??tr("modules.parameter-display.parameter_plot")){
   const {root,width,height}=withFigureTitle(printed(chart),title,parseFloat(getComputedStyle(chart).fontSize)||12);
   const text=new XMLSerializer().serializeToString(root),size=exportSize(width,height);
   const canvas=document.createElement('canvas');canvas.width=size.width;canvas.height=size.height;
   try{
     await paintSvg(canvas,text,width,height);
-    const blob=await new Promise<Blob>((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(Error('PNG 编码失败。')),'image/png'));
+    const blob=await new Promise<Blob>((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(Error(tr("modules.parameter-display.png_encoding_failed"))),'image/png'));
     return new Blob([png300dpi(new Uint8Array(await blob.arrayBuffer()))],{type:'image/png'});
   }finally{canvas.width=canvas.height=1;}
 }

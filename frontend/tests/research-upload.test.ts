@@ -41,3 +41,18 @@ test('recording snapshot retries a lost local transaction receipt and restores a
 test('recording reader reloads the current manifest when a writer supersedes its first asset',async()=>{
  const original=globalThis.fetch;let reads=0;globalThis.fetch=async url=>{const path=String(url);if(path.includes('m16/project'))return Response.json({asset:{id:++reads===1?'old':'new'}});if(path.includes('/old/'))throw Error('superseded during stream');return Response.json({schema:'m16-web-project/1',project:{revision:2},assets:{}});};const files=serverFiles('owner','project',()=>{},()=>'csrf');try{const loaded=await files.recording!.load();assert.equal(loaded!.id,'new');assert.equal(loaded!.snapshot.project.revision,2);assert.equal(reads,2);}finally{files.dispose();globalThis.fetch=original;}
 });
+
+
+test('retired research responses cannot invalidate a later login; live authentication failures still invalidate',async()=>{
+ const original=globalThis.fetch;
+ try{for(const retired of [false,true]){
+  let release!:(value:unknown)=>void,reading!:()=>void,invalid=0;
+  const started=new Promise<void>(resolve=>reading=resolve);
+  const body=new Promise(resolve=>release=resolve);
+  globalThis.fetch=async url=>String(url).includes('/jobs/parents/latest?')?({ok:false,status:401,json:()=>{reading();return body;}} as Response):Response.json({assets:[]});
+  const files=serverFiles('old-owner','old-project',()=>invalid++,()=>'old-csrf',new MemoryAssetDatabase());
+  const request=files.tasks!.parent({id:'old-input',name:'input.wav',kind:'audio',sha256:'a'.repeat(64),size:1});
+  await started;const before=invalid;if(retired)files.dispose();release({detail:'authentication_required'});
+  await assert.rejects(request);assert.equal(before,1);assert.equal(invalid,retired?before:before+1);files.dispose();
+ }}finally{globalThis.fetch=original;}
+});

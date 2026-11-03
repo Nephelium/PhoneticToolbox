@@ -1,3 +1,5 @@
+import {uiError as displayError,uiMessage as displayMessage} from '../module-localization.ts';
+import {tr} from '../../i18n/index.ts';
 // M12 source_ids: ORIGIN-WEBEDITOR, PENDING-DICTIONARY, SRC-PRAAT.
 // V2 editing functions migrated by scripts/migrate_m12_editor.py.
 // DOM, network and process-wide state replaced by per-editor injected ports.
@@ -19,6 +21,7 @@ export function createEditor(options = {}) {
   controls.fitTrimMs.value='10'; controls.spliceMode.value='outside';
   const els = {...controls, grid: null};
   const setStatus = message => options.message?.(message);
+  const setStatusKey = (key,values) => options.localizedMessage?options.localizedMessage({key,values}):setStatus(tr(key,values));
   const markDirty = () => {state.dirty=true;};
   const drawAll = () => options.changed?.();
   const drawGrid = drawAll, redrawDragOverlay = drawAll;
@@ -407,7 +410,7 @@ function deleteSelectedBoundary() {
   if (!tier) return;
   const rightIndex=tier.intervals.findIndex((item,i)=>i>0&&item.xmin===sb.time&&tier.intervals[i-1].xmax===sb.time);
   const leftIndex=rightIndex-1;
-  if(rightIndex<1)throw Error('音频起点和终点需要保留；请选择内部边界，或选择区间后删除标注。');
+  if(rightIndex<1)throw displayError(displayMessage('modules.annotation.text.d7a061db74e7'));
   const left = tier.intervals[leftIndex];
   const right = tier.intervals[rightIndex];
   const merged = {
@@ -459,7 +462,7 @@ function applyMoved({name,result,updates}) {
   state.selectedBoundary=null;
 }
 function moveSelected(delta) {
-  if(!state.selected)throw Error('请先选中需要移动的标注。');
+  if(!state.selected)throw displayError(displayMessage('modules.annotation.text.39d67a859e63'));
   const indices=state.selected.tier===wordTierName()&&state.selectedIndices.length?state.selectedIndices:[state.selected.index];
   const result=translated(state.selected.tier,state.textgrid.tiers,indices,delta);
   saveUndoState();applyMoved(result);markDirty();drawAll();
@@ -644,9 +647,9 @@ function smoothArray(values, radius) {
 }
 
 function intensitySamples(channel) {
-  if(!Number.isInteger(channel)||channel<0||(state.audioBuffer?.numberOfChannels!==undefined&&channel>=state.audioBuffer.numberOfChannels))throw Error('请选择有效的强度贴合声道。');
+  if(!Number.isInteger(channel)||channel<0||(state.audioBuffer?.numberOfChannels!==undefined&&channel>=state.audioBuffer.numberOfChannels))throw displayError(displayMessage('modules.annotation.text.c1115c2f9300'));
   const data=state.audioBuffer.getChannelData(channel);
-  if(!data)throw Error('所选声道不可用。');
+  if(!data)throw displayError(displayMessage('modules.annotation.text.1b953510bb92'));
   return data;
 }
 function localIntensityEnvelope(start, end, channel) {
@@ -820,7 +823,7 @@ function fitIntensityRange(channel) {
   els.fitEnd.value = end.toFixed(3);
   els.fitTrimMs.value = String(Math.round(trimSec * 1000));
   if (end <= start + 0.05) {
-    setStatus("请先给定有效的时间范围");
+    setStatusKey('modules.annotation.text.6782a6f16b78');
     return;
   }
   const history=[...state.undoStack];
@@ -844,10 +847,10 @@ function fitIntensityRange(channel) {
   normalizeTextGrid(state.textgrid);
   if (changed) {
     markDirty();
-    setStatus(`强度贴合（第 ${channel+1} 声道）：已调整 ${changed} 个词，内收 ${Math.round(trimSec * 1000)} ms`);
+    setStatusKey('modules.annotation.text.45a6738a75b1',{v0:channel+1,v1:changed,v2:Math.round(trimSec * 1000)});
   } else {
     state.undoStack=history;
-    setStatus(`强度贴合（第 ${channel+1} 声道）：没有足够可信的边界调整`);
+    setStatusKey('modules.annotation.text.0e0350be567a',{v0:channel+1});
   }
   drawAll();
 }
@@ -951,7 +954,7 @@ function pasteCopiedWord() {
   const wordDur = Math.max(0.18, phoneLabels.length * 0.14);
   const gap = blank.xmin > 0.01 ? 0.03 : 0;
   const available = blank.xmax - blank.xmin - gap;
-  if (available < 0.08) { setStatus('空白区间不足 80 ms，未粘贴。'); return; }
+  if (available < 0.08) { setStatusKey('modules.annotation.text.03357bd613f6'); return; }
   const actualDur = Math.min(wordDur, Math.max(0.08, available));
   const oldXmax = blank.xmax;
   const oldXmin = blank.xmin;
@@ -973,7 +976,7 @@ function pasteCopiedWord() {
   }
   markDirty();
   drawAll();
-  setStatus(`已粘贴：${text}`);
+  setStatusKey('modules.annotation.text.24b9167e61e9',{v0:text});
 }
 
 function doSearch(query) {
@@ -1050,7 +1053,7 @@ function replaceAll(text) {
   state.searchIndex = -1;
   updateSearchInfo();
   drawAll();
-  setStatus(`已替换 ${count} 处`);
+  setStatusKey('modules.annotation.text.7878a1336498',{v0:count});
 }
 
 function clipIntervals(intervals, start, end) {
@@ -1090,7 +1093,7 @@ function spliceTier(currentTier, referenceTier, windows, xmax) {
   const start=Math.max(low,referenceTier.xmin??0),end=Math.min(high,referenceTier.xmax??xmax,xmax);
   const overlap=windows.map(([a,b])=>[Math.max(a,start),Math.min(b,end)]).filter(([a,b])=>b>a);
   if(!overlap.length)return currentTier;
-  if (!!currentTier.intervals !== !!referenceTier.intervals) throw Error(`参考文件的 ${currentTier.name} 层类型不同，请选择同类型的标注层。`);
+  if (!!currentTier.intervals !== !!referenceTier.intervals) throw displayError(displayMessage('modules.annotation.text.90f0a6eb5817',{v0:currentTier.name}));
   if (currentTier.points) {
     const inside = time => overlap.some(([start,end]) => start <= time && time <= end);
     return {...currentTier, points:[...currentTier.points.filter(p=>!inside(p.number)),...referenceTier.points.filter(p=>inside(p.number))].map(p=>({...p})).sort((a,b)=>a.number-b.number)};
@@ -1117,23 +1120,23 @@ async function applyReferenceSplice() {
   start = clamp(start, 0, xmax);
   end = clamp(end, 0, xmax);
   if ((mode === "inside" || mode === "outside") && end <= start) {
-    setStatus("复用区间需满足 终点 > 起点");
+    setStatusKey('modules.annotation.text.47b62624925c');
     return;
   }
   els.spliceStart.value = start.toFixed(3);
   els.spliceEnd.value = end.toFixed(3);
   const reference=state.referenceTextGrid;
   const refByName = new Map(reference.tiers.map(tier=>[tier.name,{...tier,xmin:tier.xmin??reference.xmin,xmax:tier.xmax??reference.xmax}]));
-  if (!state.textgrid.tiers.some(t=>refByName.has(t.name))) throw Error('参考文件中没有同名层。');
+  if (!state.textgrid.tiers.some(t=>refByName.has(t.name))) throw displayError(displayMessage('modules.annotation.text.c1af99fad69d'));
   const windows = replacementWindows(mode, start, end, xmax);
   const tiers = state.textgrid.tiers.map((tier) => {
     return spliceTier(tier, refByName.get(tier.name), windows, xmax);
   });
-  if(tiers.every((tier,index)=>tier===state.textgrid.tiers[index]))throw Error('所选时间段与参考同名层没有重叠，请调整范围。');
+  if(tiers.every((tier,index)=>tier===state.textgrid.tiers[index]))throw displayError(displayMessage('modules.annotation.text.9a31eec1ef67'));
   saveUndoState();
   state.textgrid.tiers=tiers;
   markDirty();
-  setStatus(`已复用参考标注（${mode}）`);
+  setStatusKey('modules.annotation.text.e5a018944d4a',{v0:mode});
   drawAll();
 }
   function undo(){
@@ -1142,7 +1145,7 @@ async function applyReferenceSplice() {
     if(previous.labSequence===state.labSequence){state.sequenceIndex=previous.sequenceIndex;state.sequenceStart=previous.sequenceStart;}
     else state.sequenceStart=null;
     state.selected=null;state.selectedBoundary=null;state.selectedIndices=[];state.drag=null;
-    markDirty();drawAll();setStatus('已撤销');
+    markDirty();drawAll();setStatusKey('modules.annotation.text.fef96e34f77b');
   }
   function editText(text,manualLabels){
     const selected=state.selected, tier=selected&&tierByName(selected.tier);
@@ -1163,10 +1166,10 @@ async function applyReferenceSplice() {
     const sel=state.selected,item=sel&&tierByName(sel.tier)?.intervals[sel.index];
     if(!item?.text)return;
     state.copiedWord=item.text;state.copiedLabIndex=sel.tier===wordTierName()?labIndexForWordSelection(sel.index):null;
-    setStatus(`已复制：${item.text}；下次粘贴：${nextCopiedWordText()}`);
+    setStatusKey('modules.annotation.text.8e7a2e62e5a5',{v0:item.text,v1:nextCopiedWordText()});
   }
   function captureSelected(includePhones=true){
-    const sel=state.selected,tier=sel&&tierByName(sel.tier);if(!tier)throw Error('请先选中一个标注。');
+    const sel=state.selected,tier=sel&&tierByName(sel.tier);if(!tier)throw displayError(displayMessage('modules.annotation.text.df1516d51770'));
     const role=sel.tier===wordTierName()?'word':sel.tier===phoneTierName()?'phone':'extra';
     const indices=role==='word'&&state.selectedIndices.length?state.selectedIndices:[sel.index];
     const clip=captureAnnotation(tier.intervals,null,indices,role);clip.companions=[];
@@ -1178,23 +1181,23 @@ async function applyReferenceSplice() {
     const next=eraseWindows(tier.intervals,clip.windows),peers=clip.role==='word'?linkedTiers(tier.name).filter(t=>t!==tier).map(t=>({tier:t,intervals:eraseWindows(t.intervals,clip.windows)})):[];
     saveUndoState();tier.intervals=next;for(const peer of peers)peer.tier.intervals=peer.intervals;
     state.selected=null;state.selectedIndices=[];state.selectedBoundary=null;state.searchResults=[];state.searchIndex=-1;
-    markDirty();drawAll();setStatus('已删除所选标注，原位置留空；Ctrl＋Z 可撤销。');
+    markDirty();drawAll();setStatusKey('modules.annotation.text.fbf0075ff578');
   }
   function copyAnnotation(cut=false){
     const clip=captureSelected();if(cut)deleteAnnotation();annotationClipboard=clip;
-    setStatus(`已${cut?'剪切':'复制'}标注，保留原时长与内部边界。点击空白位置后 Ctrl＋V 粘贴。`);
+    setStatusKey('modules.annotation.text.42a6b543e4f6',{v0:cut?tr('modules.annotation.text.410a8e8a6bf2'):tr('modules.annotation.text.63d90d977348')});
   }
   function pasteAnnotation(time=state.lastMouseTime){
-    const clip=annotationClipboard;if(!clip)throw Error('请先使用 Ctrl＋C 或 Ctrl＋X 复制或剪切标注。');
+    const clip=annotationClipboard;if(!clip)throw displayError(displayMessage('modules.annotation.text.44f3d97f2d20'));
     const name=clip.role==='word'?wordTierName():clip.role==='phone'?phoneTierName():state.extraTierName,tier=tierByName(name);
-    if(!tier||state.selected&&state.selected.tier!==name)throw Error('请在与剪贴内容相同的标注层选择粘贴位置。');
+    if(!tier||state.selected&&state.selected.tier!==name)throw displayError(displayMessage('modules.annotation.text.cbf9248b424b'));
     const next=pasteIntervals(tier.intervals,clip.intervals,time,clip.span,duration());
     const peers=[];
     for(const item of clip.companions){const peer=tierByName(item.role==='phone'?phoneTierName():state.extraTierName);if(peer&&tiersLinked(name,peer.name))peers.push({tier:peer,intervals:pasteIntervals(peer.intervals,item.intervals,time,clip.span,duration())});}
     saveUndoState();tier.intervals=next;for(const peer of peers)peer.tier.intervals=peer.intervals;
     const start=Number(time.toFixed(6)),indices=clip.intervals.map(i=>next.findIndex(n=>n.xmin===Number((start+i.xmin).toFixed(6))&&n.xmax===Number((start+i.xmax).toFixed(6))));
     state.selected={tier:name,index:indices[0]};state.selectedIndices=clip.role==='word'&&indices.length>1?indices:[];state.selectedBoundary=null;state.searchResults=[];state.searchIndex=-1;
-    markDirty();drawAll();setStatus('已粘贴标注，原文字、时长和内部边界保持。');
+    markDirty();drawAll();setStatusKey('modules.annotation.text.745bb7403b18');
   }
   return {state,controls,setCanvas:canvas=>{els.grid=canvas;},tierNames,linkedTiers,tiersLinked,splitTierAt,normalizeTextGrid,saveUndoState,undo,editText,clearText,copy,copyAnnotation,deleteAnnotation,pasteAnnotation,moveSelected,boundaryAt,beginBoundaryDrag,dragBoundaryTo,
 clamp,visibleEnd,duration,timeToX,xToTime,escapeTextGrid,fmt,fillGaps,nonEmpty,intervalCenter,intervalOverlap,intervalBelongsToWindow,tierByName,wordTierName,phoneTierName,wordTier,phoneTier,hitTest,onGridMouseDown,onGridMouseMove,onGridMouseUp,moveBoundary,setBoundary,deleteSelectedBoundary,moveMatchingPhoneBoundary,dragWord,canPlaceWord,finalizeRangeSelect,updateSelectedIndices,wordAtTime,phoneIntervalsInsideWord,labelsForIntervalCount,relabelPhonesForWord,splitPhoneAt,autoPhonesForSelection,ensurePhonesForWord,ensurePhoneBoundariesAtWord,percentile,smoothArray,localIntensityEnvelope,mergeActiveRuns,overlapLength,detectIntensityBoundsForWord,nearestNonEmptyBounds,setWordBounds,alignPhoneOuterEdgesToWord,fitIntensityRange,parseDictText,pinyinToPhonesFallback,pinyinToPhones,incrementTone,labIndexForWordSelection,nextCopiedWordText,pasteCopiedWord,doSearch,selectSearchResult,findNext,findPrev,replaceCurrent,replaceAll,clipIntervals,replacementWindows,complementWindows,spliceTier,applyReferenceSplice};

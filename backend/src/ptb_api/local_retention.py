@@ -9,6 +9,7 @@ class RetentionPolicy(BaseModel):
     enabled: bool
     days: int = Field(ge=1, le=3650)
     exported_cache_days: int = Field(default=1, ge=1, le=3650)
+    clean_unused_inputs: bool = False
 
 
 class ExportReceipt(BaseModel):

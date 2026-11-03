@@ -8,6 +8,6 @@ export async function applyFonts(value){
  let style=document.getElementById('ptb-font-faces');if(!style){style=document.createElement('style');style.id='ptb-font-faces';document.head.append(style);}style.textContent=value.css;
  const root=document.documentElement.style;root.setProperty('--sans',value.ui);root.setProperty('--serif',value.ui);root.setProperty('--font-ipa',value.ipa);root.setProperty('--font-mono',value.mono);root.setProperty('--font-figure',value.figure);
  root.setProperty('--body-size',`${Number.isInteger(value.bodySize)&&value.bodySize>=10&&value.bodySize<=24?value.bodySize:14}px`);
- await Promise.all([document.fonts.load(canvasFont(14),'中文 Time'),document.fonts.load(canvasFont(14,true),'a ɑ tʰ')]);await document.fonts.ready;document.dispatchEvent(new Event('m10-theme'));
+ await Promise.all([document.fonts.load(canvasFont(14),'中文 日本語 Time'),document.fonts.load(canvasFont(14,true),'a ɑ tʰ')]);await document.fonts.ready;if(current===value&&['zh-CN','en','ja'].includes(value.locale))document.documentElement.dataset.fontLocale=value.locale;document.dispatchEvent(new Event('m10-theme'));
 }
 export async function freezeFonts(){held++;await document.fonts.ready;return ()=>{held--;if(!held&&queued){const value=queued;queued=null;void applyFonts(value);}};}

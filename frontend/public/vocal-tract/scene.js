@@ -1,3 +1,4 @@
+import {msg,tr,join,bindText,appendText,bindAttribute,textNode,setHTML,onLocaleChange,parameterLabel,uiError} from './i18n.mjs';
 import {dark,themeColor} from './theme.js';
 import * as THREE from 'three';
 import {OrbitControls} from './vendor/OrbitControls.js';
@@ -14,7 +15,7 @@ function geometry(data){const g=new THREE.BufferGeometry();g.setAttribute('posit
 export class VocalTractViewer{
   constructor(viewport,onDrag,{onStart=()=>{},onEnd=()=>{},onSelect=()=>{}}={}){
     Object.assign(this,{el:viewport,onDrag,onStart,onEnd,onSelect,sagittal:true,focused:true,labels:true,showHead:true,showNose:true,showTeeth:false,fullModel:false,mode:'organs',selected:'tongue',zoom:1,pan:[0,0],state:null});
-    this.svg=el('svg',{class:'sagittal-canvas','aria-label':'正中矢状截面'});viewport.append(this.svg);
+    this.svg=el('svg',{class:'sagittal-canvas','aria-label':msg("modules.vocal-tract-frame.text.midsagittal_section_269")});viewport.append(this.svg);
     this.renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,preserveDrawingBuffer:true});this.renderer.setPixelRatio(Math.min(devicePixelRatio,2));this.renderer.localClippingEnabled=true;this.renderer.setClearColor(themeColor('--panel'),1);this.renderer.toneMapping=THREE.ACESFilmicToneMapping;viewport.append(this.renderer.domElement);
     this.scene=new THREE.Scene();this.camera=new THREE.PerspectiveCamera(34,1,.1,200);this.orbit=new OrbitControls(this.camera,this.renderer.domElement);this.orbit.enableDamping=true;this.orbit.minDistance=12;this.orbit.maxDistance=90;
     this.scene.add(new THREE.HemisphereLight(0xfff9ed,0x627c74,2));for(const [power,pos] of [[2,[10,20,25]],[1.5,[-15,8,-15]]]){const light=new THREE.DirectionalLight(0xfff9eb,power);light.position.set(...pos);this.scene.add(light);}
@@ -25,7 +26,7 @@ export class VocalTractViewer{
       const label=document.createElement('span');this.controlLabels.append(label);this.controls.set(name,{mesh,label});
     }
     this.floorAnchor=new THREE.Mesh(new THREE.BoxGeometry(.10,.10,.10),new THREE.MeshBasicMaterial({color:0x327d6d,depthTest:false}));this.floorAnchor.renderOrder=12;this.scene.add(this.floorAnchor);
-    this.floorLabel=document.createElement('span');this.floorLabel.textContent='口底附着';this.controlLabels.append(this.floorLabel);
+    this.floorLabel=document.createElement('span');bindText(this.floorLabel,()=>msg("modules.vocal-tract-frame.text.floor_attachment_270"));this.controlLabels.append(this.floorLabel);
     this.valve=new THREE.Mesh(new THREE.CircleGeometry(1,40),new THREE.MeshStandardMaterial({color:0xc1868b,side:THREE.DoubleSide,roughness:.7}));this.valve.rotation.x=Math.PI/2;this.valve.userData.organ='velum';this.scene.add(this.valve);
     installModelPinch(this.svg,{
       begin:center=>{this.panning=null;this.svg.classList.remove('panning');if(this.dragging){this.dragging=null;this.onEnd();}this.pinchStart={zoom:this.zoom,anchor:this.svgPoint(center)};},
@@ -66,10 +67,10 @@ export class VocalTractViewer{
     this.needsRender=true;this.orbit.addEventListener('change',()=>{this.needsRender=true;});this.observer=new ResizeObserver(()=>this.resize());this.observer.observe(viewport);this.reset();this.animate();
   }
   async load(){
-    const [head,nose]=await Promise.all(['head','nasal'].map(async n=>{const r=await fetch('assets/'+n+'.json');if(!r.ok)throw Error('无法载入模型 '+n);return r.json();}));
+    const [head,nose]=await Promise.all(['head','nasal'].map(async n=>{const r=await fetch('assets/'+n+'.json');if(!r.ok)throw uiError(join(()=>msg("modules.vocal-tract-frame.text.could_not_load_model_271"),()=>n));return r.json();}));
     for(let i=0;i<head.vertices.length;i+=3){const [x,y,z]=head.vertices.slice(i,i+3);head.vertices[i]=(z-.127)*100+6.5;head.vertices[i+1]=(y-1.85)*85-1;head.vertices[i+2]=x*80;}
     this.headContour=stitch(planeSegments(head.vertices,head.triangles))[0];this.head=new THREE.Mesh(geometry(head),new THREE.MeshStandardMaterial({color:0xc6bca6,roughness:.8,transparent:true,opacity:.17,depthWrite:false,side:THREE.DoubleSide,clippingPlanes:[this.halfPlane]}));this.head.renderOrder=-1;this.scene.add(this.head);
-    if(!nose.coordinate_system?.startsWith('VTL reference cm'))throw Error('鼻腔坐标版本不匹配');
+    if(!nose.coordinate_system?.startsWith('VTL reference cm'))throw uiError(msg("modules.vocal-tract-frame.text.nasal_coordinate_version_mismatch_272"));
     const registered=registerNose(nose);Object.assign(nose,registered);this.noseData=nose;this.outlet=nasalOutlet(nose);this.nosePaths=sectionPaths(nose,.5);this.referenceNose=referenceNose(nose,this.outlet);
     this.noseOutline=new THREE.LineSegments(new THREE.BufferGeometry(),new THREE.LineBasicMaterial({color:0x679b8c,transparent:true,opacity:.48}));const points=[];
     for(const z of [-.5,.5])for(const line of planeSegments(nose.vertices,nose.triangles,z))for(const p of line)points.push(p[0],p[1],z);
@@ -86,15 +87,15 @@ export class VocalTractViewer{
   dragBaseline(name){const p=[...this.state.params];p.larynx_height=this.state.larynx_height??0;p.tongue_shape=[...(this.state.tongue_shape??[0,0,0,0])];p.lip_shape=[...(this.state.lip_shape??[0,0,0,0])];const keys={tongue:['TCX','TCY'],tip:['TTX','TTY'],blade:['TBX','TBY'],root:['TRX','TRY']}[name]||[];for(const key of keys){const i=this.metadata.parameters.findIndex(m=>m.name===key);p[i]=this.state.limited[i];}return p;}
   handles(){
     const s=this.state,idx=n=>this.metadata.parameters.findIndex(p=>p.name===n),xy=(x,y)=>[s.limited[idx(x)],s.limited[idx(y)],.06];
-    const items=[{name:'surface',label:'舌面',p:[...surfacePoint(s),.06],organ:'tongue',shapeIndex:0},{name:'belly',label:'舌底',p:[...s.tongueBelly,.06],organ:'tongue',shapeIndex:2},{name:'tongue',label:'舌背',p:xy('TCX','TCY'),key:'TCX',organ:'tongue'},{name:'blade',label:'舌叶',p:[...bladeSurfacePoint(s),.06],key:'TBX',organ:'tongue'},{name:'root',label:'舌根',p:xy('TRX','TRY'),key:'TRX',organ:'tongue'},{name:'hyoid',label:'舌骨',p:[...s.contours.lower_cover[4],.06],key:'HY',organ:'tongue'},{name:'tip',label:'舌尖',p:xy('TTX','TTY'),key:'TTX',organ:'tongue'},
-      ...['upper','lower'].map(n=>({name:n+'_lip',label:n==='upper'?'上唇':'下唇',p:[...s.lipHandles[n+'_lip'],.06],key:'LP',organ:'lips'})),{name:'larynx',label:'声门高低',p:[(s.contours.upper_cover[0][0]+s.contours.lower_cover[0][0])/2,s.contours.lower_cover[0][1],.06],key:'HY',organ:'velum'},{name:'velum',label:'软腭 / 腭咽口',p:[...s.contours.uvula.at(-1),.06],key:'VO',organ:'velum'}];
+    const items=[{name:'surface',label:msg("modules.vocal-tract-frame.text.tongue_surface_273"),p:[...surfacePoint(s),.06],organ:'tongue',shapeIndex:0},{name:'belly',label:msg("modules.vocal-tract-frame.text.tongue_underside_274"),p:[...s.tongueBelly,.06],organ:'tongue',shapeIndex:2},{name:'tongue',label:msg("modules.vocal-tract-frame.text.tongue_body_275"),p:xy('TCX','TCY'),key:'TCX',organ:'tongue'},{name:'blade',label:msg("modules.vocal-tract-frame.text.tongue_blade_276"),p:[...bladeSurfacePoint(s),.06],key:'TBX',organ:'tongue'},{name:'root',label:msg("modules.vocal-tract-frame.text.tongue_root_23"),p:xy('TRX','TRY'),key:'TRX',organ:'tongue'},{name:'hyoid',label:msg("modules.vocal-tract-frame.text.hyoid_24"),p:[...s.contours.lower_cover[4],.06],key:'HY',organ:'tongue'},{name:'tip',label:msg("modules.vocal-tract-frame.text.tongue_tip_277"),p:xy('TTX','TTY'),key:'TTX',organ:'tongue'},
+      ...['upper','lower'].map(n=>({name:n+'_lip',label:n==='upper'?msg("modules.vocal-tract-frame.text.upper_lip_278"):msg("modules.vocal-tract-frame.text.lower_lip_279"),p:[...s.lipHandles[n+'_lip'],.06],key:'LP',organ:'lips'})),{name:'larynx',label:msg("modules.vocal-tract-frame.text.glottal_height_280"),p:[(s.contours.upper_cover[0][0]+s.contours.lower_cover[0][0])/2,s.contours.lower_cover[0][1],.06],key:'HY',organ:'velum'},{name:'velum',label:msg("modules.vocal-tract-frame.text.velum_velopharyngeal_port_281"),p:[...s.contours.uvula.at(-1),.06],key:'VO',organ:'velum'}];
     const tongue=s.meshes.find(m=>m.name==='tongue');
     for(let k=1;k<=3;k++){
       // Regional anchors on the native tongue surface, posterior to anterior.
       // VTL has 33 dynamic ribs followed by four static underside ribs.
       const rib=s.tongue_side_ribs?.[k-1]??[.34,.66,.94][k-1]*32,lo=Math.floor(rib),hi=Math.ceil(rib),t=rib-lo;
       const p=[0,1,2].map(d=>tongue.vertices[(lo*tongue.points+tongue.points-1)*3+d]*(1-t)+tongue.vertices[(hi*tongue.points+tongue.points-1)*3+d]*t);
-      items.push({name:'side'+k,label:['后侧缘','中侧缘','前侧缘'][k-1],p,key:'TS'+k,organ:'tongue',side:true});
+      items.push({name:'side'+k,label:[msg("modules.vocal-tract-frame.text.posterior_lateral_margin_282"),msg("modules.vocal-tract-frame.text.middle_lateral_margin_283"),msg("modules.vocal-tract-frame.text.anterior_lateral_margin_284")][k-1],p,key:'TS'+k,organ:'tongue',side:true});
     }return items;
   }
   add(parent,pts,attrs={},close=false){const node=el('path',{d:path(pts,close),...attrs});parent.append(node);return node;}
@@ -102,7 +103,7 @@ export class VocalTractViewer{
     if(!this.state||!this.sagittal)return;const s=this.state,c=s.contours,px=(this.focused?17.3:26)/this.zoom/this.el.clientHeight,h=px*this.el.clientHeight,w=px*this.el.clientWidth,cx=(this.focused?1.4:-1.8)+this.pan[0],cy=(this.focused?-.1:4)+this.pan[1];
     const focus=this.svg.contains(document.activeElement)?document.activeElement.dataset.handle:null;
     this.svg.setAttribute('viewBox',[cx-w/2,-cy-h/2,w,h].join(' '));this.svg.replaceChildren();
-    const defs=el('defs');defs.innerHTML='<linearGradient id="tongueFill" x2="0.2" y2="1"><stop stop-color="#e0adab"/><stop offset="1" stop-color="#b9797c"/></linearGradient>';this.svg.append(defs);
+    const defs=el('defs');setHTML(defs,()=>'<linearGradient id="tongueFill" x2="0.2" y2="1"><stop stop-color="#e0adab"/><stop offset="1" stop-color="#b9797c"/></linearGradient>');this.svg.append(defs);
     const layer=el('g',{'stroke-linejoin':'round','stroke-linecap':'round'});this.svg.append(layer);
     if(this.showHead)this.add(layer,this.headContour,{fill:themeColor(dark()?'--muted':'--line'),stroke:themeColor('--line'),'stroke-width':.03,opacity:.43,'data-role':'head-outline'},true);
     const air=this.mode==='airway',overlay=this.mode==='overlay',airFill=air?'#a8d1c3':overlay?'#dce9df':themeColor('--panel'),tissueOpacity=air?.15:1;
@@ -144,7 +145,7 @@ export class VocalTractViewer{
     if(this.selected==='tongue'){
       const anchor=c.lower_cover[s.tongue_floor_rib??12];
       layer.append(el('rect',{x:anchor[0]-px*3,y:-anchor[1]-px*3,width:px*6,height:px*6,fill:'#fffdf5',stroke:'#327d6d','stroke-width':px*1.2,'data-role':'tongue-floor-anchor'}));
-      if(this.labels)this.annotation(layer,'口底附着',anchor,[.5,-.55],px);
+      if(this.labels)this.annotation(layer,msg("modules.vocal-tract-frame.text.floor_attachment_270"),anchor,[.5,-.55],px);
     }
     // Paint the rigid dental cut independently of the changing soft-tissue
     // masks. Restore exactly the panel/head composite when teeth are hidden;
@@ -175,13 +176,13 @@ export class VocalTractViewer{
       const j=candidates.sort((a,b)=>Math.abs(a-48)-Math.abs(b-48))[0];
       if(j!==undefined){const d=(sec.upper[j]+sec.lower[j])/2;layer.append(el('circle',{cx:line[0]+line[3]*d,cy:-(line[1]+line[4]*d),r:px*4.5,fill:'none',stroke:'#327e70','stroke-width':px*1.5,'data-role':'section-contact'}));}
     }
-    if(this.labels)for(const [label,p,offset] of [['硬腭',c.upper_cover[17],[.1,1]],['软腭 / 小舌',this.palate.tip,[-2.6,1.4]],['会厌',c.epiglottis.at(-1),[-2.2,-.5]],...(this.showTeeth?[['门齿截面',c.upper_teeth[2],[2.8,1.4]]]:[]),...(this.showNose?[['鼻腔参考 · 偏离中线 5 mm',[2,4.7],[1,1.4]]]:[])])this.annotation(layer,label,p,offset,px);
+    if(this.labels)for(const [label,p,offset] of [[msg("modules.vocal-tract-frame.text.hard_palate_285"),c.upper_cover[17],[.1,1]],[msg("modules.vocal-tract-frame.text.velum_uvula_286"),this.palate.tip,[-2.6,1.4]],[msg("modules.vocal-tract-frame.text.epiglottis_287"),c.epiglottis.at(-1),[-2.2,-.5]],...(this.showTeeth?[[msg("modules.vocal-tract-frame.text.incisor_section_288"),c.upper_teeth[2],[2.8,1.4]]]:[]),...(this.showNose?[[msg("modules.vocal-tract-frame.text.nasal_reference_5_mm_off_midline_289"),[2,4.7],[1,1.4]]]:[])])this.annotation(layer,label,p,offset,px);
     const offsets={surface:[-.8,-.5],belly:[.6,1.0],tongue:[.25,.8],blade:[-.2,-.65],root:[-1.5,.1],hyoid:[-1.2,.5],tip:[.4,.7],upper_lip:[.6,-.35],lower_lip:[.6,.75],velum:[-2,.9],larynx:[.6,.1]};
     for(const item of this.handles().filter(p=>!p.side)){
       const {name,label,p,key}=item,index=this.metadata.parameters.findIndex(m=>m.name===key),lipIndex=name==='upper_lip'?1:name==='lower_lip'?3:null,param=lipIndex!==null?{min:this.metadata.lip_shape_limits[lipIndex][0],max:this.metadata.lip_shape_limits[lipIndex][1]}:name==='larynx'?{min:-1,max:1}:item.shapeIndex!==undefined?{min:this.metadata.tongue_shape_limits[item.shapeIndex][0],max:this.metadata.tongue_shape_limits[item.shapeIndex][1]}:this.metadata.parameters[index];
-      const g=el('g',{'data-handle':name,role:'slider','aria-label':'拖动'+label,'aria-valuemin':param.min,'aria-valuemax':param.max,'aria-valuenow':lipIndex!==null?s.lip_shape[lipIndex]:name==='larynx'?s.larynx_height:item.shapeIndex!==undefined?s.tongue_shape[item.shapeIndex]:s.params[index],tabindex:0,class:'organ-handle',transform:'translate('+p[0]+' '+(-p[1])+')'});
+      const g=el('g',{'data-handle':name,role:'slider','aria-label':join(()=>msg("modules.vocal-tract-frame.text.drag_70"),()=>label),'aria-valuemin':param.min,'aria-valuemax':param.max,'aria-valuenow':lipIndex!==null?s.lip_shape[lipIndex]:name==='larynx'?s.larynx_height:item.shapeIndex!==undefined?s.tongue_shape[item.shapeIndex]:s.params[index],tabindex:0,class:'organ-handle',transform:'translate('+p[0]+' '+(-p[1])+')'});
       g.append(el('circle',{r:px*16,fill:'transparent'}),el('circle',{r:px*6,fill:'#fffdf5',stroke:'#327d6d','stroke-width':px*1.6}),el('circle',{r:px*2.5,fill:'#327d6d'}));
-      if(this.labels){const [x,y]=offsets[name],text=el('text',{x,y,'font-size':px*11,fill:'#356f61','paint-order':'stroke',stroke:'#fffdf6','stroke-width':px*2});text.textContent=label;g.append(text);}layer.append(g);
+      if(this.labels){const [x,y]=offsets[name],text=el('text',{x,y,'font-size':px*11,fill:'#356f61','paint-order':'stroke',stroke:'#fffdf6','stroke-width':px*2});bindText(text,()=>label);g.append(text);}layer.append(g);
       g.addEventListener('keydown',e=>{if(this.playing||!e.key.startsWith('Arrow'))return;e.preventDefault();this.onStart();const d=e.shiftKey?.2:.04;this.onDrag(name,e.key==='ArrowLeft'?-d:e.key==='ArrowRight'?d:0,e.key==='ArrowUp'?d:e.key==='ArrowDown'?-d:0,this.dragBaseline(name));this.onEnd();});
       if(name===focus)g.focus({preventScroll:true});
     }
@@ -192,7 +193,7 @@ export class VocalTractViewer{
     }
     this.orientation();
   }
-  annotation(parent,label,p,offset,px){const end=[p[0]+offset[0],p[1]+offset[1]];this.add(parent,[p,end],{fill:'none',stroke:'#99a48f','stroke-width':.025});const text=el('text',{x:end[0],y:-end[1]-.12,'font-size':px*10.5,fill:'#6a7969','text-anchor':offset[0]<0?'end':'start','paint-order':'stroke',stroke:'#f8f5ec','stroke-width':px*2});text.textContent=label;parent.append(text);}
+  annotation(parent,label,p,offset,px){const end=[p[0]+offset[0],p[1]+offset[1]];this.add(parent,[p,end],{fill:'none',stroke:'#99a48f','stroke-width':.025});const text=el('text',{x:end[0],y:-end[1]-.12,'font-size':px*10.5,fill:'#6a7969','text-anchor':offset[0]<0?'end':'start','paint-order':'stroke',stroke:'#f8f5ec','stroke-width':px*2});bindText(text,()=>label);parent.append(text);}
   update3D(){
     const s=this.state;for(const data of s.meshes){let mesh=this.meshes.get(data.name);if(!mesh){mesh=new THREE.Mesh(geometry(data),new THREE.MeshStandardMaterial({color:colors[data.name],roughness:.7,side:THREE.DoubleSide}));mesh.userData.organ=data.name==='tongue'?'tongue':data.name.includes('lip')?'lips':data.name==='uvula'?'velum':null;this.meshes.set(data.name,mesh);this.scene.add(mesh);}else if(data.name==='tongue'){mesh.geometry.dispose();mesh.geometry=geometry(data);}else{mesh.geometry.attributes.position.array.set(data.vertices);mesh.geometry.attributes.position.needsUpdate=true;mesh.geometry.computeVertexNormals();mesh.geometry.computeBoundingSphere();}
     }
@@ -227,11 +228,11 @@ export class VocalTractViewer{
     if(this.tongueSection){this.tongueSection.visible=!air&&!this.fullModel;this.tongueSection.material.transparent=overlay;this.tongueSection.material.opacity=overlay?.64:1;this.tongueSection.material.depthWrite=!overlay;}
     if(this.head){this.head.visible=this.showHead;this.head.material.clippingPlanes=this.fullModel?[]:[this.halfPlane];this.head.material.color.set(themeColor('--muted'));}if(this.noseOutline){this.noseOutline.visible=this.showNose&&!air;this.noseOutline.material.clippingPlanes=this.fullModel?[]:[this.halfPlane];}this.el.dataset.fullModel=String(this.fullModel);
     const anchor=this.state.contours.lower_cover[this.state.tongue_floor_rib??12];this.floorAnchor.position.set(...anchor,0);this.floorAnchor.visible=this.selected==='tongue';this.floorLabel.hidden=!this.floorAnchor.visible||!this.labels;
-    const handles=this.handles();for(const [name,control] of this.controls){const h=handles.find(p=>p.name===name);control.mesh.visible=true;control.mesh.position.set(...h.p);control.label.textContent=h.label;control.label.hidden=!this.labels;}
+    const handles=this.handles();for(const [name,control] of this.controls){const h=handles.find(p=>p.name===name);control.mesh.visible=true;control.mesh.position.set(...h.p);bindText(control.label,()=>h.label);control.label.hidden=!this.labels;}
   }
-  orientation(){const compass=this.el.querySelector('.orientation');if(!compass)return;if(this.sagittal){compass.innerHTML='<span>上</span><div>后 ── 前</div><span>下</span>';return;}
-    const q=this.camera.quaternion.clone().invert(),axes=[['前',new THREE.Vector3(1,0,0)],['上',new THREE.Vector3(0,1,0)],['侧',new THREE.Vector3(0,0,1)]];
-    compass.innerHTML='<svg width="78" height="70" viewBox="0 0 78 70">'+axes.map(([name,v])=>{v.applyQuaternion(q);return '<line x1="34" y1="36" x2="'+(34+v.x*23)+'" y2="'+(36-v.y*23)+'" stroke="#91a293"/><text x="'+(34+v.x*30)+'" y="'+(39-v.y*30)+'" text-anchor="middle" fill="#718776" font-size="10">'+name+'</text>';}).join('')+'</svg>';
+  orientation(){const compass=this.el.querySelector('.orientation');if(!compass)return;if(this.sagittal){setHTML(compass,()=>"<span><!--m10-i18n:modules.vocal-tract-frame.text.superior_291-->上</span><div><!--m10-i18n:modules.vocal-tract-frame.text.posterior_anterior_546-->后 ── 前</div><span><!--m10-i18n:modules.vocal-tract-frame.text.inferior_359-->下</span>");return;}
+    const q=this.camera.quaternion.clone().invert(),axes=[[msg("modules.vocal-tract-frame.text.anterior_73"),new THREE.Vector3(1,0,0)],[msg("modules.vocal-tract-frame.text.superior_291"),new THREE.Vector3(0,1,0)],[msg("modules.vocal-tract-frame.text.lateral_292"),new THREE.Vector3(0,0,1)]];
+    setHTML(compass,()=>'<svg width="78" height="70" viewBox="0 0 78 70">'+axes.map(([name,v])=>{v.applyQuaternion(q);return '<line x1="34" y1="36" x2="'+(34+v.x*23)+'" y2="'+(36-v.y*23)+'" stroke="#91a293"/><text x="'+(34+v.x*30)+'" y="'+(39-v.y*30)+'" text-anchor="middle" fill="#718776" font-size="10">'+name+'</text>';}).join('')+'</svg>');
   }
   renderNow(){if(!this.sagittal){const h=this.el.clientHeight,w=this.el.clientWidth;
       const anchor=this.floorAnchor.position.clone().project(this.camera);this.floorLabel.style.left=((anchor.x+1)*w/2+10)+'px';this.floorLabel.style.top=((1-anchor.y)*h/2+8)+'px';

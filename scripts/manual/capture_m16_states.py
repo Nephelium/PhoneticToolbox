@@ -6,6 +6,8 @@ Media registration belongs to the main manual author, not this script.
 """
 from __future__ import annotations
 
+import argparse
+import re
 import base64
 import copy
 import hashlib
@@ -21,17 +23,28 @@ PATHS = ('desktop/src', 'backend/src', 'packages/phonetic_core/src', 'scripts')
 for relative in PATHS:
     sys.path.insert(0, str(ROOT / relative))
 os.environ['PYTHONPATH'] = os.pathsep.join(str(ROOT / p) for p in PATHS)
-os.environ.setdefault('QT_QPA_PLATFORM', 'windows')
+from manual.capture_locale import CaptureLocale
+from verification_artifacts import verification_run
+from workbench_source import configure
+for key in ('QT_ENABLE_HIGHDPI_SCALING','QT_SCALE_FACTOR','QT_SCREEN_SCALE_FACTORS'):os.environ.pop(key,None)
+os.environ['QT_QPA_PLATFORM']='windows'
 os.environ.setdefault('QTWEBENGINE_CHROMIUM_FLAGS', '--mute-audio --autoplay-policy=no-user-gesture-required')
 
 
-def main():
+def capture_run(args,out,scratch):
+    configure()
+    args.frontend_dist=args.frontend_dist.resolve(strict=True)
+    ui=CaptureLocale(args.locale,('recording','workbench','components'))
+    source_paths=[Path(__file__),args.frontend_dist/'index.html',ROOT/'frontend/src/modules/recording/RecordingPage.vue']
+    sources={str(i):dict(path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest()) for i,p in enumerate(source_paths)}
     sys.stdout.reconfigure(encoding='utf-8')
     import numpy as np
     import soundfile as sf
     from PyQt6.QtCore import QEventLoop, QTimer, Qt
     from PyQt6.QtWidgets import QApplication
     from ptb_desktop.host import Workbench, register_scheme
+    from PyQt6 import sip
+    from ptb_worker.local_workspace import prepare_workspace
     from ptb_desktop.recording.capture import Capture
     from ptb_desktop.recording.storage import read_range
     from m16_test_backend import Backend
@@ -48,33 +61,34 @@ def main():
                  'max_input_channels': 1, 'max_output_channels': 0, 'default_samplerate': 48000},
             ]
 
-    out = ROOT / 'output/manual-work/m16-captures' / uuid4().hex
-    out.mkdir(parents=True)
-    project = out / '测试演示-录音工程'
+    project = scratch / '测试演示-录音工程'
     project.mkdir()
-    other = out / '测试演示-临时工程'
+    other = scratch / '测试演示-临时工程'
     other.mkdir()
-    exports = out / 'exports'
+    exports = scratch / 'exports'
     exports.mkdir()
     choice = {'project': project}
     register_scheme()
     app = QApplication(['PTB-owned-M16-manual-capture'])
-    window = Workbench(ROOT / 'frontend/dist', test=True, jobs_path=None,
-                       local_files_root=None, vocal_profile=out / 'vocal-profile', start_module='M16')
+    db,cache=prepare_workspace(scratch/'state',ROOT/'backend/migrations')
+    window = Workbench(args.frontend_dist, test=True, jobs_path=db,
+                       local_files_root=cache, vocal_profile=scratch / 'vocal-profile', start_module='M16')
     bridge = window.bridge.recording_bridge()
     bridge.service.backend = DemonstrationBackend()
     bridge.choose = lambda purpose: bridge.service.grant(exports if purpose == 'export' else choice['project'], purpose)
     window.setAttribute(Qt.WidgetAttribute.WA_DontShowOnScreen)
+    window.resize(window.screen().geometry().size())
     window.showMaximized()
+    window.view.setZoomFactor(1)
     window.page.setAudioMuted(True)
-    report = {'success': False, 'chapterId': 'm16', 'out': str(out),
+    report = {'success': False,'locale':args.locale,'sourceChapter':'m16','sources':sources, 'chapterId': 'm16', 'out': str(out),
               'scope': 'Actual maximized hidden Windows Qt and QWebChannel, synthetic endpoints and input/output only; no physical microphone, speaker, user recording, database, hardware latency or DPI claim',
               'captures': [], 'checks': [], 'terminations': [],
               'input': {'type': 'synthetic', 'seed': 1602, 'sampleRate': 48000,
                         'microphone': 'Gaussian noise SD .012 plus .15 sine 180Hz after .3s',
                         'secondChannel': '.45 sine 90Hz, explicitly assigned EGG role for channel-preservation demonstration; not a physiological EGG'},
               'sourceSnapshot': [{'path': str(p.relative_to(ROOT)), 'sha256': hashlib.sha256(p.read_bytes()).hexdigest()}
-                                 for p in sorted((ROOT / 'frontend/dist').rglob('*'))
+                                 for p in sorted((args.frontend_dist).rglob('*'))
                                  if p.is_file() and p.suffix in ('.html', '.js', '.css')]}
     window.page.renderProcessTerminated.connect(lambda status, code: report['terminations'].append([status.name, code]))
 
@@ -84,6 +98,13 @@ def main():
         loop.exec()
 
     def js(code):
+        code=re.sub(r'\[aria-label=([^\]"\']+)\]',lambda m:'[aria-label=\\"'+ui.label(m.group(1))+'\\"]',code)
+        replacements={text:ui.label(text) for text in ('本地录音工程已建立','已存入本地工程，尚未导出','显示所有声道','后台处理已结束','发现可恢复录音','已恢复已落盘片段')}
+        replacements['停止播放']=ui.key('modules.recording.text.cbd5b642a40e')
+        replacements['已导出 1 / 1']=ui.key('modules.recording.text.fef7ca377fd8',{'v0':1,'v1':1})
+        replacements['已导出 0 / 1']=ui.key('modules.recording.text.fef7ca377fd8',{'v0':0,'v1':1})
+        replacements['异常中断恢复，仅包含已落盘且哈希通过的前缀，末尾可能缺失']=ui.key('platform.recording.recovered_partial')
+        for source,target in replacements.items():code=code.replace(json.dumps(source,ensure_ascii=False),json.dumps(target,ensure_ascii=False))
         loop, box = QEventLoop(), []
         window.page.runJavaScript(code, lambda value: (box.append(value), loop.quit()))
         QTimer.singleShot(6000, loop.quit)
@@ -101,14 +122,21 @@ def main():
         raise AssertionError(code + '\n' + str(js('document.body.innerText.slice(-4000)')))
 
     def click(text):
+        text=ui.key('modules.recording.text.afd4b783536b') if text=='收起' else text[:2]+ui.label(text[2:]) if text.startswith(('● ','■ ','▶ ')) and text not in ui.source.values() else ui.label(text)
         expr = '[...document.querySelectorAll(".recording-page button")].find(b=>b.offsetParent&&b.textContent.trim()===' + json.dumps(text) + ')'
         until('!!(' + expr + ')&&!(' + expr + ').disabled')
         js(expr + '.click()')
         pause(120)
 
     def field(label, value, tag='input,textarea'):
-        until('(()=>{const l=[...document.querySelectorAll(".recording-page label")].find(l=>l.textContent.trim().startsWith(' + json.dumps(label) + '));const e=l?.querySelector(' + json.dumps(tag) + ');return !!e&&!e.disabled})()')
-        assert js('(()=>{const l=[...document.querySelectorAll(".recording-page label")].find(l=>l.textContent.trim().startsWith(' + json.dumps(label) + '));const e=l?.querySelector(' + json.dumps(tag) + ');if(!e||e.disabled)return false;e.value=' + json.dumps(str(value)) + ';e.dispatchEvent(new Event("input",{bubbles:true}));e.dispatchEvent(new Event("change",{bubbles:true}));return true})()'), label
+        if label=='录音历史':
+            target='document.querySelector(".take-select select")'
+        else:
+            match=re.fullmatch(r'物理输入 (\d+) 角色',label)
+            label=ui.key('modules.recording.text.9f8ea3fb5121',{'v0':int(match[1])}) if match else ui.label(label)
+            target='(()=>{const a='+json.dumps(label)+';return [...document.querySelectorAll(".recording-page input,.recording-page select,.recording-page textarea")].find(e=>e.getAttribute("aria-label")===a)??[...document.querySelectorAll(".recording-page label")].find(l=>l.textContent.trim().toLocaleLowerCase().startsWith(a.toLocaleLowerCase()))?.querySelector('+json.dumps(tag)+')})()'
+        until('!!('+target+')&&!('+target+').disabled')
+        assert js('(()=>{const e='+target+';if(!e||e.disabled)return false;e.value='+json.dumps(str(value))+';e.dispatchEvent(new Event("input",{bubbles:true}));e.dispatchEvent(new Event("change",{bubbles:true}));return true})()'),label
         pause(150)
 
     def upload(name, content):
@@ -123,34 +151,32 @@ def main():
             js('document.querySelector(".recording-page .module-toolbar")?.scrollIntoView({block:"start"})')
         pause(250)
 
-    def capture(name, caption, alt, anchor, state, selector=None):
+    def capture(name,caption,alt,anchor,state,selector=None):
         assert window.isMaximized()
-        position(selector)
-        window.view.repaint()
-        app.processEvents()
-        window.view.grab()
-        pause(200)
-        app.processEvents()
-        pixmap = window.view.grab()
-        file = out / (name + '.png')
-        assert pixmap.save(str(file))
-        report['captures'].append({'id': name, 'chapterId': 'm16', 'file': str(file),
-                                  'caption': caption, 'alt': alt, 'anchor': anchor, 'state': state,
-                                  'distribution': 'software-only', 'git': False, 'sourceType': 'synthetic-test-demo',
-                                  'maximized': True, 'window': [window.width(), window.height()],
-                                  'frameGeometry': [window.frameGeometry().width(), window.frameGeometry().height()],
-                                  'image': [pixmap.width(), pixmap.height()], 'devicePixelRatio': pixmap.devicePixelRatio(),
-                                  'theme': js('document.documentElement.dataset.theme'),
-                                  'palette': js('document.documentElement.dataset.palette'),
-                                  'fontSize': js('getComputedStyle(document.documentElement).fontSize'),
-                                  'sha256': hashlib.sha256(file.read_bytes()).hexdigest(),
-                                  'observed': js('(()=>{const p=document.querySelector(".recording-page");return {notice:document.querySelector(".sidebar-notice")?.innerText||"",error:document.querySelector(".module-status.error")?.innerText||"",waves:document.querySelectorAll(".wave-lane").length,tasks:document.querySelectorAll(".task-row").length,version:document.querySelector(".version-control select")?.selectedOptions[0]?.textContent||"",recoveries:document.querySelectorAll(".recovery-list button").length,dialog:document.querySelector(".m16-dialog")?.getAttribute("aria-label")||"",text:p.innerText}})()')})
-        print('Captured ' + name, flush=True)
+        position(selector);pause(450)
+        metrics=ui.metrics(js);image=window.view.grab().toImage();raw=[image.width(),image.height()]
+        assert image.devicePixelRatio()==1.5 and raw in ([2560,1600],[2561,1601]),raw
+        if raw!=[2560,1600]:image=image.copy(0,0,2560,1600)
+        file=out/(name+'.png');assert image.save(str(file))
+        regions={}
+        for key,query in {'dialog':'.m16-dialog','device':'.devices-panel'}.items():
+            box=js('(()=>{const e=document.querySelector('+json.dumps(query)+');if(!e)return null;const r=e.getBoundingClientRect();return [r.x,r.y,r.width,r.height]})()')
+            if box:regions[key]=dict(selector=query,box=box,units='css-px')
+        report['captures'].append(dict(name=name,file=file.name,image=[2560,1600],raw_image=raw,maximized=True,sha256=hashlib.sha256(file.read_bytes()).hexdigest(),regions=regions,**metrics))
+        print('Captured '+name,flush=True)
 
     print(json.dumps({'captureDirectory': str(out)}), flush=True)
     try:
         until('!!document.querySelector(".recording-page")&&document.fonts.status==="loaded"')
-        js('document.documentElement.dataset.theme="light"')
+        ui.prepare_qt(js,until)
+        # Select the actual preference in this owned profile.
+        for text in (ui.key('workbench.settings'),ui.label('浅色')):
+            expression='[...document.querySelectorAll("button")].find(b=>b.offsetParent&&(b.getAttribute("aria-label")==='+json.dumps(text)+'||b.textContent.trim()==='+json.dumps(text)+'))'
+            until('!!('+expression+')');js(expression+'.click()');pause(180)
+        until('document.documentElement.dataset.theme==="light"')
+        js('document.querySelector("#tab-M16").click()');pause(180)
+        js('[...document.querySelectorAll("button")].find(b=>b.getAttribute("aria-label")==='+json.dumps(ui.key('workbench.collapse_sidebar'))+')?.click()')
+        capture('m16-overview', '', '', '', 'empty-owned-workbench')
         click('新建工程')
         until('document.body.innerText.includes("本地录音工程已建立")')
         capture('m16-project-created', '测试演示：新工程已建立，左侧显示工程名称和成功提示，录音与历史尚为空。', '测试演示的最大化录音工作台，新工程成功提示和空任务列表', 'm16-project-controls', 'new-project-created')
@@ -163,6 +189,9 @@ def main():
         click('保存清单')
         assert len(bridge.service.project.data['tasks']) == 3
         capture('m16-tasks-saved', '测试演示：确认导入后点击保存清单，三条任务已写入工程，当前朗读卡显示第一条材料。', '测试演示的三条任务已保存，左栏出现保存提示，右栏显示第一条录音内容', 'm16-task-import', 'task-list-committed')
+        click('编辑')
+        capture('m16-task-detail', '', '', '', 'existing-task-dialog-preserves-materials')
+        js('document.querySelector(".m16-dialog .primary").click()');pause(150)
         report['checks'].append('CSV maps eight columns, repeat expansion creates three tasks; import changes draft only; Save commits all three')
 
         click('设备与录前检测')
@@ -290,15 +319,16 @@ def main():
         report['success'] = True
         report['projectSummary'] = bridge.service.view()
     finally:
+        report['sourceChangesDuringRun']=[item['path'] for item in sources.values() if hashlib.sha256(Path(item['path']).read_bytes()).hexdigest()!=item['sha256']]
         report['capturesCount'] = len(report['captures'])
         (out / 'report.json').write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding='utf-8')
         window.closing = True
         window.close()
-        pause(300)
-        app.quit()
+        app.processEvents();sip.delete(window);app.processEvents();sip.delete(app)
         print(json.dumps({'success': report['success'], 'report': str(out / 'report.json'), 'captures': len(report['captures'])}), flush=True)
     return report
 
 
 if __name__ == '__main__':
-    main()
+    parser=argparse.ArgumentParser();parser.add_argument('--locale',choices=('en','ja'),required=True);parser.add_argument('--frontend-dist',type=Path,default=ROOT/'frontend/dist');args=parser.parse_args()
+    with verification_run('m16-localized',args.locale,'Actual isolated maximized Qt DPR1.5 page100 light; synthetic endpoints/signals only; actual denoise, EGG invariants, export readback and recovery') as (out,scratch):capture_run(args,out,scratch)

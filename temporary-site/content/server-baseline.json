@@ -1,0 +1,12 @@
+{
+  "origin": "https://www.phonetictoolbox.com/",
+  "captured_on": "2026-10-30",
+  "public_index_sha256": "345ba1890d26c31df4cee5fc6572688af78aa14ece6be139c2d19be5a14b0f9e",
+  "normalized_template_sha256": "48676d365f9a86c688ab3c0c38c70cb2f7c1a3777740db1dd43c8a375cc7b834",
+  "public_assets_checked": 138,
+  "windows": "3.1.2",
+  "macos": "3.1.1",
+  "ipa_input_method": "0.1.7",
+  "normalization": "Versioned public URLs mapped to maintained local filenames; original download and external links preserved",
+  "later_local_changes": "Language switch, English output and localized image-file control"
+}

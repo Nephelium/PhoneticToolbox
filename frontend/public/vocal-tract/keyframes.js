@@ -1,8 +1,10 @@
+import {msg,tr,join,bindText,appendText,bindAttribute,textNode,setHTML,onLocaleChange,parameterLabel,uiError,receiveError} from './i18n.mjs';
 import {setupFeatures} from './features.js';
 import {stopEditor} from './stop-editor.js';
 import {setupSequenceControls} from './sequence-controls.js';
 import {setupPitch} from './pitch.js';
 import {commitSequenceImport} from './sequence-import.mjs';
+// Sequence names are persisted research/user data and remain locale invariant.
 export const frameName=f=>f.name|| (f.aspiration?'ʰ':f.silent?'静音':f.preset?'/'+({E:'ɛ','2':'ø'}[f.preset]||f.preset)+'/':'自定义姿势');
 export function frameIntervals(frames){let time=0;return frames.map((f,index)=>{const start=time;time+=f.duration;return {index,name:frameName(f),start,end:time,silent:!!f.silent,aspiration:!!f.aspiration};});}
 export function silentAt(frames,x,includeAspiration=true){const intervals=frameIntervals(frames),time=x*(intervals.at(-1)?.end||0),f=intervals.find(f=>time<f.end)||intervals.at(-1);return !!(f?.silent||(includeAspiration&&f?.aspiration));}
@@ -26,8 +28,8 @@ export function setupKeyframes({metadata,getCatalog,initialGlobals={},initialFea
   const dirty=value=>parent.postMessage({type:'m10-dirty',dirty:value},'*');
   const pitch=setupPitch({initialCurve,initialPressureCurve,getFrames:()=>frames,isBusy:()=>busy,onChange:()=>save()});
   const syncDirty=()=>dirty(editing>=0||savedVersion<saveVersion);
-  const save=(preserveClear=false)=>{if(!preserveClear){clearedSnapshot=null;$('undoClearFrames').hidden=true;}ensureIds();const captured=JSON.parse(JSON.stringify({features:features.get(),frames,pitch_curve:pitch.getCurve(),pressure_curve:pitch.getPressureCurve(),perturbation:getPerturbation(),global_controls:sequenceControls.get()})),version=++saveVersion;syncDirty();saveQueue=saveQueue.catch(()=>{}).then(()=>post('keyframes',captured)).then(()=>{savedVersion=version;syncDirty();}).catch(e=>{text('保存失败：'+e.message);throw e;});saveQueue.catch(()=>{});return saveQueue;};
-  const text=message=>$('frameStatus').textContent=message;
+  const save=(preserveClear=false)=>{if(!preserveClear){clearedSnapshot=null;$('undoClearFrames').hidden=true;}ensureIds();const captured=JSON.parse(JSON.stringify({features:features.get(),frames,pitch_curve:pitch.getCurve(),pressure_curve:pitch.getPressureCurve(),perturbation:getPerturbation(),global_controls:sequenceControls.get()})),version=++saveVersion;syncDirty();saveQueue=saveQueue.catch(()=>{}).then(()=>post('keyframes',captured)).then(()=>{savedVersion=version;syncDirty();}).catch(e=>{text(()=>join(()=>msg("modules.vocal-tract-frame.text.save_failed_125"),()=>e.message));throw e;});saveQueue.catch(()=>{});return saveQueue;};
+  const text=message=>bindText($('frameStatus'),()=>message);
   const sequenceControls=setupSequenceControls({metadata,initial:initialGlobals,initiallyOpen:!frames.length,getCatalog,post,onChange:()=>save(),isBusy:()=>busy||editing>=0,append:async incoming=>{frames.push(...incoming);ensureIds();await save();render();},});
   const features=setupFeatures({metadata,initial:initialFeatures,getFrames:()=>frames,onChange:()=>save(),isBusy:()=>busy||editing>=0});
   function clearDrag(){
@@ -52,7 +54,7 @@ export function setupKeyframes({metadata,getCatalog,initialGlobals={},initialFea
     if(busy||editing>=0||from===to||to<0||to>=frames.length)return;
     const current=frames[selected],moved=frames.splice(from,1)[0];frames.splice(to,0,moved);
     selected=current?frames.indexOf(current):-1;save();render();
-    list.children[to]?.scrollIntoView({block:'nearest'});text(`已将 ${frameName(moved)} 移至第 ${to+1} 项`);
+    list.children[to]?.scrollIntoView({block:'nearest'});text(()=>msg("modules.vocal-tract-frame.text.moved_value_to_position_value_126",{v0:()=>frameName(moved),v1:()=>to+1}));
   }
   list.ondragover=e=>{if(dragIndex<0||busy||editing>=0)return;e.preventDefault();e.dataTransfer.dropEffect='move';dragY=e.clientY;markDrop();if(!dragScroll)dragScroll=requestAnimationFrame(scrollDrag);};
   list.ondragleave=e=>{if(!list.contains(e.relatedTarget)){cancelAnimationFrame(dragScroll);dragScroll=0;}};
@@ -69,7 +71,7 @@ export function setupKeyframes({metadata,getCatalog,initialGlobals={},initialFea
     const intervals=frameIntervals(frames);
     frames.forEach((f,i)=>{
       const card=document.createElement('div');card.className='pose-card'+(selected===i?' current':'');
-      card.draggable=!busy&&editing<0;card.title='拖动卡片空白处上下排序';
+      card.draggable=!busy&&editing<0;bindAttribute(card,'title',()=>msg("modules.vocal-tract-frame.text.drag_card_blank_space_to_reorder_vertically_127"));
       card.onpointerdown=e=>{card.draggable=!busy&&editing<0&&!e.target.closest('button,input,label,details');};
       card.ondragstart=e=>{
         if(busy||editing>=0||!card.draggable){e.preventDefault();return;}
@@ -77,36 +79,36 @@ export function setupKeyframes({metadata,getCatalog,initialGlobals={},initialFea
         card.classList.add('dragging');dragScroll=requestAnimationFrame(scrollDrag);
       };
       card.ondragend=()=>{clearDrag();setTimeout(()=>{suppressClick=false;},0);};
-      card.tabIndex=0;card.setAttribute('aria-label',`载入姿势 ${i+1} ${frameName(f)}`);
-      const select=()=>{if(busy)return;if(editing>=0&&editing!==i){text('请先保存或取消正在编辑的姿势。');return;}selected=i;if(editing!==i&&!f.aspiration)applyPose(f);render();};
+      card.tabIndex=0;bindAttribute(card,"aria-label",()=>msg("modules.vocal-tract-frame.text.load_posture_value_value_128",{v0:()=>i+1,v1:()=>frameName(f)}));
+      const select=()=>{if(busy)return;if(editing>=0&&editing!==i){text(()=>msg("modules.vocal-tract-frame.text.save_or_cancel_the_posture_being_edited_first_129"));return;}selected=i;if(editing!==i&&!f.aspiration)applyPose(f);render();};
       card.onclick=e=>{if(!suppressClick&&!e.target.closest('button,input,label,details'))select();};
       card.onkeydown=e=>{if(e.target!==card)return;if(e.altKey&&['ArrowUp','ArrowDown'].includes(e.key)){e.preventDefault();moveFrame(i,i+(e.key==='ArrowUp'?-1:1));}else if(['Enter',' '].includes(e.key)){e.preventDefault();select();}};
-      const title=document.createElement('button');title.className='pose-title';title.textContent=`${i+1} · ${frameName(f)}`;title.disabled=busy;
+      const title=document.createElement('button');title.className='pose-title';bindText(title,()=>msg("modules.vocal-tract-frame.text.value_value_111",{v0:()=>i+1,v1:()=>frameName(f)}));title.disabled=busy;
       title.onclick=select;
-      const name=document.createElement('input');Object.assign(name,{type:'text',value:frameName(f),maxLength:80,disabled:busy});name.className='pose-name';name.setAttribute('aria-label',`姿势 ${i+1} 名称`);
+      const name=document.createElement('input');Object.assign(name,{type:'text',value:frameName(f),maxLength:80,disabled:busy});name.className='pose-name';bindAttribute(name,"aria-label",()=>msg("modules.vocal-tract-frame.text.posture_value_name_130",{v0:()=>i+1}));
       name.onchange=()=>{f.name=name.value.trim();save();render();};
-      const detail=document.createElement('small');detail.textContent=f.aspiration?'清声 · 沿前后构形连续过渡 · 无基频':f.silent?`静音 · ${i===frames.length-1?'保持构形':'连续移至下一姿势'} · 无基频`:`唇宽 ${Math.round(f.lip_width*100)}% · ${{voiceless:'清声',whisper:'耳语近似',transition:'模式过渡'}[f.source?.mode]||Math.round(f.f0)+' Hz'}`;
-      const label=document.createElement('label');label.textContent=f.stop_timing?'总时长':f.aspiration?'送气':f.silent?'静音':i===frames.length-1?'停留':'过渡';
-      const duration=document.createElement('input');Object.assign(duration,{type:'number',min:f.aspiration?.01:.05,max:3,step:f.aspiration?.01:.05,value:Number(f.duration.toFixed(5)),disabled:busy||!!f.stop_timing});duration.dataset.timeUnit='s';duration.setAttribute('aria-label',`姿势 ${i+1} ${f.aspiration?'送气':f.silent?'静音':i===frames.length-1?'停留':'过渡'}秒数`);
+      const detail=document.createElement('small');bindText(detail,()=>f.aspiration?msg("modules.vocal-tract-frame.text.unvoiced_continuous_transition_between_postures_no_fundamental_frequency_131"):f.silent?msg("modules.vocal-tract-frame.text.silence_value_no_fundamental_frequency_132",{v0:()=>i===frames.length-1?msg("modules.vocal-tract-frame.text.hold_posture_133"):msg("modules.vocal-tract-frame.text.move_continuously_to_next_posture_134")}):msg("modules.vocal-tract-frame.text.lip_width_value_value_135",{v0:()=>Math.round(f.lip_width*100),v1:()=>({voiceless:msg("modules.vocal-tract-frame.text.unvoiced_136"),whisper:msg("modules.vocal-tract-frame.text.whisper_approximation_137"),transition:msg("modules.vocal-tract-frame.text.mode_transition_138")}[f.source?.mode]||Math.round(f.f0)+' Hz')}));
+      const label=document.createElement('label');bindText(label,()=>f.stop_timing?msg("modules.vocal-tract-frame.text.total_duration_139"):f.aspiration?msg("modules.vocal-tract-frame.text.aspiration_140"):f.silent?msg("modules.vocal-tract-frame.text.silence_44"):i===frames.length-1?msg("modules.vocal-tract-frame.text.dwell_141"):msg("modules.vocal-tract-frame.text.transition_142"));
+      const duration=document.createElement('input');Object.assign(duration,{type:'number',min:f.aspiration?.01:.05,max:3,step:f.aspiration?.01:.05,value:Number(f.duration.toFixed(5)),disabled:busy||!!f.stop_timing});duration.dataset.timeUnit='s';bindAttribute(duration,"aria-label",()=>msg("modules.vocal-tract-frame.text.posture_value_value_duration_in_seconds_143",{v0:()=>i+1,v1:()=>f.aspiration?msg("modules.vocal-tract-frame.text.aspiration_140"):f.silent?msg("modules.vocal-tract-frame.text.silence_44"):i===frames.length-1?msg("modules.vocal-tract-frame.text.dwell_141"):msg("modules.vocal-tract-frame.text.transition_142")}));
       const precision=()=>{if(duration.value.trim()&&Number.isFinite(+duration.value))duration.value=String(Number((+duration.value).toFixed(5)));};
       duration.addEventListener('input',()=>{if(/e/i.test(duration.value)||(duration.value.split('.')[1]?.length??0)>5)precision();},true);
       duration.addEventListener('change',precision,true);
-      duration.onchange=()=>{const n=+duration.value;if(Number.isFinite(n)&&n>=(f.aspiration?.01:.05)&&n<=3){f.duration=n;save();}else duration.value=f.duration;render();};label.append(duration,document.createTextNode('秒'));
+      duration.onchange=()=>{const n=+duration.value;if(Number.isFinite(n)&&n>=(f.aspiration?.01:.05)&&n<=3){f.duration=n;save();}else duration.value=f.duration;render();};label.append(duration,textNode(()=>msg("modules.vocal-tract-frame.text.s_144")));
       const tools=document.createElement('div');tools.className='pose-tools';
-      const edit=document.createElement('button');edit.textContent=editing===i?'保存':'编辑';edit.disabled=busy||(editing>=0&&editing!==i);edit.setAttribute('aria-label',`${editing===i?'保存':'编辑'}姿势 ${i+1}`);
+      const edit=document.createElement('button');bindText(edit,()=>editing===i?msg("modules.vocal-tract-frame.text.save_145"):msg("modules.vocal-tract-frame.text.edit_119"));edit.disabled=busy||(editing>=0&&editing!==i);bindAttribute(edit,"aria-label",()=>msg("modules.vocal-tract-frame.text.value_posture_value_146",{v0:()=>editing===i?msg("modules.vocal-tract-frame.text.save_145"):msg("modules.vocal-tract-frame.text.edit_119"),v1:()=>i+1}));
       edit.onclick=async()=>{
-        if(editing===i){if(!isReady()){text('正在更新构形，请稍后保存。');return;}const pose=getPose();frames[i]={...pose,params:[...pose.params],duration:f.duration,name:f.name||frameName(f),frame_id:f.frame_id,...(f.stop_timing?{stop_timing:f.stop_timing}:{}),...(f.silent?{silent:true}:{})};try{await save();editing=-1;syncDirty();render();text('当前关键帧已保存。');}catch{frames[i]=f;}}
-        else{editing=i;selected=i;applyPose(f);dirty(true);render();text('正在编辑 '+frameName(f)+'，可切换到器官或声音调整，再返回保存。');}
+        if(editing===i){if(!isReady()){text(()=>msg("modules.vocal-tract-frame.text.configuration_updating_wait_before_saving_147"));return;}const pose=getPose();frames[i]={...pose,params:[...pose.params],duration:f.duration,name:f.name||frameName(f),frame_id:f.frame_id,...(f.stop_timing?{stop_timing:f.stop_timing}:{}),...(f.silent?{silent:true}:{})};try{await save();editing=-1;syncDirty();render();text(()=>msg("modules.vocal-tract-frame.text.current_keyframe_saved_148"));}catch{frames[i]=f;}}
+        else{editing=i;selected=i;applyPose(f);dirty(true);render();text(()=>join(()=>join(()=>msg("modules.vocal-tract-frame.text.editing_149"),()=>frameName(f)),()=>msg("modules.vocal-tract-frame.text.adjust_in_organs_or_sound_then_return_to_save_150")));}
       };if(!f.aspiration)tools.append(edit);
-      if(editing===i){const cancel=document.createElement('button');cancel.textContent='取消';cancel.onclick=()=>{editing=-1;applyPose(f);syncDirty();render();};tools.append(cancel);}
-      for(const [name,fn,disabled] of [['←',()=>{[frames[i-1],frames[i]]=[frames[i],frames[i-1]];selected=i-1;},i===0],['→',()=>{[frames[i+1],frames[i]]=[frames[i],frames[i+1]];selected=i+1;},i===frames.length-1],['移除',()=>{frames.splice(i,1);selected=-1;},false]]){
-        const b=document.createElement('button');b.textContent=name;b.disabled=busy||disabled||editing>=0;b.setAttribute('aria-label',`${name==='←'?'前移':name==='→'?'后移':'移除'}姿势 ${i+1}`);b.onclick=()=>{fn();save();render();};tools.append(b);
+      if(editing===i){const cancel=document.createElement('button');bindText(cancel,()=>msg("modules.vocal-tract-frame.text.cancel_151"));cancel.onclick=()=>{editing=-1;applyPose(f);syncDirty();render();};tools.append(cancel);}
+      for(const [name,fn,disabled] of [['←',()=>{[frames[i-1],frames[i]]=[frames[i],frames[i-1]];selected=i-1;},i===0],['→',()=>{[frames[i+1],frames[i]]=[frames[i],frames[i+1]];selected=i+1;},i===frames.length-1],[msg("modules.vocal-tract-frame.text.remove_120"),()=>{frames.splice(i,1);selected=-1;},false]]){
+        const b=document.createElement('button');bindText(b,()=>name);b.disabled=busy||disabled||editing>=0;bindAttribute(b,"aria-label",()=>msg("modules.vocal-tract-frame.text.value_posture_value_146",{v0:()=>name==='←'?msg("modules.vocal-tract-frame.text.move_earlier_152"):name==='→'?msg("modules.vocal-tract-frame.text.move_later_153"):msg("modules.vocal-tract-frame.text.remove_120"),v1:()=>i+1}));b.onclick=()=>{fn();save();render();};tools.append(b);
       }
-      const timing=document.createElement('span');timing.className='pose-time';timing.textContent=`⠿ ${intervals[i].start.toFixed(2)}–${intervals[i].end.toFixed(2)} s`;timing.title='上下拖动排序';
+      const timing=document.createElement('span');timing.className='pose-time';bindText(timing,()=>`⠿ ${intervals[i].start.toFixed(2)}–${intervals[i].end.toFixed(2)} s`);bindAttribute(timing,'title',()=>msg("modules.vocal-tract-frame.text.drag_vertically_to_reorder_154"));
       card.append(title,name,detail,timing,label,tools);if(!f.aspiration&&!f.silent)card.append(stopEditor({frame:f,index:i,frames,metadata,busy:busy||editing>=0,onChange:()=>{save();render();}}));$('keyframeList').append(card);
     });
     const total=Math.round(frames.reduce((s,f)=>s+f.duration,0)*48000)/48000;
-    $('frameCount').textContent=frames.length;$('transportStatus').textContent=frames.length?`${frames.length} 个姿势 · ${total.toFixed(2)} 秒`:'保存姿势后播放';
+    bindText($('frameCount'),()=>frames.length);bindText($('transportStatus'),()=>frames.length?msg("modules.vocal-tract-frame.text.value_postures_value_s_155",{v0:()=>frames.length,v1:()=>total.toFixed(2)}):msg("modules.vocal-tract-frame.text.save_a_posture_to_play_156"));
     $('captureFrame').disabled=busy||editing>=0;$('captureSilence').disabled=busy||editing>=0;$('playFrames').disabled=busy||editing>=0||isSilent||!canSynthesize()||!frames.some(f=>!f.aspiration)||total>maxDuration;$('stopFrames').disabled=!busy;
     for(const id of ['importFrames','exportFrames'])$(id).disabled=busy||editing>=0;
     $('clearFrames').disabled=busy||editing>=0||!frames.length;
@@ -114,25 +116,25 @@ export function setupKeyframes({metadata,getCatalog,initialGlobals={},initialFea
     $('exportVideo').disabled=busy||editing>=0||!canSynthesize()||!frames.some(f=>!f.aspiration)||total>maxDuration;
     $('keyframeList').scrollTop=scroll;
     pitch.draw();
-    if(!busy)text(editing>=0?'正在编辑 '+frameName(frames[editing])+' · 调整后点击此卡片的保存':frames.length?`${frames.length} 个姿势 · ${total.toFixed(2)} 秒${total>maxDuration?`，请缩短到 ${maxDuration} 秒以内`:''}`:'先摆出姿势，再保存；一个关键帧即可播放或保存视频。');
+    if(!busy)text(()=>editing>=0?join(()=>join(()=>msg("modules.vocal-tract-frame.text.editing_149"),()=>frameName(frames[editing])),()=>msg("modules.vocal-tract-frame.text.after_adjustment_click_save_on_this_card_157")):frames.length?msg("modules.vocal-tract-frame.text.value_postures_value_svalue_158",{v0:()=>frames.length,v1:()=>total.toFixed(2),v2:()=>total>maxDuration?msg("modules.vocal-tract-frame.text.shorten_to_within_value_seconds_159",{v0:()=>maxDuration}):''}):msg("modules.vocal-tract-frame.text.set_a_posture_then_save_one_keyframe_suffices_for_playback_or_video_160"));
   }
   function lock(value){busy=value;setBusy(value);$('motionHud').hidden=!value;render();}
-  function capture(silent=false){if(!isReady()){text('正在更新构形，稍后再保存。');return;}const pose=getPose();frames.push({...pose,params:[...pose.params],duration:.2,...(silent?{silent:true,name:'静音'}:{})});selected=frames.length-1;save();render();$('keyframeList').lastElementChild?.scrollIntoView({block:'nearest'});}
+  function capture(silent=false){if(!isReady()){text(()=>msg("modules.vocal-tract-frame.text.configuration_updating_save_in_a_moment_161"));return;}const pose=getPose();frames.push({...pose,params:[...pose.params],duration:.2,...(silent?{silent:true,name:'静音'}:{})});selected=frames.length-1;save();render();$('keyframeList').lastElementChild?.scrollIntoView({block:'nearest'});}
   $('captureFrame').onclick=()=>capture();$('captureSilence').onclick=()=>capture(true);
   $('clearFrames').onclick=()=>{
     if(busy||editing>=0||!frames.length)return;
     clearedSnapshot={frames:JSON.parse(JSON.stringify(frames)),curve:pitch.getCurve(),pressure:pitch.getPressureCurve(),features:features.get(),selected};
-    frames=[];features.set([]);selected=-1;pitch.setCurve([]);pitch.setPressureCurve([]);save(true);render();text('已清空关键帧和手绘曲线，可点击撤销清空恢复。');
+    frames=[];features.set([]);selected=-1;pitch.setCurve([]);pitch.setPressureCurve([]);save(true);render();text(()=>msg("modules.vocal-tract-frame.text.keyframes_and_drawn_curves_cleared_undo_clear_can_restore_them_162"));
   };
   $('undoClearFrames').onclick=()=>{
     if(busy||editing>=0||!clearedSnapshot)return;
     const previous=clearedSnapshot;frames=previous.frames;features.set(previous.features);selected=previous.selected;pitch.setCurve(previous.curve);pitch.setPressureCurve(previous.pressure);
-    save();render();text('已恢复清空前的关键帧和手绘基频。');
+    save();render();text(()=>msg("modules.vocal-tract-frame.text.keyframes_and_drawn_fundamental_frequency_restored_163"));
   };
-  $('stopFrames').onclick=async()=>{++generation;try{const stopped=await(await post('animation/stop')).json();if(stopped.pose)applyPose(stopped.pose,true);lock(false);text('已停止，保留当前姿势。');}catch(e){lock(false);text('停止失败：'+e.message);}};
+  $('stopFrames').onclick=async()=>{++generation;try{const stopped=await(await post('animation/stop')).json();if(stopped.pose)applyPose(stopped.pose,true);lock(false);text(()=>msg("modules.vocal-tract-frame.text.stopped_current_posture_retained_164"));}catch(e){lock(false);text(()=>join(()=>msg("modules.vocal-tract-frame.text.stop_failed_165"),()=>e.message));}};
   $('stopMotionOverlay').onclick=()=>$('stopFrames').click();
   async function prepare(){
-    if(!canSynthesize())throw Error('请先重试浏览器声源，或恢复模型默认后发声。');
+    if(!canSynthesize())throw uiError(msg("modules.vocal-tract-frame.text.retry_the_browser_source_or_restore_model_defaults_before_phonation_53"));
     const prepared=await(await post('animation/prepare',{features:features.get(),frames,pitch_curve:pitch.getCurve(),pressure_curve:pitch.getPressureCurve(),perturbation:getPerturbation(),global_controls:sequenceControls.get(),keep_vowel:keepVowel()})).json();
     const adjusted=JSON.stringify(prepared.frames.map(f=>[f.params,f.manual_root]))!==JSON.stringify(frames.map(f=>[f.params,f.manual_root]));
     if(adjusted&&!Object.keys(sequenceControls.get()).length&&!features.get().length){frames=prepared.frames;await save();render();}
@@ -142,9 +144,9 @@ export function setupKeyframes({metadata,getCatalog,initialGlobals={},initialFea
   $('exportFrames').onclick=async()=>{
     if(busy||editing>=0)return;lockFiles();let message='';
     // Export the current draft even if autosave failed; keep its dirty state.
-    try{await saveQueue.catch(()=>{});const result=await(await post('document/save',{features:features.get(),frames,pitch_curve:pitch.getCurve(),pressure_curve:pitch.getPressureCurve(),perturbation:getPerturbation(),global_controls:sequenceControls.get()})).json();if(result.saved)message='已导出 '+result.name;}
-    catch(e){message='导出失败：'+e.message;}
-    finally{lock(false);if(message)text(message);}
+    try{await saveQueue.catch(()=>{});const result=await(await post('document/save',{features:features.get(),frames,pitch_curve:pitch.getCurve(),pressure_curve:pitch.getPressureCurve(),perturbation:getPerturbation(),global_controls:sequenceControls.get()})).json();if(result.saved)message=join(()=>msg("modules.vocal-tract-frame.text.exported_166"),()=>result.name);}
+    catch(e){message=join(()=>msg("modules.vocal-tract-frame.text.export_failed_167"),()=>e.message);}
+    finally{lock(false);if(message)text(()=>message);}
   };
   $('importFrames').onclick=async()=>{
     if(busy||editing>=0)return;lockFiles();let message='';
@@ -152,14 +154,14 @@ export function setupKeyframes({metadata,getCatalog,initialGlobals={},initialFea
       await saveQueue;const result=await(await post('document/open')).json();if(result.cancelled)return;
       const incoming=result.document,previous=await(await post('keyframes/load')).json();
       await commitSequenceImport(post,{features:incoming.features||[],frames:incoming.frames,pitch_curve:incoming.pitch_curve,pressure_curve:incoming.pressure_curve||[],perturbation:incoming.perturbation??null,global_controls:incoming.global_controls||{}},previous,setPerturbation,getPerturbation());
-      frames=incoming.frames;ensureIds();features.set(incoming.features);sequenceControls.set(incoming.global_controls);clearedSnapshot=null;pitch.setCurve(incoming.pitch_curve);pitch.setPressureCurve(incoming.pressure_curve);selected=-1;message='已导入 '+result.name+' · '+frames.length+' 个姿势'+(incoming.geometry_notice?' · '+incoming.geometry_notice:'');
-    }catch(e){message=(e.sequenceRestored===false?'导入失败：':'导入失败，当前序列和抖动设置保留：')+e.message;}
-    finally{lock(false);if(message)text(message);}
+      frames=incoming.frames;ensureIds();features.set(incoming.features);sequenceControls.set(incoming.global_controls);clearedSnapshot=null;pitch.setCurve(incoming.pitch_curve);pitch.setPressureCurve(incoming.pressure_curve);selected=-1;message=join(()=>join(()=>join(()=>join(()=>join(()=>msg("modules.vocal-tract-frame.text.imported_168"),()=>result.name),()=>' · '),()=>msg("modules.vocal-tract-frame.count.postures",{count:frames.length})),()=>''),()=>(incoming.geometry_notice?' · '+incoming.geometry_notice:''));
+    }catch(e){message=join(()=>(e.sequenceRestored===false?msg("modules.vocal-tract-frame.text.import_failed_170"):msg("modules.vocal-tract-frame.text.import_failed_current_sequence_and_perturbation_settings_retained_171")),()=>e.message);}
+    finally{lock(false);if(message)text(()=>message);}
   };
-  import('./video.js').then(({setupVideo})=>setupVideo({post,viewer,getFrames:()=>frames,getCurve:pitch.getCurve,prepare,lock,ready:()=>!busy&&editing<0&&isReady()})).catch(e=>text('视频组件载入失败：'+e.message));
+  import('./video.js').then(({setupVideo})=>setupVideo({post,viewer,getFrames:()=>frames,getCurve:pitch.getCurve,prepare,lock,ready:()=>!busy&&editing<0&&isReady()})).catch(e=>text(()=>join(()=>msg("modules.vocal-tract-frame.text.video_component_failed_to_load_172"),()=>e.message)));
   $('playFrames').onclick=async()=>{
-    if(!isReady()){text('正在更新构形，稍后再播放。');return;}
-    const run=++generation;lock(true);$('motionClock').textContent='正在生成声音与画面';text('正在生成声音与同步画面…');$('motionProgress').value=0;
+    if(!isReady()){text(()=>msg("modules.vocal-tract-frame.text.configuration_updating_play_in_a_moment_173"));return;}
+    const run=++generation;lock(true);bindText($('motionClock'),()=>msg("modules.vocal-tract-frame.text.generating_sound_and_images_174"));text(()=>msg("modules.vocal-tract-frame.text.generating_sound_and_synchronized_images_175"));$('motionProgress').value=0;
     try{
       const prepared=await prepare();if(run!==generation)return;
       const adjusted=prepared.adjusted;
@@ -171,15 +173,15 @@ export function setupKeyframes({metadata,getCatalog,initialGlobals={},initialFea
         try{
           const frame=await(await post('animation/frame',{id:prepared.id})).json();if(run!==generation)return;
           if(frame.index!==lastIndex){lastIndex=frame.index;applyPose(frame.state,true);}
-          $('motionProgress').value=frame.time/frame.duration;$('motionClock').textContent=`${frame.time.toFixed(2)} / ${frame.duration.toFixed(2)} 秒`;text(`${frame.time.toFixed(2)} / ${frame.duration.toFixed(2)} 秒${adjusted?' · 已保护端点口腔通路':''}`);
-          if(frame.audio_error)throw Error(frame.audio_error);
+          $('motionProgress').value=frame.time/frame.duration;bindText($('motionClock'),()=>msg("modules.vocal-tract-frame.text.value_value_s_176",{v0:()=>frame.time.toFixed(2),v1:()=>frame.duration.toFixed(2)}));text(()=>msg("modules.vocal-tract-frame.text.value_value_svalue_177",{v0:()=>frame.time.toFixed(2),v1:()=>frame.duration.toFixed(2),v2:()=>adjusted?msg("modules.vocal-tract-frame.text.endpoint_oral_passages_protected_178"):''}));
+          if(frame.audio_error)throw receiveError(frame.audio_error_display,frame.audio_error);
           if(frame.active)setTimeout(tick,40);
-          else{lock(false);text(frame.completed?'播放结束 · 已保留最后一个姿势'+(prepared.cached?' · 已复用上次动作与音频':''):'已停止');}
-        }catch(e){await post('animation/stop').catch(()=>{});lock(false);text('播放失败：'+e.message);}
+          else{lock(false);text(()=>frame.completed?join(()=>msg("modules.vocal-tract-frame.text.playback_finished_last_posture_retained_179"),()=>(prepared.cached?msg("modules.vocal-tract-frame.text.previous_motion_and_audio_reused_180"):'')):msg("modules.vocal-tract-frame.text.stopped_181"));}
+        }catch(e){await post('animation/stop').catch(()=>{});lock(false);text(()=>join(()=>msg("modules.vocal-tract-frame.text.playback_failed_182"),()=>e.message));}
       };await tick();
-    }catch(e){if(run===generation){lock(false);text('生成失败：'+e.message);}}
+    }catch(e){if(run===generation){lock(false);text(()=>join(()=>msg("modules.vocal-tract-frame.text.generation_failed_183"),()=>e.message));}}
   };
-  $('sequenceLimit').textContent=`单次播放和视频导出总计不超过 ${maxDuration} 秒`;
+  bindText($('sequenceLimit'),()=>msg("modules.vocal-tract-frame.text.playback_and_video_export_are_limited_to_value_seconds_per_sequence_184",{v0:()=>maxDuration}));
   document.addEventListener('pitch-layout',render);
   render();return {isBusy:()=>busy||editing>=0,save,flush:()=>saveQueue,refresh:render};
 }

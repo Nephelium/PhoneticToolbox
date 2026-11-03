@@ -1,7 +1,9 @@
+import {localized} from '../module-localization.ts';
+import {tr} from '../../i18n/index.ts';
 export type BoundaryLevel='province'|'city'|'district';
 export type BoundaryMode=BoundaryLevel|'auto';
 export const boundaryLevels:BoundaryLevel[]=['province','city','district'];
-export const boundaryNames:Record<BoundaryLevel,string>={province:'省界',city:'市界',district:'县界'};
+export const boundaryNames:Record<BoundaryLevel,string>=localized(()=>({province:tr("modules.geolinguistics.province_boundaries"),city:tr("modules.geolinguistics.city_boundaries"),district:tr("modules.geolinguistics.county_boundaries")}));
 export interface MapExportOptions {legend:boolean;scale:boolean;names:'none'|'all'|'selected';boundaries:BoundaryLevel[]}
 export function activeBoundary(level:BoundaryMode,zoom:number):BoundaryLevel{return level==='auto'?(zoom<6?'province':zoom<8?'city':'district'):level;}
 export function currentBoundaries(level:BoundaryMode,zoom:number,extra:readonly BoundaryLevel[]=[]):BoundaryLevel[]{const primary=activeBoundary(level,zoom);return boundaryLevels.filter(value=>value===primary||extra.includes(value));}

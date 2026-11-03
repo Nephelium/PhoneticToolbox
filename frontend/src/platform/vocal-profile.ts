@@ -1,5 +1,7 @@
+import {uiMessage,uiError,localized} from '../modules/module-localization.ts';
+import {tr} from '../i18n/index.ts';
 /** Durable, account/project-scoped records in the existing IndexedDB values store. */
-import {LocalAssets} from './local-assets.ts';
+import {LocalAssets,LocalStorageError} from './local-assets.ts';
 export interface VocalProfileStore {
  read():Promise<string|undefined>;
  write(expected:string|null,value:string):Promise<void>;
@@ -8,9 +10,9 @@ export function vocalProfileStore(assets:LocalAssets):VocalProfileStore {
  return {
   read:()=>assets.value<string>('vocal-profile-v1'),
   async write(expected,value){
-   if(new TextEncoder().encode(value).length>32_000_000)throw Error('声道保存记录超过 32 MB，请先导出并减少关键帧。');
+   if(new TextEncoder().encode(value).length>32_000_000)throw uiError(uiMessage('platform.saved_vocal_tract_data_exceeds_32_mb_export_it'));
    try{await assets.compare('vocal-profile-v1',expected,value);}
-   catch(error){throw Error(error instanceof Error&&error.message.includes('另一窗口')?'构型已在另一窗口更新，请导出当前草稿后重新打开工作区。':'构型未保存成功，请检查本机空间后重试；当前草稿仍可导出。');}
+   catch(error){throw uiError(error instanceof LocalStorageError&&error.code==='local_record_revision_conflict'?uiMessage('platform.the_configuration_was_updated_in_another_window_export_your'):uiMessage('platform.the_configuration_could_not_be_saved_check_local_free'));}
   }
  };
 }
@@ -20,5 +22,5 @@ export function parseVocalProfile(raw:string):any {
   if(!value||typeof value!=='object'||Array.isArray(value)||value.speaker&&!['JD2','W02'].includes(value.speaker))throw Error();
   if(value.models&&(typeof value.models!=='object'||Array.isArray(value.models)||!Object.keys(value.models).every(k=>['JD2','W02'].includes(k))||Object.values(value.models).some(m=>!m||typeof m!=='object'||Array.isArray(m))))throw Error();
   return value;
- }catch{throw Error('保存的声道记录无法读取，原数据已保留。请先导出恢复副本。');}
+ }catch{throw uiError(uiMessage('platform.saved_vocal_tract_data_could_not_be_read_original'));}
 }

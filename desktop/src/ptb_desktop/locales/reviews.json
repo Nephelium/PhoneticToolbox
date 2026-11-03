@@ -1,0 +1,3237 @@
+{
+  "clipboard.tooLong": {
+    "zh-CN": "5fe320dd7f3c68e6396ccdf8dbcd5d82de6f2603ce12c73ad7d002fd1b58012f",
+    "en": "5905dc5e27ba30ffea68eb4dca6a096caa10537d318b2b2ff973a20f9dd6f66e",
+    "ja": "4f5d513a0142d1f562ee0744335f27f66c3452a1ee7dc9ae0fa781e38596813a"
+  },
+  "clipboard.unavailable": {
+    "zh-CN": "2898015636cb0936df3fe0b5cd8c4ce266db71ea540ae6ff25048877d922a42c",
+    "en": "f9f4aa70613f6f85fcb961cbeafb070d30fb188302e6c7e68e5d6592e489620f",
+    "ja": "326aeebd10223092c25c2e642fc5e1c855df2bee0677183df2c2c7991bd97db9"
+  },
+  "vocal.importPack": {
+    "zh-CN": "df5e990402d8e665809458d2d111091f0b12d4e83633773b80db6a988e12c840",
+    "en": "670b4864ad56257e9b65630c143739ab519f8f273c9b4db6f1a48453f63356d2",
+    "ja": "439ecad12ae5037e823ecefba772c677ccc2e3e8d0d0b4142c34c158352b7c43"
+  },
+  "vocal.importFrames": {
+    "zh-CN": "b6748ead3cc8cda8fd9bfe2552998f30cead0f38c4ebc15ca27e36b658a690ef",
+    "en": "d7dbdaa076d22ade3597529b380a60a1dc75fff41c06bc55d14bc8a0aee9b9be",
+    "ja": "a992c96eb037f587c5ba6f7022c9b8e3d0939df4e2732bb7de84a226bbcd9b15"
+  },
+  "vocal.saveVideo": {
+    "zh-CN": "f0be062798682542fb76960db2f312702d184214aaf2551cd08e17a146942ac3",
+    "en": "17b937a50f93074d3a0cff4ea2117d52cb53c7878985ae9f0852c2ded687b443",
+    "ja": "99a9fbeffcc77e45ee0d16514ad1ded837a93ff96babb57c430812fc3d88b594"
+  },
+  "vocal.exportPack": {
+    "zh-CN": "da783c0a038747cb0227558e3da8ec87e8105966cf4fc8200c12be3e19a021ae",
+    "en": "4905a79944855db55d45a0c6b529bc83703e34872e5d2e190af103ec04ddc771",
+    "ja": "2c1bc510815b445d38e8318f996c207db4b07acc5d767ed9bdd8ceac6f6ef887"
+  },
+  "vocal.exportFrames": {
+    "zh-CN": "3b161046f777f17dc402f8bed0d1739ad98ea1ae7ba941f177ecbbafc4aeb94e",
+    "en": "7e2358baddbc162e9c6a705ea2d31f2b0c02acb5fca6dd111c38defed18fac9a",
+    "ja": "af43a89e15330434f66877b663359f0cf6b66b401e4349741a7ee020f4265ca2"
+  },
+  "vocal.packFilter": {
+    "zh-CN": "4e8ea01a1a0d3b7c664bcec7f92ed2d7c7bd05163eb208e8df79a5c3cacb4ca6",
+    "en": "bd3663e4849935996934834205be630575b43b93dcd8c4ebff182cf5e5c3b650",
+    "ja": "7c091c365d3dab450bfcc72a9f7a5ca8f0dc61b848ee31ca1afc99bd07fa115f"
+  },
+  "vocal.framesFilter": {
+    "zh-CN": "291a4fb2247b9edd50161cc410d6f7d4f5410740a68101715564160662aa42cb",
+    "en": "6d46935d53af70b21c308ebd114fcabd08d70ff852292d89a0e1e8ab2ea02d8e",
+    "ja": "2c9e87f3a07fef0bb40e048452cf93a0482c3a8e4ce0425d1ab843692c547ed2"
+  },
+  "vocal.packSaveFilter": {
+    "zh-CN": "a0ae80f79fe6d31241879880da66aab2642efb538a655ef6312267add7e5f7cf",
+    "en": "365db5d82e9cb718c475bb5f98e2570d0213f2d88969bd3baf46d5efb008b552",
+    "ja": "be924ec9ab71a82dd817a541e779bd99d3575e00b651d13ebbb7b2cfe925920f"
+  },
+  "vocal.framesSaveFilter": {
+    "zh-CN": "b6b5d407b675f16f721f11a3015b47d4d44a5b2a499a80e6dbc92e3522482c5c",
+    "en": "1d8f4f67d4540ed80dcd594095b66274361aecc7e4e7dd334e363fe5b1b34049",
+    "ja": "8892fc223ac53f8fb988608a2bb8400bf0fd07e7070351544c329d76b659a885"
+  },
+  "files.mp4Filter": {
+    "zh-CN": "2586b5c40324505ffe58f97c708d3c072aa5bc835471a669c1ad8773fe49c2be",
+    "en": "86d50b6defa98793f5b3e59a0d800ea6bf196ec325a2e7344af02faae977c23d",
+    "ja": "b153725114723eb16b612b1e82b2c799cf3dc5d5f4bff166ed4a37d3aef1a446"
+  },
+  "files.pdfFilter": {
+    "zh-CN": "02111175aeb60279d17bd65e3be592b03dbcbe261150e5bbace52d02a3c970c3",
+    "en": "f6f9cb0305552c3c30f61c4ffcc99e9c270ab1cc2bff4630f0faff49c73c6f28",
+    "ja": "12679ca2cb867e8d670c7769c90e945220c337a53f6485b6c3a57be45e6811c3"
+  },
+  "files.pythonPicker": {
+    "zh-CN": "a555f63726bfc23cf1cf6a9a37213640b749a9b37edd982fd1dac9daa66b23f6",
+    "en": "01a0d5636d45547f185aa8e159ceb00c664b8806b210dc30e642299f2357e4f1",
+    "ja": "71c0859947d4d96610b555cce40585c0ad62f67b0a397214a7694fac6fcbb205"
+  },
+  "mfa.directory": {
+    "zh-CN": "94c7342a0cc70e73586d6fc116697566d81b6c8dbd542566395e5f2a2bfab714",
+    "en": "c1d005ff9ab7f05da4ae3a255e90915db012ef77a6eef034a5f17d9ac1c28bb1",
+    "ja": "facd8a182de83875e113db1c4fd082685b8d08369a4a134129427fd9479e2cd2"
+  },
+  "mfa.file": {
+    "zh-CN": "f76cd4d18644208b93fe99b2d779418084350622245f274756f9c0a01d57e5e4",
+    "en": "69c52be795b91d140a029dab1deba11d9fe2a89f29ca86c50d805df32b940561",
+    "ja": "94ec391b29ad9e69a73b2b3fcb7e17dd8570f1c8510cc828a0387b49d473f943"
+  },
+  "mfa.runtime": {
+    "zh-CN": "423f51a286789ed3597fcf3d2a24d5fec180beafead7705675bb1da4686582fc",
+    "en": "d92c6a81b2ff50096bcda80885427d1f59a25b5f483f7055523504925d16ab23",
+    "ja": "9c99a82c5703285f376cba3c79d7518415986fe56b0e51fe19c25d7a17a204e5"
+  },
+  "mfa.corpus": {
+    "zh-CN": "bfd1e2ba6bfde639e1a709bd4f7c492a1a46cc20ac08732a9d4edef7ffdb5423",
+    "en": "6b17b8fcc411a533c822a5117e33cf73fa6766739d7d36ac86dc4bea883af4fe",
+    "ja": "77949e34201fa17ea8670b736cda0325b267b76576ccc5e12fb3db1c6624a938"
+  },
+  "mfa.model": {
+    "zh-CN": "e27f85d2b4ee83433de6c5809f3cc0ab664ae1bac6ad75aaece253ca85c39619",
+    "en": "3169cad576a6388f93fc6532a82b5067b6b68570e9bee057a646c22d3962f18c",
+    "ja": "e9d49a39077cd7c48ad54b39035965b0c2a2fa957aca6b273126c98d03bd5411"
+  },
+  "mfa.dictionary": {
+    "zh-CN": "854581a8f04ce5755f4e9716b22a2502e79f087be64f6f27e875d87fde54aea5",
+    "en": "177ca70f42def1238e36da329473263ed3feadd14094c079a2230be0193436f5",
+    "ja": "7eb609b364a675a623b731a42fc97099e544c16a417dce3e71495d779f98d3be"
+  },
+  "mfa.archive": {
+    "zh-CN": "afc81a186c60a6d9efc0f9d30a6e304b9e0b34e20b821b1ba4b67680e3026891",
+    "en": "fe7ebcbdd2a149b0fcb535430b01378f8ea45b37ffea15150cda32cf98f9772c",
+    "ja": "99ae0a44bf8cccc9cf5af9471e4d6fa44a6bf85a1f04765b1bfa9f76f5bf478d"
+  },
+  "mfa.manifest": {
+    "zh-CN": "188bc79127e8665017dae5c4f15929d8ecb26dfa61b99019dc2e4c05f7bb14b2",
+    "en": "05b3abf2579a5eb66403cd78be557fd860633a1fe2103c7642030defe32c657f",
+    "ja": "f8fa171c6e438d5c9c96e1d9e048c896a168f8e7d48e32bcfd48de6399bf894d"
+  },
+  "files.directory": {
+    "zh-CN": "39ad5bc39165bcda879b4ad670329a9f4549174cf91a97d136ae0e6cacf41423",
+    "en": "05f1a36be54d01b58a4b492bd3f62381c31054566d1f703f9e5f6d592f03b1c9",
+    "ja": "e12b5939b5392e85451c61fc55ea25b8d97b9fb7609d14f6ec0d7a818b446ddf"
+  },
+  "files.audio": {
+    "zh-CN": "296c632ec857a0ba59c608e9b4ba4ec436187a969b7776f4eda6e5b3d82263c6",
+    "en": "6ed8919ce20490a5e3ad8630a4fab69475297abd07db73918dd5f36fcfaeb11b",
+    "ja": "e83d3ddca598b78ce823bcc741b1f772252ee1a244c23c4a19c52e63d7d1864c"
+  },
+  "files.results": {
+    "zh-CN": "bb7ef73495dd8a74eead9a021f2739832271393fe393708fe5c50f995749649f",
+    "en": "c099142bc3186ded72786ba27e9ea6d2da240fb9fd3fe79b479ecf8e734b2850",
+    "ja": "e3bf3a629b893f44d7d35554d545a9c8b92fc294322bfdedbbfbe57c6592b8cb"
+  },
+  "files.association": {
+    "zh-CN": "77a65d3252bd0115cd9fc82d33d0f70c7410da0ad2bfc978e77622c555ac7c5f",
+    "en": "10999f422317992b4e8d16f41ef139e608ffd55ad2ce07ac42ec519b6635acd1",
+    "ja": "a8c2fe89d1ae88b169f20da40ead2ee3bdcdd56889e83eab3ea9d8df9850348f"
+  },
+  "close.unsavedTitle": {
+    "zh-CN": "a3e432c613ca7ff40cc60b7ff51442e1b66c38093a797ec9654da77a6f77c4b5",
+    "en": "f8edaa9e0057bb34546a11141b0d6f77e0d42d3081e18c82d76e62c6b64d2b1a",
+    "ja": "69e6ea8c863d1af8ad6218a53a5867f2aacc38b53de3227994ddd9d01d8c9a89"
+  },
+  "close.unsavedBody": {
+    "zh-CN": "4f26b2caf94c95cbc4c3ad07d7df3560927f4ff386007208f1c4b723bec85751",
+    "en": "84acb4ae7fc5c4a91908a94732460ea1a3ca79b7dc06be9d102cb6307694c24a",
+    "ja": "1c1b7689ef30c6a0dcfb6dec73e8e46192a9b40a2fd5fee477fac6a08a54e46d"
+  },
+  "close.yes": {
+    "zh-CN": "4aac8782787510957b743fc42bd5cbab2f119cfad009042414a255c3a1e02941",
+    "en": "5f8cdf8f37983ab4c911aa98b610f179bb156b2d1e09d1c77e1e14e3d35739af",
+    "ja": "4e2ed5e72d2715f14d8688a90b711df5282a3aefe71f534680cb69085b804380"
+  },
+  "close.no": {
+    "zh-CN": "16b38790d59b0a3188afa5aa042a61a4554a8872a2a6e8c5209320d2eacfc61d",
+    "en": "afc22f861264a8fabb7c01d2c076d8a485675037ebe9ba31439cf5586474ee76",
+    "ja": "82bb9039f2a76bcd3a4a8ff051f5b89abd1a758cbf5b2b0cab3d3954443c9c79"
+  },
+  "papers.export": {
+    "zh-CN": "4d2c92849afe7ec92f9c5b69b9105c45bfb373078fcf40f988671f1ecef6883c",
+    "en": "5c552e0874fa4826c5f7f93accb31ad7f904eb9579c7905545ade289929c0eb0",
+    "ja": "9db4d4977b5423809160749cf1e16c5b3304075e58c40c72c89b90ea29410480"
+  },
+  "papers.library": {
+    "zh-CN": "512ab11e0114b8af984da5d2947017c1f80f012c93e4ae7688f6766f2f2668c1",
+    "en": "8f9b3fdc0a3f547cc8170067e8475c7cee1855ba8caba952f49b2e4478c729ac",
+    "ja": "0639aa9b88703d42cac909a6d75415f3ae7d2e48f0d02dc78c8899b4de2cd50c"
+  },
+  "papers.import": {
+    "zh-CN": "ed0adba013d4fad91a1b0e120917042b6dbb53142e4e5c9802171ce066400faf",
+    "en": "3fde380113f685e39edf1bf6d67484ca4e46880ec39c6ec5b4c1c6d01cd61da7",
+    "ja": "2d19c4fa8b762172d4326b965a252889a99c66afc0a1773f774d94264beb45a0"
+  },
+  "download.text": {
+    "zh-CN": "5dd6704c1e9a5d1f437089ca782c0fffa7393c8b472fcc5e11d305809aafc3f6",
+    "en": "793017feeca893abdf5eaaaea860989755f6346b455d9439180568c8861f03b7",
+    "ja": "82754ae34f6f870073179e7472ae48197fdf119377b42f5628031bacc168734a"
+  },
+  "download.textFilter": {
+    "zh-CN": "8c8638ffd561f3e6e709658bf5bf4c01a3407557af9031afe1e48541b52d5535",
+    "en": "72dcba2670a50076269cd0eafbf6f5a012153fe5dd5f8ba8de19d7ee9f8ac2bb",
+    "ja": "67d4ce149ad0763dd04775ac525c3c5d63f1a8c325f9d8d132b44b9021f626dd"
+  },
+  "download.annotation": {
+    "zh-CN": "ff35249a2b9299cea3d099925d4ddd9527f3582ea9050ab20f2b26b7421d3387",
+    "en": "e8c85e0012d21275b04c5a429ce0c4e658a78c4dd8e27d314a2a40844f5c40e8",
+    "ja": "515fb046a5cdbd1497ebb23465eac2b4dd3fd507a845924bd830e9b3e100461f"
+  },
+  "download.annotationFilter": {
+    "zh-CN": "72e239b455254cfd005c5ee5d57e26d4107d422b3c18a69bd0a5cfda9ed5c3f7",
+    "en": "fe3de656050a50d250a71f2b7f55ed119b6cba5c4b7c9fd6fdb07d20438c5ed7",
+    "ja": "9e56366e3dc24912a801b8c854ae2496ddb187e4b83ac0eba25021de73f9bac7"
+  },
+  "download.lip": {
+    "zh-CN": "b115291b39eba1fedc0b8f8c6ec3ebacf9db274d47ba8df7ba973b198286d415",
+    "en": "5b8db14fc6489eeaaeccb83c5c3b08e7adba70093c04ac4ae00c03ba5e36c7e8",
+    "ja": "8f1eaec43b0eb2d201d301bc92ef8bbc5bdb073be4e5a99badb97bd4a2886d00"
+  },
+  "download.lipFilter": {
+    "zh-CN": "4bc0fdb2a4aacceae937fb0158af9c570e09b9c7fed25309797d2a82ac840a79",
+    "en": "6607834f18aeb5e06f145098cb7ce4b246f08db0dd8615efa898c6ecc5497577",
+    "ja": "32534b36e8af7e72f9a00ae54cbb14997f629b3bcaa269aa9af4dfce67eacd73"
+  },
+  "download.document": {
+    "zh-CN": "6149f34c3140a3122ae1649ef8c1cbf73c9ccf47c53567110a359c6db3eecad7",
+    "en": "432bcb4789e6bcf6ce7e58c29cc9e5e1d34d2f8a453ea1e67142c065ddfc1606",
+    "ja": "80e4388d1474f1fd23db56c94e9d4958fdfe96387315dd58f7e22c4b13675693"
+  },
+  "download.documentFilter": {
+    "zh-CN": "ad323e28986b408e68b2842b7b6e811a959c7d7b48159ca9c217f67f626aa20a",
+    "en": "a1c2fc506510cc96b2eec13aeace9ae2f3f7ba61c13d4f5db7b38e1bde3b912e",
+    "ja": "39870068b5a58b1b07202780f50d9e4a2ac78be53eeef749d9e35fe32f1c39ca"
+  },
+  "download.experiment": {
+    "zh-CN": "b14e33f4cbb4b36cff4c26979383fc33228f9fb4d52f2ab0808ab57f233ae6e4",
+    "en": "628ce4346be067416cb53281b1a658842073e8ffa0c3dca4f223c4969c943da7",
+    "ja": "285a7fa8e8be04c7e900bf3966730bec060e29a393acd97cb1341d415029c89b"
+  },
+  "download.experimentFilter": {
+    "zh-CN": "0f32c0d85485eb20a14d0c6d0c035da21170e3af6c87de68812d4f0d608ab5bf",
+    "en": "fc6b18e8b056a2ab6bb91d4697b90148bcf2af231ceaf43a20e2a5ee94cf0af2",
+    "ja": "3a46fc81e78c2d3df5b9f19c6dd37c5ddbeccc028f351d6a13d5fc7350e7f7ed"
+  },
+  "download.image": {
+    "zh-CN": "0b37005d4e59ab9b955e0698cb1ebbb7211e71159b2104004c82838f44afc002",
+    "en": "58e909c0f4cc572309c24e35fb82feef99015269838cc3d885bc9f29d4d60b94",
+    "ja": "8592d40ea544b68e7bd7290b443ef8ccbd43c0e8076d906ba8d54f24d1af7aa4"
+  },
+  "download.imageFilter": {
+    "zh-CN": "c9fbbf3a56b6e5d1e056270fe2937429d018cfefa6d40417258f412d43b357e1",
+    "en": "3451f57614e445c640ed714d126ba2c04a12a2acdce4992207064d23750d9b3c",
+    "ja": "bdce4d6f27090ff6167f61101a38bf0c140e7f3609e35afd1596b78515cb1289"
+  },
+  "close.recordingTitle": {
+    "zh-CN": "e6b8498974122a4a1c573978f2a059333de9a30127a4ddf487015410f29936d0",
+    "en": "869f3b4e1dd838304c19deb3d090f91fe1e4247b23197b5ed71afa28cd87bcfa",
+    "ja": "f644abd9ec927b1fa82fe62b0d2acbd66d615e190f405917d1f26d0ff95ac9e7"
+  },
+  "close.recordingBody": {
+    "zh-CN": "a4db98716bbdc4d04964ef67bcc713f82c6a307619e6d3767479dfc2f8d65c30",
+    "en": "21a71869c0d7752dd35914c42ba56f0683f75979199a88db893b3216dad72f75",
+    "ja": "9b6cf5157514ae5167196e3c26d8134c0432f454cbe9e959a353b09bba25e611"
+  },
+  "close.recordingUpdateCancelled": {
+    "zh-CN": "7246d2a8ef95a2091f9fd18a557a8979bcef995867c60a389f51578be68b22c3",
+    "en": "c7c7a431c5c97ed8dd63d20e6cf05ceb040ecce3c0aa4d47d3fcb4490ec4dbba",
+    "ja": "976099a7510d5af44ab4945e7bcc0a47135de41435091e19675902c528a3d30e"
+  },
+  "close.incompleteTitle": {
+    "zh-CN": "e7a967bc1946f876fc1322df9e0a34736d07d8618a5a0cacef76f2d0348c4e91",
+    "en": "863c2b399c5bcd798a8ca8fcd9e40de5a63aa48ea02380ae7065e96da84e3f65",
+    "ja": "9592abeda93f700b33029d1fde2eb942ff628c2ed5b9608697d63f08d7d530df"
+  },
+  "close.incompleteBody": {
+    "zh-CN": "3014293efa0b4795536fcc7305f0eb74c8a5d4634b18c700300d6c15540b72dd",
+    "en": "5f75f0bb9f15afcfda6b919561c6386d8df1dac45166cee3e799ebc8d1d7e859",
+    "ja": "6a2dda6ce9b141c6ec55ccc27c6de650b05b7ff7dcf47d37333d9c31b9585c4b"
+  },
+  "close.incompleteUpdateCancelled": {
+    "zh-CN": "b3db3b68643f53daacf1e87a0966c63fbfa3519c97dea992f94aacf2331d3364",
+    "en": "81db4ea66129a63f3a08845a492a6d243630f72eb3157dad9b960f85ca687e3b",
+    "ja": "8be45151898ef1e7311b9d1930d64112934149d68cf9ae837805b7aae874c3c0"
+  },
+  "permission.devicesTitle": {
+    "zh-CN": "e71911f39dc1c49bb95014556e28f45a60154fda04ce6d8327e7653d523b2986",
+    "en": "653e92f1b66fc57347c394da6d0a996a1d5f7e1129093b0ce7b363877dc5ff4d",
+    "ja": "4c325de0b1492f6268ce549c1c8b96ba48aa6b3449f13af3a3d00c3563f43ce0"
+  },
+  "permission.captureTitle": {
+    "zh-CN": "2d6b74881a5cd8bce9a23809d0ce45cb3a530fa1edaedce5c81b387f0512e065",
+    "en": "e09ac91c74c126c5b827be41662b6aeffb0a1a8e8ec8f1b255995f57d9b89253",
+    "ja": "d43f9b936de4674e8ca7dbada6c032ffa2f6a4f27f5a9b408a7886981628fe88"
+  },
+  "permission.devicesBody": {
+    "zh-CN": "5afab08a0127c91bc7a75314d5075b9d1e79bbb5e7412e130040c54e2d1150e8",
+    "en": "3df81fee020917b1b057ec4db42c1fb9e4c84f0b9d56390b1ba3dc57488d33a6",
+    "ja": "9fb3b5a5c731c5d02c3710a2b48b3ce2ba91a8b690aa2e9746b6fb9cc3061cb1"
+  },
+  "permission.captureBody": {
+    "zh-CN": "3f2e70f61a19681646d61b76892527ec2b2458e132734bdd43bbcde6401061f0",
+    "en": "a6f705c66cff6339d139d7879602e9fc263b82f8c902fcad72fde104966e8e4a",
+    "ja": "7feab8c9380535d76c8bba1b870033ab003aabd3e5d363ab74300b5d0885ea09"
+  },
+  "recording.newFolder": {
+    "zh-CN": "43f0ea8721dd6e9735ae7c91bb7bbcd2ae7f75283f4d77b7bf28f08c90ef7a5f",
+    "en": "0abb8934ed846f093a1dd5f9df6743d74547c5865acefb5e5f0ed2b34754454e",
+    "ja": "a64dfe1220cd0c86ba0cb9551c72604bc59b1ba1768b23ca03aaa77c9509b0df"
+  },
+  "recording.openFolder": {
+    "zh-CN": "8037df056163d618cc467b2af2748a389ac3132d4f196f6c66418cf2a9a08013",
+    "en": "666d9007536df5d0df24e4fb4aa94a501fe7ecffb2b8c111045be240589c115b",
+    "ja": "c21dfe899703fa9f16f93d3e478543253a52130c08437716c274d474c2fa8db0"
+  },
+  "recording.exportFolder": {
+    "zh-CN": "7ea3444d4729a3b904e0beb8eccdba81534f2ba161f2290f03715312ec66a0da",
+    "en": "a2db05f6a81c5a8d04c3e8fbed0270ec79cf6f1bc09794559c932f2383d48e1d",
+    "ja": "9273353e8f64a2c7ff704cef6ff190c56f046ad101072756fc44915b561bebd5"
+  },
+  "color.title": {
+    "zh-CN": "e3c3a86c3f3cfb8308d91d6f24242b64bac4811623e9251991695201c396854a",
+    "en": "d06fab1c42a4905639f7da41bd7c0b2e6103fa28c8bfbac379ece8888b5c73c9",
+    "ja": "ac1e799d4af01d901496ff61954524acf03a8cefe6ef7eae4c9f3fbfd2ed0fdb"
+  },
+  "color.screen": {
+    "zh-CN": "cc229a5d1bcfbf7e3cd491682e7e7987ecc1697c776272dd6e0c869d9962c40e",
+    "en": "724607945f42e4e49bfb11d347113b7e1f324255c754ff11688c39186f9e2500",
+    "ja": "679ad45b7ee74a54113680566970fd90a7452a7b08b0103745de35a2c12d6ab1"
+  },
+  "color.addCustom": {
+    "zh-CN": "2d683983e2fb5c1f4b2b690b4d135add648575516329f8b1fc9875b0e4e53fa0",
+    "en": "6e51bc1ec3a8749375264e360764e62f004c56f5020addee0d009928101a68d2",
+    "ja": "cffe4e40307fe46258aff604b02b5325d8c07e301320b123ff8ac339ae235b5e"
+  },
+  "color.use": {
+    "zh-CN": "cc425641d1dfa51f95e9e9eea928fb6fda9b6cbe4048e4750f1b02ac639eb10a",
+    "en": "d6807b3f9a54ef12fa31f36934cead0e5fb9cb753f057accb3c84729fbec4a3d",
+    "ja": "0c081b3128cff04aba5b00f3bc80cc96c663aff3fffe40a2a741d8c671888db1"
+  },
+  "color.cancel": {
+    "zh-CN": "2cd0f3be8738a86cede1a1452f874f31d569864bbb00cacd4130990f4610cb5c",
+    "en": "19766ed6ccb2f4a32778eed80d1928d2c87a18d7c275ccb163ec6709d3eb2e27",
+    "ja": "bca84ea5c65fee0eccd1f23a972b95cce908f83977c65b4e8b32ca72a772a9a5"
+  },
+  "color.basic": {
+    "zh-CN": "da178a2b4ba60aeae5ee97dbb20698dcdf8821245fe5394e0bf6df563794e009",
+    "en": "9d3c5832109b02b037e6ecd72c555ca8f3e86bfff88b3052102ac09915e80fce",
+    "ja": "9e22edfe3136c6191f31521414fd48b5759d658776748f5707012182f63f86a6"
+  },
+  "color.custom": {
+    "zh-CN": "781b07fdcb56b56af4cf96722ebefe3bbd445c897ad62f6e7bd8e7ac4488bf4f",
+    "en": "2f7518c7ae0ed46791d169dedcb47a2ee7f226991a25483d18106ce7359370e5",
+    "ja": "2a03a0a766bf9d47fa1a19c88f829f79f1cb036196783b3850a1b1b9e5116211"
+  },
+  "color.red": {
+    "zh-CN": "229158e64854a4965509588656dcf1350b9f460ee11f6ae4b0e3bfd7456fc802",
+    "en": "02e7b82bf3932396bb82c5c1d32f16a6ef03d77bbdd93e223d1f8b47802ed082",
+    "ja": "eba6f9cb933fe7e26a41cd764142d1a01dfdfc20760dbdfb3f34e92d9b07f762"
+  },
+  "color.green": {
+    "zh-CN": "bff6ab933cc7bef69879224c050658b8fdd2aa1bcac2a42f5dc1d8da7edd6ec1",
+    "en": "96542f444ac2a640b6350cb339bde86b93715ac374811b3b65574b1ead97a3b5",
+    "ja": "620df51c99e63f1f3fd241db5639509de40e25d7a03dfebbc8aa99bc2c7d64f7"
+  },
+  "color.blue": {
+    "zh-CN": "929f5ee238ce88163d8f5ce6bd18b554dfd4d13e3abb3c28f805843599c89c47",
+    "en": "1c52508958cd5c6e42ec9bb36cc8cd04281943aba2233a4f95a987163b184ac6",
+    "ja": "7276cf7d0bd5db85318ca788072152cfecc6162a4e8f1c83cb9643378f76259b"
+  },
+  "color.alpha": {
+    "zh-CN": "256e3c1a81936ea1c0ce53f2e7f2a2e2dd9ba42fbb9da286a6032e02ade7afd5",
+    "en": "b6f85b773cba9062a1c32643a1f6a97e156c0d6c76c00dee7bfafe7166d7cc35",
+    "ja": "2ad39fc3c2d695eac16e964adde61eda0be136e8a7f04a62d09feb0be0910679"
+  },
+  "color.hue": {
+    "zh-CN": "29a7a18d7b369799795188e782a224fd2ada42e9277913e4aa04e12391140224",
+    "en": "e7d831eb81dc9042cc218e5e5889b2744b37648f2f475cc366d074e21e66bc4e",
+    "ja": "29a7a18d7b369799795188e782a224fd2ada42e9277913e4aa04e12391140224"
+  },
+  "color.saturation": {
+    "zh-CN": "8a57014e22c00440390de5b10f3214bf02ac4bfbd340e115998b9070249cb170",
+    "en": "c9cfb7f585722dffd4bbff5cd34385f8356642361c5ab944918abb8bd1fc16d3",
+    "ja": "339bb7191f5e716672bc748484c3b5759e76a01f4293cc6e4d64102454675164"
+  },
+  "color.value": {
+    "zh-CN": "039582a16cdd9b0d11bb83b7478ab068c67eed2b6302fc44c3364d2fba3d13a4",
+    "en": "224a3369a5c9dc1f55c7400620af923dfb66731285f72831913be13ed4ef4908",
+    "ja": "039582a16cdd9b0d11bb83b7478ab068c67eed2b6302fc44c3364d2fba3d13a4"
+  },
+  "color.html": {
+    "zh-CN": "240ab59ab88cba1304833bec62a404488d1c4477c675e8bccc31d748ee125121",
+    "en": "c82bd4e795bdb68e55ea45caf55e9ea9bef6da9e0facfce4f65aaf21a0c9bc8c",
+    "ja": "240ab59ab88cba1304833bec62a404488d1c4477c675e8bccc31d748ee125121"
+  },
+  "startup.starting": {
+    "zh-CN": "7f7235ec7c7a2f23066609a482a1f4cdce1c6392223bf293b8044b0116bf8e84",
+    "en": "39c6d448ee942087ace786e69a65d18f7d1fdfb23e889364e0f3c6181ad6c908",
+    "ja": "4d63bacc9d5846348d9b81f492e3d26451100a916caf1161c75a90391e679fad"
+  },
+  "startup.checking": {
+    "zh-CN": "4d7444ddfc0f6a368cc80d91d2d0b6e9614d5bb4b35f85baf7e98d1550c6f846",
+    "en": "f21a8969a34232dfbb39aca984cb1ac0ba3f4e1c99b39647067b36516f9d168d",
+    "ja": "1b2d2bbac759d66141f30a4ad0bd732e62b42475dc71dd5b6b7cc7e2e517449c"
+  },
+  "startup.verify-science": {
+    "zh-CN": "88f6655c6d1fadbacda7262627eddfae5e9801e9431f44ce7acb5c057f33414e",
+    "en": "b74e766c761c5e5df588192952c92a781cc16352b696df9966119889b0d828cc",
+    "ja": "7d1f14ac1f0737f9eb54cbf79b974bc4e5ca94fc5faf25cd7e06f04f01c2d1cc"
+  },
+  "startup.verify-host": {
+    "zh-CN": "a0a624f9e7c0e7df39792a0a5360a77f088c883498d2f90fbba0269af1d23379",
+    "en": "b2524346ebf6010eec54a3666a26285b94632bc6ab26025c0e1e6921d34809c5",
+    "ja": "6992af9165eda623499097a68c21ff03fe76942b8b91486bad7377aebd1afff7"
+  },
+  "startup.verify-apps": {
+    "zh-CN": "aa736031919e826b8248d990719f702836b9260382ffb4b8d15b8559fb5ad744",
+    "en": "19407198bc8f5433414c12ec7be4859f82db80e48bdf03c772b58234c048db55",
+    "ja": "74612cbe83d55aca3978f56135c034029422bae263c29bb528bbde6c4f31fa0e"
+  },
+  "startup.loading": {
+    "zh-CN": "16b6b47f11bba22772d213688deb3660dc69507620ae6e2ef8f999e004a67f8c",
+    "en": "d719d634f3e9dcacf0b8a441a0eb3e01aea36a2ba9470034bf45a41d84221385",
+    "ja": "11a9e0ecdc23834f2c6e2da008b195783d0042b856ce8310d6183621f84d7714"
+  },
+  "startup.slow-loading": {
+    "zh-CN": "4528275f577a71a57729be118c0f449ac4e13a36f5e338b18688d3fa5793ed02",
+    "en": "d51397b30844b9f7d0df4dcca37a11cebe9ce21b1768ef1a8e824cb4afb7d35b",
+    "ja": "7f484846d3651b9271fd054d90d6386d4c5e8993e94886c34daa41cd4c062832"
+  },
+  "startup.science": {
+    "zh-CN": "e23beb7442d0b3f39143af2410016d70690180a590c158e259d81ccffc5e68fb",
+    "en": "d43f866b3529eb4e0c0740375f840697ba68fdb6613755a8d711c8fa0f796a94",
+    "ja": "03653bfe68c3e7b1b3d5ac0e6b4a1b16137fdf7a345083837413846f9d3977db"
+  },
+  "startup.host": {
+    "zh-CN": "06b92001ab79202b2577cf55487ae1b348da93b9da187a762ae9d0eb554092f6",
+    "en": "c4d2b335d319c1a5b17aaec0ecacfbc3f6ab429d2c8f09d5b3d9f0e291e2292a",
+    "ja": "50b9cbefcf7063b90c511cbd2bbabb4b467a0a466cfb6d359fb67082f69730cd"
+  },
+  "startup.apps": {
+    "zh-CN": "58c7a031785b61a962858b53d9ab36b36a8e8a2e1b1466c2ff5eaa4eccf6834f",
+    "en": "5ae0606dfd6eb8f7f9213c4299ad8463ec2c77fb9555e92375c22da6e44837c0",
+    "ja": "d2cf65691c177f0e14e2059d9ae8ad1fa8279e533fbc4ba03d484716b09bd44d"
+  },
+  "startup.repair": {
+    "zh-CN": "3c8cf8df9b10acfd99ac93d49a52c425e1e68280a4716eae53a9d9be97b4a36b",
+    "en": "90935e2befc8e2262037ff238881bcf8226a9bb77c59dba13a6cb30ec970139f",
+    "ja": "9d83df431acd2685e454f810841e7c92370b37fa3d57574a68d1cebaf550b08a"
+  },
+  "startup.waiting": {
+    "zh-CN": "43b01e4946d789c8ba2f443da1e4ee4ea4ac0939fcd0e7060ad2f572b2ce22ff",
+    "en": "5e7c2b6b4550ff763b2f176e6f636d4a6b76d93a148e99c7bc709759be42e9ca",
+    "ja": "8a103a9795cfd1c1dcd53e4834ffad2bd927a6f460fa4d8a7e88e8d259943981"
+  },
+  "startup.preparing": {
+    "zh-CN": "2b74513926fff3bc66de82ee9bd01fa8c631419d0c103ae6dbbe3ecc2d4fd3af",
+    "en": "1ca968d4a06b87b116a0ea33d667743e965f8877d56fff70c393f94c351559bd",
+    "ja": "6f99af8f0965b4bc67338f32834aa16d2d794e9d82fcbd89fc8768e70323103a"
+  },
+  "startup.subtitle": {
+    "zh-CN": "28d1d57f5dc3287cc6d7feeb780bb3171df03a34bcab395a8928b7e0cfef049b",
+    "en": "e4e42f1f9cd0f5375546d48460dcbb2e04bf23d4cf0da8915a39bcab2a3aa115",
+    "ja": "a713af01cd734906d893782219402cbee6e8bed1f9e42c0e48af87bfbdc18fc0"
+  },
+  "startup.body": {
+    "zh-CN": "9569c91970544dde502921a02b2f8838efd0638ffa044169f65ba60ecb9abb14",
+    "en": "fb2440d6a3b433829151a36457a4fa38ecfc1dbea8beab909c34e2681f3025cc",
+    "ja": "b4eb76dd067fcec9fb600e44188b2a6f89a05c621ff6913b1c6067a5ed69a168"
+  },
+  "startup.footer": {
+    "zh-CN": "3c0e09a9d6a100982491289be751f6c0ab679509893e1733ff367faa9a3a79d3",
+    "en": "9a6501c57e257a86e900809e6df8eeb43e2331d3bcf4437c7c05818a77ad3c3e",
+    "ja": "53186ded68740e805582f505ffef31d9e772af1a02bee6b01f6dd4d46d957d46"
+  },
+  "startup.title": {
+    "zh-CN": "f3c839c2d97347dd8331fc088b2d173d9e724a8d0ce204baf9715ab40b5af937",
+    "en": "f6f31f1617945d186304a9ff75300de368aa3c90d71ddfe71032b2af707feacc",
+    "ja": "6732f03ba722078e5514b0e70774e36d16e4f0183b235017cebdb169a8da355c"
+  },
+  "cache.chooseTitle": {
+    "zh-CN": "90ce77a97e1ffaf66e4c8b8069844f9181053d15b3bd2a6e9e99c8e7527b4af5",
+    "en": "11a725f2afc0d2f198455756c728a86572dc201f2144e80ed4a6643a1509e671",
+    "ja": "f220bb67bc87c4d396629a089e77a905acfeeaa456df2d5c880a4c1393874a2d"
+  },
+  "cache.chooseBody": {
+    "zh-CN": "cdd2d3256af154e74dc41db4b45bb938f004d0416371c476eef0053383ffc512",
+    "en": "d8c2c1b89a3ecdd77fbcf3d770f4707372ef2c6786422d37c1213ec2dadb0df0",
+    "ja": "3207fc51620c574bdd6ed6e8a80dd4fd6edc438b91aa78367353df4fb937bbc4"
+  },
+  "cache.unavailable": {
+    "zh-CN": "3d7a0b92dfea73ded6639ea3a4cde8f265a63964d5010c270bda4fc7f3096d04",
+    "en": "beab8973265c9914365e74c9a42cd6cf9303ded63541f70ddd8a167267de036e",
+    "ja": "b39103926ab4de988b2381b2d396d36f2112eaa52a6763f125fd00013761b0fa"
+  },
+  "cache.chooseFolder": {
+    "zh-CN": "8d35bfece7ed696b9385f06df6653dd84262c1503711df3283b61dbf20cb950f",
+    "en": "33da51e835820c0a1007d050dae33533c188c4661a89aaf53203e5b5d13d43f9",
+    "ja": "89323f9b1742016ee65cf70d71bd62ae9f08d8af979f71fb1659204aeabde6a1"
+  },
+  "cache.pickerFailed": {
+    "zh-CN": "f6035853c312e5b406008afeeb861e194c262c43ce011386f444b18901e8fc29",
+    "en": "e87ee3271e64772ed33cf62abaddc755e3eae47cc8ad55070d423c15db9e3d37",
+    "ja": "3a361808cf47eb8d0783936621eb870a8e290360d8721a5e89a3c490518eabd0"
+  },
+  "cache.folderInvalid": {
+    "zh-CN": "81ead5bc3f099ec4f6447da93601c3d2b15522f546137155e053db2d267b2773",
+    "en": "0842754959013e98fc65a66f751b18ab7a8492dca3c8acc45882a71c04580879",
+    "ja": "82dc3936dcee20c6315f19a457ec076c0c43d6048ca1949c26e4675eb22dedfb"
+  },
+  "cache.candidate.runtime": {
+    "zh-CN": "5516a5f955e2f09527114dad6f3208342e71e8ed7c81e7a139ec4547f55ade71",
+    "en": "ca2cc7c65dc5a4b8c18719eb3aa93312207571a494c8f9eeab8c38fe0e4b434a",
+    "ja": "e3b90d25ab29bf00ffb723ab5f60195a38358e2159d29ddc4fded95295dccb3b"
+  },
+  "cache.candidate.updates": {
+    "zh-CN": "9f79004421708a46253b0ea25d7c9a97c03f9be536c9b8e943b6ccb635873b43",
+    "en": "0ba5db06873e8263a7d05bf724f536a31a88995088ee50a1c4e8268002c1391f",
+    "ja": "965d0a0995a76b36f2b70aac346ad9548aaad31822fb820f5086155c060da191"
+  },
+  "cache.candidate.browser": {
+    "zh-CN": "38a3a36f95a9481b9a54f985aef9df636e6865836fb22d4738aedd86699dc85b",
+    "en": "02495286b3b4e57cf0aefdc824868816d57fec679142043f198eea4f4eb67323",
+    "ja": "64b9248cfda0a9a62daaf3691231b21994a2219d3679b892a26e647018e3850d"
+  },
+  "cache.candidate.graphics": {
+    "zh-CN": "16fa2c0c9c2000ae833e09fb4381b3c634bf0193aa708f23de0e661cc354a8b5",
+    "en": "0fee4e66c693133e7934fb9ce24ddfb008d2606cc23159418430b760caa9e695",
+    "ja": "12557731ab2e34cbc655b9f5eee1e669720f29ab5bfdc35c0cc649f55bc0e6e7"
+  },
+  "cache.reason.graphicsExit": {
+    "zh-CN": "d81a9a91235b6cca881732891803fb3f2568729edb2f498a44e0fecd064e3b7b",
+    "en": "c2d86c4c1704db4f1f760460aaca852892a49d67046190074cedc60c3a7f2267",
+    "ja": "a6a502e9f7a2cfb542c10d0be401401bca819e80d09f13baf5e00fefc88ba1c8"
+  },
+  "cache.reason.inUse": {
+    "zh-CN": "552dad39ccaa0a03d795bc20a839eb5e163e3bfc77bb006f1ce6e36bd2ec74b7",
+    "en": "67b8234894572f541272cccf4ce94d1a28bc64e1723de24fbba9906d1cf1e046",
+    "ja": "e1cea6a1d1944446d5f3e2bb050363702aecc664489a2c1d8142674f8ef8d27b"
+  },
+  "cache.reason.ownershipUnknown": {
+    "zh-CN": "e8dc273552e94389d82c094a3a1d8e2a3fbda781a6f7cdafa64f28320886b86f",
+    "en": "7ce82482d225f66a984ea8da7b80fcf3c6ddc22028ac90d4bd2778c278271aee",
+    "ja": "1be52860fa4de830e6826987fd275f284df0b5d52f73e5b274af6d6c1095d39f"
+  },
+  "cache.reason.leasesUnknown": {
+    "zh-CN": "99174a6f587de4912698cd397e0d87296d9b4c5d5a5b771a2a7e56518ff43204",
+    "en": "02e0ff37741a154390ec702e1248fead85949e69a08d4451aa13ff5e44a148ea",
+    "ja": "e4b986e80ba574c2f2e64b63c29ed36db32b1c2ef194998dfc5b1ec059cea5c7"
+  },
+  "cache.reason.inspectionFailed": {
+    "zh-CN": "367c0f3fab39bea4169ac4ae91bd6dcd4719410df27ecc43b754a557ba908baf",
+    "en": "1a1093c71357c0d9ade2b6a1b58ff92c1edfb4eb286a9204ecb9818df80cb202",
+    "ja": "e13afa0c23e6ce71915284acb5dc8ab2d98c3005b512322d536ea8d99fc3daa0"
+  },
+  "cache.reason.qaExitCleanupDisabled": {
+    "zh-CN": "9dd9669660e267235aa98ad400f2dbc37f3c1c669f2dc176eccfd8eead5c9ffe",
+    "en": "7987d78011bc3853ba46564d410600f0a2468fbf3b744996ac2cc63034714639",
+    "ja": "7a2d29b481e62fded52fea6fd6a8bb2d3ac597821600fd648b1985ec45b9da73"
+  },
+  "cache.cleaned.complete": {
+    "zh-CN": "e063eeb57e6c3b1a42d05350179227d3d9c978d51f98f6c9adb4aa8033802d57",
+    "en": "06f6d9bfd213b11d1dfae6861908ce6f711293728328a236a8c7e1d623f242b9",
+    "ja": "9a95f643bb6be10fb9f474b5ced02900ab44d316ea013caf87d76e70568e7adf"
+  },
+  "cache.cleaned.partial": {
+    "zh-CN": "c26a41ffb32f399d8609024f0ff573a9afb91a118e8bb590ed54fd52dba81850",
+    "en": "5d711357c06d28a0d316b9b2ce6d1280af33c9d3b195eb6ef0667816cbd3564a",
+    "ja": "5c9ab2b6e956a8b90ca2f013b2998a518a80b488661cfad61e3d78275f8ccbc9"
+  },
+  "cache.qaExitCleanupUnavailable": {
+    "zh-CN": "db9fad83509d65c43321b3d1adef4550593d86a516e81871db6bb322e1e4d662",
+    "en": "3d8e607cac5d22d015df444d540aace35face622f0069c2b69d9e99db3f0bab1",
+    "ja": "a4cd3df66b0d59d44d36e2f6d5175b15ac1d454c9a83946505727d110d892c86"
+  },
+  "errors.annotation.operationUnsupported": {
+    "zh-CN": "a027c1b851f775c529994bf71d8a0a362ce2ad4980d7314d7b7caf84493267a1",
+    "en": "6d95a1500700350e3792f806dbde6ae3bcf62b7cfeaefb45f66a5bb739492d3a",
+    "ja": "9f1e09403de0421fb87d8550815cc640cb82c8c3fe8ae09aa99230ebc860560a"
+  },
+  "errors.annotation.audioGrantExpired": {
+    "zh-CN": "e7725b6d46809bcedc87fa757fae5288634a232a9061934264bd63936002f0d7",
+    "en": "ee2eb30a2f4fe9065d1c7e5273b00b4a3fe0c40020ccf92201ea76d4c3bf87ed",
+    "ja": "3a86cd3dee834fbf67182f5a2dfa134790506bac23c79a8e049fdbf20b558735"
+  },
+  "errors.annotation.outputAudioReadDenied": {
+    "zh-CN": "e111207c782c6acce9065e011164b985841cca32b1f99cd43897d27324de0cda",
+    "en": "131c88853ceb73f54089c5d6fe59db4d901b0fca008023d5161504f0d53ffcca",
+    "ja": "b48f181c691825044579f771452ea4385c99957f936fac5be20aa8b461f6d8cc"
+  },
+  "errors.annotation.outputAnnotationReadDenied": {
+    "zh-CN": "02cd28aade0d28ac6c4395c15ab4d10b3a8993696c6b8032a50996f10e0500a8",
+    "en": "e6b331a47711afb14f3e05d480f6fa784825c6ed0d9897487ddcc7965e43daa9",
+    "ja": "767b876205e269c5c1eb696d1bdde6616c758e824fffb94045738cde3c576f01"
+  },
+  "errors.annotation.selectLipRecord": {
+    "zh-CN": "c6f700914fff166e3b8d39a30178bee945381c65021f892f3ffb87a625bb6df5",
+    "en": "c86374bcc11e0a3d94a406ac7c9e689b61c6548f2d50ad8cda10832d052154e6",
+    "ja": "62b7916d101ca372fbf65dbf6a01a5dc3033dae5d928fa02c0430d8c855d2be7"
+  },
+  "errors.annotation.saveTargetOutsideGrant": {
+    "zh-CN": "60ab41a171e9851732695457d3513f68d344d77a10ee67e0c67f4669c7911e6d",
+    "en": "d3dc6091dd37234563ea92a06ea1d9874de8370b4ed7a2ab01a096f1e1cd3d87",
+    "ja": "cafe8d3ef19710ab5dda92db85b2fff524f83b497e2c9c85685415aabff2671b"
+  },
+  "errors.annotation.saveTargetNotIndependentFile": {
+    "zh-CN": "6959f2b013569ce7e219ea030c05e8c2f5b4a46a1228f6a3a8ba7adf24585439",
+    "en": "82c47aefabb3b9e12033f455a666fe993b57b7b05ef7dde287397a958d4ff6a9",
+    "ja": "97de933d49e64db0ccaf3353e47acbd22dfa6ab52d3f154131e0df298217b85c"
+  },
+  "errors.annotation.sourceGrantExpired": {
+    "zh-CN": "2696bb37453b4eed8c2354d1f2f1bcef61e95b804f12ff2714dd0f1efb7c5412",
+    "en": "5cd4809888e7402f350360edefefd7717597b8c90b05d9f9228bf9beeec74ad8",
+    "ja": "7b43bc64fac260ca0657d9a0a002056c2f8fe1e4f340b6ad74fe1a2aa430edf9"
+  },
+  "errors.annotation.writeUnavailable": {
+    "zh-CN": "53e58dea9add400f3cd0ebcb4e8a7cf9aca0c7de7f0ef63c28a3a77ee5d66da0",
+    "en": "bcaf9732fae7d93404cc6f77022c90b3345b1ec345866a768dbbb84312095a0f",
+    "ja": "178658321bdb1ea702eb3e59046dd40d6f55a21fb56fd904b124457e7b17fc19"
+  },
+  "errors.annotation.saveNameTooLong": {
+    "zh-CN": "ba3dff02d3a32b410814c520f79d751ffab5398b3874bc29d6f524074fb8afd3",
+    "en": "ebe23e00214db9f28415adf96c249cffcbc38824c0f33edac67b99e30dc42127",
+    "ja": "6f8350076dc9450efbe6698d3689c8a98eb44af3754409fa5e0af9ea2154d4bf"
+  },
+  "errors.annotation.tooManyPreparedTargets": {
+    "zh-CN": "8580eb8f55bb1808167d831202af91f94f2866eac0e1cad76f71b11899ade502",
+    "en": "9b23c877db21d15836adcd113683b11f590e16abd9e1c82d780a0e4de6bdac3f",
+    "ja": "59610c6dd9fd8c3d1a0ec6cbced31c8934c6f59563f581b7abe88bfd74712a03"
+  },
+  "errors.annotation.saveTargetExpired": {
+    "zh-CN": "77ea85cf658e707a001db94d2d20fb42b846f42f8f54a04b0c9e4c5ffcd67644",
+    "en": "419402ad1e129dcf139287748681249061e3f3125dfaf0f3de695b7015674313",
+    "ja": "43c2521c27f6ba8aade225332aa838e59b6852bf4929b4561bd5e0ba5b37704f"
+  },
+  "errors.annotation.sourceModifiedEditsRetained": {
+    "zh-CN": "f0cf6d00933f0cc6883da92435f5e548f11fba2ca52ca59f53a867a32d81053c",
+    "en": "65bcf6215ecca14f6025ebc3a3580a764f6e996f9a1e1007c1e2493fea32e405",
+    "ja": "ceaf1a548c5cd91ff835d45255f75db62032536991fe4e64f165b93de4f70b4e"
+  },
+  "errors.annotation.sourceFolderMismatch": {
+    "zh-CN": "1397ee94dc5627799026e937713fa47586c80832a1dfbdbde227d2493d9b2a64",
+    "en": "bc5fbef814837872a71a488078fa1e43046e6f784c2ad994dc5bba4fa63f6aea",
+    "ja": "915f805a4bff9b1bde9b55bb4de6b6ae3c55d386f87b0bd0ca8c4f788587321e"
+  },
+  "errors.annotation.audioOutsideFolderGrant": {
+    "zh-CN": "c491904418aa3c3c2a48f3a37daf319ec26e0093dd24c4688f445a594b9c2683",
+    "en": "67f20a3573c434f045549cd65a068f4560b5a467484c5ee8f9dc7422d272a835",
+    "ja": "7bd4178ffe0d3ae56295fff2ee78130162159bdc0c3fc1dd958e3540b2ad590b"
+  },
+  "errors.annotation.audioUnreadable": {
+    "zh-CN": "a42c465cd6ceb287b9e6863014ce70ebdbdad6f52074c522a569573109506ee6",
+    "en": "3cef1de72186dd515e976812c9711cee2c357a8ada3108aef08b90817b895b90",
+    "ja": "344fc935691ba3f34bd647983e1c9fa8bdd0926b5f4225413016a6213a3df152"
+  },
+  "errors.annotation.subfolderLimit": {
+    "zh-CN": "d7a8e7b66ec31d908c99e32f3bd0403bd0f9a5f5fa577f39f66db8bc0aad65df",
+    "en": "133c84b4c6d49b1b4e9e90341a823eaffc67f3cdff7fb2f3cb8b4c6783634c80",
+    "ja": "4695ffa5a37cb9a53c0f1ace6f305f12e6f5c742d19ddb8372c89535dcd7552c"
+  },
+  "errors.annotation.corpusFileLimit": {
+    "zh-CN": "590dcc2918ac8812ef8e3656d92bb879fe4bda0a229f80bf82acb5d19512431b",
+    "en": "686758e06f0fee1e4066cc0fad20947cd0478b5f0f399ca926c56ab604f14e47",
+    "ja": "fc9c119ebb8f91558ec9b2625453307c62902795cf90c741bce5e320090f6a73"
+  },
+  "errors.annotation.timestampAmbiguous": {
+    "zh-CN": "551f60e89d527f8f495a2d073fda98dbcbbb99879b6f2470acdd1e64f60ed67d",
+    "en": "e930d245857c3927613f28c301a06e6c362b0d52087f86d46817e5024c39b1b4",
+    "ja": "2020da6638b313e85b73ec993332d0930a915ac28aee4c297b4922ec1f6ec2ad"
+  },
+  "errors.annotation.saveTypeSourceMismatch": {
+    "zh-CN": "be62e29f4290e27974b5a36c1a444a4efa68804e43bf46aa461fdfcdbd223421",
+    "en": "430333e3fc3eac83eb834b773b0605c0d60638545563c57c59d10c33dcfe6654",
+    "ja": "2b2d3c91cd42b19af69c2c9c0bde2b87d59a4bc4e9864f5bce0ff898a0057a7a"
+  },
+  "errors.annotation.sourceVersionRequired": {
+    "zh-CN": "deaa5c8e71b831a2c0acf9ef789ae14d8d7646ccf8f1de2e35fb233407f1c0b4",
+    "en": "0bbbb2c94c83facbcdfae094da634e936f5b17cbb95a313e1e6fa0d496a0b07a",
+    "ja": "8ce70142558b585eb85b72da7efdef0e00ed7e8422172f6e490e92e53b1688e7"
+  },
+  "errors.annotation.lipOffsetOriginalRequired": {
+    "zh-CN": "708ea38588f38c2be416c9fcd81487fa06e5d901f331d2e87d4cbd40c1c8feef",
+    "en": "60c2bc3a1ad632dd2ecfe4a1b5354a34f9810de681413b11dacc1865c99b5705",
+    "ja": "dc2c639d5f2bb3d5bf9011d39fd8e07dc78774a5b74ddd1fcd442b0df2d13da6"
+  },
+  "errors.annotation.timestampTooLarge": {
+    "zh-CN": "f07f56bbed5b72f5fa705883e568fff2070b4061883d52eb5d30579224bb56e8",
+    "en": "452892b1e8b3c67a38c71abeb5c15c5920fa0732d661602b42ab8a023692cb74",
+    "ja": "ea2319dea96631f8db69d881c8ffead2baa6e3abe00a2ae71511dbe6d0fd0500"
+  },
+  "errors.annotation.otherWindowSaving": {
+    "zh-CN": "58a5046888fe367cbbe906357ce296da9ffa049400c685c72d6abe53c38df13c",
+    "en": "cae043fa8c3d151ec30473dfb3bc523790e93544f0f9b62a693a60e9a6509403",
+    "ja": "5c5fc6f9306f7dd5271f4043204765392db54c851b06c85c64e6d799a99f4724"
+  },
+  "errors.annotation.targetModifiedEditsRetained": {
+    "zh-CN": "3661021e42ce5b0e6ae3ccd90e7e91c58944cd3e32763f0c5c76beba35901c1a",
+    "en": "119b7a8bc81b74b0832955bf8648db5b7b385c2811e4397051625e18a3771033",
+    "ja": "ae8adaaad453da4d8f2dc6da8ac8b6e94364021357a1d655d9ca3a276b3659fa"
+  },
+  "errors.annotation.sourceChangedNotSaved": {
+    "zh-CN": "6338b416a83bd3f90bcd2ae7c80fd9c3e76132e03be0105e670414d22de49e8c",
+    "en": "43ab2f37d113402e7ed39fa112a8b27ddbb9f80d60822265b3551c2e30ee7909",
+    "ja": "1273d826badeae05f010a3d2a3b7a95f5ff94fb853cfb496dc49e1ed99f03831"
+  },
+  "errors.annotation.targetChangedDuringSave": {
+    "zh-CN": "e7d4180eae4db3196d5baf991da7e099c17d191c9c89a65b6e840805ea70f3a7",
+    "en": "d8d8b083bfbbac87021a4b7a9d607dde66c58b744879c9b8e912eb9886872179",
+    "ja": "a4065857706d0a3c37565e2d4da2420d66a8fd51e35cb8dc701f57d009cd108f"
+  },
+  "errors.annotation.directoryGrantLimit": {
+    "zh-CN": "ecc7181d23f829f607d9d395c0be52b5ae59fe8c86b1396577c6ee07c6a989e8",
+    "en": "5cc221a027810787f1aeb1bc951cf8190ec9249e0c931d5099e5457ae8a463f3",
+    "ja": "de1c82e73f1a158d566d609266f82ad8b12d5de4131294ea312f71e1ee75eaa9"
+  },
+  "errors.annotationAudio.annotationWavSize": {
+    "zh-CN": "debe8639f5ee77eea563d37da2a18e002c6e6e553cafc1c9ac7eb5a4e426e240",
+    "en": "841053846821bf46848acf9f0193c76d060189b31b55065ad6721b1e36ac8f91",
+    "ja": "722967e125a6d55bc6be9cfc74308f3d66caa5db027f36adbb4d24e7d3a25bde"
+  },
+  "errors.annotationAudio.previewWavSize": {
+    "zh-CN": "6a8cf3c6cf7aae7082cd7b96350fec86dad3df3148a01de6e37fd4711cd10f3b",
+    "en": "424cefe4c38a541adfd12e8041d79876d876e8cb6aeae593a91dd4e7a441967e",
+    "ja": "81c47cab86894ec6f72297e192afb69ecd6807d16d2d98ee0c6bf4deee8f2e89"
+  },
+  "errors.annotationAudio.convertedPreviewBudget": {
+    "zh-CN": "12249a8dcb5fe1648ef78495d420e7cadd7e6bb5db5449216acc9d0be9884ec2",
+    "en": "895bc07d66cc46b5b54781f4dbb9c45cde151ba32da7ea20de2f56ed21b29762",
+    "ja": "56bbfb119d6b0ca920d403d618f7742fa379f17eba615603802183596866636f"
+  },
+  "errors.annotationAudio.wavPreviewFailed": {
+    "zh-CN": "f763aada628168a60b5968b5cc254610747a7a98995fe518ddaa1eb0454ac581",
+    "en": "dce1dc89f0abb7d209373fbc25c0d86f71ce72e584847383667b985cac511a91",
+    "ja": "cec12a941dbe9ccbc8578376ff7c49ba3279e2431e991ab350ab99d2c1ae146a"
+  },
+  "errors.annotationAudio.previewWavFormat": {
+    "zh-CN": "55e5562b50f880a08a9a4980479d1d98c33e01fcd935be74e04d3e7c46882576",
+    "en": "2164652e61bf7b748087fe3a688786d66618a38d88fb2fdbcbc01f5418be4bca",
+    "ja": "6cc18d30178f1facd3e1d782c0796e48eed0754f1b97c95ab141a68fbf7c3896"
+  },
+  "errors.annotationAudio.previewStillTooLong": {
+    "zh-CN": "e1a746af7ea499fb167bd8dfba1dad4add5ecbeed12357381705bb50da99f655",
+    "en": "66f999b093ec53aeed8cbfc6915f74e35b467ecca6c4aaaff08e0a1e2a9d59a2",
+    "ja": "7899450271111a933e780d4277da3167f02769d43bfec23f430c7ab3d30848db"
+  },
+  "errors.annotationAudio.wavIncompleteOrNonfinite": {
+    "zh-CN": "55654a07c4441baa14f7e9a5eb80a2a90261c0503341ee361857d79b9f30b95a",
+    "en": "00381cea2a9084bd1e7c3adde673811476dceb828e6d681b29db4891b9a20adb",
+    "ja": "e87cce67e6205c2ca4d9b443fa92eeea9ac4420da80894ebd49d446e577e06a9"
+  },
+  "errors.annotationAudio.resampledIncompleteOrNonfinite": {
+    "zh-CN": "a7295182b6684c7d1b97ab41d93919278976e1f5207778dc6cc1a6ea8d5578c3",
+    "en": "ba45365d503c16b27e0540515b64533620bacc3a1fd44120d641dc43af6afcea",
+    "ja": "1c9900ea786ad3e5ef04d0dbc69bd39bb4d1d289f529bcb9b54b0872c7865c79"
+  },
+  "errors.appIcon.bundledMissing": {
+    "zh-CN": "18b82fa794918ba8b7af7bba56fc34d1f168aa227773373e9631c6664760d96c",
+    "en": "647daf83b1f09a78fdafaea34502095c3d3fd9aef02d14c69103f07079c38c42",
+    "ja": "d2f4e1ff3a6a4ab36d13bcd00e3494a446d90a0a6b6138d2ab89acfe758aaec1"
+  },
+  "errors.appIcon.bundledUnreadable": {
+    "zh-CN": "49456d0992f9341601bcc86c1a72a5ff06036d1eb5e365a89529130de12768b7",
+    "en": "53652bfad9149e682604104c9322817edb1a8d6abffdd69495989b8856e48ebc",
+    "ja": "c975afb53862c6748fa5d439c61b1633d152ea9dd6bbd30ec237e13cc147e3df"
+  },
+  "errors.appIcon.dockSizeRange": {
+    "zh-CN": "df372e06a433a1594c79bdfb4c05b5dd47f1b3e5bc09aa51c8557bbb2b6bd258",
+    "en": "ca0400f7feb2090f5ff2f1d0735b17c25b6d8c57f2c6ebd3aab71ddb4c324464",
+    "ja": "e5da6d91c19fef449e12ff94082ff5a4a595efe5bb41bcad888c38f9a989c044"
+  },
+  "errors.cacheCleanup.ownerUnverified": {
+    "zh-CN": "46a6e929cf0afa3dc605da0b56b66c6452d553d324d208aaf31b5a95b8b0beaa",
+    "en": "7a5ff9fe5b1e05ffe71ee2ca68909abd5093349a43b864ff1f48eab388f9503a",
+    "ja": "e5f1c86961ca00a98df725fa4d2764333f10732095255ce9d8d4a63722d6b688"
+  },
+  "errors.cacheCleanup.incompleteDirectory": {
+    "zh-CN": "49104760a3f80986f066f0747e1ae175593166d6312465d4f9833abe158b07d9",
+    "en": "55fbac6d3430eebe2616f41cd1565f5525f4769309f8942007284a447b7b5336",
+    "ja": "c1faf5c7e21f73c151b3a29d5d8b23587218fb0a7f7a1f7a12e1728bae59ab11"
+  },
+  "errors.cacheLocation.absolutePathRequired": {
+    "zh-CN": "6a900300cd6807255267ab1e57a7a2a99d415a25792d9e534a5e1f34bb73aead",
+    "en": "37c613854ffad886d174577e0c7c98376ae53182edf7aec1244ee895d5b88aa4",
+    "ja": "e015a4ea2d7d43ee97bdaf49a7d5f82d6924b07bc61be3bbbf029d9b020b25e6"
+  },
+  "errors.cacheLocation.invalidInstallMarker": {
+    "zh-CN": "d0d7eaecd69a218dbd30ad8000eee11d91275333dc95cab8ecfe5bd0d0ccc764",
+    "en": "009eed47d2b3e26c9fbbf40a640fda30d0c826de0f2f08f458a80cb769548793",
+    "ja": "35ae386cfb2c35deda9941ba98c9ec29e1f8ce93daf4d4a313b85cce29bce789"
+  },
+  "errors.cacheLocation.recordUnreadable": {
+    "zh-CN": "1f7df65ef7694b0f49aad5f406796f07ffb04758c97c4a9845c27d6614ee2c3f",
+    "en": "0155ad9e1244012fab046328479086cd185e2f07fc996022e526073d9858c42e",
+    "ja": "7fbe1fc9fa4e87b2cd02a44e2f1612ccc13d688b32a1838f6c3131936e41ed21"
+  },
+  "errors.cacheLocation.legacyMissing": {
+    "zh-CN": "c966c3fd94719416fd80ad2db5b6458e86c14f315f70dffbe8cea1e5d3642b8b",
+    "en": "6e49469aba759b48730a518a3da891f0cd10e223aae2f2bed267e76575fad685",
+    "ja": "15ed845b6e6e3e972953930a6f657ce3bd4271b94b362eecce56a7b31d0943c1"
+  },
+  "errors.cacheLocation.currentMissing": {
+    "zh-CN": "62ebe501b523843c63bfd7e628d0146bcd5cfd02422127ce0be52998cecc22e4",
+    "en": "42646dc8357543b1b325c5567dd89c749a5d3644b33b30cefd2f28d1e80b0b22",
+    "ja": "e5053c443853b01a2b8bae86857a5729aaaa8e6189c13dc698172c97550b3c3c"
+  },
+  "errors.cacheLocation.openFailed": {
+    "zh-CN": "272e2fa4fdf2b4ef8f9c9b2b6141ff5b095eab47d1479377ac153d62fb9b7ee1",
+    "en": "747be45f83c88221f087498d7377fd3ccdf74f5d1868bcc27181ee29f64ffcf0",
+    "ja": "30e23ad4d7bd96b0a31725c0860196a9642fc53cdbc824e1f6c5efe180296127"
+  },
+  "errors.cacheLocation.researchOverlap": {
+    "zh-CN": "a33ae88cb230694fe3f46bc604789150b956fff4a8b138ed1b609b673f398efa",
+    "en": "a53427e6a3088191bfffd7da53f1082e75ecbe804b46414201e9a290c85fb89e",
+    "ja": "6b0f1999efc6057f39c9fdbe053e344a6b7a89911c247f8cfeb994fff748b49d"
+  },
+  "errors.cacheLocation.pathOccupied": {
+    "zh-CN": "7706d7754631bd186267d1f62b571716685fc4e122840d70bb956dc052af81b1",
+    "en": "07cb5c94301f388cda4eabd34e7cc4ee1d71d349e471a84a32978d2893280f5a",
+    "ja": "69f48804367eec8d3ce7423f6f09f11446637df792e21b14437d9679b9d693f5"
+  },
+  "errors.cacheLocation.markerInvalid": {
+    "zh-CN": "a472395130e5fd6d747e7ac1c539e86087eebbcb0a7ae4e56d460de17bff59bf",
+    "en": "183bb494e3ccaecd24641ea51058fbda40bb0624287a011c37489ecdc968e21d",
+    "ja": "f094a2bb61d4a05e144d0719fd505272792c8ddf03fc837abb460c3abe073619"
+  },
+  "errors.cacheLocation.folderNotEmpty": {
+    "zh-CN": "8245cc285b0144a7a90259c55b82b2259a9760a1f13c35ab96877679d841470c",
+    "en": "b7ec57edfbe6626f0c3c4de116be70d2961f89154f8bbd5d467a57c722630ef6",
+    "ja": "3ca9264acd8109f9080ac3a73707f69d1555b3ade46bafd61e70b11a6e62871b"
+  },
+  "errors.capture.failed": {
+    "zh-CN": "730e0c062132326efa55f01f675484ec782bda241304b85826c153f0341e019e",
+    "en": "cd10ca01b074680039eaf363f7771ab9a9f08535f217f7f777fb3d4919228c33",
+    "ja": "9711941a5c2ee31d6d17ad067723dc7dd7ff0e93d62001e25126bb31c6d08f3f"
+  },
+  "errors.capture.desktopNotHidden": {
+    "zh-CN": "7e6fb8b992d691374c7d20811aae2d140ec671553984af3476c8590fdce93da1",
+    "en": "1ae007a614862e9d3d9c7ef9de1b5ad46953f5d283c02841fe6795eeb4586dd2",
+    "ja": "5b17f419b7073a8592d5a8882e1c605f4e2fece13c5e3cd210d710be79d2e858"
+  },
+  "errors.directoryIo.filenameInvalid": {
+    "zh-CN": "bca9ced906d3453062bb4d9cf2132e69e0e9b5372120d175d01928a0959cd0ac",
+    "en": "64b643ea39f3592cff15b0a5febffee18373003a7111020d75a3a1b9df3d3316",
+    "ja": "39bdbddab435cf0390bd7bb911e0a301b32c422f25c76b1484b04deee0fb7ff8"
+  },
+  "errors.directoryIo.outputChanged": {
+    "zh-CN": "dcc050e900856fef5941c180b6cdd2c875f508a4b6209f1e8577c6b4643c8995",
+    "en": "cab2977dc11c38d6625ece5c19359e09f6302dcdfd6479a2bc0e4a5129242eaa",
+    "ja": "ac8c0d756711aa3604c687d9ee856b519301a835b92f87530d834dbffc7a0d06"
+  },
+  "errors.directoryIo.lockFailed": {
+    "zh-CN": "9c1d18efcbeabaa9ee67be56fdddbbf0931f8d5a2153bb85a19a3a3522a47def",
+    "en": "af3796122988499c86c61b57e7286fd2ddbabe74e25fd7645bb6c4117357e61a",
+    "ja": "b23748c4d4b73373a8bfd517fb17fe4539f8cada6d5bda4ff8e5507fe0fece44"
+  },
+  "errors.directoryIo.safeSaveUnavailable": {
+    "zh-CN": "24b5cf3681605e0f771fb56359e4a7b3364fba7fddc1e3ddf4d4152beb02f8b3",
+    "en": "09ae73d6fd0755816be8d1142e266ce45d18eca789bdd51ed48a778a3fd48189",
+    "ja": "cdd785e1c453325dae88f2503bab6318399e81437c929f027b2af33ea7006e89"
+  },
+  "errors.directoryIo.outsideGrantedFolder": {
+    "zh-CN": "b478de95a0e8f30c4c24bb7ad6574637afd5d14f0f6478497a5c8c1a85cbacb3",
+    "en": "4b700f6988560820c2e6bedaf76e015e09e1f336cc3b97ba6a871990c6c57c95",
+    "ja": "8721b796237c411b295e0818d9acf2e42befd0a0d73d41e9e5e799d75ba81bf8"
+  },
+  "errors.directoryIo.targetNotIndependent": {
+    "zh-CN": "bf5417aa970e0bc1fc1840c683a4b2ec288f8386bb2aa0ba7be33d3564cec070",
+    "en": "82a9c0a2688eac01df8498a777b08ddec662fe90ef495063b31e5f5a71a1093e",
+    "ja": "60632cfabbbb2997eca81b5554e3660108d3042b28615eb380dce362293adcce"
+  },
+  "errors.feedback.redirectStopped": {
+    "zh-CN": "65047442b644b031fce22d00d77f8accc867dc17492d5d356d0b81859eabba20",
+    "en": "82219e593255c7683296bf97fee9d080864beb88ee7310d9a2ca593ed1485f8b",
+    "ja": "f61163e3a57547a95edf658c93d562a0066a71e4288a8ad6d280238aa5b01a15"
+  },
+  "errors.feedback.credentialProtectionWindowsOnly": {
+    "zh-CN": "c64f0412b3d7dfcc5f5a5e6416ecb8d8255ee41c3c895b5a93539a58607b87dc",
+    "en": "9eadb15be42911ca03cb2a9a57734ec27bd7aa543365a61848dbc8a3e832c191",
+    "ja": "f8ba5e8af537ad9d8292f637c40d6799a0e076712e05c7d0951f3faba89b87f0"
+  },
+  "errors.feedback.systemProtectionFailed": {
+    "zh-CN": "92e57bedeb3c24d11abb97e81b6c52ec530fea29f8dbe0525a9795b838fe70ee",
+    "en": "154439cb62a444217a4c562ef355f9c9c59ba0aff219a01ec4c284fd8b2ee2ec",
+    "ja": "39f670a216870200ead7dbc732aab054070f9e05e9399e3296f69495706d9723"
+  },
+  "errors.feedback.httpsEndpointRequired": {
+    "zh-CN": "4377a2bfdc7956c4a94ceaa6b3a626192875cbd925c31601dd1f2ff44aa39cca",
+    "en": "ff66ebf05f3355215e712b1e58b061279ff1202008a39fe50c4bf8e517b812b4",
+    "ja": "0a86054313edb1ad30418d2b33a5d670df67fb17409d1b88f2b017723023316f"
+  },
+  "errors.feedback.requestInvalid": {
+    "zh-CN": "3194ece4bee0eaf31f368d342b77d46954e7ddbc6db0832a435d0f2afb88faf1",
+    "en": "2b5b7dc2f9afafe495fc42d848a959746a798b6b9af1938629ac823ca5fd77a4",
+    "ja": "624dbefbdb702946faafa9dc6f009eb0e8890de1a9fc82e4abd25e16d34c7134"
+  },
+  "errors.feedback.imagesTooLarge": {
+    "zh-CN": "991b17a0ddff3911ac3288e9aa6507768bb88b1b3c34f448532cbf3d16581a5c",
+    "en": "f9d4e3d03178019decf130f46e7eabc19e46e83290ccbd60adddd43ac2805db0",
+    "ja": "9fb64cfa49fd784b36d86fca72bf45566eff4eab891138e7039cd92c1597ac15"
+  },
+  "errors.feedback.operationInvalid": {
+    "zh-CN": "5a8b229aad7d4c3ab203741224d9e769963e2d333fca694b9c12f0cdc4e65c2f",
+    "en": "ec1e015da419d04333056cc4bfded7701b9cb0e5215378fdc225812d895ab08e",
+    "ja": "6913b7d450bb3c7ba6cfd2cb99ab393bb76ce582237ef623e69a489ec422a0ee"
+  },
+  "errors.feedback.connectionFailedRetained": {
+    "zh-CN": "242bcae2d83d6bdf8b32890c5fe710a67ce0e5e4b8508b857ad9cb06c7ad5744",
+    "en": "3cfdec2e962bdb2057420a7ab3e6469639fa54b4f8b55f7df69522273daecb8a",
+    "ja": "e1ce2f62c50712b081a5ef60d40b79b581c5a658d58f6ad22d1140d83fd5cc19"
+  },
+  "errors.feedback.sessionIdentityInvalid": {
+    "zh-CN": "d6ea45502519546d204b06198785812abdfe6a2d6e2efaf5f2e59e5041bdb2e1",
+    "en": "0ba117d1bcbdd65f9ac18c3b7e3379ed09c2f7298d08265b4e77c80c4aa3e613",
+    "ja": "e7b7fada8f55905847be8774047f1522d444aad51e358b4592aa787d8399dbd4"
+  },
+  "errors.feedback.selectUserSession": {
+    "zh-CN": "dbd2380291ac283dcb466d77a60e50efa8f31ed9637e3ec50a7a21ba147e58b0",
+    "en": "dd5d47d96fb6c1c30f056340344364233b9f35b3fc12b90c7156a45974430c36",
+    "ja": "0d5a0fa70d85e95335f5c3fe435af919ce9f1b2f3fc89f9e878d99e7bc9a081d"
+  },
+  "errors.feedback.credentialsUnreadable": {
+    "zh-CN": "7d2cd9bc062e65d2f2d5df1981c9474661e19acd87091e47dfe55e41dac3be98",
+    "en": "7970e8d4ed235d6c0fc2820e87576812bb3b191db91e0d4ae85a7963d40b9aff",
+    "ja": "78d9663371ee888cceb58652cd71ac43102428ec237d149bc261306999dab9fe"
+  },
+  "errors.feedback.responseInvalidOrLarge": {
+    "zh-CN": "e22665c0b4c5afe4d35f247fffa2731bd05bc649443232709bd14924d32b60fd",
+    "en": "57dfc0c4905176a3983b9413202d9b90935f9415f4f46be37b2a71bd6967b7dd",
+    "ja": "b42a0b16dc62336f401a31391309942621a8014b3048fb545946c8867b7ec940"
+  },
+  "errors.feedback.webAdminUnavailable": {
+    "zh-CN": "ee78a54474fd314d8966a98aefd46f09fc4cad19d215a1e8db89bf608ea48924",
+    "en": "13bcd54f9f3b6a84e5ee406e8fd8f63135003dd87878071f9d076d19f2dfd52e",
+    "ja": "60a131ec465f421d8aa5e9f3c9a4a9610ba98e387d8a5b6dd5930e411122cd6d"
+  },
+  "errors.feedback.adminCredentialsIncomplete": {
+    "zh-CN": "9aa3e487c97496c123e28dd3d1da0436a8fb7d922932795b2253c5222449d908",
+    "en": "f535ef1ccc0cf8df5f8637c207c8edf84029dd14ba8440fb9410943437b5eb50",
+    "ja": "4eee0a85689161f7423de74cd5e82e3f854c69be747f30429b55535612935ffe"
+  },
+  "errors.feedback.deviceIdentityInvalid": {
+    "zh-CN": "5892356319f22349492242271932e31ff03050b363dbc17f689875beec90a124",
+    "en": "748c5a73f064d78adf6080b4a03b09c61e16a2112e872596127f0aabd1f11397",
+    "ja": "635bb99d87b9da67f730d7ad18b1a43ce16dc348da88b5da236249acc29e5e12"
+  },
+  "errors.feedback.sessionLocationInvalid": {
+    "zh-CN": "f7e39f91379ab1033aacf60b5927bcddfffc21a4404fc7bbd34e0dfeccbe65d9",
+    "en": "821bd4fb867a9fa1fa0ca60a1160680689b0a6be15f639ec4225e082ef9ecc32",
+    "ja": "e1ff1e519f8cca294fb720798053ee2550abfd1e4c43225472da88c4466c384a"
+  },
+  "errors.feedback.applicationFilterInvalid": {
+    "zh-CN": "cb8bcf39d8095b7f114e9829822718434e26d71cde11a5575d527da7a7bd0ebd",
+    "en": "c47261b22e59cb7600ec03e092dafd63b245cb6ffbc0ec643e2699c50efdc6eb",
+    "ja": "53c7aad012005bd0a6e11a5054f52d64d49767df09f84aabd5577af982d8f7ec"
+  },
+  "errors.feedbackBridge.statusUnavailable": {
+    "zh-CN": "bb411bd1ecef2a0f70f869c314efc80222b3ab6624cb7282e9877f609b286829",
+    "en": "7f34668ffabf3f1125c95e6dd424828666611389eb102a50099ff6e195f5506a",
+    "ja": "7637c47f488cb701b379a5fa133f1d278f674692a940a87ca146d420118c66c5"
+  },
+  "errors.feedbackManager.frontendBuildRequired": {
+    "zh-CN": "461838c63a4765e90fdb7daf8c12a88469e6437cd6c235c32a53c8ee4bd58fec",
+    "en": "688e80979bed06a8f9e259dd018ea78a3433568c34e96d2413aafd8c03c78df8",
+    "ja": "a4d4bc0f6292f1c75622ae1b584d69f0841d49a9114b4712eea0ab529dae6893"
+  },
+  "errors.feedbackManager.alreadyRunning": {
+    "zh-CN": "e0828a000aac0020d76d95d98eb5e028f59e28ec5888a17a0fe66274ceb623e5",
+    "en": "d00d24e660fca7cb25ed8357b7520acbaba62d6fda36378a402293bf30c6087e",
+    "ja": "5a71bef2977642173c88a932707d53938029eb188c1e6777da9b85506e5f8177"
+  },
+  "errors.files.linkGrantDenied": {
+    "zh-CN": "bbae51a11fd60bd1cc746791c11b6d679c749f74a6f07da220fc9dd1398d13bc",
+    "en": "08d1e96776a5a0d0282ad3ea8189b1c62b7193a1f442efbb10eab26bd424a84c",
+    "ja": "3585150bbfb1034f4920ab16940baacc63f104f8aca09437575598798ffcff21"
+  },
+  "errors.files.modifiedOrUnsafeOpen": {
+    "zh-CN": "78c370c1eb873278b3cd699dfb8aede561fb9c9cfcc49b02b6ca356f2558263e",
+    "en": "010786801b4574e356e1c5cf4e52862839b31122d2d0fa4c61bb3dc13e703e7b",
+    "ja": "e494d6f33e43a088c2e8d5576630ca0606a1c98372d5d7b4dee27271e349bf2e"
+  },
+  "errors.files.changedRefresh": {
+    "zh-CN": "63ad644a88c3c349094b389d0208711917287a7eb9a269637e0c9e5c256e41f4",
+    "en": "1e26a12d30adef463690186b92ef29a1d4f8821b33e64b48067abef1c70fb6e9",
+    "ja": "2c76a52772a5a9c9d78ebe027d9fc883b098fab0fb5e038db4a7ec91053a71ef"
+  },
+  "errors.files.changedDuringRead": {
+    "zh-CN": "90b760d842a1692c65ac34b51b416361dfff4ecf7a6dbda2f81503c8854fa177",
+    "en": "9cb8cc127ea73127a5e5a30d905da207406c0d62db6c6177df48cea4ef848c97",
+    "ja": "ac868e7ab8bb916f1c3e99019205b794f380f15cab163b8274823d01989cadd7"
+  },
+  "errors.files.previewSizeLimit": {
+    "zh-CN": "22e312084c11ae60510727c2655617b79d05f6315aca883284d257673eed1d10",
+    "en": "0336f4c4f4fc6601219270b8967de715a61d9a846ef002a3991ddbd1e835cc37",
+    "ja": "e473224c272b59cfc389592e5dc17c0b6c4f10bb43f4336fa41602f1b17a12e2"
+  },
+  "errors.files.directoryCapabilityUnavailable": {
+    "zh-CN": "2a848a8f5897db84e0c70cb824dc60e88527debc8ddaa6fa0e579b807d1aabba",
+    "en": "29f37d8beae81821a4116a48e59d9048c064e99ee71407f75a3b6769a352541e",
+    "ja": "49f916815a7cd3a230e5afcda3a01e3e978587d22b9b3058b933fc0712502e6a"
+  },
+  "errors.files.tooManyChosenDirectories": {
+    "zh-CN": "2ea94351f9e34f10ad2ba04169398ed99469cdfdb1078d2308b97abf08f48903",
+    "en": "f1a692fb8c391197ecdb45bb111d1895bf0a0275c284c60ca41cc3d8138b15f2",
+    "ja": "2c29106a2f4ed51f08c5fedfe59f11308dcf5bca9aa435fa2a5624ba04d94936"
+  },
+  "errors.files.directoryGrantExpired": {
+    "zh-CN": "242868be84311dfbb3738cd277a70f9af344f31c49e4c841bce5de7dbacfaf07",
+    "en": "0f623942464f47dd24d92e7a1afb80fb725b0b6a45c1e2fe43e50523732d3723",
+    "ja": "5a04fe12130b13074e8a5310b210034d3723dd0a5e69c3ca7a5c8a67eb9945ee"
+  },
+  "errors.files.outputReadDenied": {
+    "zh-CN": "212457b06218cc0c421eea3a7e62eabc3ae3f1b690ef06c6ffdaa1fb4bd11b5e",
+    "en": "0a999acadff46cce47a3329683a6f329d12eaa63760785520bff08c536f522cd",
+    "ja": "b39718a4d24714e6adec7f8537bfa1c39d5e50286b021eb9b4002d90fc2f0c19"
+  },
+  "errors.files.fileGrantExpired": {
+    "zh-CN": "444670dfc5dbce165dbfa54b5a7e2aea871fd0e7b7594dd9336ee654f41f8a7e",
+    "en": "f49c092aae45d050f8814403332a4582e6ef6672ae1e412ebbc23672ab23f7f6",
+    "ja": "3598c0f75b9d32554daf5841ed677dcbab6f4255ed5c05bd8b8bc711cc6f059d"
+  },
+  "errors.files.wavGrantExpired": {
+    "zh-CN": "903ddbe17f1d709af38c29e2b68e28649b18b6523f07def1f8d312f27d7805c0",
+    "en": "7c91e10f8f3dd495bef4d294b71fa0020cb1e73778810ad362f9f4596959971d",
+    "ja": "0e58916cc1cbd7129e6a36397a031b41dd12b4de0eea481fc030a4a9bbcc811c"
+  },
+  "errors.files.outputTypeOrGrantInvalid": {
+    "zh-CN": "944a46e9d1eae112276bd868b7ad4fe74ffed6de89dd22fe35f43a5c6a41de4e",
+    "en": "a796467cd46a280fca3c4d63e5e2d6bbf497a9ba183f5500ae920152f8902f75",
+    "ja": "7c5b818779c4061532ffc1fcdcb6c99452d3453f7df3962dfccfe6276eadb806"
+  },
+  "errors.files.sameNameResultExists": {
+    "zh-CN": "e1f74296caa3f2a57f9ae4e8995ed91a1db84f8db65e2334cd26b82bb92715d5",
+    "en": "ce6666b8c96f81f42d89f95bb50d1b864054c349e5aec735ab44e601d3dc8eda",
+    "ja": "cd2f8bddc077a3fb26942a8c0c6936e5521bc360e5219228cf25b492c895b054"
+  },
+  "errors.files.captureTooLargeOrClosed": {
+    "zh-CN": "e221ab540c1244d16e4ba5197d91d20f6ebf97e793de43db768d876342b61c37",
+    "en": "805ebccef14431fdab0a7de6d673cafffab5525f4d8741c442134549d52b44e1",
+    "ja": "ae1902533fa3aa6c84f26ac2da2d5472e37b8b7344daebf24850764e56374c49"
+  },
+  "errors.files.locationUnverifiable": {
+    "zh-CN": "563a5150fd5cb7cfa3afb0188599664f9d88a9f4fdf4f20b1d74425e90ffaa6d",
+    "en": "648d0b1b68bc7ff32f0d8b1f3d52cbdc1443913da1d809efbc1dd5f44aaf3bdd",
+    "ja": "83019e15ae824751f7ba2b45feb56ee3c5a48a4986e4b10068a12f4fdd5ee447"
+  },
+  "errors.files.locationChanged": {
+    "zh-CN": "664c6d9283d9d7e6d8404c09e0442e2710cfe4d5ffebfc2ffdca5f1898dbaf5f",
+    "en": "5ea47965fb0f3e7b16f80fc047cc2ff0c5e5752d8b62d574cb8e03c9a9827424",
+    "ja": "b09de0be7dc7bd2deed1022f68e80992f90c34f2a9c7cbadec2c68b1f63af996"
+  },
+  "errors.files.selectDirectory": {
+    "zh-CN": "262e66625d0dd95bfca98eb14e701093a7cb04c8f71d28037af9e46e534b32df",
+    "en": "a4aa4d9ed2a9125d7bcf4275a0059982b13fdef5c6f18aeca26b6764fbd6041f",
+    "ja": "85fabad53339bf9b7a1a85601850ebb7545101f05033632a29a2385ec0d9e019"
+  },
+  "errors.files.directoryInaccessible": {
+    "zh-CN": "9b05a5d9541cc3ee112c3d23cf7b5409d570de24264977b00822eb856e07fa15",
+    "en": "c4081f2d9d3705c38616f1311f6a8ffdb3dc0d2b8408e6b7bec65d9c0986feb6",
+    "ja": "e28dcfe7c10a0f3621dc21b4805c77c16cf4b6e61961c347d8774c0f9beb9fc9"
+  },
+  "errors.files.directoryChanged": {
+    "zh-CN": "936ca2628f0a11daf57bb79f31fd970376985cbf7bf11a7bccab5f1c4dcae749",
+    "en": "d05b8fd66fb27e59fd9b75d526bfdfd4730fe52e83cce5d83f849c2a76e4354d",
+    "ja": "36ae6d2872d1ff75c38df4d26a664cf201569a6c2a0cf370940825ed1990b63c"
+  },
+  "errors.files.directoryNoLongerAccessible": {
+    "zh-CN": "ddda4251ae08e10c96591045bada5787bd123ce0739128bd24a25ea969dcebe0",
+    "en": "88527b13ac1fcfef26576c0e44e3e5b8e89923a77e8fdcc1fe8b0dc2202657ad",
+    "ja": "c6a4e0c89da472c13c07fe3391856dfab67c66464670c8d244ab7365561a970c"
+  },
+  "errors.files.audioChanged": {
+    "zh-CN": "60f839bc632859e18b9fd6f0c52606f5f5a21c639341c88dcfabd7c40cacd6c5",
+    "en": "4a43c2c84fa63da4346c46ca6cb61c06ecd2837467957ea6878606569f4b095f",
+    "ja": "8d479dacb3336fc423810d9daaae1fcccac5de225840d6ae3cde6c5002af7245"
+  },
+  "errors.files.audioInaccessible": {
+    "zh-CN": "01f735b9cba0edc52ccad1e8d2e90264b833d834045db01367928df22eca7036",
+    "en": "59b2ff8be5a6add7cab8d0960980bf3fe64d941b74ce3cca8535991201eaf0cc",
+    "ja": "1ff32db70773b6bf07c085c377785df648b42f8d0051e946f8c66230aa87b231"
+  },
+  "errors.files.outsideDirectoryGrant": {
+    "zh-CN": "5afe5e4b87165e3b842498574fcf95ac14c95e2c75efb27eb1ed5b7a4266cd96",
+    "en": "b2696edef81d1e5fdc92874a349b904a8d2b7fe6b0b1880f1833ed65fef21891",
+    "ja": "b84ade3d90f51fadbd83ddc38fc9aa4e64489170e445888946da7bbe2fde3a65"
+  },
+  "errors.files.unreadableRefresh": {
+    "zh-CN": "498822a5e2ba2d69835c8bd7e3a55048c14a425b9ab92cf981a82f967e8f5559",
+    "en": "8580c2d3559c2437185667ee4c3ac7d59eb852b8de1fb813d3e4bc5067b85a07",
+    "ja": "787bc2f423aa668e7c87cee1c40548d8a5f9d518e39e28eaabc6f4241e4c69ee"
+  },
+  "errors.files.subdirectoryLimit": {
+    "zh-CN": "1414e380670562308e91d4d3a8fad9784d828ac852a5462302e86b5a2bbcd0d3",
+    "en": "37d64b680e50e39ec1fbf3e60eb189f375e3ec6cae0634fd79e5ba1c33ca2f2a",
+    "ja": "85f05831d613017039d387c79f4ad0503fa895b76cd8d6ffdc1a0ad15d01c61a"
+  },
+  "errors.files.corpusScanBudget": {
+    "zh-CN": "860387da7f0fa1ce2ef4fa08ab78d9a3f5b3fd805952bc596daac404c11c405a",
+    "en": "62e8459f4fd3da31fbc95a40a3daaf7f7cd08452a2d2dbc61eacc05ecbb53782",
+    "ja": "b93bd94c43db7fcc4c916a7a02a844d63e15be140b4e600bf4767c252671575b"
+  },
+  "errors.files.directoryEntryLimit": {
+    "zh-CN": "03341804c3339ecbee5b032a2a8e836511e31b8131b1366bd1f3cf463d7b1afe",
+    "en": "4aa5f4b3bbd7eff5ab06c6bb63577998e43029f3ae7f14630b6a62303dad759d",
+    "ja": "50b29d23b8edef340b67ed916f02df8ee960e13ca764a4925865e8caf53cf367"
+  },
+  "errors.files.windowRecordLimit": {
+    "zh-CN": "e4f806d249d8fcf5b49c36856990cc91a3908ca3f8e71d6754f4985ac19f53ba",
+    "en": "7754b5c7915ef0ae8ea30230f18304ad4ee36a8962defcafe39473546d0173d8",
+    "ja": "38301937a9337c2fb1a4f5024c381078ed1ece9ddd275b4ef148141a0e0a2296"
+  },
+  "errors.files.directoryScanBudget": {
+    "zh-CN": "11a11f8e99ffb87b3000cac60ad2567588d1c015ff7b749733fd443586e44b50",
+    "en": "40a6cf94989a0682c11bbac9427742f7cfcacd0d524c878a2963ef1a406182d9",
+    "ja": "ec986a82fb4d4d72a0988b11ba811e59cc4e7cd9d1495748ddf09ef3289cfa52"
+  },
+  "errors.files.directoryGrantLimit": {
+    "zh-CN": "84ce9b7c654d61824c640b902c8991232df5fd2b1cc0ec10b08bca72ecf18dc6",
+    "en": "cf1046fee12f0d64de60b5f17ea6a696b3afc3a2dde6021bc64333bafa550645",
+    "ja": "263a9d6b7ea0a7c51f173b9fb04b06a04cc6e498e47528841dc70f5e5a35dacf"
+  },
+  "errors.graphicsCache.unsupportedDirectory": {
+    "zh-CN": "2b1cea68c082265dc090c115b03084d18b455633ea5941b97d8198f64e9f6ef1",
+    "en": "967bd524fc776aaddd0283d12b2db6fda5a23ec3fe65952061cc7d7c58587d53",
+    "ja": "e0e92795a7505c1b105dadf51fac670907a9601b390ca040d05967bd6439e902"
+  },
+  "errors.graphicsCache.cleanupRecordUnverified": {
+    "zh-CN": "094e79e7ab2199d131c76642ef622656a1583754744784114271f08271837275",
+    "en": "adc6fac9d05348ca3bc2e3f33d06fedcb52fa7b7a6cad825a0623ab307be8b91",
+    "ja": "74dc51df0ad9a8e27aaeda88ae1525aaca63daf0e7863b7f8d1b1043675974fa"
+  },
+  "errors.graphicsCache.cleanupRecordUnreadable": {
+    "zh-CN": "87a7f1c8a5aec761bbee8053c318f9d753b1fd22d1f4b8bbb61d2cee59512740",
+    "en": "106755e6d252c29e84c897b8f59134d01876cf6301a60bc7063bd0f72570067f",
+    "ja": "8b59536425c4a769ecc45c50708540b941dfaa4db1fa4f0b6680f2bbce61daf1"
+  },
+  "errors.host.frontendBuildRequired": {
+    "zh-CN": "06f63473fe22ac9eb3ebd7cb531012a68fa4fa90cd67c8d0c8b579fc62118425",
+    "en": "9da609b7849ae10891aa14723e672410f1b7b29c8b443d6771449951ea59eaae",
+    "ja": "96c83f24e9135f49cdc7ee876fabef37c6e830090fb5e3c7f5abf04a0318a2c0"
+  },
+  "errors.host.recordingRequestTooLarge": {
+    "zh-CN": "d7221c2a6019ef58e4b580b44e92a18d5fd413c0731e15c96a5262cd4ee9161b",
+    "en": "fab8c65aa39f0684007c6439168f4badc5ec2a552e87e5c0c588d95724a29048",
+    "ja": "0da26ddd7f520bc20be8a01b757f1bcf8994de3454607a18530592c878fbd746"
+  },
+  "errors.host.recordingRequestInvalid": {
+    "zh-CN": "1a25ef9a658fd50819e68c0c4ecc1ec104cee232c1efa154f6a166fd2876fc5f",
+    "en": "7a4423487aeb5a0a332ae18705537f26236eff2759e755730710d03d39501ab1",
+    "ja": "83cf492069c9fd8f24a773de03fd89c05042f085e4a1546202a1d383b05c4dca"
+  },
+  "errors.host.iconRequestTooLarge": {
+    "zh-CN": "d4279de5aa572bde4639ef72c0b2830c2e352283aac8469b200e3df78bbc24ea",
+    "en": "72e2b297866d6e6a268458cd083adb906d6b1da828dff95063aa5d1364759981",
+    "ja": "2ae1454dbcf0ffddf371013dd54d253a8b3ac2348db33088fc827c98870ba8dc"
+  },
+  "errors.host.requestTooLong": {
+    "zh-CN": "c97541ee475e065ef0f745e5c7a620135dc14e9ae83cf8260b13e0e301918c7c",
+    "en": "a114aa014dc6e361251fd6e74f9eb873032c02973ed1d3d946a26bb6cab61cc4",
+    "ja": "6ed2473bc6229e27148a17720d5dac37c58f2ae0ba0daebd9cf416a6c533a2b9"
+  },
+  "errors.host.unsupportedRequest": {
+    "zh-CN": "583fd7699c07115b00bc31887b996e9ed1d1c2366d7d43dc965d590615b42ad9",
+    "en": "b95cdec03050fabe741864e6e1c5b60941602ae4f38c6bff6d9377bc6d17170e",
+    "ja": "1b3bf2a84b6e8604219516bcd8fba75133df4143d776a89887864dbeea7e93dd"
+  },
+  "errors.host.confirmCacheCleanupAndExit": {
+    "zh-CN": "4c2eccee984309c84eeb59ca5efb6645cdbd52016d5b059ad4d771f69b963e3e",
+    "en": "bb01f714de1b2e69f43cedd19d2dddbd3c997d21f4c3c765742ab485310cc80f",
+    "ja": "64c72e369b9babe657e710b36ebf42bdc53ae696c1deb5785c8a79733bd66ab6"
+  },
+  "errors.host.unsupportedCacheDirectory": {
+    "zh-CN": "91faf7f74912485d152ede68c8d7c693c3e43f569d7df262cba5e634cc77aae7",
+    "en": "0e99ac1652f673739f850685d7ae83aada5ec550f7e94a01b6e0768eba8e625f",
+    "ja": "1887d37b811f2cf15b428fc4cd47cf21301afc235bd17662a39b62c1c36eddd6"
+  },
+  "errors.host.inspectBeforeCleanup": {
+    "zh-CN": "bf211c48afe0d1acd7403be369356b02f4f710f742d2bca2f715b3f5df2bd898",
+    "en": "79af2f6295f1af36378e0cdaea399c6c3691fc162268e36df96047a5d57e2642",
+    "ja": "7a75246eec29f6ccab8b6dbd725b9a1e11b6325286379e97e74b059421d679d8"
+  },
+  "errors.host.selectGraphicsCacheToInspect": {
+    "zh-CN": "8b4b370ee16f4f5a2bc6e6a22766ce50f4ad4abd9eb515516cb2f3d2c0568951",
+    "en": "8b3cddf0fb92a70eaf74cfd78a712aeb073a3c005cff738e5bd5b1fd38811ef9",
+    "ja": "a292e1080e676e028582e961de78234d4ddfb8075c76a43516942fb0a60b91a5"
+  },
+  "errors.host.recordingDeviceBusy": {
+    "zh-CN": "946c8f1a10fb30bf262b1753ce2189550b8da2fa6bbe4cd2639cf9cb0b172213",
+    "en": "706af0e2d7c07c98e2eda47c9149aedf65e32b3ffc394b8e92028f619c20b6b6",
+    "ja": "2d99c8965693af1644353903f8bda54b9811d0225de294ad8b6bc2d1b37edcca"
+  },
+  "errors.host.unsupportedRecordingDirectory": {
+    "zh-CN": "7f148d51c508f6bc917ed44b8f0cc57e26442b82d40495dd54ebe90286e3e4d0",
+    "en": "0ae4f23043e9186398e1c75cf81197e3759c12dbe305b4bc24a94e7d8e78e884",
+    "ja": "22b7d8fb6fe20ac850b95edd4485f22b7e47c81fe67a9cfd924eb7311f265ff2"
+  },
+  "errors.host.unsupportedMfaResource": {
+    "zh-CN": "58ebc14207bf343a8e4fd6611f385f655cac400d39eb0b1b70eab6376c01eace",
+    "en": "cc6ba455f1d99d509008ab62050758714d51b38302f4bb70374daf76d2274979",
+    "ja": "e8565a687655ce5f2679c43ebf567d7f4754355645b37de598f8eba057203f05"
+  },
+  "errors.host.unsupportedOperation": {
+    "zh-CN": "258573da29ba4e8e43f8a04caec31f66cbf5f2d94a9ddddee2467a8dd97a8053",
+    "en": "dfbe979154dfbc6f1df8e0beda04f4e06adcd7fa2e034c19155a2299ab9e2b64",
+    "ja": "8c44b4d1e8fcf10e8f2cb9a5f2ae1d5517bfa52ccd8284b9d5c8174e35afaf1f"
+  },
+  "errors.icons.invalidImage": {
+    "zh-CN": "57c5519ed2086deefc7c31d4612ec310db9e192b8e2771f6f422fee46ceb654b",
+    "en": "0a6586c8a91c1d69c00c7ae0658221cd2f26e8cd4efb715d944c49a1e64576df",
+    "ja": "a9035b68b63341b8fa52ec361375c8e04a43ee56d1f433d7fa5d128a5a097f60"
+  },
+  "errors.icons.imageTooLarge": {
+    "zh-CN": "0737782e6d3d7305ee7adb7169ce02b68fb6bd8214c51c8fafa89d9e7fb9a14f",
+    "en": "a74fafe733a32cc1d57e8c13055ace039573038b81385ba899f09271b4fbb4e8",
+    "ja": "5fb8e321aae28ef0e4519632d139a216742b878946d51305205aad17aa02ad34"
+  },
+  "errors.icons.resizeRequired": {
+    "zh-CN": "b49d7bf6067af9f1919b70cca85e4acc818af8bd1aacfe6ba32c2ee61ac267d0",
+    "en": "d84116bc80459285e8d6ad8e8c50e13e482966fa4034d16f61d10f856a767a39",
+    "ja": "dbbf5bc745aaab0c12bf3b02a498ac450a18b27134debbb19d30ee56ca1c77b3"
+  },
+  "errors.icons.readFailed": {
+    "zh-CN": "3f0b63c45f12185f86dba568fc82b69dca37c6347102826d3793b20156dc4ddf",
+    "en": "a74b467063e82c345b2879a9d97cdcc49b460ac47ef9bf5609dbdb25f2896e6c",
+    "ja": "d3be544648be990a99279a3df936c9286fc9f075d41202229541f028ffa5077c"
+  },
+  "errors.icons.saveFailed": {
+    "zh-CN": "d771ae93c8116258f385b659c408bfe1e4c3928a2097dce4226338e6867cda82",
+    "en": "3494385ba7a5e6224a29477d7a3d429c1099ee82ea0e1ea701cdf17453fb4a7c",
+    "ja": "09c2b05364d22bde2600313305361d843784ec937f1619f4a56b826d0d1356c3"
+  },
+  "errors.icons.invalidEncoding": {
+    "zh-CN": "1d64829278a8f7f465b993bd797e01be72a8ce928830af689007ef602b45e72a",
+    "en": "902153f4cc9420942431eda16c5064f14cad0854787f2053e5a1a0d1bc30e6f6",
+    "ja": "355f4af4a93602c855400a8dbb310dbd807aa60794ca38a277c5ca7a0897cedd"
+  },
+  "errors.icons.settingsTooLarge": {
+    "zh-CN": "e0f8882bd69d0651224ef328c0a3324bbd62c0ffdd844a980dd37efd24618f3b",
+    "en": "c9480c9fde84bb3c534ca2d64dc9c52ad4f8e2113947f0c5919cc93658237b6f",
+    "ja": "0132484b212c59ba55599a526396783b4d05a2aa2eb00d637c1667c3c5bfc4c6"
+  },
+  "errors.icons.settingsSaveFailed": {
+    "zh-CN": "87456203bf1fc565c436d95ec5ad255d277c57adb6f61dcd3a30c38a508aee3d",
+    "en": "8f32df8d663364c0c6395686a7966742b24d6d052140e356a446d9819c7353e6",
+    "ja": "9a4b43de07564a9dfc78ca60c8d959564c254f9d7c5594939bc3046eb27a0b7a"
+  },
+  "errors.icons.unsupportedRequest": {
+    "zh-CN": "6dd9b53ad0fa06dc2f534ac34c9363cf0ccbeac675b00a5c490253cc87ea39a7",
+    "en": "ecbcc6fb5d62592046c62ea39c738ff2f7a98395819a38a216c84e4067fcc966",
+    "ja": "94e3ed2332dc2ef47a4a9de2c77b8935285c8cf7a0fb90562fe52affcff87163"
+  },
+  "errors.icons.settingsReadFailed": {
+    "zh-CN": "b1b078889b5a67b64dc32f31ba44128f39fc3dc73dc49371de730d8210cf5eb6",
+    "en": "49d8ea08af1bfc259da2c1881444d72d9d0f6832fd43fbd2d1060f1ba1a1714e",
+    "ja": "bcfeaa043938b38bbda39c271ef88480ee04e7c505f2844bda96ea47e2533a24"
+  },
+  "errors.icons.selectionChanged": {
+    "zh-CN": "019a0b777b6b7fb146766ad0543b7cb1ac14493d0021fb3e621a54212d95000a",
+    "en": "f1ef76a827cbc9b522a7996111057b0af851dc3e4afe92dc41cc1179dad49de7",
+    "ja": "01b265e9bfea2ffdf3880bf378e2a612641c181f2ff426b31942d18a0052ba30"
+  },
+  "errors.icons.invalidName": {
+    "zh-CN": "0487781e947eb2e1da0effaf7910521ea75f9ba03db60d2ed5b6f3744c4e1ea6",
+    "en": "f5b22ee040724dcee78abf310514f8c645681c2e92d02a34c31bf30f52d26a5f",
+    "ja": "8d6cf55d49f815dbd68cf24a0239078d2008d53241751b534b53f94df61680e1"
+  },
+  "errors.cache.locationChanged": {
+    "zh-CN": "17594226f5d8ec3395479fb14b474a6983a7f4f77b23c70c3f83b5fa90c62ae7",
+    "en": "40953b6c13c0a4cbafe24f1c2c67b227087375a99fa005c83f87b90566159160",
+    "ja": "ad2c8050b73521e9a0d86f210383caf4471119c2909ea7f5ad7a599b1ac4a43a"
+  },
+  "errors.cache.openDirectoryFailed": {
+    "zh-CN": "e86781034a83e0450aee7a706c8386056e9fc4b2a0144cc5f31b11d24da81785",
+    "en": "5c0951ea1456c50685a2ddaf7482eca4a9854ca6e68633997ad9e3330177c379",
+    "ja": "06b3ac398ace96b9698e486651e68d625cbe04322797d7d2702a437f29eeba07"
+  },
+  "errors.cache.openAndInspectFirst": {
+    "zh-CN": "04ca86ee3ea393a47fa079a4246243ee32d4c00de1dc7ec2e37a50ba9b96e104",
+    "en": "ddf208a2a4f7892728a790157e33434e45a891aecfa0ace191cc849a52c8fc7f",
+    "ja": "e5a721472eecd8b7a530b56d52d7d4c81c8dc984f54b7226b24413fd749490a3"
+  },
+  "errors.cache.graphicsRequiresExit": {
+    "zh-CN": "dc9db767e92d3b68eda38052fe4875aa35ca64dc75ea0e0b8a6ad91f9214e16b",
+    "en": "f239c611fb7b20525c4a0614f8e9b979d7f00947e8016759a8a0d96bff95208a",
+    "ja": "ee339e387cc3d09dbab0a61dd0b2d3f59dbeec4009330b86ecced4b571c1f172"
+  },
+  "errors.cache.inUse": {
+    "zh-CN": "ab31e34abd9fdd58138beea95695198913a4e7d4dc288c1e04cdde1df19f278a",
+    "en": "9e6d3341f9503793898bdff6576d534d5bfae3c0049829d3e4ad8bed3b1ebc94",
+    "ja": "2d0ec325b9012cc1fc2b852277863d9c5d4d0d7306d1b3917e3133da8f2916f1"
+  },
+  "errors.lips.unsupportedOperation": {
+    "zh-CN": "a24a88e30791963eb8ac179d136f2c27a48accc85de8c70db7746b0b2e9e0c49",
+    "en": "e11d0deca91356ab497234d0fdb0fb405959f6b924b33d51af0f2ac58bf57dee",
+    "ja": "1061950c9bee8521f6a2208c95d2a2e89ae226f05627212c03c6a5e35618675a"
+  },
+  "errors.lips.fullResultUnavailable": {
+    "zh-CN": "3c34ac68cfc23f5f1d6d1617bcd0038aacc06cfaf0a09c8af799f7c3f85de0f7",
+    "en": "52779540ad857f667572d914c631c38d5b6061ea45e36cd3cb451bff1670b056",
+    "ja": "f189bf8e5efe55ff5caa0371babf75e31e98de297c037798e2c8e0d31e963bf8"
+  },
+  "errors.lips.resultInfoIncomplete": {
+    "zh-CN": "1a2ed6f94c536b2e411921a97413836c9a7cbff6bdb773073bbf12f80287e99b",
+    "en": "381de016bc473ef2a13cf91d44f7a01f6eead60ca7ca31f06d7389e7f3dc325f",
+    "ja": "dfdee43ddef55fd35f539a534262e3fd14e2ae1c3880857fe93324150f284b6a"
+  },
+  "errors.lips.resultInfoValidationFailed": {
+    "zh-CN": "0ae140583f8e53ca1600f41cca410db852004b397afd604d5c2423ac9a07495c",
+    "en": "5ea19e4dc2510759abb583d8b4ae625fc8bad8067e57e56c9861854c2a965c9a",
+    "ja": "8b4e8c644df87fee75fe4869fe91df262d71a3daca7d336cf4d5c0a65a65fbb6"
+  },
+  "errors.lips.mediaReadBudget": {
+    "zh-CN": "743aba053680e74505458430ccf15f09e0d5e82242b4af1cd45506667beb1dca",
+    "en": "acc998c97c519fb768a1bb20c8ccf8a5ef869ca3780e734e51b473157baad5a9",
+    "ja": "21e581782c65a2632c9cf60b9fae40611cb0f5338b8bac77f84ce8755192f1c2"
+  },
+  "errors.lips.mediaReadValidationFailed": {
+    "zh-CN": "60c0ca4d2b360b8f7d737142ecee6304a39c567b9d7c4aa631c6282cb0c087c4",
+    "en": "67d5717a3d1097b862688f3c899748b88cfeb27944f0cb5119be0c5717468f07",
+    "ja": "f25828a7671d09c3dc120cbf84e3bc295ec16cee238748105775d74231c62676"
+  },
+  "errors.lips.mediaExportDiskSpace": {
+    "zh-CN": "8a689aaec7cf9e01a82ad1a3391efb0b8be6ba77dc6b68f6e14ff87734b6166a",
+    "en": "14606b2cf467ee536d56e8f00b221261f5da7d1c5a2b611fe0fca5c41ef60206",
+    "ja": "34ba0d50ddfb735b964a27ba53e88d2afde20db6df1642cd4396788e76da8f1a"
+  },
+  "errors.lips.invalidOffset": {
+    "zh-CN": "8b2f7b9d27fdefa8e6871a1b2044736dbf4c6ba337aaa9b150d955baa6dbea28",
+    "en": "adf30998915d04326d730a2b5c68ea832500910d98486b32a7af7a799cfeeada",
+    "ja": "d842a1dfdd8044e5f3f1f22293903218b243e2d8d7a1e76dd5494a1529cd627a"
+  },
+  "errors.lips.videoEncoderUnavailable": {
+    "zh-CN": "4bddbd5d147f574cbd5105b82f77f3da6fb8f2cc87b0a9b0e8731e813eacd8cc",
+    "en": "919c537c768eb1c976b9ec7fe5bdbe93447bc1d605d2a79b2dbff402eb5182f4",
+    "ja": "d1d6ae3c96396ed91457f7618faeddde3a8b5eb73f46215d3ffaf4fdb360d767"
+  },
+  "errors.lips.mediaInspectionBudget": {
+    "zh-CN": "f3dae81e0d1504e54d226fafda62393a709885f4177792d15cd68f435dceb561",
+    "en": "53278cb6f04c8d16b8dc2ce2b46a30ef3c1df5409e500989b08b04db0865e9ce",
+    "ja": "34b784f6fb18679ca4cceca30d05fe6233912d47e42b4b18ac38285e73394997"
+  },
+  "errors.lips.resultUnavailable": {
+    "zh-CN": "82179b59b537dffeae06c9c7ffb2beb4c50bf841dc5021f202899c8ea3e7509b",
+    "en": "470d3a0d9c500e2324b46600e4596bcf1b6c589269ad23d09464f21c3d2b6f15",
+    "ja": "8b923c7af27a8a31c11feb7a92929e2c1903f16b4b4ec5c5a66afe72c832e182"
+  },
+  "errors.lips.audioMissingOrWaveformBudget": {
+    "zh-CN": "a069cb1ff7165056f16ff860ae262cb9214b14cabbfa0526dd6e1c53935402b4",
+    "en": "3e82d9bcd73f0dbbf687a53f778d79d4daebcd1e087741084c8c7faf0c2c1365",
+    "ja": "416004200077b0180786068643673f4697fb34f55374457ef6a2f8e66dfe752f"
+  },
+  "errors.lips.saveRecordingFirst": {
+    "zh-CN": "0c940a1ef0f9f737a50a43d086a9488c25fbff359e4f2e92cc7c493b3162aa9e",
+    "en": "9665cd4fbbcd887ebd5ac561f8fa42e62a7add41f0a47cba8b9cf50c58bf4bc6",
+    "ja": "3bede075640eb9c6636615090aca63a043dd894d5e1a7f55df2f4561610131fb"
+  },
+  "errors.lips.savedMp4Changed": {
+    "zh-CN": "0bcb4d39283ca544b93f57c290ed384cd085be2bea2160940bc7ce3090a6488e",
+    "en": "db7e0e32e91cbe391575d90d11070c24c9210cc89f9b7aa2c8dfebb9710acde5",
+    "ja": "7c6ecbe168d470372fdb81479de919197a1d8285c854487b0c66215cb0192b50"
+  },
+  "errors.lips.historyVideoMissing": {
+    "zh-CN": "4e9f8d5568ad8c059d95205db793686fcbecdb6b80104a53559a566f6ec582da",
+    "en": "f5ec509b49511a0cb4a5244c6b2b67372af0aed1cbce3af66d22a38679ea1956",
+    "ja": "abe9fdc2bd2ca003ec29dc8d9b6b418faf9dd027f6fa87801ebb5b21c0a69c7f"
+  },
+  "errors.lips.replayPreparationBusy": {
+    "zh-CN": "f7f47b3a811f1b063ee97b1c3bf4de6aea17f41b2bd999d3cc0c089fd55e3f0e",
+    "en": "8d21f23aa5dd1162c48c9db22d689d26b34514f5f4256e9ebc3a602290a0f7da",
+    "ja": "450be0f6eb53001c9b59a7d1469a72bcab9708a5a0deaf0e537b2bee4de25760"
+  },
+  "errors.lips.replayDiskSpace": {
+    "zh-CN": "3cee0d00849a4cc515514dee983c8d365740637be071d35acd59a37b9bc813d3",
+    "en": "5480b85d9cafcb210092c25b4383e91e46c9c9bbfe2b4855d8d3ecb60a29bc5f",
+    "ja": "b1150bb54a7355e7f3427277dae3bc4de1b0ddb917d90ff4ee121f6f3d3cd04c"
+  },
+  "errors.lips.replayReadRangeInvalid": {
+    "zh-CN": "ae91246f2395fb0d86a98ef15fc80806dec25c84c0a7b0de1f30ba23d2989987",
+    "en": "8c1e824ca9d07be4cbffd9c6013c37eceed371a3d16a6a996560f1bdb0aac12c",
+    "ja": "12af0c06d0fcb6b7e9b5d2bb7a3bb5134262cebeabbe1e9dda46733df2b4e3d4"
+  },
+  "errors.lips.videoReadRangeInvalid": {
+    "zh-CN": "54e3f11e33fff6646915d0372ceea67497305b400d6f31afb0e16c008029a6f3",
+    "en": "a930bcd374a7ffea3bb9ce0b301662ddb316b335d472c396f84fe17bc9607ba4",
+    "ja": "1460a32dbaa055841df276ea7f9a0ceb386f3e5bb4e896887ac2ee1ec2b77e69"
+  },
+  "errors.lips.selectOutputDirectory": {
+    "zh-CN": "36711b07451fe4dc6f20ced88401e72d480d10c0c0e5262c1daecae17c16547b",
+    "en": "37bc2fbd2b5472f323117a6605f0e9ae6fe053dc4faaa216af2d467222d2446e",
+    "ja": "11840b10e3f1bf9ee8b26cf31e961e47550b48a0c1985d36486be82f05cb0a95"
+  },
+  "errors.lips.animationSettingsInvalid": {
+    "zh-CN": "ab855b288dfd7520870db0f1a5fc06e62bfbcc0201e9dd6e52fe092bf600ac53",
+    "en": "55e6c36d37fa86cd78aaec2ebd0f719db41a7f8e51e2046f2d918c56f3fb18c1",
+    "ja": "b71886eacbe26f73b3d0dcd28d454aec383e8dbef83cbd07efaa5fe61ae9c747"
+  },
+  "errors.lips.animationExportBusy": {
+    "zh-CN": "a000d7eae60f86f7b7758128286ee4fd519b0e67a36ecf21b62705d009a27e26",
+    "en": "9d9720655e9bf19bac9ef6863db3ec4089446da77f3dd0c25cf89430db1ed6e6",
+    "ja": "ecdf70bcec3ef8bf4e9fea001d67105a2d02cbc97c9bedc2920be96b1b54f42a"
+  },
+  "errors.lips.resultSaveOptionsInvalid": {
+    "zh-CN": "ae0f854420df30aff8decc89bda118fcba7a78dc94baabd2f0d34689e2c43209",
+    "en": "1fdb17a1b01f6e6d6d8e8c0d0e04a9ea3fe376de4691b8860bda37be36b304dd",
+    "ja": "596aa75d514b403a2c5811beee4b406d2fd336ca9c2cdcf25ed1b8f890ad595e"
+  },
+  "errors.lips.recordingSaveParametersInvalid": {
+    "zh-CN": "7ad9260f955989799462043959a4719d03e16530c8d093c2dc7be67b8b943297",
+    "en": "000c6e60c1fe911300723ff3927bc4a31a8a4da842d3527e4b5bf86609b00ac4",
+    "ja": "01059b3e332263e6d01a8f43afa51d2bdd6c6bc0b2ebef3e056058929822f754"
+  },
+  "errors.lips.tooManyPendingSaves": {
+    "zh-CN": "bea0666f20b95d19f5435814741004cfed77915dca4bb760c2e601b70b0ab096",
+    "en": "379d6da1973c231205f67a2aed4ff5eb8f8f5665ea88b00d431f015eedd77d6a",
+    "ja": "ffd3c02fe71287d4da9de45633ac5f9d93879d778c636893a0841ab1a90bc244"
+  },
+  "errors.lips.outputDiskSpace": {
+    "zh-CN": "d679012cfa23b2981aa1651aef7346dd1abc7bebd16692fefb3c75ba82f327cd",
+    "en": "2d90f4415dcb0cd51df475346ac0a4feef9327917b82981dd8615c6adf1144a0",
+    "ja": "28f97c43b30bcbbe9c17a016bd8ab0e461f22d3726889c8cd396a35325140e7f"
+  },
+  "errors.lips.temporaryDiskSpace": {
+    "zh-CN": "4c67d766fef8912a0cd98f527b5141313675eef6a96d212091a9a29855cb435a",
+    "en": "014cfefde5e3b9b48635766dc0bb934516eac7ef104153955b32d9629034cf36",
+    "ja": "bf36cc968c137367eeca4c1ebea4f2a91590ef2b6423db8d6832424db0283c16"
+  },
+  "errors.lips.saveSessionExpired": {
+    "zh-CN": "b2345a532a6df7bc1b3e80635b69b9927ea0844a56f9b3ee8e07e84d88dba66a",
+    "en": "66550d2031fd44226ebfbf2c0bfb9870a0ad914663197a0f3bdc602619b05c26",
+    "ja": "47cf2500e6bd6f5ddbe70ad6ed0050b6b93d2fb78edfd52eff8e7a9cf8d1735c"
+  },
+  "errors.lips.saveChunkInvalid": {
+    "zh-CN": "70a23cd67f31d3ee5df59cdce68aa0849722eec30a137c1999035a50584b677e",
+    "en": "657f90cb534061a427545668fe6f58da4b5d1cd726c0f3ba9b90b9d9da767a54",
+    "ja": "1c04670a29fdc565fb94734b5c6d60ead16791cf4e50a86f68eafebc0b24cbb5"
+  },
+  "errors.lips.recordingSaveIncomplete": {
+    "zh-CN": "da2a64b4b39ec8c7f2a677a50359bb13a6faf2fb4875923ef7e65f8788d92fe1",
+    "en": "df56ce4d3b6f6d9e45d04e55b03219bba7e24edff461b481c8b96c4b396dd122",
+    "ja": "81332eba5d25cfd580954f259039e4136d88aa5105f512acfd038ae99d668cfd"
+  },
+  "errors.lips.recordingValidationFailed": {
+    "zh-CN": "d4fba89b22405d2965a4b8cfb1e8fc782e7b406c14c31d911d1808882e56a5cb",
+    "en": "19e4999634a0c650d8e862ee38b380d904720b5432e6055bc8a265e2e5ee6d6f",
+    "ja": "c349f41947c5bdad4a37cdda9a4bc3f85f5f21df4f0648b78d0db0f9603b67ea"
+  },
+  "errors.lips.audioInspectionValidationFailed": {
+    "zh-CN": "fbf0764f8fe32d3d0c0e1842682f12f4ecf49a4f556fcca0ac85efad70b3b4da",
+    "en": "9a89021aac6295a0c7ab285a6e7c02e9d03ab39a1ab1d3e93d02481f2496002b",
+    "ja": "80ad823a99f02ecd5020608b25be57447a9a1169581902294a8ce13b62604f0a"
+  },
+  "errors.lips.unsafeResultName": {
+    "zh-CN": "314533ac349a5d35a5dc2c084d189765e15a6f5159e54545cde9542c9d12d0d5",
+    "en": "3bfd90307ac2b75f7ec4fb6aec25fe01c27797d4d865efcffdea9a80b5c3c68d",
+    "ja": "b1656c58469643ac38c1c7a2d7bce612c81488ded7cf9bc466eb10b0ab5eedec"
+  },
+  "errors.lips.partialResultRetained": {
+    "zh-CN": "649c8df827d3e8770104470c96c39985f09ca5c5c2b118c7e66214e3c8e8d717",
+    "en": "75c16cb995d01bf9e7bf7ecf2b5bb63c0c4dbf9e51f11c27c1fdd4afded711d3",
+    "ja": "b8d0ac91cf00024b52906c1042c1bd5d52f1c0bf457db8a373fb66328e1fe14a"
+  },
+  "errors.lips.captureSaveBudget": {
+    "zh-CN": "f8fce017151350fbe827630302cfa8430549cd9516f5a590b754a30801a9c1da",
+    "en": "2cfaa34f3600849f4cd3787dd6c5dd45bfaf9acdba40292177e92a578ce7bc9c",
+    "ja": "b1e2fa043921faaf40e65b3be5e78480469eab950287dcb06005b78a4d673493"
+  },
+  "errors.lips.savedFileChanged": {
+    "zh-CN": "93a643b1f6086cebea3ae55851ff63aeea5c8f70d8d759c6dd976702bc949bed",
+    "en": "6c47a080dc095a47b538741cd0ecc93386fd3444fbfcde9e84b370d956669a0b",
+    "ja": "9d3b6875ac41959dfe7258b44b3fedca2071a5002ea6b73f4a2b15ddca8d053e"
+  },
+  "errors.lips.candidateSaveIncomplete": {
+    "zh-CN": "6cbb00f4b8a03580773ad9c3b77381cfbf4d210e6054310e28d3edc07b45689f",
+    "en": "14b13efbcdce5b94a24c714a9ef1afcc585d6c2557399fb4a14722f863466609",
+    "ja": "d57c3a679f40676ef4ef23d5e1ddd9b7c815800054fe2d0cc49c005bb69c5fd1"
+  },
+  "errors.lips.animationResultIncomplete": {
+    "zh-CN": "8e68b2864e8720e56ac72742d5c82d7875ccfd8cc9c98d0a17fee4644ca8b5dd",
+    "en": "f6d831145f085b3656587fa372ce161719cf0445dc746a6e3522011af1b623e4",
+    "ja": "32eb5b5370d9c8ab8e9cf4ce1a32beb0bf4f4f206735aeacac84fd7d727e7c87"
+  },
+  "errors.lips.historyVideoMissingForSave": {
+    "zh-CN": "57129c45b48708ff233d48e85ad1d1c0eaefeac023efad016457db23511fc66e",
+    "en": "ac6db4c279e14f13897b6d4ccdfaa4297e3b2562baac40b1f8fce7c34ff1d7fe",
+    "ja": "c9a5579681de383cc342971a775a838558814491e5b9ad2da5a6c0518a8a132a"
+  },
+  "errors.lips.videoTypeInvalid": {
+    "zh-CN": "403d018e9ff7da98e7da9b85c8cade30de16e5c4a405f3a099fee29bd098ed96",
+    "en": "9be73e9c606563a17ec52dc44c90092032a1a4ddae0a3810274984f3a2c5b7bb",
+    "ja": "36d55c4270b2748104d52922e1cc4117f0e87ecbf1fea6ca46a6b27d3272c586"
+  },
+  "errors.lips.animationExportCancelled": {
+    "zh-CN": "ac9610ab0188b0fb1a6c8c467016ddb22b7ee46007640c9a064d5bfa8d051344",
+    "en": "12bb1c7f7079220ff1b6f44b2fdfffa0f04f997fdc727b39f9a87ff67dd5c714",
+    "ja": "18dd64a5f351809bbf94356c170d736f99ef5e359ab73bfe09eca9a1b416ab1d"
+  },
+  "errors.lips.unsupportedMediaPermission": {
+    "zh-CN": "6a2ad4dc45d0ee267c851201872ce2ae0e39ee1efd36de3e9d2e541ac9be764a",
+    "en": "34bce1486521f82ee56d30f6c3f4235d2370ea14a97bca9f908b2c2d5d6ce0c8",
+    "ja": "83dbe90912842f463ad51908ad9805029070165de8d33e494c05ca72bc3f9546"
+  },
+  "errors.lips.replayFrameRangeInvalid": {
+    "zh-CN": "d66da86217cf81da1462784c81570fbb9e04f6d67aa4c3cddfdcfdaf08ec3b4a",
+    "en": "5b3849dbfcd6ec7b1b0aadd5e8b0e828451c7bf5f5d7fa7b3d79f9421b7a494e",
+    "ja": "9787ad3060ee2e1bc6f2a31a9226dfe3c1e07f564af05a94ee2a7fc102b2e64c"
+  },
+  "errors.lips.completeResultUnavailable": {
+    "zh-CN": "b6452b090fc8425f84e2448a51513de9641c1d30f122493fbe50da5c467caf60",
+    "en": "52779540ad857f667572d914c631c38d5b6061ea45e36cd3cb451bff1670b056",
+    "ja": "f189bf8e5efe55ff5caa0371babf75e31e98de297c037798e2c8e0d31e963bf8"
+  },
+  "errors.lips.frameRecordsUnavailable": {
+    "zh-CN": "9e1fbe3169f98f4a0cd8afa3d721f3b6bc9adb62a8186f7a5764c466fe852bef",
+    "en": "19231a4f498a47b0cffaa57d584886930ad4be35b3f2304f2c77727c5fc40d58",
+    "ja": "f21ecc7383c541b84684f87e003e0ae109952971e2e19f5972e6f08d673822a3"
+  },
+  "errors.lips.frameRecordFormatInvalid": {
+    "zh-CN": "81f24af66ad67fe2d8b7dfcfae373a4dd587f88b6e55a74b97af55ffb2540a9a",
+    "en": "ec358b161afcd3cfaf3133c1dbf9ec45976dcfd624ab285bae54603a95409200",
+    "ja": "c9c164a5a9a6f184ae23ab1922fd787151ee711d9f09b9f7d09510d38de05be6"
+  },
+  "errors.lips.frameReadIncomplete": {
+    "zh-CN": "13cce0649176a1f23647d01519a06ecbba6fc5a59868ebcfa513c2f3818bf891",
+    "en": "dd08f940b6b33735934efe89c6a2d67c0d6e0863818333eaad7983363cbad475",
+    "ja": "c11446935245c1f16be008802df401f0f3c63166c285cc0d9b734625ac3f34a4"
+  },
+  "errors.lips.frameRecordBudget": {
+    "zh-CN": "438ee2872f7283c6e963a6c32dcb2a19da2780dbf243c04930cd3a8fc80892d0",
+    "en": "0ee9d695bea72b54ae1a0f3e73bb749646907493971410a42e0ee31be631ce9b",
+    "ja": "a19c4a75998d124649de32724b378bf4a7752929eb301f90f437a807066926d3"
+  },
+  "errors.acousticSynthesis.unavailableOperation": {
+    "zh-CN": "6344d20a977d6ecbc3c8dab72bb6e550cbb16ab252fd5a0f04a1a6d278107ad1",
+    "en": "bca5f0173887a9c94f830a683b717ef7e2472621626e8ed56f60f638344df315",
+    "ja": "4cc8c299f4b424b0da6ff58366f04be94877b45873b16361215a790c593c6ac8"
+  },
+  "errors.acousticSynthesis.wavSizeLimit": {
+    "zh-CN": "091c0bbcf063b8d02292bc49e6944a79362f16bfa27e861889e5a057a719ea68",
+    "en": "779f0a9d766315ad6a3885f0192e4e350c57603805d4f02d87ae724b4efe221d",
+    "ja": "f25d1cfcb88ee038bd6d89f015fd52c2e9106fdbc6da46566edf6add9da737a6"
+  },
+  "errors.acousticSynthesis.sourceChanged": {
+    "zh-CN": "5db5a9fc6f398031a8a1bebfe3c9a00df09941c89186a6fd8b9d275bb559f6f2",
+    "en": "f37d5891d6ae7c93ee6702bfac0c6f39e560a4f53d65a30f2f627bfcdcf3e5af",
+    "ja": "618ab3742ef273dbd57c70887f5f661b8c94335ab123db2be60f8fd999dd89f0"
+  },
+  "errors.acousticSynthesis.projectMismatch": {
+    "zh-CN": "ad2f5365db4aafaf7a250b0b9abafd9f4dc555826b8a8e1e77732e98835e5e50",
+    "en": "4851df65bba78c1fc9132d55dfd048ef2ab5e4e4c2e00a44c75777194fb78f88",
+    "ja": "e74a7e9de1b72fab8839907f4c4ea8f1cc0c3033ed2bc86dcdfa72393f6c4c4b"
+  },
+  "errors.phonationSynthesis.unavailableOperation": {
+    "zh-CN": "08714fd533a6730bb3477d47a462de4733e42c439071300d72ec86af50e215c3",
+    "en": "1a8beabc06f42d3f80a431e543fe23feef81bffd59e60ae41d713c7d63d69640",
+    "ja": "b09110ebcc8330a80b3b767280637c6c191ce68f80b12f0c8903c7005c432f48"
+  },
+  "errors.phonationSynthesis.wavSizeLimit": {
+    "zh-CN": "b2f2b72c47fbaffb34f78414056254eeddc148649c3048dab59bf7a43b397f06",
+    "en": "bf0fde050ba77f33ffcc595c681725ce1ba6a4c233e10526cc248852cba0a301",
+    "ja": "1bfe9b8d0bf7eb3135206a23a6b546f42209b032344c4129e447d39f9d4d0f6f"
+  },
+  "errors.phonationSynthesis.inputChanged": {
+    "zh-CN": "62ac0eb2ab5265013e121f417f2db835a979a3d54422be720115d4defc7c7d71",
+    "en": "2e71b7a2487719752bcf064833a89b5b35087f4cf0ace5c367cbeac4146bfa6a",
+    "ja": "7a42f5b90344cbe581215bfbbd1aed66dcefae5b8bd2e44e4ec62fbeae216f1f"
+  },
+  "errors.phonationSynthesis.groupIncomplete": {
+    "zh-CN": "5a8a26baa219ac4e560606b82ab365b7e0d90fdabb5936064bea25ba7dc78b66",
+    "en": "4c0ef74794f5cd96423bd1f70b09a3dc3d556d1e3d75f6010afffa295b78216a",
+    "ja": "0201b31d76ad2d3855a107c9fd25919278208e09a956234ed6c4fff7347a2d2b"
+  },
+  "errors.phonationSynthesis.tooManyF0Points": {
+    "zh-CN": "fdaacfc594a2dfce7cbf0921aa68f67fbfb2e139240e401c95160deffd03bf1b",
+    "en": "6cb8f049ac27e188b24fea7645eba08968f649800445549e2b2a09a53d059174",
+    "ja": "10d4277d5292cc0883412577099de27276c61aa98c7e7e087373e96454141c27"
+  },
+  "errors.phonationSynthesis.selectOutput": {
+    "zh-CN": "862dac864402ab8052cbcbf25fc8a64788d116821810f9efa2bc60acf204a2c0",
+    "en": "f8ab1d6e871ae0c36f16f4254dc9b9cba8ff2fe45614b90c522cb47245f28740",
+    "ja": "1f12bbb8de194c203213015c1d560478b88cbd35e66357afa162f85aa0c4a3da"
+  },
+  "errors.phonationSynthesis.groupNameInvalid": {
+    "zh-CN": "30e332a88162b934c85eb8a3219be83df63b2ec95e0e4368ad34cbb7be668702",
+    "en": "fe741d574176e2cf6b7a58bf185d6a75bf70456c645c3d7462cc54917db0b957",
+    "ja": "4fe25f00f2a67c08eb174df091fbd3cecda9c6b170b183f9b4ff9e38da0888e9"
+  },
+  "errors.phonationSynthesis.nameCollisionLimit": {
+    "zh-CN": "82bbf4275244503d92f967ae5c3c6291071250966614870d5b9ae7497d71d50e",
+    "en": "fda3c8b78cc11bae770efd7cd7739c794e63c19196ab520f644eb4fafad128a8",
+    "ja": "4fce0a059dcdce6f7f78f2d3d7554936e287851226f7a9af2e6da74b5e0e2694"
+  },
+  "errors.speedPitch.operationUnavailable": {
+    "zh-CN": "8e3423932932aa85ad484c215e1aa9cfc1cd8b9c52504c12440fdd45822ed610",
+    "en": "25f4f0303e8715f95b518b3b5cb28b486ed05687b75f96c0c5dbe5bf60f6aa75",
+    "ja": "3c4d895f7b5c89c0471d9727df94d319eafdb671d8589ead31dfb6d9c1c598d3"
+  },
+  "errors.speedPitch.externallyModified": {
+    "zh-CN": "bae2e46115aec1fa029e20510f38a5f70f43b5a2fa131052a06abf3eb5cd70fa",
+    "en": "5649a1524ae8c3daf55b66910863f9c3d6c8abf4b59df68195914b606d96330d",
+    "ja": "4ee5ae0bd3747e1d3e3737788ef7c92b7e73732066ce8d49d0757d7c91ba94bc"
+  },
+  "errors.speedPitch.outputGrantRequired": {
+    "zh-CN": "30d5ca737e5910a101bbf45cee8921dbee1256d660e5f9131ee63d9b52147736",
+    "en": "d786e5dec9a2b4263e69dbe5e6dcf38b9330e3d43c77be9fa8339c78f3c0296b",
+    "ja": "9965e523f9d6ea3ccb6bc46b8a783cd40da48da0c5e39b5e067c61c243acc4e7"
+  },
+  "errors.speedPitch.resultIncomplete": {
+    "zh-CN": "8ec2301b3d6ad93ac714926af7ffe72515732ee1696a5e94ea779eb2763b44f7",
+    "en": "203a24d207098d55755019244b2c5e69cee263cf021d196ef72da01122069239",
+    "ja": "b2daa973261e1bd7340157c9e1f781bd0d5e4aebe150a7bffb181f27a5060415"
+  },
+  "errors.speedPitch.resultNameInvalid": {
+    "zh-CN": "ba6ccb86037f77d6775a961ae441649797da9e311d87e09314812c71c4a66f14",
+    "en": "6038503abf1968b76091eab256a8b81aaef049c98f1f999d10be7aa1e03a0ebd",
+    "ja": "04e05ed98a17a8172159d2250f7bf65bbf20c2befe29613d927c4076d3bfc3e2"
+  },
+  "errors.speedPitch.sourceChanged": {
+    "zh-CN": "576df16b9a59f6b4432acf17750eca492c51409695c9be9123e7a2cf07d22746",
+    "en": "ce23c03ff40277c58b63059909088cdf7fde33707f4a333310b483942ba9545a",
+    "ja": "9920cdca1a1aec5560d60b2e0062c38720c163f9824bd9e26479dc731a4e43fa"
+  },
+  "errors.speedPitch.projectMismatch": {
+    "zh-CN": "b5af364c6b08233fca229c44c7906828a701d2977f835726c8f82cf7502e4c6d",
+    "en": "4851df65bba78c1fc9132d55dfd048ef2ab5e4e4c2e00a44c75777194fb78f88",
+    "ja": "e74a7e9de1b72fab8839907f4c4ea8f1cc0c3033ed2bc86dcdfa72393f6c4c4b"
+  },
+  "errors.speedPitch.resultNumberUnavailable": {
+    "zh-CN": "b01b3c305514ef21ebd70a044f3ee3945abc544c7201c2e723f612c2d6155786",
+    "en": "0a0fef3b90687b2ae7984ad1d6e820273765f3da765f2231fa593e7def6e6fe1",
+    "ja": "86c35df02d1bff3f8d0c0c7e2685d28614e60e18ce93900964ee8c3c81761254"
+  },
+  "errors.speedPitch.filenameInvalid": {
+    "zh-CN": "1731a1d44a7fb1e540992745cd2f0e1b61626f52507dd688dc9d6316c2594c2a",
+    "en": "8a7ae560632147feaf59d96f3722083e9a448c222bad07fae3b18bc617e83044",
+    "ja": "fc0c829224c2567735a2b4780c8685c6f4bb97a9bf5871c9f3a3e591ff807e59"
+  },
+  "errors.speedPitch.filenameConflict": {
+    "zh-CN": "c5059a452f9fb437f73f8705d1e93aa8cd6ed5b7e24d3206426fba69214d41ce",
+    "en": "cb414c1688f2e2669fc2fef296537bea7976f55839d2720c9c3ed02c5d39801a",
+    "ja": "9154b6130b15e7f75a6389b1a959f268e39727d79111abbf32d66ac13ccceaad"
+  },
+  "errors.speedPitch.exportCopyFailed": {
+    "zh-CN": "5f0506a634e6fb102c914fa7d5c2940277ee623f5367f985213cabed896c60d9",
+    "en": "315db1d245d60610c6a05e4583995a07ca687c16e6d88b36781bf80783f2a450",
+    "ja": "fc55d59b99025cfc4221a7e2f52ff4124215a07e1d95bf9e96b1a46f63f30ffa"
+  },
+  "errors.speedPitch.resultFilenameExists": {
+    "zh-CN": "ba9b93d6028ce6cb65768e4f4b1e5df73e6fc65374c528c4555c088b9658b02a",
+    "en": "b8a1f9be1c91c1cca5ce98f59d0cdff8ef879e7ebe018c8e12599cbd5b4e7166",
+    "ja": "26a0b310e23266a092ca0e896246a11a03caeb71ca3d7183d5192763f6ac6555"
+  },
+  "errors.reconstruction.selectPythonEnvironment": {
+    "zh-CN": "befc43b32b0e1c1aa60a1c932df46d226ac87a8522c356e2ce7b7b712805f657",
+    "en": "4ab1f8b2e56b9b573ee46753b2a14e31a7d274902c73b3300ffdc2ff35e85b30",
+    "ja": "b2ef4f64210d3810ace619b5949e5e317c595ad9aecff10f3f5230004d441121"
+  },
+  "errors.reconstruction.selectFourCorners": {
+    "zh-CN": "364e1f1c14b2debc8d1997d98ba396c51625a8b1c3e398d683cb96a543da127b",
+    "en": "6f2703dad807284346d3b94a4f5b0b96c06d7b049c0bf70b91ee5843d50829b1",
+    "ja": "285e8a2c677ae9ee42b58263106cb29f618366d9a268bc8739c2d656b34eab0d"
+  },
+  "errors.reconstruction.crossedCorners": {
+    "zh-CN": "32f322783d1589685ac84bd5708ffc20019c78e49778c7d7ec14713a2df99b18",
+    "en": "32b431a210f5c85bb335b2982150be1ce20ccc89c74aa5ad0f5bbcca04b8dd89",
+    "ja": "cef4815892ac171eb1767eeecff4662a58f23627d969f65b1f1f47e976292a0f"
+  },
+  "errors.reconstruction.regionTooSmall": {
+    "zh-CN": "9a4841c871a4a03bcda26625cdb36e866628741ecb58f1494aad16d1902ae1b6",
+    "en": "5d0eaed5979ba002713bdb48a658f72f13c58bd2699933ec770fd1c03f79e336",
+    "ja": "bda973b340bec13e1cf1dad861fec7f9d6b69069328b9d6f59ef53291ff65392"
+  },
+  "errors.mfa.unsupportedOperation": {
+    "zh-CN": "7b55a35cc596a49081c3aa241da45f24424d15e0215201d1b47ca2505503897b",
+    "en": "5dd4b3af67be50726b8197a0cdb23a014ca555cc8ad98e3df97f25850e29d36e",
+    "ja": "e4e13350acc8d8bda85f2d01257e6fd007151a65655915accbf56ce34074c0e2"
+  },
+  "errors.mfa.unsupportedResourceType": {
+    "zh-CN": "081e92ab5513f6ab7879751b113d135bfd6c3bc35fdac52132a8348f622816e5",
+    "en": "3b91fabc6d9aad32fa2a36f398c5695db44b909ee211d19ed18d63ea1fa40d15",
+    "ja": "d20aeb4440e8fe1c5b07114ed443d7568dacb5198d3b6d4450782e5bfe289d61"
+  },
+  "errors.mfa.fileMissing": {
+    "zh-CN": "1530509897dfa3bf9a4395667a60da91383998d9793bf77755a48d36ed619f44",
+    "en": "6607142ec049b8977b88a3cd2dbbba67f346e6c6cd7ff041a646c5e051cdd2c1",
+    "ja": "f75ff46c9904749df6d5f1bb1e08444aea678d2f75143443a748513d4a82a06a"
+  },
+  "errors.mfa.reselectResource": {
+    "zh-CN": "522a2ad592e5dbc306c11cfcbae5af16ad45a047d01c17d84c6913b53d076f30",
+    "en": "cb561ab9da1cb3fd4d2cf3636634cde974e9ceb47b7796897fb3b3dec26f5703",
+    "ja": "db9081d35c4d2ef6ff28683644fb63606dcf4ff3ed2b2e2d33759716170be80d"
+  },
+  "errors.mfa.dictionaryEmpty": {
+    "zh-CN": "a894d3ecc223c6265c9f27fcce128cb2acc1be696f4cb6bbf84e8030662f86d2",
+    "en": "af6104ac60f66c0760d9f3d95e21019da0fa173936cc0243a56ae77a6619b5af",
+    "ja": "8a4d38853db95c01d58221bdcf52207fe56d3924a94550cb136795692ced1343"
+  },
+  "errors.mfa.dictionaryBudget": {
+    "zh-CN": "b3dafb9e97e8e10b8a57f57f15124530b24c25e560f22d11e9775026747b0f98",
+    "en": "48b7b4ce7ed223067adc7b35955a797084dc2abfb0a1a9862319e1a9900276fb",
+    "ja": "3cbe1ebc3c9f172028c959b0a138164d436e68c7810d5dc3708a3e3a869da9a3"
+  },
+  "errors.mfa.inputTypeInvalid": {
+    "zh-CN": "54a4f6f75fb59749060a13293c91997ca96df6a5111568a718f6937cbf3b0de1",
+    "en": "fa3c9da5ea4baf258a0c8cae753f5735c53d64a7012e984d541495d5868bf2f7",
+    "ja": "e510ed6323d9738703dd102bb4b18188cd202caacad61bb8d5d253deb43d6f2f"
+  },
+  "errors.mfa.fileBudget": {
+    "zh-CN": "97084f43be0fb80af359d1955bb56aa3345bff2165328bee1355d67eb69ae91f",
+    "en": "ced4d9c8e635c6f6a53535a9b90007401fc7278f8e12a57a3b9b753c24bf62f8",
+    "ja": "8d6b612fc11f9ee49ab6fca910f67f2301ff8509e8045208f714d89b833185c1"
+  },
+  "errors.mfa.transcriptionSourceUnsupported": {
+    "zh-CN": "7af8343494232bfbaf64a5cfb9cffddd756a78c9a2299e4ac879764ebea8b6cc",
+    "en": "c94b11f1de8d355633d9ea826b6131c8b04f0ce3620193efbe6f09c96c2b8e26",
+    "ja": "46a70fa75de5b6f600e9caaa76be73f0c67c0c89ccdc869b1a0f3d0ecbe0eced"
+  },
+  "errors.mfa.directoryEntryLimit": {
+    "zh-CN": "6cb5bedb52bb023ef27c6718cf5882ab147c176513625a5dbbe0f8d35e2fd1a4",
+    "en": "7f0450e9599f8e7471af6159616631144266d09f915c2bef729319f4eefcf57a",
+    "ja": "c04aefe8a713e94d84f2395a5f28f2d85e6d5c573fe6edd7fe2e6494928aceca"
+  },
+  "errors.mfa.noWav": {
+    "zh-CN": "508c5bb40a35b472408410e92fd11229ef6d840bd6dc3c16d9e8f36fbc6e94d5",
+    "en": "3f45704121052ee821b88bdc4447b79ae3956a2fcc11c02162cc49e4760c36d6",
+    "ja": "49dc20f830eed75c555666408e36f0878c610f77cb4aa61c751d9b073ef14d10"
+  },
+  "errors.mfa.taskTypeInvalid": {
+    "zh-CN": "ab369e3c3c9a435c08d6f56ed92399b47365cd8dabf532e8f3790de558122ecc",
+    "en": "721fd65bd8b5f0b3310344b96a04998dd32d24e0c9568c5cc642a9678d20823a",
+    "ja": "99a0873b2ada2ab373f5ed6965e2b30805c9cf4b1583e75d53eb2ae4f26731e2"
+  },
+  "errors.mfa.fullResultUnavailable": {
+    "zh-CN": "89771abc347d142203c2ccfb24f13313ce2562129fd33734ca7bb4d982bbd54f",
+    "en": "f3edb2807b261f556c7ab2701705576b1a8f19195ac3a2246f7dbdcba8de42b8",
+    "ja": "6b0b17a7f1dc735506ba796f631cd8bd4cb10cb1af79f26d71f9a41fd49856be"
+  },
+  "errors.mfa.componentOperationUnsupported": {
+    "zh-CN": "8403134a0db0745e8e7c4672bd4b81ae4c80192a4cce4f5158d69eaf5e04446e",
+    "en": "5686f7a366515717839e7cf548f54d25581e736197948b4b23e04537f28c151f",
+    "ja": "18bbad4250196a54bd2ebc0eee7e037dd6658d7ffbefbcf948a86249c30a1316"
+  },
+  "errors.mfa.fileBudgetOrEmptyTranscription": {
+    "zh-CN": "125f1b7b2f4dc8758e38b1727a4ce0664f02758e2185a0bd70b3f1c4a7e38a2b",
+    "en": "439abb671a92fa840cb4a4b3a9599ad0a1fbccd509bf229d36f880a1b8d6f45c",
+    "ja": "91df37aff5cc3cfbcc802420ed45de8bbf946d71e4a5664ea74c98b92d5a16e4"
+  },
+  "errors.mfa.relativePathEncodingBudget": {
+    "zh-CN": "89a2efae5a5a3f3fcc6b2e823183ce642940bf5ff6fc8ff2bf2ed468a254877e",
+    "en": "a2c4ad4cd89aad7c9d36ad8e225092e57f7ad6ebe7004948b90bb033fb141106",
+    "ja": "8d95d7ca4088b23eababff6e0ec33898f3da5212527acf3417cd5d4978834ae0"
+  },
+  "errors.mfa.taskInputLimit": {
+    "zh-CN": "74e018d65b0acf49961864c92426a11fd1a184b702d2dbf8f84a900ffb66c2e6",
+    "en": "eb2a8b79051a6fa00b7bf56f9e23178226bd2b3e5bf6f774ab6ed70541a9fdac",
+    "ja": "e5d5aa7828dc0c7dd50b4179fd05fa765fd9870b0fc2aa2899c275b718d0e5fc"
+  },
+  "errors.mfa.saveValidationFailed": {
+    "zh-CN": "56ccc32804848fb7356f93bc7b77ef181358eaab627e3e9625fe879699f99c56",
+    "en": "5632be265cfb1932eaa8573b62e3d680468c9d4ada265bf7ffd94292b23b9e7d",
+    "ja": "5c1720ca778f63110085a717dbfed7f0644d064c3bcc39793609243494f26c7b"
+  },
+  "errors.phonology.operationUnavailable": {
+    "zh-CN": "27888bc11d375aa2c1b227e4d65c91876d8e0d6c1db5b93c73fa89efbdc4f81a",
+    "en": "4c4c758d9d713e8e5e1f89f69d6725897ec5984e6fe473d4a19b115b1638118d",
+    "ja": "1fa7a666c66b70626b173bbb6f011306fd8030196ba5d352163a850b306263fd"
+  },
+  "errors.phonology.resultUnavailable": {
+    "zh-CN": "d609bc89d634fa731ec08e3fef812910d6bbde21466d68647a57e15d0d071d83",
+    "en": "07f1e8d67ccd2567ee598eaeab3a9c796c6ac16ecaceedfc80de6b4005caf97b",
+    "ja": "262194513133f80789c95d59129806fac1871a8d2b8ff6517e51a3f4d3308095"
+  },
+  "errors.phonology.threeResultsIncomplete": {
+    "zh-CN": "cf987f52b82e30d58ceff10e31700e63f6109daa98fd6e7b645e4d1f02eec1fb",
+    "en": "a899e19af1ecbc0f68551d2c760babcc7b7cfaa494b3beb329b8d55675060ff8",
+    "ja": "1df7b84fd14070e460df1f789ad3b9ee966727c0d0a565fe4ebc92ea08cf536f"
+  },
+  "errors.phonology.fileSizeLimit": {
+    "zh-CN": "b4c13c4395bc02290be2a6d34a3e2c7e75bc62695f4dc5dfba7c07efff16b509",
+    "en": "5aa9dfc91a6bae9ff44dae58d0d90094b1dd98b7e34fc494fdf58bbce3ca146f",
+    "ja": "b8ae4756707c117732aa65c1a0252606452dcfbebd55de118539980fa9d3ed14"
+  },
+  "errors.phonology.outputConflict": {
+    "zh-CN": "f9c7613899ef0d99016cadfa75fb13b68afb309028583ea85571d40f2f6cc8e2",
+    "en": "f18bc7d7dad0c19b60079ae7dd3c9abf3d15300725f43e4c0a02b69fac425088",
+    "ja": "32735d4c4c1c8100ba2570670b27f7e2b299450dd23df275596ecf687264515e"
+  },
+  "errors.recording.unsupportedDirectoryPurpose": {
+    "zh-CN": "5961d2dff483adc547a1033b58e309b188ef66a139258cc6135329c873cd3efd",
+    "en": "eef5f0592be506be0a523071e939ce83429265af5c005e1656502cad0c120914",
+    "ja": "99d6d97ec1f848f4e6dd711234bfb38564cdad274f20569b9f837ee0909d2378"
+  },
+  "errors.recording.requestFormatInvalid": {
+    "zh-CN": "f09dfd77045eacd210ac819452bb1eaaa98c8fa70e3ff297335c2e7ce6844f7f",
+    "en": "7a4423487aeb5a0a332ae18705537f26236eff2759e755730710d03d39501ab1",
+    "ja": "83cf492069c9fd8f24a773de03fd89c05042f085e4a1546202a1d383b05c4dca"
+  },
+  "errors.mfa.closeAllWindows": {
+    "zh-CN": "666b54455ef0b403f327b42279d250d90bb22005c74b2402b0ca35de96033698",
+    "en": "20d7724abd78b47c88ccc6ec86bc1568bf165162fafa4d464fd6585b26e064f4",
+    "ja": "d306e851b45af23effe538457ba32e3d7e2c4bc3130f0c0d11f68a18eb072f70"
+  },
+  "errors.mfa.registrationUnverified": {
+    "zh-CN": "a07135952e5b8a27ad5e879d6c7bd6dd7010e851edb74283ed17946ce71e7e7a",
+    "en": "8faaa7ad220bcc60ba2d6ee3ed9f16d0d169dbcc8d77e4f4be311d502346310e",
+    "ja": "3f1845317c7569ba01b4176da32590389992db516a82c1f7a8378be1bcca4f0e"
+  },
+  "errors.papers.storageInitializationFailed": {
+    "zh-CN": "9f6aa77b6435eb32c54e9fc222641c68fc55e1fe5e578afbed97ae3be2c757e5",
+    "en": "bba060884381a8b98879c5ca77f47dfbb065d7b0b43d44f7622a076b34cf7b16",
+    "ja": "573312949dd19289379b085eb2f63834809c7948bda5fdc0dc1b6d22a978adfd"
+  },
+  "errors.papers.invalidRequest": {
+    "zh-CN": "32d418c3130d25b93d9596f97d96f3755c31acc11b566794df4dd65e2edb56f4",
+    "en": "f6ce4a67f0c20cfc59f3c4e6979ffa98485277ddb3a614c8cabd1fd2d74bbb9d",
+    "ja": "c8a709383028c6b09ab538f8843ca8126f17958c7bd1db15ab6b1ced45f06548"
+  },
+  "errors.papers.selectPdfDestination": {
+    "zh-CN": "a6486d1deee55f3bb890d41448069eadf84f494eb2f3c5fde047fdce0456d998",
+    "en": "a59ee06b9e40bf2d043686477ca7339faed4db0e334b837eaf3f43e054a03446",
+    "ja": "e472aa97dbe4a12e94cbb03b3e32fb2412edf1fd6edb56abc6c599130e6b2a47"
+  },
+  "errors.startup.applicationIntegrityFailed": {
+    "zh-CN": "eaa361c600fffa5d11ef8812d8df32745125cfc3fdc89bb016c3027128d8df10",
+    "en": "3db699fe7bd970f9a72b84abf57f8d9852f3f1ff309d63238bf3f1af8f100718",
+    "ja": "109d4e45091ba45713e150658b1399f471e5148e8ab37c242e183b79255ba8bb"
+  },
+  "errors.startup.cacheCleanupPending": {
+    "zh-CN": "43bf5d59df1785dfb1f99e86e587a30c09e7e0976692ef83f90bb3069997e3b3",
+    "en": "0d1165d6145635551850c09af3eec58be80bf3abd4fd81859199fcf6947e0dee",
+    "ja": "9b3fd1ad04e725932c039322f0533abd29dae34d8ec69c8b09d0242f222bd087"
+  },
+  "errors.startup.insufficientDiskSpace": {
+    "zh-CN": "7f9a21501b56b3a00a5cdd01bcffdfd9acc25f7bb56ea08158df697ed2d3af72",
+    "en": "f0f0dfc9049483051d0afe18f375e01b54f1ff6b591858e98596713c848cfe27",
+    "ja": "e07c66aad5d4dc8ce461bd28db26e6ccdf55c54a585e5b513d7313ad61bb1ffc"
+  },
+  "errors.startup.cacheMarkerConflict": {
+    "zh-CN": "4de349b1e23cf3b464562a8b7f053bbf49e282ab170f5f773d3e7e26db0d24a5",
+    "en": "5f5ae3287c82f203d4851f32148c8d7ba3e3a6219a3ee6faacdbd2360381e3c7",
+    "ja": "c8f5d3027fdf55336996f6f99e3b178dd1e757a4ef7ea443671d307a6c86cf17"
+  },
+  "errors.startup.cacheVerificationFailed": {
+    "zh-CN": "3983e113fdaf81db4626e8405ee828884dd5946a1847c0f7f97a746f6508c45e",
+    "en": "84dcff5cd4a17873857b9b94a9b2be5288ec0aefc90471b57b68b6c6ee0770c1",
+    "ja": "1a1ce38df571172fb03ec05f384cc07f07e50af9c8077df43ef96989e3340e27"
+  },
+  "errors.startup.cacheBusy": {
+    "zh-CN": "de57a4672e72a670029b3f7ae0588d546c9c6b2c7cc4385f672f3f5522b11b3f",
+    "en": "fceed5b34999b3463ce76ee8a83c549a7c5e24b30a8f2444463c5a3ff5d0893e",
+    "ja": "b54ce6f294c6793a673fecdba349d322ae76332359305dd96390e0c4a25cceff"
+  },
+  "errors.startup.iconUnreadable": {
+    "zh-CN": "316f81d09c663dd008d51ee2f16e9bfd089581c7f895f7ba6df8ea993949eab8",
+    "en": "ebaabd408f1c600595be0d99c4f7f7fee8212e381bc165cce6ea0ad4ab37a607",
+    "ja": "eaa6042ac6a616fc7c05aa7454d1aea705d14fcd2e9c03bb10da1984133f3f7a"
+  },
+  "errors.startup.preparationWindowCloseFailed": {
+    "zh-CN": "5de507638d2ce684498526f82d4c7ebfb2fdd7140bc0560cf629eeba3ab3cb12",
+    "en": "53a399b5a0f40548eab7f6e533432d203c4438a06aeed331415ec709a0dac526",
+    "ja": "7370249ff85886f569e0f836984f90a185ad2fc27fa8cfabc8d642146d4c58dc"
+  },
+  "errors.startup.noticePaintFailed": {
+    "zh-CN": "d7e6babcd8748de9bf6fbd246096dd599a57d066952966f666796dc9f251d5f4",
+    "en": "41a2262bc6efaa90342d311dc8dd9b356cb31954970cb31c09d0247cc4d6830e",
+    "ja": "2f6e0e6499551cec9187e70139f5ea7313a3f2d10197bd7c390b3933624ec89e"
+  },
+  "errors.tasks.unsupportedOperation": {
+    "zh-CN": "590ea76b52d4b7e94dd64729cada7753f9ae18dbd14f61b1a91c969fe618010d",
+    "en": "2f5d6899cfa1b635b3ed8370d85749cf8d45725b2c330ec52344b7704afdcd0b",
+    "ja": "1e9daf20bbdeca95d47f808404ab6cdaf0ab90ff845bb65a6e4c1b1b3a1b1c0b"
+  },
+  "errors.tasks.parameterResultFormatUnsupported": {
+    "zh-CN": "103d6b08b634a8dff3aa214b1b24a398b73154c79bf0216b4893daa4d618b075",
+    "en": "515261f9ca602424c29266eea32bcf1b48fe023095c70b8f5531f7bd946a0dd2",
+    "ja": "2386a16d2d1f6ed0a4bb7da868c7b88de208a5f836ee1f2702ffd034634d7cec"
+  },
+  "errors.tasks.resultNameCollisionLimit": {
+    "zh-CN": "7b90693ce60d2be76419b5e3dec8e0cf00e2e5760a336f57f085aee997696b8c",
+    "en": "6ff2f4f40ce2b56adcb0098ccd95862f40a56295570813edfbfd4a540de787ac",
+    "ja": "3b516d6b6f39e51ab63bf92e56734599e706cb83b5d2145482674ca56127efc0"
+  },
+  "errors.tasks.selectLegacyLipPkl": {
+    "zh-CN": "dc1c6f46abd1ed9deee623b81e0ed9517c7da6224a2e70f2ea3db10837427bef",
+    "en": "de9678e471bce8cc7ca8b73cb3c932a8279d10b75c08bad63eab03996e4f2630",
+    "ja": "25bde7d318f38d4af37b751cdf549887466653ca174a3dbb9790360b71890572"
+  },
+  "errors.tasks.conversionFilenameTooLong": {
+    "zh-CN": "2653390ec84f445b9e22fa2cee63d829147589e7320c0d0e184d0929047cb9d9",
+    "en": "6cf16e980153574c816e5504e6eb99606d5cf3bf22d958dc019b90fd8946622a",
+    "ja": "a0b2e3a8a7523ab6da2f3967cd0e9616f8a2d51a79901619d84a4170dd830adb"
+  },
+  "errors.tasks.timestampAmbiguous": {
+    "zh-CN": "0cc4e843b460c3ad8a73c93cee1ebac27583ea47ff0bb42587e0b3af6cf824fc",
+    "en": "f908f5f6055b48e71d763d53e0f8bc40e8ecf32fbc2554449e3660aff2f603c8",
+    "ja": "733f2ea09f2451f57fba0be904f861b9f3737b8a85465d24fdd1b5d8e20dfb0f"
+  },
+  "errors.tasks.timestampSizeLimit": {
+    "zh-CN": "980458986bd863a106b2776f06dd91f2a74d51323842860c697a6d5955df01d9",
+    "en": "b35acefea8113edc485860d42f55032994fa1ef6087676236757a31a07e20a43",
+    "ja": "260aa28d5c0114de2e951641ddac2fa6bfb22f8af0715bafef4d61317a1afc27"
+  },
+  "errors.tasks.legacyPklChanged": {
+    "zh-CN": "446efc9a79646b02840cd8a5b7e72f29600ef714cb03c523b526c97bcb8ea6ea",
+    "en": "5aea1f96430ad76a179311c396bb78dc12aa4a9137420f6f086a5de36fc0fd42",
+    "ja": "675279ead9019ff3f235856122d3e5e24165bdbc1ae8b21a9eb301250e49bece"
+  },
+  "errors.tasks.timestampChanged": {
+    "zh-CN": "0d00599c9a8f167d750013423d28e3d6db7c0d6572718c54ba474a8766f3f88f",
+    "en": "80844cbf9a6361fe9c054db555540fcbf79658bfa39a98c6e3f086156efd8fb3",
+    "ja": "449199bc4c6adb0b2711b4c50c45090711bccf549e0832608562d1312acfd42f"
+  },
+  "errors.tasks.selectResultsDirectory": {
+    "zh-CN": "1f54e42cfb106ab1b2d73376e87bb99879a0452e0677624c3b52b6187b33e6a6",
+    "en": "b303a138ca93b2010a22bc1a8b21b66cedc2e7127fd87b84842319e205097f80",
+    "ja": "d6eb833aa28f976e5f344b96d5c5dea612c214e58fd02d961d54bf73ce426556"
+  },
+  "errors.tasks.historicalSubdirectoryGrantExpired": {
+    "zh-CN": "a0f9be4ee58b0a4a089c94439afa3199580b549e9d52314eb1b1ed557515403a",
+    "en": "3b9a3c6268c386ff7a1c30f2147d694611ad296415c14287b7dc78de4399c16c",
+    "ja": "55a6387d144f0f722dbffef4063ebb881e5fa9997f8e0c325a6df348b715cbd5"
+  },
+  "errors.tasks.outputFilenameTooLong": {
+    "zh-CN": "cc5ac5e9fe0e1e95669a5ababa406a7a00b1df406617089b7b542dfb6cfc3444",
+    "en": "5793b5d00e6003264ec4c4cae0243dec6e1c63211be0cdf8b43493f110cbd235",
+    "ja": "76f03ee10b2bc87d20e31256611bb241a51230c572d37dce7f6c95dfd54e7fa6"
+  },
+  "errors.tasks.audioValidationFailed": {
+    "zh-CN": "454b1da6f5fc9014bf06e7ba5e522f23beb333534bb0df6542f4865f1fcc638a",
+    "en": "ec2f01e059c923708655d74204d0660e869be81b323559dee99295e16100fd57",
+    "ja": "7a6cffa1e8e5fd769e28953c9affbfd7fbd0be867d7ef6b203d14b460d0ee9e6"
+  },
+  "errors.tasks.analysisUnavailable": {
+    "zh-CN": "60b94d5f48bdff7c86715b1818251f63cec27ae4771e01c117ad80fcc198803b",
+    "en": "2a75b2ec0a4b7779758c87c8736e4f4c540aad83e7be9366fe6c0ed69d98a739",
+    "ja": "f435f725a00b1cca98324e06e74c7dd5b89ec7b26f90ada80523a01067445ff8"
+  },
+  "errors.tasks.resultFileInvalid": {
+    "zh-CN": "b91b0557daa0cbffffa2ca96a72c2cb856b2d394bee5d4167a33c833e9a44616",
+    "en": "ad83ee85dc64eca8bb30e9a42cb3a136727a5f47cbaaf06236583cea615e233e",
+    "ja": "268d06a6bf96bf3cded847c34595cde84a3e7e9c2e47480d568ef816f11151d0"
+  },
+  "errors.tasks.parameterValidationFailed": {
+    "zh-CN": "780eb76ebc35e22af679b083d22b89fe0cd255cc90ef7d8047edf5d8d349fd47",
+    "en": "cf10acaf2dd306fb1e3596e3a89bc74efbb069cc31259040b43150f37e20d874",
+    "ja": "0befe5afa8eec5cf08dcce35786d390728264939d7fd85dbdf4d315494583de3"
+  },
+  "errors.tasks.batchRequestInvalid": {
+    "zh-CN": "2021ff7226cd4ea6bf81cd3cb369b2dfb9c91e58ac21e87ad5d6bccaf1a1ef77",
+    "en": "5d0549a4742d3081d0436366b2b60c6fa3686adfc4701a0864ed0bc8eca18294",
+    "ja": "fb7494f81d8ae937c2b978b7dda15a916ba8e61bf2fa186b71324bbbc14eb0c0"
+  },
+  "errors.tasks.lipJsonExists": {
+    "zh-CN": "b4ed076976f7c0975291cb84d0e498e03461046360a186edeb4a50bf6998f212",
+    "en": "9d83b385a14dcf8ae468136d9c9c0cd4e7260ae88b1c9b598a06d80e9fc0a2a1",
+    "ja": "db01c47af166f4afd982e83b2eccf3d3ab23aa416d7054db3d583c72f0b23da5"
+  },
+  "errors.tasks.cacheCleanupUnsupported": {
+    "zh-CN": "bf072ccd529ff1e090c89e99ae70ad98125dd5ebc2e57708961fa7c1450f32f2",
+    "en": "71a0436a8bcd782b645e01f35777170bc32121cece87550c89e733da00ee52f0",
+    "ja": "56456476ac4e1d3841485f5ef8475408d776a787d55296f302f8532d8111ea04"
+  },
+  "errors.tasks.associationUnsupported": {
+    "zh-CN": "37225e984460371721a94bfdca7eccb5b4503c49bb1270cce2f79924b507b254",
+    "en": "0ee539f0f7e17db959d3ad73ab1df39a6cfee45c5795748609b736dd8ea0df46",
+    "ja": "6c2469ded6aec0534128cbdb6789e00c5f003abff899689915909875cc68538e"
+  },
+  "errors.tasks.vocoderIncomplete": {
+    "zh-CN": "647e91244a60f24733e9fe30c9237e0bd7798c682f66baea08f088cdcad2b7fa",
+    "en": "985d9df20a319499389f059f57a12348ace6589d191d2c0d82bc68e77ec4a6e4",
+    "ja": "2e5e6835b8f08780b7638a6dc0f350626696e4a327411067dd89988385d74d69"
+  },
+  "errors.tasks.parameterSourceInvalid": {
+    "zh-CN": "2cc34be648e11806be6e732ca8089e6ac239d8eb13b159cb0ee7db3f84aefde3",
+    "en": "07046dd421dae815fe3bf55166ce831b47bc63524c3a510e51fbdfdcea2c4454",
+    "ja": "d5d8b4879d77553f04eba9c5ecb86897d61f87e045d28a74181cf454ac7481dd"
+  },
+  "errors.tasks.sourceDirectorySaveDenied": {
+    "zh-CN": "19192e486effe583d9b951d90008d8b53d961586d3f09013b5e1f8aba5fae761",
+    "en": "64fba644d04547e87119e63148cdf900df9c59e696696212008d42ceb0b2f8b6",
+    "ja": "691c33465b85bb2841107e1402daa07eea43b7be76f0e4f12dafc5c1e100b068"
+  },
+  "errors.tasks.outputFilenameUnsupported": {
+    "zh-CN": "fed61e3c1f1648e3ec39c8f6fe5f9a9a413475709e665b55a3c62d4dcbf012b1",
+    "en": "5753c73c3a6fc65a9c8bb9dac76c619b3b86be83a1c6c7c11069cceb8ee3e3e3",
+    "ja": "7535e1d5e2da7e0b8cc34d395aef7e1f8b60feda341234eab3ef5311989ff662"
+  },
+  "errors.tasks.outputDirectoryChanged": {
+    "zh-CN": "8a302624175d0986ced29b5351090ee5d2db3b19971cffcf4672632e9140d962",
+    "en": "586a51f17ea116c8ddd9b6a5481bbc1d7d6397cc3f547905be5e9ac61b805234",
+    "ja": "fb0f26cf66c40e57647c48baa37769de99c8c704b5affefef52d99dbcc7a58be"
+  },
+  "errors.tasks.downloadIncomplete": {
+    "zh-CN": "c4c48c4d4ccf2450ec4fc7767204124305f006159f80881f06d761e0c78f9592",
+    "en": "c26b1a4bc77fe0ebe6eaef09c657d1cc76a51074a20f23ba8543af8555719097",
+    "ja": "1d768c2ad29b7a62b2539f524b2dc144789f538df3b0de8c6c36abeb2385c53b"
+  },
+  "errors.recording.writerNotReady": {
+    "zh-CN": "b18279fd33970cfff19585b7bfa2146923a9ce5e9b18f2609bc17b4f34cfad3a",
+    "en": "11d31586a70b6fc0a3c90176a4c72e3cf898f0ef8209d51f74ce2f45ba509ba4",
+    "ja": "90ed764afcdbed93f33ed1f68a5dff36bdbf312dc905ea95526fdbe05722c23a"
+  },
+  "errors.recording.diskSpaceStop": {
+    "zh-CN": "7b0144310157b7183d32109ec15f232e343c3f40e02d70faea74ac506cc87c8b",
+    "en": "cd7db68debad18d51aa4d0cb69d9890dc97ce9a43330d2416c4e8c351473cf0f",
+    "ja": "76ae3ead8b45f2ee408bff90af730431d23b065357d7c4db5d8c50506d2eb02a"
+  },
+  "errors.recording.writePending": {
+    "zh-CN": "b68118349222be515b03fa9495d2dbc781865411bc43f46bdeff8707024ec3d2",
+    "en": "ef9b310366d0fd18e6592c92c9f330eb2685e10c5abec6287e4d21d57de78914",
+    "ja": "781e0d06770a22b88e01b747feac5a0f151530bacdab66f20e20061ee6fefb55"
+  },
+  "errors.recording.sampleRateMismatch": {
+    "zh-CN": "ae57e506d51084716af79533d33f0d5e4a3e95ad7f40df114ae45ad51de12247",
+    "en": "e12bcf8e1b3dcbfff3addb5a2949356aabf02250fe7c316d073b12a3ba5d6933",
+    "ja": "c859eac857f93212bf0c6a41f89b6b76935d4f07e99f8831abb852048498157a"
+  },
+  "errors.recording.discontinuousFrameSequence": {
+    "zh-CN": "8c144a2b55ff3d0414c708e0b33e469382b29a17965ebb1bee29eff4f41f026d",
+    "en": "5dbb01a685b7b48879aafe1104f3444382903c1d3f52243f3282c770ac541803",
+    "ja": "e161954bfea18b737f734e51f75d1e8511161d230d96def10c3dfa570d7051e9"
+  },
+  "errors.recording.nonfiniteInput": {
+    "zh-CN": "95222aa46c49b5808f5ce67e01e9606c762066939d1367e8c0070e3e0b146bca",
+    "en": "7764f0cf5b24b2b5d3b63456fc295c4109fd85fa7bc54375a0661d57a25288b9",
+    "ja": "7272650bf8f00a746d58d136ce8e7c6130723c0b361d7dac11e94e32650b968b"
+  },
+  "errors.recording.inputStreamNotReleased": {
+    "zh-CN": "61276f02dcd9ed41debaeb3c407e02ffcd105ee2494d4514c1bdeef87621377d",
+    "en": "40cfe5618bb042d75ccc9985995132b36362c006a01d21adf6c4e9992b6363be",
+    "ja": "60d7d2e24445818333f810ba145d2daddb1794016bc0e4cf0236da06a5387800"
+  },
+  "errors.recording.inputDeviceChanged": {
+    "zh-CN": "34e5fcba9e5e2726d66df49ee2668ee816ce67e9c81b52c1f69a33693901f61a",
+    "en": "cd8b68062f5491284932e7ed6104e85eca41baac71cbd8020c2e6ff61f3a233c",
+    "ja": "db0e4c36e1c7264bef9766d1d855fff8b0a5a3f4b8a1ebbed12d4a00215cdebb"
+  },
+  "errors.recording.inputFormatUnsupported": {
+    "zh-CN": "8e77833dd5e2fb9222121d012fa18047524cb29571618a58184eed32b077a96f",
+    "en": "6a83abbd39853a288b48da183071be0d0600017d691c53bab3b54c0ebfffe1ab",
+    "ja": "edfa8f706f597afc2db66e1ed64cb181d0ba560058789fd79b9308aa8de3b92f"
+  },
+  "errors.recording.channelRoleRequired": {
+    "zh-CN": "ea01c382cda96719c03faa8a66129039ef89833a8abfd28a5661e51bb8ab7bb8",
+    "en": "5d3ee0e2eb2cbe0b94ce0520130f723ea7cb6be0c1fdb90da91c8aa106f8a206",
+    "ja": "c71c3782a32b06866c93eb1a0a2a421e341d353098c5eef9bc7f9c69289bfdee"
+  },
+  "errors.recording.digitalGainOutOfRange": {
+    "zh-CN": "4dba14a284ad0ee9d61665c8c5c17bbd7672cd04b04c583b8455138b49b09747",
+    "en": "9dd1b9affd71028c45d3016f6c16d5f235a2aa4e6c93c48a0a8747e94649e316",
+    "ja": "5ae474430d1a9ae8d3c7353f15b617b065ae58433e9dd0a1026a7df2434c9ee6"
+  },
+  "errors.recording.selectOutputDevice": {
+    "zh-CN": "ed5e07674de49a0b9fe07382dca3b3a52107259578ecc98532c43b9a153d3932",
+    "en": "c142dc74a0ab68f4b58f491713cee3b621372acc2ea2c164d19b21b3523f58f5",
+    "ja": "0800373e470c5355e3b7fa33728b9366d02cc4fe91560ad8950c466e9af96903"
+  },
+  "errors.recording.auditionSettingsInvalid": {
+    "zh-CN": "11839da0739e75d08bb2d39e147349ed2bcf18171d6a59fc246b6bcd7813980d",
+    "en": "46a31be9abfffc137212b3733f10a2e8a415d3b2cca92804d13e933828ddfa5b",
+    "ja": "c025213ad5743ae93869a2fd82a7e7488db14bb8fdf3abe5df4075ef39147a1e"
+  },
+  "errors.recording.auditionAutoGainBoolean": {
+    "zh-CN": "7fb28f65e9c3f7c138f5ada0a903c20ddd9354452530de5a7824e98ec95f21eb",
+    "en": "a2b8907b71ea40582230a5258b2b429b49aa2e472aa3722ab735606c70cb4234",
+    "ja": "50d644e0002ade1bd915da2a4a3720829e38db3df4be8cf2903e13b0e718fbae"
+  },
+  "errors.recording.outputStreamNotReleased": {
+    "zh-CN": "8bedf746a694d2e0fdec197576df673a06764e1c1841cf8056f0fce51c6b6fce",
+    "en": "8f24d7aab26b6b662d0da1ec62da03d1999f7ca57af514f8f914888f01849b2a",
+    "ja": "80e33d0ae0474703f12d2168641735d6bab8430c7e4079d59d36056e4d472722"
+  },
+  "errors.recording.auditionReaderPending": {
+    "zh-CN": "108d649ae65fb95b0f1f7079398941f31153887d4f6039c864620bf898441aa4",
+    "en": "c814e783b1abaddf1de2432f0c0cc7bf3e195e098be6a40116a0f1376e2d1c00",
+    "ja": "8a3976f9da98ec1d4951deacffc040fc49e2d31d3a99e9dc38633e69f322a466"
+  },
+  "errors.recording.exportRangeInvalid": {
+    "zh-CN": "7d841d5d1e143a0dc44e99d3baae76e601c81a0259ab71a74af57304d9ca82a0",
+    "en": "8dcdd1055d52b626c7e49d8ebb90909c6673cfec8bc3110a7a9dc079c52c7be0",
+    "ja": "c99793fe56d8c2e89ed2bc27c51c263f4aa08bad4c61bb9313e0ca65c8681561"
+  },
+  "errors.recording.nothingToExport": {
+    "zh-CN": "76debe800a3bb36b777d589d937d14bdf55f4fa8d4f39923b251cb731b947dd1",
+    "en": "7f57cc295adb72d676c28f7df4430312d29dc7fa839683fdbfc0d6b097ee8a19",
+    "ja": "bc400bd0ce5802d76a97249b3b0dda72a6d0b56774d6e12bef71c87dc7269a6e"
+  },
+  "errors.recording.selectTakeFirst": {
+    "zh-CN": "48ec14e4d93d57b2a42bac305bbddf4d0832a7d19a767c3abdb489a9ec0db990",
+    "en": "fb9e7b4819b3a3d8a0d5c190bb6956e48f2b3a3db529dd955995be9aaff7291d",
+    "ja": "0589769fd5ea994ed157c726d645d87c1c4623f2436762d76310ebfdd19ead87"
+  },
+  "errors.recording.processingRoleRequired": {
+    "zh-CN": "3b6b2ccc3b7fe7c9c49abcd33833a8d03c0218eff4095c770e0617a9b8a829bc",
+    "en": "474fab6e82865b1bbfa7702da70583a3fedd57246bb87e8eca96c0b61600faf8",
+    "ja": "2282fba1ae1b86b5d8779a87c17dc5270cd2370a3659235072bf8dcb9c8babed"
+  },
+  "errors.recording.noMicrophoneChannel": {
+    "zh-CN": "a8be5d54a5a1ae1e8ea58d3fab31da819e632fcf91b56ea9c23734401f9429b8",
+    "en": "ebd2411a6d68769764549cdbdfd87a52d4eb62d8932552386f2a64c5d4db3ee5",
+    "ja": "912ab01669c304a382a7346d2eb9e70b9161186278afb0d5b4b20ee0e72c8c13"
+  },
+  "errors.recording.wavFormatUnsupported": {
+    "zh-CN": "b2e7fd19aec64f2b08cc90bc77c966ffc5670e9d690d68a28c5056c38c4a17e0",
+    "en": "5a97d685d2cdb662ff6651a89ad9d9fb7ad9038f64e8dbf894e045cbf4951fbb",
+    "ja": "a77d02643cee4569d02b2e46420f4accb545320caaf020518601e556497ee802"
+  },
+  "errors.recording.processingCancelled": {
+    "zh-CN": "437ce23b49d73aca54605eef5ab850b8398be1498ea730b7db71a044b2d6b38c",
+    "en": "dd6127a170be915b5048687a54311ae8e7092557dd38d77550c682e3a9532407",
+    "ja": "33411384835483cdf385943cd1643ed5533a5b12365351eb917f820728cb3073"
+  },
+  "errors.recording.outputInvariantFailed": {
+    "zh-CN": "0313b5b445b7ed4322892c1a28369b40a7dc5e1370fdab830317fb8e6e48be82",
+    "en": "83520309fdb95e344d9c9406c95f62cae3426dc2be19422930b52bce8889fcec",
+    "ja": "a631954256ddec6ab6ece6bc2b845e8be5030efdd3c9d8f33cbc3e045f3793f1"
+  },
+  "errors.recording.exportSelectionOutOfRange": {
+    "zh-CN": "7c40b035fbf141f5d42603bcc9550810d3a2f6054f8a304eda6abd9772436959",
+    "en": "65c01be08ae30b3273b0e019d046057aba8c560d65e5a386ffcb88f4b7bc8664",
+    "ja": "da39e1eb4f6985c68a8a91eef1e8e129d547ef9a1ce095e7c353facc808eff24"
+  },
+  "errors.recording.batchExportCancelled": {
+    "zh-CN": "d5740bbec1e802e5418a9c32eb2f951a313d7941f388fc0ec655cf8977eaca08",
+    "en": "f1e5d41e640111ff80901a32c7174e41f1970eb29da7ffbfa379542964507c05",
+    "ja": "f78e6c42b6e361e711784605d635d7d647ce4f5a150f75e6fa7135bb7f5431b5"
+  },
+  "errors.recording.exportReadbackInvalid": {
+    "zh-CN": "2ad1f3f65fae8f7d5f95d10d92499fc825964f94166e42946478454dec5aa087",
+    "en": "2d8f867e1d0d5d45661c43bcd77f092685920988766c8aa57a358b4cbcf15ebf",
+    "ja": "3258e873db1c9e4cd4434614a901d57185f8157242528c3a06f242b82bb1566d"
+  },
+  "errors.recording.exportPublishPathInvalid": {
+    "zh-CN": "a5d4835e493a4929f34152cba43bb41b1e7e5b50ed9f5f9eddb6570c1a96d6fc",
+    "en": "72951d0a1684f28f28953f4b980b2950a0e6fe20d7e31853445e554f41f81fb2",
+    "ja": "28d791e0f46c7eea3e3060a91207ffdfe6985d5943899416ca9987541cf7908e"
+  },
+  "errors.recording.pcmRangeExceeded": {
+    "zh-CN": "30723d50a532cf80de0012cb141eba7d71c673401d6320a43f6354ef2b4c3ac0",
+    "en": "9aff208d10bd619b9e8947dac0c38557db60aff2c5a97b1f1db3e5aaceb1a6c9",
+    "ja": "45000b994d6c05e5b121154b01f998608eaac52fee8dac9c607888713da987ae"
+  },
+  "errors.recording.exportCancelled": {
+    "zh-CN": "6a6519cde4c86d1f834da8697db8a1c00ef6b79d2c470ccd8757e0ea1993166c",
+    "en": "2272f5a7392be24ab114b50f1f0ed1afdbfbc70e67b75896e6abed73521273b7",
+    "ja": "8bca90573d4b4ba78c3311b72cd28590ab77b41ff8c5b68fbce5ffbefe9f7114"
+  },
+  "errors.recording.operationUnsupported": {
+    "zh-CN": "3025b391257fd1ce39ce165ce3841fdae54c2ee113894e18bd4a864aee026bb0",
+    "en": "842a1133e6e260ce1fe0358c1c67a2ab963e885e3ac51e4542bf3a1519228f6b",
+    "ja": "af7c979e4c70750bef59e1839c13b78a89a8bc75127bfbffa9e5c695d7f8a5e8"
+  },
+  "errors.recording.directoryGrantInvalid": {
+    "zh-CN": "06f233b3b5742c5432a826b4dae139b394623b84e1abe7dc5e4948e2a56085c1",
+    "en": "11cf3c6dc362655e3167c1451df5a6d36dc65536c7c014ddff4d75384ae0b66c",
+    "ja": "6d0fd6136c2fd998e4a70c87795d3d0654f37f0256ec2a6f93f3ffd44d92e360"
+  },
+  "errors.recording.openProjectFirst": {
+    "zh-CN": "8624f26b98fadcc9469cfca488a198e9ba1ada66214190d58abcea8145a82262",
+    "en": "ebaaaa2a8d88aa6d6153de809e785473581bcb0b0935750ce546c00d7885bf36",
+    "ja": "b5c906ccc73e08f1b40174492ad2dedca2cb67442f42541996481bba8ba2b4c5"
+  },
+  "errors.recording.stopCaptureFirst": {
+    "zh-CN": "a0c604896b20a0b792b0c8dac850f41d8a22b0a769647c783ec2c76e25f58935",
+    "en": "a1a73bee0c690f67935df2f5d1bb4bf8fada570387723546e2040854489cfb63",
+    "ja": "db91f27f1e847dababf2bdd781df84e26b9e0af8e1c6be51a581c9e6d85c08af"
+  },
+  "errors.recording.backgroundJobPending": {
+    "zh-CN": "9b1a39b33a1386004b8d3ac9a2de067659ffe9d2e88125f968d2ca5534ce9912",
+    "en": "3cedec75452a3d3437886759254e8adbd7c60d5157ea49f0dd10e9e890844678",
+    "ja": "28528885ef52ed678b0d0968ba1ac423e842b12f70b80a55df3730607cc54edc"
+  },
+  "errors.recording.takeMissing": {
+    "zh-CN": "e00e70f3333fcbce637e1ff8ae1233f48fd22f413889cedfddbd0fdfec5e0b14",
+    "en": "f49d2dede3b9817d90da4ae12c212a1ed51a30a49c0642c401b24d07c52def0b",
+    "ja": "0bcab04ab57d5f60591f8d608b8b0ba068162ecc4fed6ea5e975101edb82c516"
+  },
+  "errors.recording.emptyEditPrevented": {
+    "zh-CN": "d592d9c0c16178ee8ed4ea3478b0d9a9f4d23d890cc6991208dcf20b97d6465b",
+    "en": "bb996d19fd256e5fad4f75e358fd548f7cbfb275ff33a74e889dd5cce9038dce",
+    "ja": "88286f6580fddf52b38f627aee503263cad5c88b3b41b2fb83de0dce95c5e60f"
+  },
+  "errors.recording.exportOutsideProject": {
+    "zh-CN": "5b8ead3f8a7aef55cdaf32dc65731d3e53052cc0a47df6b02a8d22413ff9a392",
+    "en": "b4eeb866982163a043d3ccd19de99af59ff96382a7ab5cc0cfa5b629de441afb",
+    "ja": "9130bf73e09a6532ddca86946bd5e6e0f96dd43ade5dc9cd60435401271a3675"
+  },
+  "errors.recording.stopBeforeDeviceRefresh": {
+    "zh-CN": "cccb192bfcaf82d619b52df532df79668ec70f1803a695a83be2b047253455f2",
+    "en": "ca256b7514990ffdc79384eb3d5a7934087a32b0c47e1c15a46dd6365ecdbaa1",
+    "ja": "3f46e24bb467853e7b94ec4c060c51c3024e82395387a0d8ceadd06943005f4c"
+  },
+  "errors.recording.stopCaptureAndProcessing": {
+    "zh-CN": "f6a192c956d54a5ae574f59fa3814f2d67efbb8dd3b1c8f460d782551daa891d",
+    "en": "fae4198af74376eab1197272685acab2fb74f57e92523705c37706840f14a407",
+    "ja": "86c7b88829f4779dae5bd6a31df8ff45a2143829c467e1571aebf8983e483b0c"
+  },
+  "errors.recording.taskCountLimit": {
+    "zh-CN": "e1127dc1ea740d44143f42545de556a3c26ebf51e8947aef9185909e1bc403c0",
+    "en": "687e2efce9cf07f24ca5a122992b5507d85bc77c97239830324b9afa8dc0dfbf",
+    "ja": "8931b1d7c342bb84a1c44cf4cf3883a29682155510454650f2879e03b485cdd1"
+  },
+  "errors.recording.nativeUnavailable": {
+    "zh-CN": "e61575ac5167f07dbac9799a3bd9b643a07b16edb8b00874c86d7b510ce249a0",
+    "en": "637b19535ffe0cc7a08537d1e2f247847d6008bd29bedd4bf19ae4a99a91682f",
+    "ja": "9bd87fef471ae47a7bf543ef31e98bff5285a851ae478b344cde93f7aa149862"
+  },
+  "errors.recording.taskMissing": {
+    "zh-CN": "1cf7af8c3fb6db52f467f5a1f08d95a01577035fb9c06967608094937d48c822",
+    "en": "697642c3afd230b302804eef0c49d23e16a965641c342c7d87998e6a07c92b11",
+    "ja": "a73e6569c3a0bbfae11434c3114a92efd1072475cab3efaba1f8a5513a2e29ce"
+  },
+  "errors.recording.taskDisabled": {
+    "zh-CN": "1719235a8b2757dff59c8d53b1696183540881a3247074cbec3694048eb610f6",
+    "en": "107e7589ed21667073b92ea50177018e07982f03494816e84c92bfcfe410e103",
+    "ja": "b6060a2388d98054818c4561402ade1608c9329502bf4b3afe584cb7bee5acc5"
+  },
+  "errors.recording.recoveryEntryMissing": {
+    "zh-CN": "9598de20a6b6d498e1c932046a2de6eddb0e9f05fef15faca75d7fa8b69241d3",
+    "en": "89ca30f0fac4a246a525cc770f851d2e099eb85c8ea78744e6ddd59a42e3e2aa",
+    "ja": "1b74a8f040cd5e39bda21d2a693e4f574e6ae1a0bf1783288d191c2d380ac600"
+  },
+  "errors.recording.previewRangeInvalid": {
+    "zh-CN": "c5db4cb54e802d1d62c96f4c01a8931a84bde86060a71bad2e9d64406b0d9ea8",
+    "en": "3c8287e44e07f8b590e68edbff08341fa589fb16255022fc6255b3928a217340",
+    "ja": "272b8fdd8d3e13ee1cde17403e6046be34e3a679d485c6fb59e061a79dca80af"
+  },
+  "errors.recording.noiseSampleRole": {
+    "zh-CN": "d92bad5a72a3e142b1ec45afbb622641462e95ef32dae2dfb001cfe3cb76d71c",
+    "en": "8f632ad0c86a32126f1d389d00827bf6076a94d41de7d5f005847f33827f861d",
+    "ja": "7c5a9547479570629716044face16cc88755a869e417b85df9cfda10b8aa19b5"
+  },
+  "errors.recording.noiseSampleDuration": {
+    "zh-CN": "184a11311342b5ceb7219cc3fe35a6784166d9af4b014f718f6963b2a1217010",
+    "en": "26486f7c6604fccab175fdffb6e57621fa25c99224675d46b27a352e12a2db83",
+    "ja": "0a32c5a4a5554fc4070d5d36846102b188b6c55abdbfd7ba67edcfdb546ee958"
+  },
+  "errors.recording.processingUnsupported": {
+    "zh-CN": "72eb3a335afa068e779798fed507e50b3967de82b7f0cfe871f22582d46fcef5",
+    "en": "f7093c657bd513bf0b75ac4ca5a8c5ea52664c5c660bec18fcb0fabbce850244",
+    "ja": "e355713cb997265d1ceda25544a5e8247910ce5d124d9a231b47500b739b1ece"
+  },
+  "errors.recording.matchingNoiseSampleRequired": {
+    "zh-CN": "a39469ab1acc6a30892a4f11bcb39c65b8f40877a52807c81916f3470f88e68b",
+    "en": "053920008a7a1e1c122efa1255cfce91cd416e87fdd8c6fdcbbe158ca21709c5",
+    "ja": "9dd96409029a73d97bf81c10231bc89b339813d556d57bd8b4dfd9bbce9a6bf6"
+  },
+  "errors.recording.selectAudioChannel": {
+    "zh-CN": "0ffd4dba97158181da7ea6504a1b260d4cd062f12ee41577bc2a670fd06183bb",
+    "en": "69b0f080a43edd8a76685e169a05dd41049b409f7b1fac8c08260949077947cb",
+    "ja": "010f524644e44af40de81cf67c649a5f9ccb420e4e52f0a3fded7a891b3a238e"
+  },
+  "errors.recording.taskIdInvalid": {
+    "zh-CN": "7166503401e275095b016950bcfe06876e8b25a58e0aae042bdaa3232dd965e8",
+    "en": "42526146a9a64cca819bb7aef1acaba5e89de26377780717389f68e4a162a187",
+    "ja": "4c609592c95e6d8971c9d3ca19486a9801ce297487b6196ff8c657c843675df3"
+  },
+  "errors.recording.filenameUnsafeOrDuplicate": {
+    "zh-CN": "3779254ac8ebe963d9e94dcbdf7f067f2ef388b85a1c19f56b866b5dd55c68f0",
+    "en": "cc05a84ee3e4cc37061e76b50fd354daa98dbbf14ede77e99d8657c4b5af579f",
+    "ja": "89677e3d94433c91e7821f6ac970b41a6fb5e18a20ca781414e17b130056e4c0"
+  },
+  "errors.recording.taskStatusInvalid": {
+    "zh-CN": "634b9000c40fedb667b1dc50d1daef658ac78712e66a553f0617e200d8a72286",
+    "en": "12194d6c87e5677f3f99973c471a0ea5b211242279282cc2b120e3cfc091f1b1",
+    "ja": "51cdd48b0b9e06e9e126b9480c4ed0c975f46002555ae62bba9333faa2d0083a"
+  },
+  "errors.recording.clipboardEmpty": {
+    "zh-CN": "3a8311421325614000acbc1350720c12f1f47189bd0675575797f43fb993a6ba",
+    "en": "57cd7417eaafc3b68da7364dc254e009fa6a185d2b1a7c6adbbe2b5cc0022f4b",
+    "ja": "bdb9efc9b3fc232224ff30e2cb848aca83fd53426710d43ad11cdb70db333aee"
+  },
+  "errors.recording.pasteFormatMismatch": {
+    "zh-CN": "e1b7671c5f1794f739f0459761741d522456bf8598812f0e0fb3f840d0e1f6f1",
+    "en": "65879907769a77c43cd7f241ce0959706a0b4f1963ce003df36475e146bea4f3",
+    "ja": "03930a27e1688a33876b61ce87d1c894079d256d01a02854820061e8e08c056f"
+  },
+  "errors.recording.differenceAuditionUnsupported": {
+    "zh-CN": "02dd2f46091817e4643e1abf1ca0c30df18fbb42507b54af8c1674df392b9c85",
+    "en": "114dd0999e47138bc0869e618368ab46116fbe4b7af10efe22272f2f7d17ae36",
+    "ja": "feb2767e5ae07b9951680f5ca725ff879d6915e12889129e9efb16687fa1f83b"
+  },
+  "errors.recording.taskTextInvalid": {
+    "zh-CN": "4267fc35558796d06bea07c97801ca7bde6d4254c29280773943187cd2fddfa0",
+    "en": "3bd410aa9c7dfd04b793c2dcbb7f497bde13c42a276d3dfc81e59ba2830937a4",
+    "ja": "20cad8329f759441b7eecb6905297d75be5c933c5f70083c58fc043d902aa5e9"
+  },
+  "errors.recording.historyVersionMissing": {
+    "zh-CN": "8f11d8627560326b30961f1934708fbfb896fe512ef8dfc255959cc69b03d3c8",
+    "en": "6c1e1af47064f9145fb7a0c2a2a445eee086a4c0a7e45e4421515581edb207a4",
+    "ja": "70d080bf26100a947f42589dc130a8be734a83cfa4d5f8020a7330af882d2d4e"
+  },
+  "errors.recording.editCommandUnknown": {
+    "zh-CN": "d0a053da703781b8fd914f31d8f3315f1ea47c33a559237feaca7872396c528c",
+    "en": "5a7e9832dfa9f5884eabbceb921df193bf5d210c6104375225855da2da631f81",
+    "ja": "843d20654a7c136974b65a64cf19b9b0d195d82e48a0471b4845d3aa859f7a6e"
+  },
+  "errors.recording.derivedFrameCountMismatch": {
+    "zh-CN": "fa28249c4870fbff9f4d06e526d33fc2e9f0202ccaef2ab8d112765d30bafbe5",
+    "en": "e91ef64bd8419473b1f387ba7e5256919cf35d2f0755ad68a10d606ab25a084f",
+    "ja": "bb43c367a506fcabbba5484bd25008ac297071ac97926e29b64475c0ab705804"
+  },
+  "errors.recordingStorage.manifestSizeLimit": {
+    "zh-CN": "df448930eaec07cc839d81f2a67dd5a34dac28728b71c32a344e3745cbe1da47",
+    "en": "ef7fb1c8ec9147ee6436d7263018a43b1b70b2e4617b121582a9f87cd10e816f",
+    "ja": "fca6f1d9b681176b728650dd897de7e92494667e096a9b81b05c1dfbe41c4c57"
+  },
+  "errors.recordingStorage.manifestTooLarge": {
+    "zh-CN": "6daf9a7e7dddd4d93b6bd5986656ab75d7303972a5a49fe1f0bad86c56837906",
+    "en": "081e344503b034d3b432397b3199b80c20a0f5f95e87cd29910f05323f9f79b7",
+    "ja": "55e69f1b2079e94ca8896d3652e05f99db8d1436cf399eab6749bc65060baecd"
+  },
+  "errors.recordingStorage.resourcePathInvalid": {
+    "zh-CN": "c3365dfde65762258748fa5e1ec55370eabe1fb54aa3bce807f143537bfe3795",
+    "en": "73dacf2087c089aac257d213466c22bb38eaee845991d3680531af805670d00e",
+    "ja": "e690f5ce78848d28e686738e5d7bed5c5cc6e5a34589bc1c09cef8f7c6ea23db"
+  },
+  "errors.recordingStorage.resourceOutsideProject": {
+    "zh-CN": "25819bf37db840a1af9465843b01ba8eb49cfb93e8c85cf2d52ffdc6697578e0",
+    "en": "6a12234c3ec26143e8aca69c7bea182a504231d7b10176642e2012ecd5e220aa",
+    "ja": "bdf82ec8c82b4c8db0bd8a8db8aea7e6f25ef8eb439f4585d0efc2f294e84719"
+  },
+  "errors.recordingStorage.rawChunkInvalid": {
+    "zh-CN": "e01bfe5d17b69ea61353ddce04080bb810e17b8f646fe322c4d3af23a602099d",
+    "en": "da8e2f4f640faec607b4a9be759624138cfac3ebe27925c6b676e1604bc979a3",
+    "ja": "eee588c987402f2a7a1e414c8b879152e01793ff578c1cdd2e51daea970ebeb3"
+  },
+  "errors.recordingStorage.audioFileSizeInvalid": {
+    "zh-CN": "2ee0964bfcc861b52ea528eb6dbbceb495e6ec1312575edf916c5feea8349ad0",
+    "en": "d253c1cd3682f3de3d3694851fff5672f9f6ce29e091987ccc979f3185fe7805",
+    "ja": "9d25662928e8146951d58863b60b319403d26223f87c5a73374514d479b23e8e"
+  },
+  "errors.recordingStorage.segmentFrameIndexInvalid": {
+    "zh-CN": "75c6ef5978f28454a4176f88cb877be4dc3fcfd420063b0fc1460e67172dc20f",
+    "en": "902cc9459785ec3ac5e87ef2c14e6663f8026fadf2dac36634468634b73c3bc3",
+    "ja": "58bd57d480de1c808b8679bb8787e06e1fc90b1b039e84597fdd4c4ef5cc74a8"
+  },
+  "errors.recordingStorage.chunkSizeMismatch": {
+    "zh-CN": "08da805443d686acc79823781bb4a585823a5642e04d2e88f84fa5fdab89188c",
+    "en": "be157586324511656b6a22d8d5e8f8b9e81c54d692174627163be9b81201a539",
+    "ja": "6996ec5f0095d89bf41bf1e8233b478eeda2335924647d274bc63f848f704d7b"
+  },
+  "errors.recordingStorage.audioWindowExceeded": {
+    "zh-CN": "d54cf019168e0f2b2f51f56c59f6399968a729dfeb85963f6acba3e6ce9c87f3",
+    "en": "7999cca3d41f751591f9621026148ba996f22f5c7fc337f4360c2fa8ddcb550b",
+    "ja": "62b22f52734c043d606ee042c2da11594cf787ce5d679cafa1dd7f26b9dd8737"
+  },
+  "errors.recordingStorage.shortWrite": {
+    "zh-CN": "5c7260f939d809dd2827faa17e03701628e3914658ffeaaf1786bd256840722e",
+    "en": "155553d0f5d24c85cb35833745d076953178d2b8906a76236470e66b5e779bc0",
+    "ja": "a4b61b2775ca3840311d042e119b11784f529e9dc76e28245ec45d33e3cb05a4"
+  },
+  "errors.recordingStorage.chunkValidationFailed": {
+    "zh-CN": "8b4d082d0ef59fe6cefc543be734c1a379f3f61e67ec65158d043a602f748ac8",
+    "en": "e70bbbd6bf58fe434db4d9edbfe9929f909345725a1be2173d4abd92592bf6f7",
+    "ja": "e9eba8f277393b7f39c34776e75bc7860b180582c9a96744a1bc0c8f853258b5"
+  },
+  "errors.recordingStorage.emptyDirectoryRequired": {
+    "zh-CN": "8d9d289969615adc919d91a4142ce7f3d87618df1857f6c7fedfd283bb1b1ced",
+    "en": "71b7aa4dbcfe71ff7db9c155077d0380270362d969d78aa746fc21db364e22d8",
+    "ja": "dc3a58840fac90fd8f79f6ec6769a9afaebe97c76f8d8ba4f7f541db6fab6638"
+  },
+  "errors.recordingStorage.projectFormatUnsupported": {
+    "zh-CN": "799aa46c1edbe5254d3314012b2896b6d94c2cb8b8e521e444154a97b7499ca1",
+    "en": "cb433bb12a94ed89781d8220cdf671b3dd1558d3d1cb1156a4637e81bbb4ab88",
+    "ja": "d8593e88a48854fa4d67f7735934db0ddd14c9eae9876f80df5f2f98e1a5bb34"
+  },
+  "errors.recordingStorage.takeCountLimit": {
+    "zh-CN": "d31a58834f1f5c98cc55728d72231ce3b0f78c20bd455e3f96a33a9bda3ae1aa",
+    "en": "9ee550f4096331acc449891a37b38e8d90ba8b7b23dc4c3007e38ad2c1ff08e9",
+    "ja": "4cd4658f18f5b45273430910ac5bbcc3899270535bfc1aa3be6fa3d97d12b608"
+  },
+  "errors.recordingStorage.secondWriterDenied": {
+    "zh-CN": "7161ad465c4fbd1a2e04b3c791c5b77061fd9f6053d69f7f7ab618f2a796b972",
+    "en": "bcaac531a16377b98ffac8ece38449e6b88601f22d5acbbe81a4769f2d27d4b7",
+    "ja": "a6eab32cb61377cf6f4d56ca74c3b5df2b1886bd6fa6a8f1cae9bca65e7b061e"
+  },
+  "errors.recordingStorage.duplicateTakeId": {
+    "zh-CN": "193e09296bc2268ef49d3fb888a67291545d192fae9b3ed0ead4cde154b4bf4e",
+    "en": "55e63d3b49ce06da3bd46d9ff987bc740917542125923a4b3e9bff0f7a5c14b0",
+    "ja": "712aadb9f919006920fc385df6ba216b27460ee73fed8c41c344d4d68a860de5"
+  },
+  "errors.recordingStorage.versionIndexInvalid": {
+    "zh-CN": "eb95f9df3dfc8757fc1a561eced0d63d4ee2fa27e73c4271740d035b8a54d768",
+    "en": "99ca5eb0a1adda49beab7a8002330b7afec53bf02cd8bfb47e249be9e5b5a8b1",
+    "ja": "280020c092df382277f56d635267b465f7cf3828b1f1bca1c014b43493eb429f"
+  },
+  "errors.recordingStorage.chunkReadIncomplete": {
+    "zh-CN": "c5c5be8dc3ea4ef6ba8daf9387ee2f3fc7b1f1316af5b38763bcb11de3be9163",
+    "en": "da74847b72745a80e4e2d6b851df964a9a8691a2ff251d24dfa78c5ab29f15a1",
+    "ja": "f276812237150618be04c0bc0013f5158bb4137a48ea780b7293835c0f381121"
+  },
+  "errors.recordingStorage.nonfiniteAudio": {
+    "zh-CN": "5fe3ef7afcdb236d9842a4c20baef9157726eddb0fe8cd04febcb891876b7244",
+    "en": "ba00050f770cc81819d4f2ce292ad41695672710d8eeb3e3e9c608e52a2587db",
+    "ja": "28a562277dbb10c3831ad9ddb9dc2520d401bce6bd076edcaeb0f805b327ccf4"
+  },
+  "errors.recordingStorage.projectAlreadyExists": {
+    "zh-CN": "1d725860ca821c55f5b04d0fd7749222452f116608442ea4675fe1b6b2ad180b",
+    "en": "bbf690e69d6cf618b073e169b1d54356bb01112d4c67331dfc63ddf012c3768f",
+    "ja": "a006f1d6ea3406c0d2fed0cbdf7043c35cd7c8a63dbaf9b0afe59f81382beac2"
+  },
+  "errors.recordingStorage.projectMissing": {
+    "zh-CN": "491198e684474a0d361324ef90c0d12d58a4d4f2088077b3220550d528ec1282",
+    "en": "cfd310c3fcc5ecbfb83eac84cc8e8d02c73ed938c94bc3313783072de2bdfe91",
+    "ja": "e87cec7c130342879a96be7b7e8862c47311436998f2ae2c3b5824158d139ddc"
+  },
+  "errors.vocalTract.silentModelLocked": {
+    "zh-CN": "6ced641d222eb661492243b802ee00e99737a05b3d17fa2a32efc12d63faca57",
+    "en": "97eab061774aea17cb841b0ddf18df0361595074102418b5b12df7b451256977",
+    "ja": "5d5c5bf675cc2224f2f522c0c160d6d23db17b6e436bf60b63d112cb87234ed2"
+  },
+  "errors.vocalTract.outputDeviceUnavailable": {
+    "zh-CN": "2f4f288bda92ca75d980e275c718d9fb09ee22b2d44c45242961e7c6ae7c8519",
+    "en": "aad45b225e8773f0abbf3cc324a8e97d2f2372ca774e7a3cdfe60ba31e48a4c7",
+    "ja": "1754902d1f5c18995a892e590b39185e3a16021ab178fea72dacc2d91e5960dd"
+  },
+  "errors.vocalTract.outputDeviceDisconnected": {
+    "zh-CN": "93c79e96a42b7058125f34b8a2662ead5a83904e0208e4743da9366fa05786ff",
+    "en": "46e6e5fde2b22fdd8a6b798ff566998e983ab551f5fc048f5b3a555cd41d0d15",
+    "ja": "409969552d3c15fe0eab10b986b323012be6415869396f06bb50d2ecc455748c"
+  },
+  "errors.vocalTract.gestureMessageLimit": {
+    "zh-CN": "ed1dad765dc029e350bee374d3828ce72538d5943985827fb6f69b4412291388",
+    "en": "6165b72a9d90fc640eea370b9b2dea1fb4a9b48a7996730616f167fbb837b314",
+    "ja": "d9d174abd9f294c301c7cb367e7d10884ec6840e5460b34a618412a09cc6aa7e"
+  },
+  "errors.vocalTract.engineStartupFailed": {
+    "zh-CN": "ca725c36ac48864d6c4687a78a081be48104b33c203182e631aa0a076d528334",
+    "en": "32d5b8147c642f352a50dbcb7e829353ab0acf82f0d4bea8851e6e248670deb7",
+    "ja": "577db7835f6d640383d85aa29957316e09d5492faa2726540cfb32215d534ae3"
+  },
+  "errors.vocalTract.fileOperationUnsupported": {
+    "zh-CN": "830fdcc2e02998586fe472afc1672844f78f7cf9e1249bd8dd771cd051963d93",
+    "en": "4a5dec3aca4fbf76ce66165b2821feae04032328eb6867a9f1589f734b5136c6",
+    "ja": "fb28e4190c45bec05c47590b8feb76d6616ac1d8511ce13f356cec50fb31339e"
+  },
+  "errors.vocalTract.videoSessionExpired": {
+    "zh-CN": "5ae0f3df3e1643ea901476f06918712758bec42071dfe3637c6debc3898191ce",
+    "en": "c5fee17c944cd83a0c94fb8a08e1e59dfaf465a9956ea33dab8c8c1d3c4272a7",
+    "ja": "78729bb48b0f2e44f0a6193e41d546307c30bcbf4e33fa58bd4d91ca900b237c"
+  },
+  "errors.vocalTract.fileSizeLimit": {
+    "zh-CN": "15ae271715f816c4a82a7b1dc61d80f8ae33aa9276691f68e1d32e06d8bc31ea",
+    "en": "180767454886426d8a9b00a3b7d828562fb2c263b6bc5227d41ec2d415915d6c",
+    "ja": "262fecb597aa580245e477c1e0ec5d532862e47e25c5f254b5e63bba9ed78f89"
+  },
+  "errors.vocalTract.videoExportBusy": {
+    "zh-CN": "ec3e1360f8c161bc669c44a792576f222b1a14571763ee6291bf52bbe78856da",
+    "en": "123caa74131c5defcd0e9e2d913b2a73b94a57736458f5ce68f6cde57a706a8f",
+    "ja": "b37716466cc3039bc9b971e972f9d9245bbc1172e8e3cb4039e237017b9653dd"
+  },
+  "errors.vocalTract.applicationExited": {
+    "zh-CN": "8d4b0cd9a668e7d2878f230177ac3a0d562897348bdb209713c6d5ce41039020",
+    "en": "5c7af08ef2e0da1fa4e2c99af20a23f072d077671c22723a497ed5ce83d61be1",
+    "ja": "9e43c9bd93853372f9d76fc233123c78cb3a3fef1b48883b6310b776f3380483"
+  },
+  "errors.vocalTract.modelInvalid": {
+    "zh-CN": "9c03e9033e0e2b411807398f583c08a7f8e39428ea4535533dda8318d0620122",
+    "en": "35afff0b0792dfd5dd2e6e05e991ebc01f4763858e4911249f73c20c3252b653",
+    "ja": "5de173f39c78ecf5edd2371c60c2d2c47bf17c2b6b745170552fd9dd8d0161fe"
+  },
+  "errors.vocalTract.gestureReadLimit": {
+    "zh-CN": "a6466d26cb436a9c3cbf7b902a294ff5aff645ebaf3af5b8fb1538e63b7f71b9",
+    "en": "4907e4ee122e93b4e2420984727fccd8db5a5df350467bf26b47385be2e9ab95",
+    "ja": "b410b85482769cd61e9841686e3e9adb5d927e79500bfe2e60ed1019c55953bf"
+  },
+  "errors.vocalTract.configurationSetReadLimit": {
+    "zh-CN": "79d5a4856dcb66174d31cc7d1b78fee67ba3822bc0b4ba607345aceb63790fef",
+    "en": "d444cc26d6f4b2b9239673b87e5a73224ebb03617e58e9f35dbaef0938bc1520",
+    "ja": "79bbcdc0f4c3fe77c2e774aa4f8f2b43a5b370a1af33765eeb5790f2d8bc270e"
+  },
+  "errors.vocalTract.configurationLibraryReadLimit": {
+    "zh-CN": "1891b7228550597f53b44b6beeead8f69c8821d0c065bb68442982bfd1adb3a3",
+    "en": "a3f25867b62e05ebcf896605142db4549601435f30ad498a36d8e6d71c837692",
+    "ja": "4d3984de786d9a64ebf32773112a2346a5814e808f3c05392724c1940575574a"
+  },
+  "errors.vocalTract.configurationLibraryVersionMismatch": {
+    "zh-CN": "abe281e7f3141401095996a05ec9100077033e73e6b4440aebe6b956c77c4af7",
+    "en": "836600c2388902940b2f41e1d021c57bbd9b922eba03e51944cba77d56e77f39",
+    "ja": "c6b6532d0ba17444c43a5236632839ca446d3587700810164d14c808c70fba90"
+  },
+  "errors.vocalTract.favouriteSettingsTooLarge": {
+    "zh-CN": "73a6b5885a2d309c65d8977ae7a9404515bd8b7552613a88e95cc0740fa4dbd4",
+    "en": "3854d13e345267197ab5faf9bd050f42625cdaa4d94f39299d744b5432cd5689",
+    "ja": "a56c122ff162e1d5478568c758ece054eb88ebabb320c560ea1d1407e3780c84"
+  },
+  "errors.vocalTract.favouriteSettingsVersionMismatch": {
+    "zh-CN": "eac7f478d3ad48463491f7674195eedef23aaa0eaebc20db59d8d86d9976c270",
+    "en": "a5f12bc964acfcac4ce4d188189b9c66c95909f88c96e3159367154c187595eb",
+    "ja": "d7147f55b8164f2cbeeb810e45cd5c269a0720d5de591155aae6adc4f1bbb0f4"
+  },
+  "errors.cacheLocation.dedicatedFolder": {
+    "zh-CN": "44d2f0dab93f98e12ec0f98cadd7d21669e540fbd9c9e0911f8325535588aafd",
+    "en": "5c6521f869b89a30c64efb4f86a703caf2785b84d58a9c3656a300c7a1c9fd2b",
+    "ja": "5ec3eed306705961bd2b01c79fc3207e1f26b90955f98e8b19861b2beb68030b"
+  },
+  "startup.failureTitle": {
+    "zh-CN": "7f4204a4f99ad84cb8aee5c25de3bb026454d7759116d62e0b129908108b7a0d",
+    "en": "b860efad45821308c72772929f30903c0f6cc3b12a101a6296294054bd6aec9f",
+    "ja": "e59fce7075f1ecc681c30948911b3aed94cab09901c8dad41c8d88e1c42eb526"
+  },
+  "startup.failureBody": {
+    "zh-CN": "4a6b82a130a471db22a9ace9cea94d5429b19ded622000855464a319c64ac276",
+    "en": "74928c807fa6349623edd725f687d7280d4f6600604cb7683bb31951b7ea2546",
+    "ja": "156f106cfb1515b6caad1224c27c5b1bd25ee3d99c5bfbd28137fd0048852236"
+  },
+  "startup.integrityOrAccessFailure": {
+    "zh-CN": "a16c7547318cbd8d44d5f69b2f98c948a08e1e6024c6e298e0df7264c2cde643",
+    "en": "f1e11c169272566b8657704afe4071114cb81919bf45c4d7888bb90a48a4aafc",
+    "ja": "999d5d930efb5685306c1ce9fd82c27431fd80028874e5fe00977bb2e2410440"
+  },
+  "errors.mfa.uniqueTranscript": {
+    "zh-CN": "47dc862e57ab2c079e43c9088f1e523ed06371f2de46df800fbfdd2d49e57972",
+    "en": "f3091d3af8bde0ed96a2ccc21e5ee1bb64cf28b92293955084e344c3f5b7d2e3",
+    "ja": "cad82798c2b1529b9bc3822b73b9815b66bd77282cf7897e4f65cfa710b036b0"
+  },
+  "errors.mfa.missingTranscriptFormat": {
+    "zh-CN": "9dd5735486406060c3d56c5de3c3bc0395457b02f36e517151482d7806234626",
+    "en": "1d7af8d05277757a115e3a0fdbdd95a845b78655a25e07f3407d144f275fb2a2",
+    "ja": "fbc575b1f838c21d627dacbb748306a8c41aec1fdb5d90723eada10db5d76f24"
+  },
+  "errors.reconstruction.invalidAudio": {
+    "zh-CN": "86351c08036a51d33b79ca3c63f2d98e1fd1afea97d52c923a5f1c0be1a18f19",
+    "en": "1eb312f28b8a036ba0e6457af5951c4e8ff22fc48b6ab5f345b9630470145baa",
+    "ja": "bb6a18b04e8a50fdddc9043fe3b455b800dcb1fe878c055508fd8f212a611cb9"
+  },
+  "errors.reconstruction.invalidCorners": {
+    "zh-CN": "c70fee283827ddbfcb6949877add8f0380a5f580d33b6c1286c131c528b68b78",
+    "en": "0045821e9345d2dbe5e03c0e47958d17ccdfa5522a825aa8e8dd435e239ea5df",
+    "ja": "4a7b3af3b362a9b60a7d7f60b58174b55b1c34206fa20ea766f47711e3da6289"
+  },
+  "errors.reconstruction.inputBudget": {
+    "zh-CN": "79ea89c421b4e6570f15035233ac8f5f47a1345c64da7908cd6766563c18e251",
+    "en": "df1e277ce690534a668378f6fc768f7d4653903ce7d674cc8a6fe128723d6137",
+    "ja": "4f88156ffc34d96c40b67c99c3740734a37be6bca7988bb7aea0adc1b1f4f5f8"
+  },
+  "errors.reconstruction.previewBusy": {
+    "zh-CN": "42b049da2da4d30e2f0d6abe94dcf6e5bd0176af489204504e32dae9ba799b60",
+    "en": "043ea4f753186b3f5bd1fe225b2fa82e57f75cc8373142634633d21ab581aac1",
+    "ja": "0127678e0e55b502b1a1e1a52480041c22be8177c4007319ee9e3667329a0758"
+  },
+  "errors.reconstruction.previewTimeout": {
+    "zh-CN": "b23a9e04639882f8ca139b3e6e1bc776509424aad83f48d47d24aa8b2a14db81",
+    "en": "7fe033d49d0fa18fb19130e925ba9aa9bba27d857773763feb88d8b9a18d6c06",
+    "ja": "f0919b37bbbdfe02485e3a88d21ccc43f7436b9747a3e0457e8f8f20d7bddb8f"
+  },
+  "errors.reconstruction.inputUnavailable": {
+    "zh-CN": "66aad2ff310eb84758dc8e2b635a14126f7cc1bc56f906da2f5292a173ab3418",
+    "en": "e9bd6b0012409cfe328daeb29216c0ea5f2521edff287f95ed00f81a3af3a3a5",
+    "ja": "87cefc13e19586d06c917989cad672f6147c2d49b205aee222f8cea6e37bc704"
+  },
+  "errors.reconstruction.invalidInput": {
+    "zh-CN": "4ef190ea5099fc5718886f44e7cf5b3316133d12718d44330bce734a01638036",
+    "en": "1d3a4daf73e6f201a9531ee603e63c4bab60b4dc5fb5ddbba55b2925f20278cd",
+    "ja": "63278e2dfa896ea8226a50786632946e3cfc4b620385832aaba15357f07d2ca2"
+  },
+  "errors.parameters.previewBusy": {
+    "zh-CN": "9d8dd97ebf01bb757e80b874e728d5335f6f0175e91f022070b58c9bbbbc6259",
+    "en": "cff4c44554d602714ba8babff698512ae2e567776c0653bf741c72aafccf2248",
+    "ja": "01b4df717c3dfedc0703f9cd5448780fddabd9128a6564becf9a6e697810c99e"
+  },
+  "errors.parameters.indexTimeout": {
+    "zh-CN": "2284dbaea94ef41d8b9d7b5580f58af741fcf405bf4319e05c86839aeebcf5a3",
+    "en": "627af1bad506480b4562c6967f828717e06d015c23fd3f0b9aca10379387e8be",
+    "ja": "2cacdfbce509fd7e0cee74f9fe058e69f670c0f059855c3fa4469515e1c407df"
+  },
+  "errors.parameters.readBudget": {
+    "zh-CN": "15ec35eb03866e464dd7ab16f9a0ca1c0f46103f4621a1af0abb63d69059db22",
+    "en": "41859fcbb8f2d2f6ee30dc2ec51768e60d567039b75d8db2f049c13fd5d65d1a",
+    "ja": "d6c945fe6e3b04c8bdcfa401e019923f6fca38bccc0b501cdadf983b4bd16032"
+  },
+  "errors.parameters.unsupportedStructure": {
+    "zh-CN": "3f58aabb7cb9845aea4a2834c12c3e4ba905d98a228dc296315a61b6ad2409e7",
+    "en": "25e9cc99c2b1101041082357b9604a34e35389592ef87961ef5d2caed03649c0",
+    "ja": "b7d4842aa33b589170ad370210d75c80502bc50d5274b347d3047b195db283dc"
+  },
+  "errors.parameters.reopen": {
+    "zh-CN": "9e5f1ceb0b4355da86e51f98d946e284720b10040be3c77cb40f7a5e1f9e1761",
+    "en": "65c70470ce9307c01de6dd374e53838c2a3d658c64bacbb11ae6d70858784f02",
+    "ja": "9515a9a061d32c3c0822577f89255dd17e7293a7e38cc2b0697bee824522295a"
+  },
+  "errors.parameters.windowFailed": {
+    "zh-CN": "0d518414f32977a7a4335a9c320b89cb24895ca4cfa4e65fbe301ad04999cc7e",
+    "en": "31dacfb0a7cc3216ee2293bc5cde53086f30dd9ef8eb814963e9d44c5c510257",
+    "ja": "9039e7fa888c155f5bb99279180ed35b820fe7d5f2cf57365716fa89065af3b3"
+  },
+  "errors.parameters.fileBudget": {
+    "zh-CN": "4eb161162e001539ae4faa7d83285d2e0062cac0819f573796f47d5ef32708bf",
+    "en": "2f2da47a453df327c213a903e16153a46a139aef91419ece36e79ce16e0de500",
+    "ja": "d563a853d11667789d3aeb268790988f9d87b9bc2233bedc5cae4e5714587aa4"
+  },
+  "errors.parameters.readTimeout": {
+    "zh-CN": "11e44a0bd294eb55140c0d225c7f96dd818d0ec7e76bacd288db01b7cd324376",
+    "en": "1e7ece58a24c5f24f9047f6a4246d84eb7869368137b334791931a6f9f4fa6e3",
+    "ja": "6d042494a52d000ef542fad0b338c3b7936398a4fef4d8480facaf4074a7ba29"
+  },
+  "errors.parameters.invalidTable": {
+    "zh-CN": "d61373de3306e511018ca60f5b79b821178e698b5cebf11c64865e6605b8c72a",
+    "en": "15945670542cbfb0b709e52bb297a7227d5b78e4cfd0ad64dd9777d885eb4853",
+    "ja": "ecc2814dd8ef697a7d9e86286533b9671624f1fe5a719cc54740eb3a4a783fad"
+  },
+  "errors.parameters.readerFailed": {
+    "zh-CN": "50e4c24e716ac22ee717bafa3ecb3254471f0331a08a26aa28041cd9038ffade",
+    "en": "7182d9cddbec6284423529969fb7d74119f20197c475a74bea786c051a42483d",
+    "ja": "5cc6ac0cf27a12af1d399ae5256454df74c388b9ae61c6e9dc30b66a10b117d6"
+  },
+  "errors.parameters.platformUnverified": {
+    "zh-CN": "bfbd0519f3ed649fa435690afb29f1677b7169487206b3cde1a4d5d7c38d121f",
+    "en": "dc978084d27f161ce891d01a04353e3a39c60e3c42af30cd67b45c85eb220319",
+    "ja": "47be3c23516a8c343e918b77f4e603d08769367c922f3c648a87f3fbe2d9382f"
+  },
+  "errors.parameters.serviceFailed": {
+    "zh-CN": "39f8e638c124ce7d416ababf383291fe795d033040189ef463fdcb096f6c944a",
+    "en": "827995056cb2f791f36a674f784ba9247ae991f40ca9e6ba25876d0e06ee1b07",
+    "ja": "88b5cd330b05c34746b3cd9deb08a2206a7dd39e8ba0760fe97f54791824fd42"
+  },
+  "errors.lip.legacyBudget": {
+    "zh-CN": "68d2b4a0986445636ce06c787b3e8ba3a44e1cf3939c2b9c0212307f92c4e3ec",
+    "en": "287cf2b11c1ec485d9fedff6fcd5c3689cc874344a58e509a3fef7d4b358fe0a",
+    "ja": "8c9018846cec554b1001867d3c810c4e5fd043bfbc09b79352de7e1ff14fe6d4"
+  },
+  "errors.lip.legacyTimeout": {
+    "zh-CN": "3a62d5544402af48099944a90c897bc6bf7a568c75d9418d560362b6416fb20f",
+    "en": "9d1b482ea3e6823932bb76e2e787e8cb98e6870c9ba2267ff74f3809f1f17252",
+    "ja": "f36f5796355491d576695d6b1bad0a8d596fe797293dbb92c333ee19a88d4872"
+  },
+  "errors.lip.previewBusy": {
+    "zh-CN": "ef1e51e4bbfbdd3bc70d4eaa18189d1a58bfb4452270d8df1f4f240130cfaf32",
+    "en": "56f66a4e9a65866c6f0747761b85be5fe0373901d7ca9c1f884ecb95df9fece5",
+    "ja": "aa6d6f5d76da63f5c240df4d2472348c8c397997d5dbb119e98ea7d594d8a762"
+  },
+  "errors.lip.legacyInvalid": {
+    "zh-CN": "803085ad768a2d1dc5dc85b35e782f921a3a69a2bf2d6b247bb275e4ca14bec7",
+    "en": "63fdd6a810fb4a969b69b91ab4f0b2402616eb7cb101b10ec3e0bdf9741bb0bb",
+    "ja": "64641e06e6385b2779a4c43474408b91fb68fd7befefbe688c1678cdc1062bf0"
+  },
+  "errors.results.integrityFailed": {
+    "zh-CN": "fef1a2df14b225dc607b3da204a0a666b339505c99805b6386749b432b1c872f",
+    "en": "5311d55f7f779796c6e9a465699dbc2f00ec4b61bb0671916350c42f5b7d559f",
+    "ja": "ee12cdf807a9ca43d5fa3098f1e59074733d19fd82a5d6857fdc3178e16e0c87"
+  },
+  "errors.results.retentionReceiptFailed": {
+    "zh-CN": "8adadad1658f3881b09d8837e9d9f76b90bef1350521d8240862571316ad0778",
+    "en": "150cb5f48f248ae622b6f0f769828a7569954080485d29928c46c30b2795d1f4",
+    "ja": "3c3bcc4ba25660cbab7f308a76aee559bf97e1fc96d2ab17350e6e0a06a060ef"
+  },
+  "errors.audio.durationLimit": {
+    "zh-CN": "7e0aa409281d78e1fd541cf605618375e241a224127932134bbecf80846b3714",
+    "en": "519ba9a33e8e9d21bca7b9ab44402c92d8aacd115236dd68534dd2c15af6ea13",
+    "ja": "84310c1a34abe1f29ec1980c8e29697365ccdc4e3a3dd611e4ebeda7dbd3589e"
+  },
+  "errors.audio.invalidFormat": {
+    "zh-CN": "0f5c3aee76ffe7f4e3aca83b7a91e3d3ef5f82e7a400d95213fdd3ad6e27ee53",
+    "en": "a00fa0c7290c8b5052458b0f2bc5a3507c042aa6e1e5cb1f814a5d919d0744cf",
+    "ja": "9e6544085c4b31ac26358bcda40e86e6f03458ca8752467549d7df7c7bf1aec9"
+  },
+  "errors.papers.folderCollision": {
+    "zh-CN": "bb655fbea60e92df31677982334d2fd7c292600b28c9a41eb89c9f5e1c64eeef",
+    "en": "cd5c1eb8af1da371b16bee802661fab87fb2faa476d4f29e919d25ee5c11b28e",
+    "ja": "b2c99d227aca3acc35996432f7245c89251d8aabe526192b57ff67cadc58b2a3"
+  },
+  "errors.recording.deviceUnavailable": {
+    "zh-CN": "c5887cbdc12cf0150180c62d097c7cd2074ae0e1800225d061598c1d49ea9e5d",
+    "en": "d9e4cf94bf26cf360a875f15c680ef21ab3ee87e502d4dc6017c86bf33394e4c",
+    "ja": "06da76a6a2d4868e25d1118665d2eb6cf45e0c8cdee7230f237d169be4c46034"
+  },
+  "errors.recording.playbackStartCleanup": {
+    "zh-CN": "0f959082e9e7292bae8bf425bdfc7617c376fe5d804f73291ec22c7d6fe9a55e",
+    "en": "184f01bcefc849fcb9edbab2debe41455f13ebaa34866e6218f04dc2faf30cee",
+    "ja": "07d895cf6d07bb2e9ddf70506b5d67a2d6de58d7a4f61716fe84167987347f8e"
+  },
+  "errors.recording.playbackStreamStatus": {
+    "zh-CN": "830d37aca161ebf0edf7291fbb49f13e7eb99ad97ec8cc1eea7217763609c38e",
+    "en": "3e977ccd782c08ce1c81f81c07d11426ca9b3d091525f95b146e84a67277c909",
+    "ja": "e914f2f4c99a0865e5fa1e04668b93cdf17c69384780ac7fa17a599cce6012de"
+  },
+  "errors.recording.playbackAbortFailed": {
+    "zh-CN": "1380efd38fe5cdee6c425bfdbc262d5a3d0d340e36cf51094cd5ea7232949bc3",
+    "en": "4591951576a64c7d13df10df4bbd79e8809db46b0e37e545aed5900cd687c0c4",
+    "ja": "86632969e91bb75f1b0cb997db4e8edf3fa5ed5a14e789f9f03225ca0e66cf27"
+  },
+  "errors.recording.playbackCloseFailed": {
+    "zh-CN": "3cb4800180284f8d2c1582b8d8f9f0b2275bfd047174108dd7bbd2093cd2dc24",
+    "en": "2a4aba77c3562a892f39ee2c4d9f1e36b2b1c366239f845bdd110a35ceff9693",
+    "ja": "aa4bfebba8dd48ef8244756721501f65e1081554c9079d046d56784b8d642b9f"
+  },
+  "errors.updates.versionFormat": {
+    "zh-CN": "c8b6f92ff0aa787c43dace74bfc11474c6d94f0e6361cf64d8a011d84385f284",
+    "en": "1dcb3d0c406e279f7216dce0b8d72dd5d1731d0479c3f9418f957f0b667bcd00",
+    "ja": "a1436b6bba9a7c807f4290b52cbb630adc88468a47a345cfcc953c4aad56c3e8"
+  },
+  "errors.updates.semver": {
+    "zh-CN": "a7d1d0e190e932eb13b61f747d1a8afb5178c51edb7ae247e8807ec3f8eaaac4",
+    "en": "df734a5b0934b4a168ac5ef356b51055449082e8570db9eb5438e99ff87fbf55",
+    "ja": "5a1542f8869d608a76fddff7561dc6eebd13cd001142e348a2b64c4150e80053"
+  },
+  "errors.updates.leadingZero": {
+    "zh-CN": "19bb73a62ae553bab9cf0b84d4a6c39cfc546b1a7aeb6b6ba6338b75f85745f4",
+    "en": "766c4281d2e48b8773637fe04819fec64a077b67f380ed9d9901045fb8e4fa05",
+    "ja": "6f2d6f7f8b504542e823d1b51e8a92f5b3f85386ccba84e11a60242ad422a2ef"
+  },
+  "errors.updates.invalidUrl": {
+    "zh-CN": "400b7a213a80db26dbd8b7f2d6af3c1047e8cf747f09e6dc3bcd4ececb5bebbb",
+    "en": "a7f1fbe72f12b19c1f86883bc118dec4b4e281c2eeeb7f232b098634a8657d02",
+    "ja": "de864e9360bcbe998375592f3906cc91b65ef1cc32b60db5fd869e826ddd5327"
+  },
+  "errors.updates.trustedHttps": {
+    "zh-CN": "03c2d68ad295d21129f71a3289e58f8d768e0c0c7743d3cbe9879f9be9aa7954",
+    "en": "48724f464d02b4595730d07a3aa380fbc0f6277d79352b7a569878df04156560",
+    "ja": "8aa6f3f77e87a5fd803162c9c22385e9ea3da5885654d75d7e7ae981a9531517"
+  },
+  "errors.updates.invalidPath": {
+    "zh-CN": "8bbdaab5c74237ce5be9143802089cdb4c25f63281972c1648e7e93ece061d8e",
+    "en": "77ce06a04105b7de9ce61a582f465142ccedd8f046b3c292cecdfcbcfd864a6f",
+    "ja": "14b85ee691bc23af6ebd8e86464a6e79f62fcc3bf3b95c8a1626176b301957cd"
+  },
+  "errors.updates.trustedSource": {
+    "zh-CN": "c2c0ce9f602063828160f6bb9a3f2f96bfd8c6d9f1b415e8f547d6c996d896fb",
+    "en": "99a89a9a392a0c1d7e24c3f34ce0707ea0d1ff8f19e93711c03c11f2663c4e39",
+    "ja": "9203cfb4b3a9f42150afd50a0dd29c5638add506f0c3dfc0a8e86c98e70dca1f"
+  },
+  "errors.updates.cancelled": {
+    "zh-CN": "ead59ec1753e9b1c689c697a48c9bc73e4e0facc08e593672a3bb3228647be15",
+    "en": "8168812e478fd9709acc72f9bee9e10d60d105e6bb5cf5d634626265a10fec1d",
+    "ja": "9a4bf2620186ff19fefdf04a05d3873f5fc22d3a737a9ca95b2fc5e501f99d4f"
+  },
+  "errors.updates.invalidSettings": {
+    "zh-CN": "108d30c747bccafc3323d06894e4bc1337bfb9291f1cc43837d38ff0963cb562",
+    "en": "d688c29c4c1906b7db154fab4677d50644a463ea55a96ffa0d9448395d40e592",
+    "ja": "de280ee7c80509be75ef86dfac2dbb01fd91b52ab4fce6622d2efd5a133d07bb"
+  },
+  "errors.updates.checkTimeout": {
+    "zh-CN": "fb339c27aaaf69b57e09fb779910eedbc5139eb39232bd16c6bc5cc9d892d1e6",
+    "en": "332a68e20090630fe305ae09d8fb34c62429bd9f386fecfd289db908d28d58b0",
+    "ja": "5002bf9755f0460f67f0e5ad0d5d3bd76fbd0a76c68f3af7f54cdfb77c5f5092"
+  },
+  "errors.updates.metadataSize": {
+    "zh-CN": "7e719496215c68ad256c31840cf13788ef6f6da353472f41e9b2518314f5023c",
+    "en": "c08ea9ae03752a3f054bb8912a24a19ca5af1c105394de7c9e2c7c7d2c605aeb",
+    "ja": "e38b43fdef14415015ecceeeba2f8c46ad8872fef19188bb4125b62f1481dd00"
+  },
+  "errors.updates.invalidRelease": {
+    "zh-CN": "2a8df2b9445d5b19a9bdd637059b808202ad61bb05480f1d2734d65af7411ea9",
+    "en": "688c21a61a87271f3a89c087b84855ebfd5d561a606f69fa708920880d66c7a5",
+    "ja": "6d8d537401b74c50cbcc62d58936c995824d9e1beaa1a45685a3280ec1eb76a9"
+  },
+  "errors.updates.networkRegion": {
+    "zh-CN": "db17d02d061db4f4deb7eb89db0f25fafdefac4960ff194359cdd4f585e60ec1",
+    "en": "8a17e591545f317d0543db699d594c42627992b2a0ec194e2579f2fdb3a42d7a",
+    "ja": "ada26555d2a942a53b22f1084ca897a423f258d187026bf0588d569858cba52b"
+  },
+  "errors.updates.systemRegion": {
+    "zh-CN": "8a22d23d2e70cfd5951b972dad8ad0bb72aeb80b5cd4cf46bab3302bbcf0cc4d",
+    "en": "24c090fef84f7e739d1d6d1bb274f5e416ade7de05ff4c45aa18c85aea3cbb0a",
+    "ja": "b0428e35b339c42eb2ded0170fbda7101aaba09d3561e6fff2aadc3d566cc753"
+  },
+  "errors.updates.unknownRegion": {
+    "zh-CN": "507e905bac265539ec5b9f6dee22b71e24f570e7727a9f7ef6569b21d1c69cb3",
+    "en": "e6eb6ac362a5f307d0624bd466de938520bea1a24f4affe6d96d986a6e785236",
+    "ja": "5a558c73822b578fc8bfa76dde5e0e653c826995440f18d6579106280b3a5d48"
+  },
+  "errors.updates.packageKind": {
+    "zh-CN": "3cbff97c17fbecc0a569cf1b4f14bb467bf0ec9b3f0510c6bbd78b3ed1c9960b",
+    "en": "c75a52091440e759218563bb10a97d3dccba89337597bfaeff64197734e32711",
+    "ja": "2a2a6a613237e402dcecac020091e837c2f0454a82d938c997647291ec487548"
+  },
+  "errors.updates.packageMetadata": {
+    "zh-CN": "a933fe1f25548f9c053e9f3ae73e53b02bae0f0279cfc9b64e0e0eabe3ff3055",
+    "en": "fabf7f56e7ebd8567238f10ed002ab196ba22ac649e0492352fab60d153bf152",
+    "ja": "ad774174059e942778d859cd23772cbc6e46f3054388ab870702caffd8df3c26"
+  },
+  "errors.updates.installerFormat": {
+    "zh-CN": "a9ecc71f63ca9d0a1cf15498452c4f456ff8088063875a0c418c41eb2ec5a326",
+    "en": "a31fbfc9806d8f2c6f8c00a1a9d112d1ad57daa27deeb7a97c9879a24a7fb5f8",
+    "ja": "1a835285c69c12e09acc79d11caf665d65f244382e398463af2bbb9140657f7a"
+  },
+  "errors.updates.portableFormat": {
+    "zh-CN": "851032534f8d160255e8b962c6a229f4f82ddeff1675d9c7660d85203ffd2ae1",
+    "en": "d25a1522b7dc68102a61324b2a5abb97c911ced49dae044046b813afcdf6b0b9",
+    "ja": "80b8602b2e56e1255a994b569b9aaf01e8db7d0db945cdf06e751723a4eda41d"
+  },
+  "errors.updates.manifestVersion": {
+    "zh-CN": "d8a3ad29e94152fa62c03a0a7f8d2a16e3ad7206e59ffb500b0c3d5864771031",
+    "en": "dcd04859fbab1557c9be46ab7cfefe34d30748883c7bb2190b54049f4129f3de",
+    "ja": "b8cba395935c1ae45e09abe705e21394384a69605e47a814e4f15ccbd063f5aa"
+  },
+  "errors.updates.channel": {
+    "zh-CN": "aebf2a8ac3691923f4499fb3b409233d236cd22fabb9a0228bdcc71ea8e12251",
+    "en": "d375b61b2b3d420b25437c893871fd3871fce4e4f28ad988968b3326a2f47cd1",
+    "ja": "85032b4d48fb97ea6070952ff9f6f6b5e5f10ab6c46e8c70d7f3585eedaa0594"
+  },
+  "errors.updates.stablePrerelease": {
+    "zh-CN": "48ab6a699f917cc610723736970d3ba5b64ca2c045b9bb95019b678b3a7dad16",
+    "en": "f9b79568fbb3e5a87125efc1f92f22e1ea9c0b7b78fe52a6d8d7bc2cff359e70",
+    "ja": "9c10f763fdf2497938db9f27f3fed155431cb84f1b94c52f364584bd84669740"
+  },
+  "errors.updates.packageList": {
+    "zh-CN": "08d562eb8d44c4a4f4afe8cd0ba7a463524b1848e9f6e11fd81573eb3c1000df",
+    "en": "8f9cdfc12d65f9edfb88c57c256bc4dd42fe6058e18e5e9d3115a4d5de4c5a4b",
+    "ja": "c42cf4333ee51fd8abd38f33e4b4a42c8826ea9a7018c24b3167561203734df3"
+  },
+  "errors.updates.duplicateKinds": {
+    "zh-CN": "e2a6549342ab530525a6b465c1cef47f6ddbf3213c71eebfe96f968813fc6ab1",
+    "en": "eba1544489d89122ab37ba4576256a441fec16ad04d2c7e367cadc1a356bb3ae",
+    "ja": "a2bbca5a0941dcfa0b21d8ddaed565bd1b839360372fe319f4b0a23aa3b96e4e"
+  },
+  "errors.updates.windowsChecksum": {
+    "zh-CN": "024f37d37e6228c4bb2ac2659090142dafdd723358b9236ab908b28504b5c347",
+    "en": "f8724ba37d2f6e234c48f71def200d1d96825787fbb4346016bb664320d7397d",
+    "ja": "bd3651b012424721b12f7a31a3f18242172e6003e714e52a75e54ca60d879e31"
+  },
+  "errors.updates.notes": {
+    "zh-CN": "958f1486db6d0c9fa25514e19e738cbfff601ac16a243f8402eea3ad1b418601",
+    "en": "06ff2c4b5e9e2761814ba39aa5af0c9d7589788972fe6c161ccfab3fe006fcb4",
+    "ja": "0cb6f942929606a62d8ebbecaf279501f8dae06b156f1f37a57c0152fdb70afd"
+  },
+  "errors.updates.releaseIndex": {
+    "zh-CN": "b2d5ed737a8076c220357ebaa335af4ed18a37ccf979c005f95fb1dddfc7b65d",
+    "en": "ec3e582662a0228da7f10973359caf88df2b25a21969f98bf6e6cca7227ad14b",
+    "ja": "6ca8f930fef0016b33fe77b4f98f460be0a2f3bb0c54046f2d7a92c472ac5c39"
+  },
+  "errors.updates.githubTimeout": {
+    "zh-CN": "354a511139e36952d89b0de65e79243cac689a8a2a864ae29340a4eadb951b3e",
+    "en": "904a583c7e1ac86d9dd9f44098311d3092c18e9e0e819ef059e9bb0bca683996",
+    "ja": "46d1f2d50d466cb3d4c2f41ea4f35e63746d9636bb9e904153326bb57e37fec2"
+  },
+  "errors.updates.githubList": {
+    "zh-CN": "776991f99126617865dd02e733c6f26f6691ab2bf14e0c029a8807b56fb5b215",
+    "en": "7aa7c27a209ca0d8b230bf6a6f5dfa475c2d4b74b81527abc88598b00dee029a",
+    "ja": "7033eb0cd7d84d96bc6d1a2167a8a2a1272dec46f590220d84798ff8d14d19b3"
+  },
+  "errors.updates.githubAssets": {
+    "zh-CN": "ca1868c04c8882fcf8f8914616016eabd5ef2bd3cf4d4232a851fb7c35cacdc3",
+    "en": "9c71d328044b51714fc36209e3ca81367eed9985ef790092e75b325a33b5cb90",
+    "ja": "4581698ca70b2cb7ab33e681588ae5ce29ae7900acb319a335a8fe49e5115fd1"
+  },
+  "errors.updates.githubVersion": {
+    "zh-CN": "fe8ca463ee4cd1fad4c4638d0b5ccc89aa2c6adfbd446ef6b806dfd438aad3e8",
+    "en": "de4316a8a6a620b83da2394dfb6cd99a8d11b962d59cb6bad3f9fa38cf53b82d",
+    "ja": "3e5fed01b01cd71c14db1aaf1ba6e9c15fa0b48d13089342ba4c086481b02f43"
+  },
+  "errors.updates.githubChecksum": {
+    "zh-CN": "3fe7781d9ce3d27bfb7d6e2b031699f95b025ae54ae43f1dc275633ad7f8d93d",
+    "en": "c149d81b77adaf4024590a3782c823e04db2d193ff7ccfce64253e5903aedbd5",
+    "ja": "c0e7137da50efe23279aece8d0c58cac5025f0e319ca440c77723c5b6033215f"
+  },
+  "errors.updates.githubRange": {
+    "zh-CN": "ff9fe38d59de280d142db2f14f056bec1ff0d72519785ce67a4ae761a398ca0a",
+    "en": "124696146edf429b75f9d551a59394ee61654b238f8fb379d816ce8ebce941a0",
+    "ja": "e7c4be6d9e6cd48dd1e8afc42ebd55a5a472e96d9a450811fea3767ff73d9976"
+  },
+  "errors.updates.sourceHttp": {
+    "zh-CN": "5216e524830c72056e03d8deb29254fbb59c36f2e89b33dc86210795c8a89116",
+    "en": "1bdf2fa6111d39be6149bf8dd3eb481fbe50581a92adece0fae40f13ca74eaa8",
+    "ja": "0e50f5c8f63d2b2c5b9c243252388af614c8878c9ec053f15dc8114f1fa3d09a"
+  },
+  "errors.updates.networkFailure": {
+    "zh-CN": "406ad23a4874cb7e1f2f5f5ed2ec4cee3759176a3e761be5e6ccbcaca4f514f8",
+    "en": "8ee3b2941b003c2f41897696860bd509618c99841376a7b33b264802d40a5006",
+    "ja": "84038962a899b95a5a62e1141f78f9ef94ebbebbd910597e1246c40c1883c1de"
+  },
+  "errors.updates.checkFailure": {
+    "zh-CN": "79b39dacfacf0306ac302d8347cf42d90a4b31cf78668ade3bb43dd4013618ec",
+    "en": "2c73af0a30e0f250c6a99b67438f128b6c8a3b768ed469726e53494c19b77b99",
+    "ja": "2ef2421e2087e8efb708cdb9ae67dbc1d2f4d87125c89e7663521dfd7e805d8c"
+  },
+  "errors.updates.checkArguments": {
+    "zh-CN": "1de5a83bf931d2129e310bdb381d0e29cdaac7fcdb74f5a6edd8ec2b5c0d33cc",
+    "en": "077bc5003da077648988ca3f20b15296378762f317e20f5fa1575ada4a13cc35",
+    "ja": "31d2bb9e0017d1ec5de16ff3f2a9af3752036e3fc059fba37e12638005fd0352"
+  },
+  "errors.updates.manualRegion": {
+    "zh-CN": "187b88cd44e46d10201e1d86c2e79e33fd1a01aa5793d77323fbf5f52b259481",
+    "en": "3d6da52073bee9b8e2e885328a841ad7374eeef12f3f7df5aea8b8a3fdcf8de0",
+    "ja": "2337e1eb009daf6f10041e379b63ed54043fe59d9f731121f9ddccbb90d16054"
+  },
+  "errors.updates.sourceConflict": {
+    "zh-CN": "085b479ef3d908d9022a736c6c44b727bc0fd3d8516ece96e20be784901425fc",
+    "en": "280eeabbd2815dab2cc7ee323d9d3f77157008bed0cee55c4ebc3d00ca51ab89",
+    "ja": "0d66c79656f7fc1039e751783923db7eaad4befca0290d3b6b3331a1cedfe004"
+  },
+  "errors.updates.staleRelease": {
+    "zh-CN": "b6eee5409952688df9c98ed4ed3fcc79c2660ac63d826cd6fb29dfd5daa05468",
+    "en": "962be9ec2b56c560d034820c12c7a0be9a5c4106b6fb08d1f8df2c2b99a8aded",
+    "ja": "2807259751652390e8962176c0e2f6c137473be2ba71b3de423eefd18f9b077a"
+  },
+  "errors.updates.confirmDownload": {
+    "zh-CN": "3a7e9bd4a5bc6b89d925f08240ee4fc2ff93eb068edcfe6806f1521f17cb307a",
+    "en": "815537d8953321ff896112061ce4fb5cf46d3357c1493e932acc27285a578f2b",
+    "ja": "b5b317ea9c2377bcc236778557a137272b7e74899b309c01a9485c86545d73fc"
+  },
+  "errors.updates.installationMismatch": {
+    "zh-CN": "9ecbece84991a34c1cc135fb2fd20a20c207f4ac9f6c4ee86aed79c03334a245",
+    "en": "9fbfa4d0b94d103073e9ee616d3b53c90f1f495ba09acf7c2707f4715f3d7c52",
+    "ja": "1f2bf8b19c9d9a5c62948d6514918e4c50cd27e75c685e29daaf233af16aaff7"
+  },
+  "errors.updates.noMatchingPackage": {
+    "zh-CN": "131cfdefb46178718407699966704b7fc2b4ee10f8acb87a918302d65f629b2a",
+    "en": "205c57c4b04c7731241b251956bbaeb113e2691ab885475dfce304f58e942964",
+    "ja": "e8fa59b10d10d4326208a1aa44a800c199ff256076c8f34e58d1d0b243a60047"
+  },
+  "errors.updates.downloadBusy": {
+    "zh-CN": "a91f567591ebb64dcf4f6bb6c2af218ee0bef8863ca6784a42fa28cf1cfe725a",
+    "en": "bcb488e0b87e401166c93a8ce809e757b3e515eca34d5835697cbc1db4c81599",
+    "ja": "c08c10951e04cd1b49dc63d0f29c75a2bcb9ad082fcfc6ebc1b46874944fd8e3"
+  },
+  "errors.updates.downloadFailure": {
+    "zh-CN": "970cc2ccf8f53e5d1630eb09d465bdeb9182ae79ae92371451d5d250233a6374",
+    "en": "467c2bc74b3b34e67ae9f2ab8426a75394fb95d048efed71319bf3245ddbc113",
+    "ja": "6418e232179964f48efd003b62463c781bb2d665813a965fd10628f5d77dcfbb"
+  },
+  "errors.updates.cacheDirectory": {
+    "zh-CN": "8a517e6ce0c450d62a694bc52f96c501d2fc43d2260ce24787507150f46d6031",
+    "en": "f6a11964d49d52f0eed21c8a1cf49f8b2822360bef640edd8a1909d2d28c83cd",
+    "ja": "66c98d37787bb5e14116365214d4fa6f7615d322daabfc81e6229b77a7eb8f98"
+  },
+  "errors.updates.responseSize": {
+    "zh-CN": "8ea2fca1e6193afaa696f4b45d3b1a1f880a4dc7e0df178d47165c06c9c27b84",
+    "en": "14e768ccbb51e5cc3cf4591bc4b2e4e373118d258f55f51151b3978acc9bafa6",
+    "ja": "fad0673072bf04a863029c0c6ba8f2f5f438e36d71fc69f922c95c5673716679"
+  },
+  "errors.updates.downloadTimeout": {
+    "zh-CN": "754cd4ecf8a4cc5e10a3a802f375948319c1ff2c2ddeddcb92166d596e72d85f",
+    "en": "ae0ab00f9bd4d14c2c4149f6eac8f3a7790743469fd1da9e08aaa17a3346ee63",
+    "ja": "db079bf23748856c5174326bbee814cbb1e6455f410f6c20defc36671584ecbe"
+  },
+  "errors.updates.excessDownload": {
+    "zh-CN": "e2acc0c001f727ae1e7ef379ded59207d73b3d6726f163c370786dae6604f348",
+    "en": "8c29e9a47ce9047eda637cfcf06eb265d44ad4ed00afe64e8913043a63abcc35",
+    "ja": "611c892ba825b32b989fff16da420f248427f9ca814cb4ad0be2197ddc94e1ba"
+  },
+  "errors.updates.incompleteDownload": {
+    "zh-CN": "035ce6fc3873fb5e6e20515335027f86cc4b5b438c918ec88dcaacd5922fe840",
+    "en": "a81fa90abcc01fcb54f73e5eea74742086889fb6b0fa64fc22ca283c80f93d6e",
+    "ja": "4f96274109d43c006a172d40e10792249d4583ab6c05a2683f4c1ae02e62a2f6"
+  },
+  "errors.updates.checksumMismatch": {
+    "zh-CN": "e0e60a10be67cc8aa2debbe3505b9699d892cea68e1f1643c9a20cae9882ba9f",
+    "en": "5ad7e674e74e2b86731f1ead9a8e4a429cbfd28ab0e27be4ab596a5ee5c653d8",
+    "ja": "28c0e892b92ec2c8374f20ffdca189f19b69e616d1046c3d010f3441c45a17aa"
+  },
+  "errors.updates.staleDownload": {
+    "zh-CN": "8db017476f7e7bc8f620d45db13509a38f3bcca0b62e9eda34012964ee8a4c46",
+    "en": "230d5a58e1d069307822ac57f0d96ec2ead3cc4318c65f19482e9079a48d646e",
+    "ja": "f281a6ba5c1627f02424dbb53e61b7fc763ef9b42bf540271bdc951729ed2da0"
+  },
+  "errors.updates.cacheLocation": {
+    "zh-CN": "43c2659e1756f92955dc248703a1436366bf198347085b49538b506337ddc727",
+    "en": "aa3e26f5e3c03e51d2d5f96d61afe477ff29adb48d3f060a9b4e68a4c040350c",
+    "ja": "dd7354626d3abcd170cc3eb3b29494411d6bbd3037573de502a850e4f0264498"
+  },
+  "errors.updates.cacheChanged": {
+    "zh-CN": "aaab5fdf3cd8699700c0201644ac60b887891cc36d55ed27b433278f7da6411a",
+    "en": "e5d9413d4137fd0d4a22c6cc63ec60dae66b88ec6fecc6b5644d59091a829ad6",
+    "ja": "c033c2c165cbef4f199d0de10b1e0514654f0a852fa89d4cf216885e7588041e"
+  },
+  "errors.updates.cacheUnreadable": {
+    "zh-CN": "9c748115d7cd0cc7b87311c735f64e0341c87419835fb414b2f6380efbecf89e",
+    "en": "39767a4c7d1b31f60b6b09abff7ac1cd877996c01276e1201dde151b06880a71",
+    "ja": "9d1886aada2a42adad5a9d396e0bd96f964913560de8eb660587b5f3aed1fd5e"
+  },
+  "errors.updates.confirmApply": {
+    "zh-CN": "4b2ec05513e9c3a434bc1b4999c54d1161e5d7ccde4d62cc0424e1ec47972b7c",
+    "en": "24b35c7bc7c4d96a66ea4a6e46286fb9bfd02b99eb38b2ba04b60540479e8d49",
+    "ja": "c51fcbafca33a68fa0b84d607a426eafb134a1d935f46f8a1ed43cc619fa573f"
+  },
+  "errors.updates.applyUnavailable": {
+    "zh-CN": "c8cfeeaba8e05dd14372a556809c1a61e14000bcf6b37269af7c6f3503317955",
+    "en": "9073cbf7ba7e2a7f060c92059fd0a908bae15d022db1a23519e025daf3fc68d2",
+    "ja": "4c04f6383d35b07abc6b69e223615096664e7d865ad9a2fa22dd82d24cecd34d"
+  },
+  "errors.updates.requestSize": {
+    "zh-CN": "40796b089ad4b65c08dcddcf159d61a746d43e23d12c45b720bb873fb709c48c",
+    "en": "a27564f0a4a2d11015d0b66be19e793f091de22bd5f3de403f75be33d509fffc",
+    "ja": "9b43c07c5fb3a701898a372bc9f10f7016d2a4a836361e38139021436104afae"
+  },
+  "errors.updates.requestInvalid": {
+    "zh-CN": "2d072c9ac1ad68199ad8cd93e2c00870b4f77fb4abe8265b887d635754cee760",
+    "en": "342c45b00dfbceaa86519b827d6659c09d0067716fe277cb3ba0f05a442bf4cf",
+    "ja": "86a19d21f1be304e1635d98c07fde1960dac949970b17a9a835a75db243e51ef"
+  },
+  "errors.updates.busy": {
+    "zh-CN": "77931f8f94f59ccf9f2a10b13ae28680bc571e5e36e361429bc218b06846a933",
+    "en": "b67bdc2d68df75d1a98a67808d2b161c9465c158c90cc8223e5a92e67aa43d27",
+    "ja": "d2e177040f32a160d2babf5fc696fca672e6bb028574ab518dd8e4fdc975c418"
+  },
+  "errors.updates.requestParse": {
+    "zh-CN": "eb18c6ee316845fec2175670125fd3f5e1f40275cd5b7c0d6e60999469755363",
+    "en": "79da93567973d3ff70c34d31d190e2f3ae7fbfbfc25e812cf0037609040efd4c",
+    "ja": "14e84458a0ad63f1d6c3298bbb5e7edb70e61ef1b573fc166ce5eb4cae5e01f2"
+  },
+  "errors.updates.requestFields": {
+    "zh-CN": "4c657c4e67a2139a83cb96b197dd62eaee94a96dd29e3079e7ae940368b2424f",
+    "en": "ea5ddc9494b58e412046e6d9cd6d0d929f394e56461a231324101f5cfbcf38df",
+    "ja": "7db95880d8a2286578136006b53d9b0b79f84baec538651241a060d1e61fca7c"
+  },
+  "errors.updates.operationUnknown": {
+    "zh-CN": "fb232b1a9c9d56dad672f41e283bef19d851e5c4c16fe73379f4c48bc443202e",
+    "en": "78fb92134369cb8b4e1c233881056542b36fb1c2202091e263e0a38102df5493",
+    "ja": "ef49551f04e7580fbf07dcbf2fb852606990bc91e7d39bae22bd337bf41114b3"
+  },
+  "errors.updates.operationFailed": {
+    "zh-CN": "7e47a25ccbda08b13fec4749b97fd4e47b9e521855fe45d37aa76574b3ee65e3",
+    "en": "eed469e1333986471bea5df91c449af8582f83a0986a9f67d3ef6be10e689851",
+    "ja": "b36800c8452f20e7b16a23fc35b9a5d6ef93c17e0f37038ae8b240d484e2ab9b"
+  },
+  "errors.m05.playbackTimeout": {
+    "zh-CN": "3c6aa7c97d98ce53c7ea3d58b233e1db941329b148752dcbbb2f5f935971f816",
+    "en": "eb29809dc2607b77f84cee10e34e8c004aa560db9b9fa54e69e8c3a312c334e3",
+    "ja": "f7f13a975cf3872cd959090eb69d451fab38948a35715d77b001bee1d8e668c4"
+  },
+  "errors.m05.recordingSaveTimeout": {
+    "zh-CN": "a43f6d64b1bc857fe5ba23110ac1252430c195c3ca1b21eb5ea5d175140b35e6",
+    "en": "6c8be4cb3ef383513d66365ff0360cc8d41ca30e9cb34bc0c3696497e574f7b0",
+    "ja": "3081e4872db9415eb6846024ff58c36542b89455bb53d23f71371637e14647e0"
+  },
+  "errors.m05.playbackIncomplete": {
+    "zh-CN": "221816c523b385c96354d00db2538680ddd5a72966f9b5bce4ed7a1495651b1b",
+    "en": "db2f4c69b0786548030bfd2c82c63d4cc9411c6a79eb1d55d720fea8dfc9e65d",
+    "ja": "c3273cf1d3a303b4d498df4c1fe17a31716329a4f9f46ce3e8e99a2c31ddde95"
+  },
+  "errors.m05.recordingEncodingIncomplete": {
+    "zh-CN": "afb9592b48cf175ec9ad138b7d7550c00891014dc9124037e68d5ca1b9d12508",
+    "en": "e43b1b13c84265c5e8b1a7f6c463bd9d3f7a0b3415b60f4ccae3a96e52624212",
+    "ja": "aed0e2a2aba54c80d8010ab80ae92a6886b64c31d23dbbaa938eb5e2147ff918"
+  },
+  "errors.m05.mp4SaveFailed": {
+    "zh-CN": "4888f77464c40e1b196f57831af908e886bbbbd2a0ba1a11b9a0403ca9d8a475",
+    "en": "23f8d06e3e7c67bd52192ed988c05bbf421c950383295b461ef9e46b6dd7f04a",
+    "ja": "9abe9649e6aa1bd9f64ed9ea6bdeb2144b42d70309bed9ded41c0a38f98f8c20"
+  },
+  "errors.m06.parameterSize": {
+    "zh-CN": "37688d7b7b09cf0d28243269d653041b66c29216644cea072b076ed9fec63976",
+    "en": "d44d46b584a2075c689ee577eb69e5d561f74307bfeafb7a391331d3512c501c",
+    "ja": "1107df4a253b2b1050802d573945bf5ab3f037d7b1c03ed42d4d7452b33b269f"
+  },
+  "errors.m08.resultUnavailable": {
+    "zh-CN": "a7fa61d316d42464098f4064b02593776a98ea712208c85bb4f4c8c1ea36b927",
+    "en": "867efb975678ccaf48afe514ca359d7e45a22477445f5eccb7143ce942902ab5",
+    "ja": "d6ac2f8629ebbec207b1b7386ffa364e2366f87291adcea4427c1e07ee8eb86c"
+  },
+  "errors.m09.pythonInvalid": {
+    "zh-CN": "06202a63f00b68783c9b71a7cbc63a3aeb588627ce09887bc5d591faf0e8abeb",
+    "en": "3da2874fec681925a147107a01a5134e55dce57ee3ccddf156a4800081b1267f",
+    "ja": "fe6d1b3a39902a8d0342b16616732c5313955c7666786d5eb12e58dc164f6dd5"
+  },
+  "errors.m09.gpuUnavailable": {
+    "zh-CN": "8e32a2df0f0f51dd80c57e79db5b29678f136beec7c9813ab33f5c3ab1747567",
+    "en": "d29237a2c57c2dd54caf64235d95e52137ec7b418ec5f6702f195ba73b5965ac",
+    "ja": "74b2cabb6d970a4a44cd589e5877f4d8881e5b20f0a41177737ee382bf3d47b3"
+  },
+  "errors.m09.pythonDependencies": {
+    "zh-CN": "2f91c3e44fee38637e9edf4ed60accd706c05d499b3d07b8064d03dbb1863c1f",
+    "en": "055878c6948af5deca2add7845af906a4237c605da2f9bdae92f991db2653575",
+    "ja": "490c3eadd3204cbeaca65a2d8bac2c5fe1e7b8b4d857fe159ae84f742698d689"
+  },
+  "errors.m09.pythonChanged": {
+    "zh-CN": "14b97f4431ae862eebee7d616f059ffde6fb5bbbfdbf24c049bc0cc7c479f682",
+    "en": "8468035773bbc292ac5653e8fc087c4dc7fe64467992db833ff52f266cb66900",
+    "ja": "cb956d6b2fd3fbb259bc97ecc6ea0b73a724669bc8b767edc885a8c0dd840397"
+  },
+  "errors.m09.vocoderTrialFailed": {
+    "zh-CN": "7acff78a1a4568c692d578847848f83409422e9d52d27301e6c059bb01328a9f",
+    "en": "29bcf9e90a5d5ceb09e5a648f4dbc1ef682495006efc0ef8614e9e9493c70175",
+    "ja": "60b5903ff3f5943eda86775533d8f79a1b20a9c5e11a76b505d571b741a8f56b"
+  },
+  "errors.m09.pythonCheckIncomplete": {
+    "zh-CN": "0e932e3b60196f6f8ff62f893470c1fd6aad65644ffb54aecae57ad16faab90d",
+    "en": "fc490120efbaa4a4ded65a34e266f6560aa6553fccc339211e1fc0a84f59f0d7",
+    "ja": "266ae50c467e5e0317dea6d774518edebf7fafdb2c51605944516927cb3f6119"
+  },
+  "errors.vocalTract.requestFailed": {
+    "zh-CN": "0e5fae09535eb86e705bcb8cd242f14d13471ed70831794d21b833b489db6d68",
+    "en": "10dbdff45e1ec4195033eb9092780bf3310708f514981f6639daac2f1c23c5a3",
+    "ja": "0febaafc020bd4978e3ad870594fc4d8157fa6b214ad6cfdea73ab89d7e890e5"
+  },
+  "errors.vocalTract.engineExited": {
+    "zh-CN": "594e8b652ad7fc13b028ffe2b59800b2718c809f427035637d21b81bd75107f7",
+    "en": "cfeff96ba8f085ebdae8f4d7311a57d111bfe3ae30a033661ad449b9bfcae567",
+    "ja": "831fd9bcc3d4f884cf180a7d3ffc9abaafe21e7a5a5b4ffdc87e1ab5892d8b9f"
+  },
+  "errors.vocalWeb.invalidRequest": {
+    "zh-CN": "6642051a18b5b903c8a0d397937251d7dbae4bd1f7b6245b6e0cbab894a9a97e",
+    "en": "8e200c2d09c4e5ea36fd8a1ffd9b3bf4f8964fa688c056dfed15756910757d1f",
+    "ja": "af0427b6919e738a9a5ed5781d8cb1b7aa2df74e9cc0d0d73ec420c168af55c6"
+  },
+  "errors.vocalWeb.videoScratchSpace": {
+    "zh-CN": "f8c4d6ea054de2f2c67f24b08a814e2a68f8a33a48c486da97e9a0cbfa4b2ede",
+    "en": "eb3a2055fc5176b199c03f23a3b1f0ba6e374e2c7efc295264288cdc262f45c3",
+    "ja": "6a086540ef34472606eb890693bdfb4bb1e054e367b1a02de647e7babb278e56"
+  },
+  "errors.vocalWeb.downloadCapacity": {
+    "zh-CN": "8f8ea3a0d56257ff0f43a23160276dcca83b9b2384cf3e813dcca96b7905a24a",
+    "en": "fe3f6eead4632873e3dd96396224d85aab14050c3aecfdb73fb8680f73e0d781",
+    "ja": "93f109c7c52b601cd7466ef138211b96afa3ded04ea3972b7c89decb5d40c80e"
+  },
+  "errors.vocalWeb.encoderUnavailable": {
+    "zh-CN": "1589b465caa25ae4f2b3485efa1ab25d452f5cae32588c6fd2294446ce768afc",
+    "en": "5e97a2b1a64f4c2189ca45bda505425ad820f49426ce560e4ca1a922a82e3991",
+    "ja": "3a8acd72b3e434d00b1814559659f4cc9aa622ba212f481c8031fc45ee33781d"
+  },
+  "errors.vocalWeb.computationFailed": {
+    "zh-CN": "d55ed5ce0456eb07916714d16b9302ac123dc9b0649f805af4a288b99c2caea2",
+    "en": "7a9607083c3b458825979cfd7c62404f53fc9818c2ce3d4f635b6664e0b3b766",
+    "ja": "52c299fe75259f0ea04fd265315f9070008ed1601c92e8ba8ea1e899647905f3"
+  },
+  "errors.vocalWeb.mp4DurationIncomplete": {
+    "zh-CN": "300993474b884e09e7c533c86f1d4a0364d3e9c9c1b49ca8b1d392f747e82ccc",
+    "en": "c7c5be465239ce6a1c474e446931635396d595a7859a5d4b7ece39ea303d8ccd",
+    "ja": "85375ac4e23f2075cf478fb767ee08d2dfe4e2b873507ac0f6000b3395cc641f"
+  },
+  "errors.vocalWeb.mp4FormatMismatch": {
+    "zh-CN": "d151660cfb012bb08406b4ca898027b4dd5dbc26b3931339204e2a6e9791f6e9",
+    "en": "a6fb98d4cb9c639b5eee47a0ab21e3057423d55a6fcb100f0625a1378d535652",
+    "ja": "a7bd13d9a6bdbcd98685512df71b8eaac4703f8820ddfb4e45a4d8f5a44c31cc"
+  },
+  "errors.vocalWeb.mp4VideoDurationMismatch": {
+    "zh-CN": "a1cd2daf2863045de7a693fd294748bdcbeac2bddf9313bf6c248ac01e69e1b8",
+    "en": "8a580d3de3e96b61d94b0219a46c1720f068df05e3a830a7d5170e6b7eff4d5c",
+    "ja": "8de2a57fbd7c811062a7804c05c87fc59b4f610be30cae3948a29dc6bdd38af7"
+  },
+  "errors.vocalWeb.mp4AudioDurationMismatch": {
+    "zh-CN": "2a48072f257542c1c040ff9532523a8ce064af104e56c537ad2daae246b21299",
+    "en": "e8a50433cafc614f08f1421d579d4f08b9b8720dd15ac66fa8c9b3bc03fddc14",
+    "ja": "b244288f0ca5bbb1021f7ed34eed6d42b031d17c04562418267e13a2d5a65c81"
+  },
+  "errors.vocalWeb.mp4FrameMismatch": {
+    "zh-CN": "44fb41020079b4e21c8e94a22de5addcbc724a9f3d830d02152930233302f0f2",
+    "en": "30723aa22926d476a4ffccb47cb90650746dc3a7459142c1ae3178e7c74f0281",
+    "ja": "7f0702dce98099d11462c3ba190147234ee0cccd3b3a50fb9cb8f5be6f9affb7"
+  },
+  "errors.vocalWeb.invalidOpusDescription": {
+    "zh-CN": "9065370c115e6f6817146403401a366804bf5c78d03f37744aca2c37a54a06a2",
+    "en": "9322e59ec0632aeb3cef8ce2c6b797f83d6e86d8f272e65141720d1db8f74b4f",
+    "ja": "5ae424cfa2bee6c030990da7fa38a5793838a5f6ffd5faa2dbc8c8d8b970f153"
+  },
+  "errors.vocalWeb.unsupportedVideoShape": {
+    "zh-CN": "69f9c67e17ca0a5d3190a45077e7d48e342546e9eea651172bcf06d363ed5df3",
+    "en": "18d31c196a145aedff087294aac8d5b645c6dd9b0f0c8a544084900c99a71444",
+    "ja": "fc26a40ed497c4c38325b8780e6e2f6d75005e8d3890384c14ee69f2c49cae44"
+  },
+  "errors.vocalWeb.videoExtension": {
+    "zh-CN": "785d34e5165f057955041566240a3b3401ac268b76127f38043d6475ed250c7f",
+    "en": "3461ab899296a5f6e612075ce5e35c4a1f344d75068028dbecce3011a455aa8a",
+    "ja": "439ccf60c5add4b2268a1463167bd1573c9f8f35457d0273fbd7179cbb8b2e81"
+  },
+  "errors.vocalWeb.mp4RuntimeUnavailable": {
+    "zh-CN": "bf3ab648202f03299b310ae5c869efcbd0b2776d1f9198f150c4ce56db8ef09d",
+    "en": "4a635f4767c4311f3097a07eea1dcd3751eab706217e96767e5534c7e466c6af",
+    "ja": "c9db65b862f87a1ab958addda74c7c0920d69e5a4bc18fe79cadedfad8985645"
+  },
+  "errors.vocalWeb.videoSessionEnded": {
+    "zh-CN": "27a09fff0312f2194fc3b655ce33f6202ffaf9504fa29fe6dc0968b72e8f6f7f",
+    "en": "7d285ddc3183b3a63d769d29b35719c12e0a0a17e51541327afb5a56a56cf4d8",
+    "ja": "191d20c32c5090767020d119025cbb8fed310469f207e0dff832a83e8c382cc0"
+  },
+  "errors.vocalWeb.invalidVideoBatch": {
+    "zh-CN": "42c10b91e1262d9b2adbe354ca5a86523fe39e39b36859226c1c58e0477dc72a",
+    "en": "e5892526584f8046b97436eeefaff86bb4e6e43fe076b9321bdf22baab8ce32f",
+    "ja": "6d635c73e560ff7579a0463bc77e7c333f09b13674614c3f2184b76e24f3f2d1"
+  },
+  "errors.vocalWeb.invalidTimestamp": {
+    "zh-CN": "7b99c3a26cf9d0dc82125884cf2aa1728178ff9063d41fb2b5f49159b408d18e",
+    "en": "82c9f472222703560c2a5ef352db8bfbb9a4ee0d7d1cbcef729f9784beaeee6b",
+    "ja": "ac4a951813eaf2e33f6234ca52c7a5a8bbf52e04df050b6fd16f52b5bf41f5ba"
+  },
+  "errors.vocalWeb.frameCapacity": {
+    "zh-CN": "72aafe26ce1a255d1f6f3640d2d2e095f40ed21b1aec76de6197113db7505ff6",
+    "en": "9f07fb46d0a855c5a2b84adf4cdb3452257f8f22fed185e8e7d125ea27971e51",
+    "ja": "094e6603eb439c1b659d6e9379dc41a82580626e3d920be0ee9c14cdc4249ede"
+  },
+  "errors.vocalWeb.videoCapacity": {
+    "zh-CN": "c588616adcc499a8d53fcc603866f716c4793018804a5cfc219c170aa402b390",
+    "en": "2899dd77222f4e43f2edd0487eaa9738ff859f50dcce7be63db3eeeb3aba299a",
+    "ja": "ad37c6117dc9e00e8d0167726b41bc586f8043bd112dcbff46ab2578c556c5a9"
+  },
+  "errors.vocalWeb.invalidAudioDescription": {
+    "zh-CN": "cdea187de030ddd22b5f3ac9c1f8c8593b42550af8b1c07118d36a9f5b593104",
+    "en": "d11456ede0c585ac88d135d56b7c6410399323270052cbf1b1e72f767ad7ec91",
+    "ja": "a5c0a0845cc01e15050c784cf0d10a061523f429db659a458e6e28629cc064ef"
+  },
+  "errors.vocalWeb.incompleteVideoFrames": {
+    "zh-CN": "268b03544422ec756c83b5dd497ce11a5bec079901e5b3cc56c667a55964a87f",
+    "en": "c32e95ee2bbc39cd0af14dfc569e7881293a18d05570e18594e9008e16f7047d",
+    "ja": "e921c7aacd7b93f3347b6058179f498a7d270cfd0509578f12a411d6a79a895c"
+  },
+  "errors.vocalWeb.incompleteAudio": {
+    "zh-CN": "94e57417af1895a9188724eaaed9411feacccca1bf7052620cea24ab2affc260",
+    "en": "9dd41294900fc1bc21dad6e8804e78a7229834dde215ddbf7d39cc5ae5f19a2c",
+    "ja": "47098b4fa469a731d5558217106f07dfb4e011209db78a2fb62a4c73dc2e7d78"
+  },
+  "errors.vocalWeb.exportCancelled": {
+    "zh-CN": "7b376795bbcabbb45b060b06dcfd91026876a2e80281cd50f9781138ca533953",
+    "en": "47c8e0cee4bd398e18018ee57a71dafa998a7a30d17eac6e7c16b4d341f93e7e",
+    "ja": "8bca90573d4b4ba78c3311b72cd28590ab77b41ff8c5b68fbce5ffbefe9f7114"
+  },
+  "errors.vocalWeb.mp4Incomplete": {
+    "zh-CN": "5518121b590f68ff9d1e0e8dfa583ceec2f28ea50891dcbfabcd9d0f6047dd25",
+    "en": "f23daa8ec37913a3cb0880e3c591326dabc31bc837d6e81b49a57a6b691244b0",
+    "ja": "4e6e1911475fdd3af85b877043559dbd0b32080c50d2ce611df0ba1f748ae638"
+  },
+  "errors.vocalWeb.mp4Timeout": {
+    "zh-CN": "539dc3aca149e75f2f59aea5d227be1b3ba0b6354dbb81825ea8f8fa118505e0",
+    "en": "95433adcf0763b878e0f3b8f308d7e7375b781c72f1af3c17117c2d59d193dd8",
+    "ja": "1731cd7007109274912b0c10c107574425a06e6cfc5a799e5bfd18304539e4df"
+  },
+  "errors.vocalWeb.mp4Failed": {
+    "zh-CN": "e2e6e3ac43ecbf6185385ae2745cb03f819db555139c2635e90b784853c8cff1",
+    "en": "099c63d63c84a3803080cc22f4b0516e8ea64b0bf4dc7977d3258423075ffa5b",
+    "ja": "8c30977ab3d09e29213cbf345ee70463e02f2035991cdb64224eee8b4e456fc0"
+  },
+  "errors.vocalWeb.continuousUnavailable": {
+    "zh-CN": "3ad117879ed3a43fa2a9e239a2f050e27fe7d98361ec535763454c10dfb4304c",
+    "en": "4c82f552da45bae153dcef28799fbda13dcadd34f1e39d838f0b2f6ee4ace012",
+    "ja": "128d1aa1024c5693d0967616bf785d16a5affae15f607c0f0ead1421b8a4c789"
+  },
+  "errors.vocalWeb.previewActive": {
+    "zh-CN": "abdd1334802f6a0377528bbbd6b7e032a33c168d3ad0b2214bfc95e27f7ec160",
+    "en": "e4ec36df293095387240407ec07b28f1259b81beee88c8a885eb6b5c6954bef5",
+    "ja": "128c80ced614f3ece71a01e854edcc1600c531191f9f523d8a65207ce81c566f"
+  },
+  "errors.vocalWeb.previewDuration": {
+    "zh-CN": "9505aa751713451c59e7816c10a4e1f6bf27a3a4d4d035d0515ee02a618c9394",
+    "en": "d81cf73f043478748f245eda4a5d9d0368e1405bd297dd5c5081dbad2c7e2947",
+    "ja": "3e975caf124bce02f1a9c72784ab9db68a3763c5a04a8f4be272ae547520973d"
+  },
+  "errors.vocalWeb.sequenceLimit": {
+    "zh-CN": "971c7b3cf705a3e6bbeae888f8dc2d9b0fa4bbfb1b44327f2068cfdedb6e3260",
+    "en": "48dfeeb0a4b2fccbf27670f6bb8963aef06d525fd2b9dfb19a1452f1b82ffd42",
+    "ja": "dc81091392dc36bb6d4e5f848810786d613902919255c250a559b8b2e2d72511"
+  },
+  "errors.vocalWeb.chooseOutputDevice": {
+    "zh-CN": "7d106eda298be2def516420fd0c006258e2b0da166f8c8964909a96176907747",
+    "en": "08730412f18fb9d0830421ba9b98e1e35317eea366dfc651a7f38ce09cc33f93",
+    "ja": "bb765800da64cb8187db64a64553d5767b6a214bdd263a3526fbdb673b31a7d5"
+  },
+  "errors.vocalWeb.invalidVolume": {
+    "zh-CN": "2ce1c288bbfabf7786bf078c2c19f7811e0ecb2213ed97b2126d30e8cf0d94e1",
+    "en": "103c7e91b9eb3826df45a23685d508ee0f19d5a6b309fa6b4b8b15d6f2eb1c5b",
+    "ja": "678706c35e8c4c311bf06e74266ad1abff2ae20579c2a8790cb34569e7a9f03c"
+  },
+  "errors.vocalWeb.invalidPosition": {
+    "zh-CN": "600c78f2741e869c102ee0ebd9791a4588b685b28cc599e851657e0635438050",
+    "en": "35a1b267667a50fde8e80b0f15ff436158bc33608ffe2d2da5e83bfd2345dc64",
+    "ja": "df04c00ee2c163211d603c06b2be50fe6c0e6938692ed697421ce717e7f425d0"
+  },
+  "errors.vocalWeb.incompletePlayback": {
+    "zh-CN": "e373febf4549fe6d7ea698386a2d4f531b9bfb49f3cdde762378000f8903b911",
+    "en": "dec66ddffb931ef0a47e847f4c83d222b112d3816dd205b003b4e6e74e8e4900",
+    "ja": "b4edd9345438d7705f722142903ee8fdbb93bfcd947f4f870834c6be413c9117"
+  },
+  "errors.vocalWeb.bufferFull": {
+    "zh-CN": "8a6019f0792b52f594fea7b9a2a3163f4724c0ffc9addfc0a2bcc0c8ac89105e",
+    "en": "591c0bd78246ae9bc38bdca9ddae56c12674985b2db2a8d2f37a0889343459eb",
+    "ja": "a48ad92ff94d6d2a41be9091200aebc6b494e37e8664c421420be44e05fa3bc9"
+  },
+  "errors.vocalWeb.videoDurationRange": {
+    "zh-CN": "6223704e8658648a61d2a82669cff87dd817981558f9381975eea35d97dadd6f",
+    "en": "25ec5d5a9075b0fad931718ef34fa206281bc7bf22e8bf9e58946982eaa63307",
+    "ja": "47da4e118c91ab8cd6e3103f62e07f67780731743c233f355dc9b3389b7f8e11"
+  },
+  "errors.vocalWeb.videoLimit": {
+    "zh-CN": "580d00b214aaf7d53baa2b28c99023e7a112183494fb6aa4f128f2eedda81313",
+    "en": "c812f1b6f94a2fca1448c7f332e860e04c5b8eb2c2a51aa6e0dbf03debec7aa7",
+    "ja": "916a922f8229fd78284fd816b90394f691796711997e13ce0de4602c31af4fa4"
+  }
+}

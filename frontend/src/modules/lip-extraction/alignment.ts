@@ -1,8 +1,10 @@
+import {uiError,uiErrorMessage,uiMessage,joinMessages} from '../module-localization.ts';
+import {tr} from '../../i18n/index.ts';
 import type {LipRow} from './port.ts';
 
 export const parameterKeys=['area','height','outer_width','inner_width','total_width','open','circularity','face_width','face_height'];
 export function checkedOffsetMs(value:number){
- if(!Number.isFinite(value)||Math.abs(value)>2000)throw Error('偏移量须为 −2000 至 2000 ms');
+ if(!Number.isFinite(value)||Math.abs(value)>2000)throw uiError(uiMessage("modules.lip-extraction.offset_must_be_within_2000_to_2000_ms"));
  return Math.round(value)/1000;
 }
 /** Shared time axis; normalization affects only this comparison display. */

@@ -15,8 +15,8 @@ def hawks_miller_bw(Fx: float, F0: float) -> float:
 
 def iseli_correction(f: float, Fx: float, Bx: float, fs: int) -> float:
     """Iseli & Alwan (1999) harmonic-formant correction (dB)."""
-    if any(np.isnan(x) for x in [f, Fx, Bx]) or f <= 0 or Fx <= 0 or Bx <= 0:
-        return 0.0
+    if any(not np.isfinite(x) for x in [f, Fx, Bx, fs]) or f <= 0 or Fx <= 0 or Bx <= 0 or fs <= 0:
+        return np.nan
     r = np.exp(-np.pi * Bx / float(fs))
     omega_x = 2.0 * np.pi * Fx / float(fs)
     omega = 2.0 * np.pi * f / float(fs)

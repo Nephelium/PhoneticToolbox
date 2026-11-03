@@ -5,7 +5,7 @@ import re
 import threading
 from PyQt6.QtCore import QObject, pyqtSignal, pyqtSlot
 
-from .updates import UpdateError, UpdateService
+from .updates import UpdateError, UpdateService, update_error_fields
 
 
 class UpdatesBridge(QObject):
@@ -55,8 +55,8 @@ class UpdatesBridge(QObject):
                 self._jobs[request_id] = cancel
                 self._pool.submit(self._execute, request_id, value, cancel)
         except (ValueError, UpdateError) as error:
-            self._emit(request_id, {'ok': False, 'error': {'code': getattr(error, 'code', 'REQUEST_INVALID'),
-                                                        'message': str(error) if isinstance(error, UpdateError) else '更新请求无法解析。'}})
+            self._emit(request_id, {'ok': False, 'error': update_error_fields(getattr(error, 'code', 'REQUEST_INVALID'),
+                                                        str(error) if isinstance(error, UpdateError) else '更新请求无法解析。')})
 
     def _execute(self, request_id, value, cancel):
         def progress(result):
@@ -89,10 +89,10 @@ class UpdatesBridge(QObject):
                 raise UpdateError('CANCELLED', '更新操作已取消。')
             response = {'ok': True, 'value': result}
         except UpdateError as error:
-            response = {'ok': False, 'error': {'code': error.code, 'message': str(error)}}
+            response = {'ok': False, 'error': update_error_fields(error.code, str(error))}
         except Exception:
             # Do not expose exception repr, URL trace bodies or host paths to the page.
-            response = {'ok': False, 'error': {'code': 'UPDATE_FAILED', 'message': '更新操作失败，请稍后重试。'}}
+            response = {'ok': False, 'error': update_error_fields('UPDATE_FAILED', '更新操作失败，请稍后重试。')}
         finally:
             with self._lock:
                 self._jobs.pop(request_id, None)

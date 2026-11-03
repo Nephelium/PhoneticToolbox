@@ -77,31 +77,55 @@ def main():
         threading.Thread(target=watch_owner, daemon=True).start()
 
     async def serve():
+        nonlocal worker
         task = asyncio.create_task(server.serve(sockets=[sock]))
         while not server.started and not task.done():
             await asyncio.sleep(0.01)
         if server.started:
             print(json.dumps({'url': 'http://' + authority, 'mode': args.mode}), flush=True)
+        delay=1
+        while not task.done():
+            await asyncio.sleep(delay)
+            if worker is not None and worker.poll() is not None and not server.should_exit:
+                worker.stdin.close();worker.stdout.close()
+                try:
+                    worker=await asyncio.to_thread(start_worker)
+                    delay=1
+                except Exception:
+                    import logging
+                    logging.getLogger(__name__).warning('local_worker_restart_retry_required')
+                    delay=min(30,delay*2)
         await task
+
+    def start_worker():
+        from ptb_worker.executor import stop_child
+        child=subprocess.Popen(command('ptb_worker.cli'),stdin=subprocess.PIPE,
+                                stdout=subprocess.PIPE,stderr=subprocess.DEVNULL,text=True,encoding='utf-8',
+                                creationflags=getattr(subprocess,'CREATE_NO_WINDOW',0))
+        try:
+            child.stdin.write(json.dumps({'kind':'sqlite','path':str(jobs.path),'local_files_root':config.get('local_files_root'),
+                'reaper_binary':config.get('reaper_binary')})+'\n');child.stdin.flush()
+            ready=queue.Queue()
+            threading.Thread(target=lambda:ready.put(child.stdout.readline()),daemon=True).start()
+            if json.loads(ready.get(timeout=10))!={'ready':True}:raise RuntimeError('Worker did not become ready')
+            return child
+        except BaseException:
+            stop_child(child)
+            raise
 
     worker=None
     try:
         # Result-cache maintenance never admits jobs or needs a scientific worker.
         if jobs and not cache_cleanup:
-            worker=subprocess.Popen(command('ptb_worker.cli'),stdin=subprocess.PIPE,
-                                    stdout=subprocess.PIPE,stderr=subprocess.DEVNULL,text=True,encoding='utf-8',
-                                    creationflags=getattr(subprocess,'CREATE_NO_WINDOW',0))
-            worker.stdin.write(json.dumps({'kind':'sqlite','path':str(jobs.path),'local_files_root':config.get('local_files_root'),
-                'reaper_binary':config.get('reaper_binary')})+'\n');worker.stdin.flush()
-            ready=queue.Queue()
-            threading.Thread(target=lambda:ready.put(worker.stdout.readline()),daemon=True).start()
-            if json.loads(ready.get(timeout=10))!={'ready':True}:raise RuntimeError('Worker did not become ready')
+            worker=start_worker()
         asyncio.run(serve())
     finally:
         if worker:
             worker.stdin.close()
             try:worker.wait(timeout=10)
-            except subprocess.TimeoutExpired:worker.terminate();worker.wait(timeout=5)
+            except subprocess.TimeoutExpired:
+                from ptb_worker.executor import stop_child
+                stop_child(worker)
             worker.stdout.close()
         sock.close()
 

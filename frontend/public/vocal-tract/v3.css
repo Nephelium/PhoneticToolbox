@@ -223,3 +223,6 @@ body,.parameter,.parameter label,.parameter input,.parameter select,.inspector-t
 
 .stop-timing .stop-help>summary:after{content:"+"}
 .stop-timing .stop-help[open]>summary:after{content:"−"}
+
+/* Let translated headings share the control rail without letter-by-letter wrapping. */
+.inspector-title{flex-wrap:wrap;align-items:flex-start}.inspector-title>.eyebrow{min-width:9em;letter-spacing:.04em;line-height:1.5}.inspector-title>div{flex-wrap:wrap}

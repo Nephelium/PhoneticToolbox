@@ -26,6 +26,15 @@ def login(client, username='alice', password='a-correct-long-password'):
                        headers={'Origin': ORIGIN, 'X-CSRF-Token': csrf})
 
 
+def test_other_client_cannot_lock_account_and_success_resets_streak(setup):
+    store,app=setup
+    for _ in range(10):assert store.allow_login('alice','attacker')
+    assert not store.allow_login('alice','attacker')
+    assert store.allow_login('alice','owner')
+    with TestClient(app,base_url=ORIGIN) as client:
+        for _ in range(12):assert login(client).status_code==200
+
+
 def test_login_rotates_and_logout_revokes(setup):
     store, app = setup
     with TestClient(app, base_url=ORIGIN) as client:

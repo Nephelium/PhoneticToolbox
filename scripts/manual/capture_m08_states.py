@@ -1,130 +1,56 @@
-"""Capture distinct M08 manual states in an owned maximized Windows Qt window.
-
-The supplied natural syllable is copied into an isolated fixture directory.
-Only disposable task state and explicitly generated demonstration outputs change.
-"""
+"""Real localized M08 native gestures, synthesis/history/save and original batch variants."""
 from __future__ import annotations
-
-import hashlib
-import json
-import os
+import argparse,hashlib,json,shutil,sys
 from pathlib import Path
-import shutil
-import sys
-import time
-import traceback
+ROOT=Path(__file__).resolve().parents[2]
+sys.path.insert(0,str(ROOT/'scripts'))
+from verification_artifacts import verification_run
+from manual.capture_a_support import Capture
 
-ROOT = Path(__file__).resolve().parents[2]
-DIRS = ('desktop/src', 'backend/src', 'packages/phonetic_core/src', 'scripts')
-for directory in DIRS:
-    sys.path.insert(0, str(ROOT / directory))
-os.environ['PYTHONPATH'] = os.pathsep.join(str(ROOT / d) for d in DIRS)
-os.environ.setdefault('QT_QPA_PLATFORM', 'windows')
-os.environ.setdefault('QTWEBENGINE_CHROMIUM_FLAGS', '--disable-gpu --disable-gpu-compositing --mute-audio --autoplay-policy=no-user-gesture-required')
-
-
-def sha(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
-
-
-def main():
-    from PyQt6.QtCore import QEventLoop, QTimer, Qt, QPoint
+def sha(path):return hashlib.sha256(path.read_bytes()).hexdigest()
+def run(args):
+ with verification_run('m08-manual',args.locale,'Actual maximized Qt, registered natural syllable, native Shift/mouse gestures, original synthesis and saved WAV readback; two .3-amplitude 1s/16kHz/150+220Hz PCM16 tones for same batch recipe; muted')as(out,scratch):
+    from PyQt6.QtCore import QPoint,Qt
     from PyQt6.QtTest import QTest
-    from PyQt6.QtWidgets import QApplication, QFileDialog
-    from ptb_desktop.host import Workbench, register_scheme
-    from verify_m08_wiring import setup
-
-    out, db, cache = setup()
-    captures = out / 'm08-manual-states'
-    inputs = out / 'm08-inputs'
-    saved = out / 'm08-saved'
-    for directory in (captures, inputs, saved):
-        directory.mkdir()
-    source = ROOT / 'manual/assets/software-only/single-original.wav'
-    fixture = inputs / 'single-syllable.wav'
-    shutil.copyfile(source, fixture)
-    QFileDialog.getExistingDirectory = lambda *a, **k: str(saved if '结果' in str(a) else inputs)
-    QFileDialog.getSaveFileName = lambda *a, **k: (str(saved / Path(a[2]).name), '')
-    register_scheme()
-    app = QApplication(['PTB-owned-M08-manual-states'])
-    w = Workbench(ROOT / 'frontend/dist', test=True, jobs_path=db, local_files_root=cache, vocal_profile=out / 'vocal')
-    w.setAttribute(Qt.WidgetAttribute.WA_DontShowOnScreen)
-    w.showMaximized()
-    report = {
-        'success': False,
-        'scope': 'Actual Windows Qt, owned hidden maximized window; no physical audio, IME, DWM or DPI claim',
-        'python': sys.executable,
-        'flags': os.environ.get('QTWEBENGINE_CHROMIUM_FLAGS'),
-        'source': {'path': str(source), 'fixture': str(fixture), 'sha256': sha(source)},
-        'captures': [], 'checks': [], 'terminations': [], 'out': str(out),
-        'sources': [{'path': p, 'sha256': sha(ROOT / p)} for p in (
-            'scripts/manual/capture_m08_states.py',
-            'frontend/src/modules/pitch-manipulation/PitchManipulationPage.vue',
-            'frontend/src/modules/pitch-manipulation/PitchCurve.vue',
-            'frontend/src/modules/pitch-manipulation/HistoryPlot.vue',
-            'frontend/dist/index.html', 'manual/V2_STYLE_GUIDE.md',
-            'output/manual-work/v2-reference/html/chapter-05.html')],
-    }
-    w.page.renderProcessTerminated.connect(lambda s, c: report['terminations'].append([s.name, c]))
-
-    def pause(ms=100):
-        loop = QEventLoop()
-        QTimer.singleShot(ms, loop.quit)
-        loop.exec()
-
-    def js(code):
-        loop, values = QEventLoop(), []
-        w.page.runJavaScript(code, lambda r: (values.append(r), loop.quit()))
-        QTimer.singleShot(6000, loop.quit)
-        loop.exec()
-        if not values:
-            raise RuntimeError('JavaScript timeout')
-        return values[0]
-
-    def until(code, seconds=80):
-        end = time.monotonic() + seconds
-        while time.monotonic() < end:
-            if js(code):
-                return
-            pause()
-        raise AssertionError(code + '\n' + str(js('document.body.innerText.slice(-3500)')))
-
-    def click(text):
-        assert js('(()=>{const e=[...document.querySelectorAll("button")].find(b=>b.offsetParent&&b.textContent.trim()===' + json.dumps(text) + ');if(!e||e.disabled)return false;e.click();return true})()'), text
-        pause(150)
-
-    def fill(label, value):
-        selector = json.dumps('[aria-label="' + label + '"]')
-        assert js('(()=>{const e=document.querySelector(' + selector + ');if(!e)return false;e.value=' + json.dumps(str(value)) + ';e.dispatchEvent(new Event("input",{bubbles:true}));e.dispatchEvent(new Event("change",{bubbles:true}));return true})()'), label
-        pause(100)
-
-    def idle():
-        until('document.querySelector(".m08-page")?.getAttribute("aria-busy")==="false"')
-
-    def snapshot(name, caption, state):
-        w.showMaximized()
-        assert w.isMaximized()
-        pause(500)
-        w.view.repaint()
-        w.view.grab()
-        pause(400)
-        app.processEvents()
-        file = captures / (name + '.png')
-        pix = w.view.grab()
-        assert pix.save(str(file))
-        report['captures'].append({
-            'id': name, 'chapterId': 'm08', 'file': str(file), 'caption': caption,
-            'state': state, 'distribution': 'software-only', 'git': False,
-            'maximized': w.isMaximized(), 'window': [w.width(), w.height()],
-            'frame': [w.frameGeometry().width(), w.frameGeometry().height()],
-            'image': [pix.width(), pix.height()], 'devicePixelRatio': pix.devicePixelRatio(),
-            'theme': js('document.documentElement.dataset.theme'),
-            'palette': js('document.documentElement.dataset.palette'),
-            'fontSize': js('getComputedStyle(document.documentElement).fontSize'),
-            'sha256': sha(file),
-        })
-        print('Captured ' + name, flush=True)
-
+    from PyQt6.QtWidgets import QFileDialog
+    c=Capture(args,out,scratch,'m08','pitch-manipulation');print(out,flush=True)
+    w=c.window;js,until,click,pause=c.js,c.until,c.click,c.pause;report=c.report
+    inputs=scratch/'inputs';inputs.mkdir();saved=scratch/'saved';saved.mkdir()
+    source=ROOT/'manual/assets/software-only/single-original.wav';fixture=inputs/'single-syllable.wav';shutil.copyfile(source,fixture)
+    report['source']={'path':str(source),'sha256':sha(source)}
+    choices={'directory':inputs};QFileDialog.getExistingDirectory=lambda *a,**k:str(choices['directory'])
+    QFileDialog.getSaveFileName=lambda *a,**k:(str(saved/Path(a[2]).name),'')
+    def fill(label,value):
+        import re
+        match=re.fullmatch(r'(时间|频率|连接) (\d+)',label)
+        if match:
+            index=int(match[2]);column={'时间':2,'频率':3,'连接':4}[match[1]]
+            return c.fill(f'dialog[open] tbody tr:nth-child({index+1}) td:nth-child({column}) '+('select'if column==4 else'input'),value)
+        c.fill('[aria-label='+json.dumps(c.ui.label(label),ensure_ascii=False)+']',value)
+    def idle():until('document.querySelector(".m08-page")?.getAttribute("aria-busy")==="false"',180)
+    def dismiss_save():
+        if js('!!document.querySelector("dialog[open] .file-list")'):click('取消')
+    def snapshot(name,caption,state):
+        if args.scene and name not in args.scene:return
+        regions={
+          'm08-freehand-reference-light':{'curve':'svg.m08-curve'},
+          'm08-independent-selection-light':{'wave':'.plots>.module-section:nth-child(3)','selection':'.plots>.module-section:nth-child(3) .wave-selection'},
+          'm08-f0-import-light':{'dialog':'dialog[open]','values':'dialog[open] textarea'},
+          'm08-breakpoints-three-light':{'dialog':'dialog[open]','row':'dialog[open] tbody tr:nth-child(2)'},
+          'm08-history-audition-light':{'history':'.history-details','audition':'.history li:nth-child(3)>button'}
+        }.get(name,{})
+        c.shot(name,regions);report['captures'][-1].update(caption=caption,state=state)
+    def capture_variants():
+        import numpy as np
+        from scipy.io import wavfile
+        tones=scratch/'tones';tones.mkdir()
+        for name,hz in [('原音 ɑ̃˥',150),('原音 二',220)]:
+            t=np.arange(16000)/16000;wavfile.write(tones/(name+'.wav'),16000,(.3*32767*np.sin(2*np.pi*hz*t)).astype('int16'))
+        report['batchInputs']={p.name:sha(p)for p in tones.iterdir()}
+        choices['directory']=tones;click('打开音频目录');click('批量变速变调')
+        fill('音高调整方式','hz');fill('语速倍率','0.8, 1.2');fill('音高偏移 Hz','-20, 20');click('全选音频')
+        until('document.querySelectorAll(".m08-page .file-list input:checked").length===2')
+        snapshot('m08-multi-variants-20261021-6e6f6396','Original two synthetic tones, two speeds and two Hz offsets: four versions/file, eight total.',{'sources':2,'speed':[.8,1.2],'pitch_hz':[-20,20],'versions':8})
     def drag(selector, points, shift=False):
         box = js('(()=>{const r=document.querySelector(' + json.dumps(selector) + ').getBoundingClientRect();return {x:r.x,y:r.y,w:r.width,h:r.height}})()')
         target = w.view.focusProxy() or w.view
@@ -142,12 +68,7 @@ def main():
         pause(250)
 
     try:
-        until('!!document.querySelector(".home-page")&&document.fonts.status==="loaded"')
-        click('设置')
-        click('浅色')
-        until('document.documentElement.dataset.theme==="light"')
-        click('变速变调')
-        until('!!document.querySelector(".m08-page")')
+        until('!!document.querySelector(".m08-page")');c.prepare()
         click('打开音频目录')
         until('document.querySelector(".m08-page select")?.options.length===2')
         js('(()=>{const e=document.querySelector(".m08-page select");e.value=e.options[1].value;e.dispatchEvent(new Event("change",{bubbles:true}));})()')
@@ -165,6 +86,7 @@ def main():
         click('合成整段')
         until('document.querySelectorAll(".history li").length===1')
         idle()
+        dismiss_save()
         snapshot('m08-freehand-result-light', '手绘目标完成整段合成，输出波形和从实际 WAV 重新估计的历史 F0 已出现。', {'historyCount': 1, 'action': 'synthesize', 'speed': 1})
         drag('.plots>.module-section:nth-child(1) .wave-track svg', [(.20, .50), (.47, .50)])
         drag('.plots>.module-section:nth-child(3) .wave-track svg', [(.35, .50), (.70, .50)])
@@ -187,6 +109,7 @@ def main():
         click('批量生成')
         until('document.querySelectorAll(".history li").length===4')
         idle()
+        dismiss_save()
         snapshot('m08-three-path-history-light', '拐点工具已生成三个峰值不同的实际音频，历史图同时显示先前手绘版本及三个拐点版本。', {'historyCount': 4, 'linearResultCount': 3})
         js('document.querySelectorAll(".history li")[2].querySelector("button").click()')
         pause(250)
@@ -196,6 +119,7 @@ def main():
         js('document.querySelectorAll(".history li")[2].querySelector("details").open=false;document.querySelector(".workbench-right-body").scrollTop=0')
         click('批量保存')
         snapshot('m08-save-selection-light', '批量保存窗口列出当前视野的四份已生成 WAV，默认全部勾选；此步骤尚未选择外部保存目录。', {'dialog': '批量保存', 'selectedCount': 4, 'saved': False})
+        choices['directory']=saved
         click('保存所选音频')
         until('!document.querySelector("dialog[open]")')
         idle()
@@ -204,30 +128,13 @@ def main():
         assert len(list(saved.glob('*.wav'))) == 4
         snapshot('m08-save-confirmed-light', '四个音频已保存，最近保存提示给出实际目录和最终文件名；生成历史仍保留。', {'historyCount': 4, 'savedCount': 4, 'directory': str(saved)})
         report['saved'] = [{'name': p.name, 'sha256': sha(p), 'bytes': p.stat().st_size} for p in sorted(saved.glob('*.wav'))]
-        click('批量变速变调')
-        fill('语速倍率', .8)
-        fill('音高倍率', 1.2)
-        fill('音高偏移 Hz', 20)
-        click('全选音频')
-        snapshot('m08-batch-settings-light', '文件夹批量页已勾选同一短音节，语速 0.8、音高倍率 1.2、偏移 20 Hz；尚未提交这组设置。', {'tab': 'batch', 'speed': .8, 'pitch_ratio': 1.2, 'pitch_hz': 20, 'submitted': False})
-        assert sha(source) == sha(fixture) == report['source']['sha256']
-        assert not report['terminations']
-        report['checks'] += ['Every capture explicitly maximized before image grab', 'Native Shift gesture changed actual target path', 'Actual natural-syllable synthesis and three-point linear outputs completed', 'Selected history loads actual audio; physical output muted', 'Four exported WAV files and on-screen directory verified', 'Original and isolated source-copy SHA256 unchanged']
-        report['success'] = True
-    except BaseException:
-        report['error'] = traceback.format_exc()
-        print(report['error'], flush=True)
-        raise
-    finally:
-        report_file = out / 'm08-manual-states-report.json'
-        report_file.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding='utf-8')
-        print('REPORT ' + str(report_file), flush=True)
-        print('REPORT_SHA256 ' + sha(report_file), flush=True)
-        w.closing = True
-        w.close()
-        pause(300)
-        app.quit()
+        capture_variants()
+        assert sha(source)==sha(fixture)==report['source']['sha256']
+        report['checks'] += ['Actual natural-syllable original, native Shift drag, three generated breakpoint outputs and four saved WAVs', 'Two original synthetic-tone fixtures, speed .8/1.2, exclusive Hz offsets -20/20, eight planned variants', 'Original input SHA unchanged; temporary WAVs cleaned with owned verification scratch']
+        report['success']=True
+    except BaseException as exc:
+        report['error']=repr(exc);raise
+    finally:c.close()
 
-
-if __name__ == '__main__':
-    main()
+if __name__=='__main__':
+ p=argparse.ArgumentParser();p.add_argument('--locale',choices=('en','ja'),required=True);p.add_argument('--scene',action='append',default=[]);p.add_argument('--frontend-dist',type=Path,default=ROOT/'frontend/dist');run(p.parse_args())

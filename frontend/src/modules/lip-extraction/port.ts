@@ -1,3 +1,4 @@
+import type {MessageDescriptor} from '../../i18n/index.ts';
 export interface OfflineConfig {filter_enabled:boolean;cutoff_hz:number;}
 export interface LipRow {index:number;time_s:number;detected:boolean;points:[number,number][]|null;metrics:Record<string,number|null>|null;width?:number;height?:number;input_resolution?:[number,number];}
 export interface LipResult {id:string;name:string;backend:string;rows:LipRow[];metadata:Record<string,any>;files:{id:string;name:string;bytes:number;sha256:string}[];}
@@ -14,9 +15,9 @@ export interface LipPort {
  inspectRecording?(blob:Blob):Promise<Record<string,any>>;
  audioPreview?(result:LipResult):Promise<Record<string,any>>;
  saveRecording?(name:string,blob:Blob,metadata:Blob):Promise<{saved:boolean;recording?:Record<string,any>}>;
- analyzeRecording?(token:string,config:OfflineConfig,signal:AbortSignal,progress:(s:string)=>void):Promise<LipResult>;
+ analyzeRecording?(token:string,config:OfflineConfig,signal:AbortSignal,progress:(s:string|MessageDescriptor)=>void):Promise<LipResult>;
  reason?:string;
- analyze(file:File,config:OfflineConfig,signal:AbortSignal,progress:(message:string)=>void):Promise<LipResult>;
+ analyze(file:File,config:OfflineConfig,signal:AbortSignal,progress:(message:string|MessageDescriptor)=>void):Promise<LipResult>;
  save(result:LipResult,offset:number,action:'apply'|'save_without_offset'):Promise<boolean>;
  saveBatch?(items:LipSaveItem[],action:'apply'|'save_without_offset',options:LipSaveOptions,onSaved:(id:string)=>void):Promise<boolean>;
  sourceVideo?(result:LipResult):Promise<Blob>;

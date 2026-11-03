@@ -13,6 +13,7 @@ import csv
 import hashlib
 import json
 import os
+import re
 from pathlib import Path
 import shutil
 import sys
@@ -25,7 +26,11 @@ DIRS = ('desktop/src', 'backend/src', 'packages/phonetic_core/src', 'scripts')
 for directory in DIRS:
     sys.path.insert(0, str(ROOT / directory))
 os.environ['PYTHONPATH'] = os.pathsep.join(str(ROOT / p) for p in DIRS)
-os.environ.setdefault('QT_QPA_PLATFORM', 'windows')
+from manual.capture_locale import CaptureLocale
+from verification_artifacts import verification_run
+from workbench_source import configure
+for key in ('QT_ENABLE_HIGHDPI_SCALING','QT_SCALE_FACTOR','QT_SCREEN_SCALE_FACTORS'):os.environ.pop(key,None)
+os.environ['QT_QPA_PLATFORM']='windows'
 os.environ.setdefault('QTWEBENGINE_CHROMIUM_FLAGS', '--disable-gpu --disable-gpu-compositing --mute-audio')
 
 TONES = {'1': '阴平（暂拟）', '2': '阳平（暂拟）', '5': '阴去（暂拟）',
@@ -36,11 +41,12 @@ def sha(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
-def main():
+def capture(args,out,scratch):
+    configure()
+    ui=CaptureLocale(args.locale,('phonology-induction','workbench','components'))
+    watched=[Path(__file__),args.frontend_dist/'index.html',ROOT/'frontend/src/modules/phonology-induction/PhonologyInductionPage.vue']
+    sources={str(i):dict(path=str(p),sha256=sha(p)) for i,p in enumerate(watched)}
     sys.stdout.reconfigure(encoding='utf-8')
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--source', type=Path, required=True)
-    args = parser.parse_args()
     from PyQt6.QtCore import QEventLoop, QTimer, Qt
     from PyQt6.QtGui import QGuiApplication
     from PyQt6.QtWidgets import QApplication, QFileDialog
@@ -49,13 +55,12 @@ def main():
     from ptb_desktop.host import Workbench, register_scheme
     from ptb_worker.m14_table import load_v2
     from phonetic_core.transcription.phonology.rules import PhonologyRules
-    from verify_m14_wiring import setup
+    from ptb_worker.local_workspace import prepare_workspace
+    from PyQt6 import sip
 
     source = args.source.resolve(strict=True)
     original_hash = sha(source)
-    out = ROOT / 'output/manual-work/m14-test-table' / uuid4().hex
-    out.mkdir(parents=True)
-    inputs, screenshots, saved, retry = [out / n for n in ('inputs', 'screenshots', 'saved', 'retry')]
+    inputs, screenshots, saved, retry = [scratch / n for n in ('inputs', 'screenshots', 'saved', 'retry')]
     for directory in (inputs, screenshots, saved, retry):
         directory.mkdir()
     table = inputs / source.name
@@ -85,18 +90,20 @@ def main():
                             for folder in ('frontend/src', 'desktop/src', 'backend/src', 'packages/phonetic_core/src')
                             for p in (ROOT / folder).rglob('*') if p.is_file() and p.suffix in ('.py', '.ts', '.vue')}}
     (out / 'baseline.json').write_text(json.dumps(baseline, ensure_ascii=False, indent=2), encoding='utf-8')
-    task_out, db, cache = setup()
+    db,cache=prepare_workspace(scratch/'state',ROOT/'backend/migrations')
+    task_out=scratch/'state'
     register_scheme()
-    QGuiApplication.setHighDpiScaleFactorRoundingPolicy(Qt.HighDpiScaleFactorRoundingPolicy.Floor)
     app = QApplication(['PTB-owned-M14-test-table-manual'])
-    window = Workbench(ROOT / 'frontend/dist', test=True, jobs_path=db, local_files_root=cache,
+    window = Workbench(args.frontend_dist, test=True, jobs_path=db, local_files_root=cache,
                        vocal_profile=out / 'vocal-profile')
     window.setAttribute(Qt.WidgetAttribute.WA_DontShowOnScreen)
+    window.resize(window.screen().geometry().size())
     window.showMaximized()
+    window.view.setZoomFactor(1)
     window.page.setAudioMuted(True)
     destination = {'path': saved}
     QFileDialog.getExistingDirectory = lambda *a, **k: str(destination['path'])
-    report = dict(success=False, out=str(out), source=str(source), originalSHA256=original_hash,
+    report = dict(success=False,locale=args.locale,sourceChapter='m14',sources=sources, out=str(out), source=str(source), originalSHA256=original_hash,
                   sourceCopy=str(table), inputs=input_hashes, toneMap=TONES,
                   sourceSummary=dict(rows=len(rows), uniqueIPA=len(analysis.unique_ipa),
                                      initials=len(analysis.unique_initials), finals=len(analysis.unique_finals),
@@ -111,7 +118,22 @@ def main():
         QTimer.singleShot(ms, loop.quit)
         loop.exec()
 
+    def label(text):
+        for prefix in ('调类 ','上移调值 ','撤销归并 '):
+            if text.startswith(prefix):return ui.label(prefix)+text[len(prefix):]
+        return ui.label(text)
+
     def js(code):
+        code=re.sub(r'\[aria-label=([^\]"\']+)\]',lambda m:'[aria-label=\\"'+label(m.group(1))+'\\"]',code)
+        checks={
+            '不同':ui.key('modules.phonology-induction.text.fe40817c21d6'),
+            '已读取 5453 条记录':ui.key('modules.phonology-induction.text.545e7b7b3c71',{'v0':5453}),
+            '三份结果已完整生成':ui.key('modules.phonology-induction.text.eb39df1be797'),
+            '三份结果已保存':ui.key('modules.phonology-induction.text.f7a399c93e18'),
+            '声母、韵母与声调统计':ui.label('声母、韵母与声调统计'),
+            '导入与归并审阅':ui.label('导入与归并审阅'),
+        }
+        for source,target in checks.items():code=code.replace(json.dumps(source,ensure_ascii=False),json.dumps(target,ensure_ascii=False))
         loop, values = QEventLoop(), []
         window.page.runJavaScript(code, lambda v: (values.append(v), loop.quit()))
         QTimer.singleShot(8000, loop.quit)
@@ -129,16 +151,26 @@ def main():
         raise AssertionError(code + '\n' + str(js('document.body.innerText.slice(-4000)')))
 
     def click(label):
+        if label=='归并声母':label=ui.key('modules.phonology-induction.text.fc6391285198')
+        elif label=='归并韵母':label=ui.key('modules.phonology-induction.text.ba7a1e750ec7')
+        elif label=='1 · 导入':label='1 · '+ui.label('导入')
+        elif label=='4 · 结果':label='4 · '+ui.label('结果')
+        elif label in ('声母 → 韵母DOCX','韵母 → 声母DOCX'):label=label[:-4];label=ui.label(label)+'DOCX'
+        elif label=='二维声韵表XLSX':label=ui.label('二维声韵表')+'XLSX'
+        else:
+            label=ui.label(label) if not label.startswith(('调类 ','撤销归并 ','上移调值 ')) else ui.label(next(p for p in ('调类 ','撤销归并 ','上移调值 ') if label.startswith(p)))+label[len(next(p for p in ('调类 ','撤销归并 ','上移调值 ') if label.startswith(p))):]
         expr = '[...document.querySelectorAll("button")].find(b=>b.offsetParent&&(b.getAttribute("aria-label")||b.textContent.trim())===' + json.dumps(label) + ')'
         until('!!(' + expr + ')&&!(' + expr + ').disabled')
         js(expr + '.click()')
         pause(120)
 
     def select(label, value):
+        label=ui.label(label) if not label.startswith(('调类 ','撤销归并 ','上移调值 ')) else ui.label(next(p for p in ('调类 ','撤销归并 ','上移调值 ') if label.startswith(p)))+label[len(next(p for p in ('调类 ','撤销归并 ','上移调值 ') if label.startswith(p))):]
         assert js('(()=>{const e=[...document.querySelectorAll("select")].find(e=>e.offsetParent&&(e.getAttribute("aria-label")===' + json.dumps(label) + '||e.closest("label")?.textContent.trim().startsWith(' + json.dumps(label) + ')));if(!e||![...e.options].some(o=>o.value===' + json.dumps(str(value)) + '))return false;e.value=' + json.dumps(str(value)) + ';e.dispatchEvent(new Event("change",{bubbles:true}));return true})()'), label
         pause(150)
 
     def fill(label, value):
+        label=ui.label(label) if not label.startswith(('调类 ','撤销归并 ','上移调值 ')) else ui.label(next(p for p in ('调类 ','撤销归并 ','上移调值 ') if label.startswith(p)))+label[len(next(p for p in ('调类 ','撤销归并 ','上移调值 ') if label.startswith(p))):]
         assert js('(()=>{const e=document.querySelector(' + json.dumps('input[aria-label="' + label + '"]') + ');if(!e)return false;e.value=' + json.dumps(str(value)) + ';e.dispatchEvent(new Event("input",{bubbles:true}));e.dispatchEvent(new Event("change",{bubbles:true}));return true})()'), label
         pause(150)
 
@@ -155,33 +187,29 @@ def main():
         assert js('(()=>{const e=[...document.querySelectorAll("[aria-label=声母列表] [role=option]")].find(e=>e.textContent===' + json.dumps(value) + ');if(!e)return false;e.dispatchEvent(new MouseEvent("click",{bubbles:true,ctrlKey:' + str(ctrl).lower() + '}));return true})()'), value
         pause()
 
-    def snapshot(key, figure, caption):
-        assert [window.width(), window.height()] == [2560, 1440]
+    def snapshot(key,figure,caption):
         pause(450)
-        window.repaint()
-        window.grab()
-        pause(450)
-        pix = window.grab()
-        assert [pix.width(), pix.height()] == [2560, 1440], [pix.width(), pix.height()]
-        file = screenshots / ('m14-test-' + key + '-20261006-light.png')
-        assert pix.save(str(file))
-        report['captures'].append(dict(id=file.stem, chapterId='m14', figureId=figure, file=str(file),
-                                       caption=caption, maximized=window.isMaximized(), captureMode='user-authorized-2560x1440-window',
-                                       window=[window.width(), window.height()], image=[pix.width(), pix.height()],
-                                       viewport=js('[innerWidth,innerHeight]'), devicePixelRatio=pix.devicePixelRatio(),
-                                       theme=js('document.documentElement.dataset.theme'), sha256=sha(file)))
-        print('Captured ' + key, flush=True)
+        metrics=ui.metrics(js)
+        image=window.view.grab().toImage();raw=[image.width(),image.height()]
+        assert window.isMaximized() and image.devicePixelRatio()==1.5 and raw in ([2560,1600],[2561,1601]),raw
+        if raw!=[2560,1600]:image=image.copy(0,0,2560,1600)
+        path=out/(key+'.png');assert image.save(str(path))
+        regions={}
+        for name,selector in {'import':'.import-card','merge':'[aria-label="'+ui.label('归并确认')+'"]'}.items():
+            box=js('(()=>{const e=document.querySelector('+json.dumps(selector)+');if(!e)return null;const r=e.getBoundingClientRect();return [r.x,r.y,r.width,r.height]})()')
+            if box:regions[name]=dict(selector=selector,box=box,units='css-px')
+        report['captures'].append(dict(name=key,figureId=figure,file=path.name,image=[2560,1600],raw_image=raw,maximized=True,sha256=sha(path),regions=regions,**metrics))
+        print('Captured '+key,flush=True)
 
     try:
         until('!!document.querySelector("nav")&&document.fonts.status==="loaded"')
         report['physicalMaximizedWindow'] = [window.width(), window.height()]
-        window.showNormal()
-        window.setFixedSize(2560, 1440)
-        pause(500)
+        ui.prepare_qt(js,until)
         click('设置')
         click('浅色')
         until('document.documentElement.dataset.theme==="light"')
         click('音系归纳')
+        click('收起侧栏')
         until('!!document.querySelector(".phonology-page")')
         snapshot('overview', 'm14-figure-m14-overview-r2-light', '2560×1440 完整应用中的音系归纳空态，保留导航、标签栏与四步工作区。')
         upload(table)
@@ -207,7 +235,7 @@ def main():
         symbol('ph')
         click('归并声母')
         select('归并目标', 'pʰ')
-        until('document.querySelector("[aria-label=归并确认]")?.textContent.includes("影响 1 条记录")')
+        until('document.querySelector("[aria-label=归并确认]")?.textContent.includes("捧")')
         snapshot('merge-confirm', 'm14-figure-m14-merge-confirm-r5-light', '仅为展示，把 ph 暂指向 pʰ，确认区显示影响 1 条记录：捧 phoŋ1。归并依据尚未核实。')
         click('确认归并')
         snapshot('merge-applied', 'm14-figure-m14-merge-applied-r5-light', '操作演示确认后 ph → pʰ 显示在下方，声母暂为 33 项；本例随后撤销，最终结果保留原分类。')
@@ -246,7 +274,7 @@ def main():
             report['exports'].append(dict(file=str(path), size=path.stat().st_size, sha256=sha(path)))
         click('选择目录保存三份结果')
         idle()
-        until('document.body.innerText.includes("同名结果")')
+        until('!!document.querySelector(".phonology-page [role=alert]")')
         assert export_hashes == {p.name: sha(p) for p in saved.iterdir()}
         snapshot('save-conflict', 'm14-figure-m14-save-conflict-r5-light', '再次保存到已有同名成果的目录时拒绝覆盖，三份原文件保持不变，可重新选择目录。')
         destination['path'] = retry
@@ -289,12 +317,13 @@ def main():
         report['errors'].append(traceback.format_exc())
     finally:
         (out / 'report.json').write_text(json.dumps(report, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
-        window.close()
-        pause(300)
-        app.quit()
+        report['sourceChangesDuringRun']=[v['path'] for v in sources.values() if sha(v['path'])!=v['sha256']]
+        (out/'report.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+        window.closing=True;window.close();app.processEvents();sip.delete(window);app.processEvents();sip.delete(app)
         print(json.dumps({'success': report['success'], 'report': str(out / 'report.json'), 'captures': len(report['captures']), 'errors': report['errors']}, ensure_ascii=False), flush=True)
     return 0 if report['success'] else 1
 
 
 if __name__ == '__main__':
-    raise SystemExit(main())
+    parser=argparse.ArgumentParser();parser.add_argument('--source',type=Path,required=True);parser.add_argument('--locale',choices=('en','ja'),required=True);parser.add_argument('--frontend-dist',type=Path,default=ROOT/'frontend/dist');args=parser.parse_args()
+    with verification_run('m14-localized',args.locale,'Actual isolated Qt DPR1.5 page100 light; original authorised 5453-row table unchanged; real parsing, merge/undo, generation and exports') as (out,scratch):raise SystemExit(capture(args,out,scratch))

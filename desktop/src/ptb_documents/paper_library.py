@@ -109,7 +109,10 @@ class PersonalPaperLibrary:
         for child in children:
             target = self.safe((parent / child.name).relative_to(self.root).as_posix())
             if target.exists():
-                raise PaperError('上一级已有同名文件或文件夹：' + child.name + '。未移动文件，也未删除收藏夹。')
+                error = PaperError('上一级已有同名文件或文件夹：' + child.name + '。未移动文件，也未删除收藏夹。')
+                error.code = 'paper_folder_collision'
+                error.filename = child.name
+                raise error
             moves.append((child, target))
         before = self.entries()
         relocated = {}

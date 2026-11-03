@@ -1,9 +1,10 @@
+import {msg,tr,join,bindText,appendText,bindAttribute,textNode,setHTML,onLocaleChange,parameterLabel,uiError} from './i18n.mjs';
 import {canvasFont} from './fonts.js';
 import {tint,dark} from './theme.js';
 import {frameIntervals,silentAt,framePitch,framePressure} from './keyframes.js';
 export function setupPitch({initialCurve=[],initialPressureCurve=[],getFrames,onChange,isBusy}){
  const $=id=>document.getElementById(id),canvas=$('pitchCanvas');
- const specs={f0:{lo:60,hi:350,unit:'Hz',name:'基频',step:5,base:framePitch},pressure:{lo:0,hi:1600,unit:'Pa',name:'驱动气压',step:20,base:framePressure}};
+ const specs={f0:{lo:60,hi:350,unit:'Hz',name:msg("modules.vocal-tract-frame.text.fundamental_frequency_103"),step:5,base:framePitch},pressure:{lo:0,hi:1600,unit:'Pa',name:msg("modules.vocal-tract-frame.text.driving_pressure_104"),step:20,base:framePressure}};
  const curves={f0:initialCurve.map(p=>[...p]),pressure:initialPressureCurve.map(p=>[...p])},undo={f0:[],pressure:[]};
  let mode='f0',drag=null,cursor=0;
  const total=()=>getFrames().reduce((sum,f)=>sum+f.duration,0),copy=key=>curves[key].map(p=>[...p]);
@@ -12,7 +13,7 @@ export function setupPitch({initialCurve=[],initialPressureCurve=[],getFrames,on
  function value(x,key=mode){const curve=curves[key];if(!curve.length)return specs[key].base(getFrames(),x*total());let i=1;while(i<curve.length-1&&curve[i][0]<x)i++;const a=curve[i-1],b=curve[i],t=(x-a[0])/(b[0]-a[0]);return a[1]+t*(b[1]-a[1]);}
  function draw(){
   const empty=!getFrames().length;$('pitchEmpty').hidden=!empty;canvas.dataset.empty=String(empty);canvas.setAttribute('aria-disabled',String(empty||isBusy()));$('pitchAddFrame').disabled=isBusy();
-  if(empty){$('pitchStatus').textContent='';$('pitchUndo').disabled=$('pitchReset').disabled=true;return;}
+  if(empty){bindText($('pitchStatus'),()=>'');$('pitchUndo').disabled=$('pitchReset').disabled=true;return;}
   const w=canvas.clientWidth,h=canvas.clientHeight;if(!w||!h)return;const d=Math.min(devicePixelRatio,2);if(canvas.width!==Math.round(w*d)||canvas.height!==Math.round(h*d)){canvas.width=Math.round(w*d);canvas.height=Math.round(h*d);}const c=canvas.getContext('2d',{alpha:false});c.setTransform(d,0,0,d,0,0);c.fillStyle=getComputedStyle(document.documentElement).getPropertyValue('--panel').trim();c.fillRect(0,0,w,h);
   const top=48,bottom=25,x=t=>42+t*(w-94),y=(v,key)=>top+(specs[key].hi-v)/(specs[key].hi-specs[key].lo)*(h-top-bottom);c.font=canvasFont(10);
   for(const f of [60,150,250,350]){const yy=y(f,'f0');c.strokeStyle=tint('#e3e5da');c.beginPath();c.moveTo(38,yy);c.lineTo(w-50,yy);c.stroke();c.textAlign='left';c.fillStyle=color('f0');c.fillText(f,2,yy+3);c.textAlign='right';c.fillStyle=color('pressure');c.fillText(Math.round((f-60)/290*1600),w-2,yy+3);}
@@ -21,10 +22,10 @@ export function setupPitch({initialCurve=[],initialPressureCurve=[],getFrames,on
   for(const f of frameIntervals(getFrames())){const left=x(f.start/total()),right=x(f.end/total());c.fillStyle=f.silent?tint('#7b877a')+'40':f.aspiration?color('pressure')+'12':tint(f.index%2?'#39877916':'#39877908');c.fillRect(left,0,right-left,h-bottom);c.strokeStyle=tint('#adbaaf');c.setLineDash([2,3]);c.beginPath();c.moveTo(left,0);c.lineTo(left,h-bottom);c.moveTo(right,0);c.lineTo(right,h-bottom);c.stroke();c.setLineDash([]);c.save();c.beginPath();c.rect(left+2,0,Math.max(0,right-left-4),42);c.clip();c.fillStyle=tint('#51756b');c.textAlign='center';c.font=canvasFont(11,true);c.fillText(f.name,(left+right)/2,16);c.font=canvasFont(10);c.fillText(`${f.start.toFixed(2)}–${f.end.toFixed(2)} s`,(left+right)/2,32);c.restore();}
   for(const key of ['f0','pressure']){c.strokeStyle=color(key);c.lineWidth=key===mode?2:1.3;c.setLineDash(curves[key].length?[]:[4,3]);c.beginPath();let pen=false;for(let i=0;i<=200;i++){if(blocked(i/200,key)){pen=false;continue;}const xx=x(i/200),yy=y(value(i/200,key),key);pen?c.lineTo(xx,yy):c.moveTo(xx,yy);pen=true;}c.stroke();c.setLineDash([]);}
   if(document.activeElement===canvas&&!blocked(cursor)){c.fillStyle=color(mode);c.beginPath();c.arc(x(cursor),y(value(cursor),mode),3,0,7);c.fill();}
-  $('pitchStatus').textContent=`正在绘制${specs[mode].name} · 实线为手绘，虚线为逐帧值 · 改变时长等比例伸缩。静音段不能绘制；送气段可绘制气压。`;
-  $('pitchUndo').disabled=isBusy()||!undo[mode].length;$('pitchReset').disabled=isBusy()||!curves[mode].length;$('pitchReset').textContent='恢复逐帧'+specs[mode].name;
+  bindText($('pitchStatus'),()=>msg("modules.vocal-tract-frame.text.drawing_value_solid_drawn_dashed_per_frame_scales_with_duration_silence_cann_190",{v0:()=>specs[mode].name}));
+  $('pitchUndo').disabled=isBusy()||!undo[mode].length;$('pitchReset').disabled=isBusy()||!curves[mode].length;bindText($('pitchReset'),()=>join(()=>msg("modules.vocal-tract-frame.text.restore_per_frame_191"),()=>specs[mode].name));
   for(const [id,key] of [['drawF0','f0'],['drawPressure','pressure']]){$(id).setAttribute('aria-pressed',mode===key);$(id).disabled=isBusy();}
-  canvas.setAttribute('aria-label','手绘'+specs[mode].name+'曲线');canvas.setAttribute('aria-valuemin',specs[mode].lo);canvas.setAttribute('aria-valuemax',specs[mode].hi);if(blocked(cursor))canvas.removeAttribute('aria-valuenow');else canvas.setAttribute('aria-valuenow',Math.round(value(cursor)));canvas.setAttribute('aria-valuetext',`${(cursor*total()).toFixed(2)} 秒，${blocked(cursor)?'当前段不能绘制':Math.round(value(cursor))+' '+specs[mode].unit}`);
+  bindAttribute(canvas,"aria-label",()=>join(()=>join(()=>msg("modules.vocal-tract-frame.text.draw_192"),()=>specs[mode].name),()=>msg("modules.vocal-tract-frame.text.curve_193")));canvas.setAttribute('aria-valuemin',specs[mode].lo);canvas.setAttribute('aria-valuemax',specs[mode].hi);if(blocked(cursor))canvas.removeAttribute('aria-valuenow');else canvas.setAttribute('aria-valuenow',Math.round(value(cursor)));bindAttribute(canvas,"aria-valuetext",()=>msg("modules.vocal-tract-frame.text.value_s_value_194",{v0:()=>(cursor*total()).toFixed(2),v1:()=>blocked(cursor)?msg("modules.vocal-tract-frame.text.cannot_draw_in_this_segment_195"):Math.round(value(cursor))+' '+specs[mode].unit}));
  }
  const point=e=>{const r=canvas.getBoundingClientRect(),m=specs[mode];return [Math.max(0,Math.min(1,(e.clientX-r.left-42)/(r.width-94))),Math.max(m.lo,Math.min(m.hi,m.hi-(e.clientY-r.top-48)/(r.height-73)*(m.hi-m.lo)))];};
  function remember(){undo[mode].push(copy(mode));undo[mode]=undo[mode].slice(-20);}

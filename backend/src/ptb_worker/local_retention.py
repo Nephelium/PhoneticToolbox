@@ -1,4 +1,4 @@
-"""Opt-in policy for this instance's managed results, never source directories.
+"""Configurable policy for this instance's managed results, never source directories.
 
 The existing asset lock and SQLite transaction fence each sweep against workers.
 No schema change is required. Old assets receive a full first-observation grace.
@@ -27,14 +27,16 @@ class LocalRetention:
         no_links(path)
         if not path.exists():
             return dict(schema='ptb-retention/1', instance_id=state['instance_id'],
-                        enabled=True, days=3, exported_cache_days=1, last_sweep=0,
+                        enabled=True, days=3, exported_cache_days=1, clean_unused_inputs=False, last_sweep=0,
                         records={}, mfa_attempts={}, last_result=None)
         if not path.is_file() or path.stat().st_nlink != 1 or path.stat().st_size > 16_000_000:
             raise JobError('local_retention_metadata_rejected', 503)
         value = json.loads(path.read_text('utf-8'))
+        value.setdefault('clean_unused_inputs',False)
         if (value.get('schema') != 'ptb-retention/1' or
                 value.get('instance_id') != state['instance_id'] or
                 type(value.get('enabled')) is not bool or
+                type(value.get('clean_unused_inputs')) is not bool or
                 type(value.get('days')) is not int or not 1 <= value['days'] <= 3650 or
                 type(value.get('exported_cache_days')) is not int or
                 not 1 <= value['exported_cache_days'] <= 3650 or
@@ -86,22 +88,30 @@ class LocalRetention:
         return value if type(value) in (int, float) and math.isfinite(value) and 0 < value <= fallback else fallback
 
     def _observe(self, state, policy, now):
+        policy['records']={key:record for key,record in policy['records'].items()
+                           if key in state['assets'] and state['assets'][key]['state']!='deleted'}
         for key, asset in state['assets'].items():
-            if asset['kind'] != 'result' or asset['state'] != 'ready':
+            if asset['kind'] not in ('result','input') or asset['state'] != 'ready':
                 continue
             if key not in policy['records']:
                 # New releases stamp creation. A historic mtime is not evidence.
                 created = self._time(asset.get('retention_created_at'), now)
                 policy['records'][key] = dict(first_seen=now, created_at=created,
                                              exported_at=None, touched_at=created)
+            if asset['kind']=='input':
+                record=policy['records'][key]
+                record['touched_at']=max(record['touched_at'],self._time(asset.get('retention_touched_at',record['touched_at']),now))
 
     def status(self, *, now=None):
         now = time.time() if now is None else now
         with self.files.batch_transaction() as tx:
             state = self.files.state; value = self._load(state)
-            self._observe(state, value, now); self._save(value)
+            before=canonical(value)
+            self._observe(state, value, now)
+            if canonical(value)!=before:self._save(value)
             assets = [a for a in state['assets'].values() if a['state'] == 'ready']
             return dict(schema=value['schema'], enabled=value['enabled'], days=value['days'],
+                        clean_unused_inputs=value['clean_unused_inputs'],
                         exported_cache_days=value['exported_cache_days'],
                         result_bytes=sum(a['size_bytes'] for a in assets if a['kind'] == 'result'),
                         input_bytes=sum(a['size_bytes'] for a in assets if a['kind'] == 'input'),
@@ -131,13 +141,13 @@ class LocalRetention:
             state=self.files.state;value=self._load(state)
             completed(path,identity,state,value,now);self._save(value)
 
-    def configure(self, *, enabled, days, exported_cache_days=1):
-        if (type(enabled) is not bool or type(days) is not int or not 1 <= days <= 3650 or
+    def configure(self, *, enabled, days, exported_cache_days=1, clean_unused_inputs=False):
+        if (type(enabled) is not bool or type(clean_unused_inputs) is not bool or type(days) is not int or not 1 <= days <= 3650 or
                 type(exported_cache_days) is not int or not 1 <= exported_cache_days <= 3650):
             raise JobError('invalid_retention_policy', 422)
         with self.files.locked() as state:
             value = self._load(state)
-            value.update(enabled=enabled, days=days, exported_cache_days=exported_cache_days)
+            value.update(enabled=enabled, days=days, exported_cache_days=exported_cache_days,clean_unused_inputs=clean_unused_inputs)
             self._save(value)
         return self.status()
 
@@ -208,17 +218,31 @@ class LocalRetention:
             # chain, including M07 analysis_job_id and other parent job IDs.
             protected_jobs = {row['id'] for row in jobs.values() if row['state'] in ACTIVE}
             protected_jobs.update(a['job_id'] for key, a in assets.items() if key not in eligible)
-            protected, visited, queue = set(), set(), list(protected_jobs)
+            protected=set()
+            # Pending items may point at a parent result and its input chain.
+            # Protect them before selecting either results or imported copies.
+            if tx.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='acoustic_batches'").fetchone():
+                for row in tx.execute('SELECT i.input_snapshot FROM acoustic_batch_items i JOIN acoustic_batches b ON b.id=i.batch_id WHERE b.closed_at IS NULL AND NOT b.cancel_requested'):
+                    refs=self._references(json.loads(row['input_snapshot']),set(state['assets']))
+                    protected.update(refs)
+                    protected_jobs.update(state['assets'][key]['job_id'] for key in refs if state['assets'][key].get('job_id'))
+            visited, queue = set(), list(protected_jobs)
             while queue:
                 key = queue.pop()
                 if key in visited or key not in jobs: continue
                 visited.add(key); snapshot = json.loads(jobs[key]['snapshot'])
-                protected.update(self._references(snapshot, set(assets)))
+                protected.update(self._references(snapshot, set(state['assets'])))
                 parents = self._references(snapshot, set(jobs))
                 for parent in parents:
                     protected.update(k for k, a in assets.items() if a['job_id'] == parent)
                 queue.extend(parents - visited)
             selected=sorted(eligible-protected)
+            if policy['clean_unused_inputs']:
+                for key,asset in state['assets'].items():
+                    if asset['kind']!='input' or asset['state']!='ready' or key in protected:continue
+                    record=policy['records'][key]
+                    if all_cache or now-max(record['first_seen'],record['created_at'],record['touched_at'])>=policy['days']*DAY:
+                        assets[key]=asset;selected.append(key)
             # Validate the complete set before any unlink. A bad later path or
             # an externally changed result must not cause an unreported prefix.
             for key in selected:

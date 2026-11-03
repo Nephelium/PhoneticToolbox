@@ -9,6 +9,8 @@ import {browserM06} from '../src/platform/browser-m06.ts';
 import {defaults,valid,clone} from '../src/modules/speech-synthesis/state.ts';
 import {MediaBank} from '../src/modules/perception/media.ts';
 import type {M06Port} from '../src/modules/speech-synthesis/port.ts';
+import * as i18n from '../src/i18n/index.ts';
+import * as localization from '../src/modules/module-localization.ts';
 
 const source=(path:string)=>readFileSync(new URL('../src/'+path,import.meta.url),'utf8');
 // Run actual SFC declarations with only storage/media/host boundaries replaced.
@@ -23,7 +25,8 @@ function component(path:string,names:string[],env:Record<string,any>,state:strin
  const get=(map:Map<string,string>,key:string)=>{assert(map.has(key),`Missing ${path}.${key}`);return map.get(key)!;};
  const statements=effects.map(pattern=>{const matches=file.statements.filter(n=>pattern.test(n.getText(file)));assert.equal(matches.length,1,String(pattern));return matches[0].getText(file);});
  const body=[...state.map(key=>get(variables,key)),...names.map(key=>get(functions,key)),...statements,`return {${[...names,...state].join(',')}};`].join('\n');
- return new Function(...Object.keys(env),ts.transpileModule(body,{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.None}}).outputText)(...Object.values(env));
+ const bindings={...i18n,...localization,...env};
+ return new Function(...Object.keys(bindings),ts.transpileModule(body,{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.None}}).outputText)(...Object.values(bindings));
 }
 function deferred<T>(){let resolve!:(v:T)=>void;return {promise:new Promise<T>(r=>resolve=r),resolve:(v:T)=>resolve(v)};}
 const turn=()=>new Promise(r=>setImmediate(r));
@@ -116,7 +119,7 @@ test('M06 port retains failed bytes across new task attempts, cancellation and e
 
 test('M06 actual SFC restores pending retry, guards new work and blocks close until results and draft save',async()=>{
  const f=failedPort();await assert.rejects(f.port.run('generate',defaults(),undefined,new AbortController().signal,()=>{}));
- const env:any={ref,computed,port:ref(f.port),job:ref(),retryContext:ref(),config:defaults(),revision:ref(7),wave:{dirty:false},notice:ref(''),error:ref(''),busy:ref(false),durationText:ref('2'),low:ref('50'),high:ref('500'),overrideText:ref(''),name:ref('F0'),props:{stateKey:'server:test'},valid,clone,appliedOverride:()=>'',override:()=>{},replace:()=>{},host:{projects:{write:()=>true}},requireApplied:()=>{throw Error('new task reached validation');},epoch:0,disposed:false,abort:undefined,applyCompleted:async()=>{}};
+ const env:any={ref,computed,port:ref(f.port),job:ref(),retryContext:ref(),config:defaults(),revision:ref(7),wave:{dirty:false},notice:i18n.messageRef(),error:i18n.messageRef(),busy:ref(false),durationText:ref('2'),low:ref('50'),high:ref('500'),overrideText:ref(''),name:ref('F0'),props:{stateKey:'server:test'},valid,clone,appliedOverride:()=>'',override:()=>{},replace:()=>{},host:{projects:{write:()=>true}},requireApplied:()=>{throw Error('new task reached validation');},epoch:0,disposed:false,abort:undefined,applyCompleted:async()=>{}};
  const api=component('modules/speech-synthesis/SpeechSynthesisPage.vue',['restorePendingSave','discardPendingSave','save','attempt','retrySave','run'],env,['canRetrySave']);
  api.restorePendingSave();assert.equal(env.wave.dirty,true);assert.equal(env.retryContext.value.revision,7);assert(api.canRetrySave.value);
  await api.run('generate');assert.match(env.error.value,/待保存/);assert.equal(f.computes(),1);

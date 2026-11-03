@@ -1,3 +1,5 @@
+import {uiMessage,uiError,localized} from '../modules/module-localization.ts';
+import {tr} from '../i18n/index.ts';
 import {parseGeoManifest,readGeoManifestFiles,type GeoFile} from './geolinguistics-directory.ts';
 
 export const geoDownloadRoot='https://www.phonetictoolbox.com/app/geolinguistics/';
@@ -11,12 +13,12 @@ export async function downloadGeoData(progress:(value:GeoDownloadProgress)=>void
  async function get(name:string,limit:number,track=false){
   signal?.throwIfAborted();
   const response=await fetch(new URL(name,geoDownloadRoot),{signal,credentials:'omit',redirect:'error',cache:'no-store'});
-  if(!response.ok||response.headers.get('content-type')?.includes('text/html'))throw Error('服务器资料暂时无法下载，请稍后重试，也可以选择本地资料夹。');
-  if(!response.body)throw Error('资料下载未完成，请重试。');
+  if(!response.ok||response.headers.get('content-type')?.includes('text/html'))throw uiError(uiMessage('platform.server_data_cannot_be_downloaded_right_now_retry_later'));
+  if(!response.body)throw uiError(uiMessage('platform.the_data_download_did_not_finish_try_again'));
   const reader=response.body.getReader(),chunks:Uint8Array<ArrayBuffer>[]= [];let size=0;
   try{
    for(;;){signal?.throwIfAborted();const {done,value}=await reader.read();if(done)break;
-    size+=value.byteLength;if(size>limit)throw Error('下载的资料大小不符，请重试。');
+    size+=value.byteLength;if(size>limit)throw uiError(uiMessage('platform.the_downloaded_data_has_an_unexpected_size_try_again'));
     chunks.push(value as Uint8Array<ArrayBuffer>);if(track){state.loaded+=value.byteLength;report();}
    }
   }catch(error){await reader.cancel().catch(()=>{});throw error;}finally{reader.releaseLock();}

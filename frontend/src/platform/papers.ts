@@ -1,8 +1,16 @@
+import {uiMessage,uiError,responseError,uiErrorMessage,localized} from '../modules/module-localization.ts';
+import {tr} from '../i18n/index.ts';
 // M18: explicit native capability; paper bytes are never application assets.
 export interface PaperAsset{path:string;size:number;sha256:string}
 export interface PaperJournal{title:string;publishedAt:string;doi:string;volume?:string;issue?:string;pages?:string;articleNumber?:string}
 export interface Paper{id:string;title:string;titleZh:string;authors:string;version:string;sourceUrl:string;journal?:PaperJournal;publishedAt:string;submittedAt:string;updatedAt?:string;acquired?:boolean;analysisDownloaded?:boolean;dismissed?:boolean;license:{id:string;url:string};translationNote:string;guide:string;abstract?:string;abstractZh?:string;analysis?:string;analysisPdf?:PaperAsset;original:PaperAsset;translation:PaperAsset;downloaded:boolean;local?:boolean;notice?:boolean}
-export interface PaperStatus{firstLaunch:string;warning:string;papers:Paper[];notice?:Paper|null;autoReceive?:boolean;checkIntervalHours?:number;folders?:string[];collections?:Record<string,string>}
+export interface PaperStatus{firstLaunch:string;warning:string;warningError?:{error:string;display?:unknown};papers:Paper[];notice?:Paper|null;autoReceive?:boolean;checkIntervalHours?:number;folders?:string[];collections?:Record<string,string>}
+/** Owned background failures retain the raw warning and compose only display text. */
+export function paperStatusWarning(value:PaperStatus){
+ const failure=value.warningError;
+ if(failure&&typeof failure.error==='string')return uiMessage('modules.paper-reading.auto_check_failed',{reason:uiErrorMessage(responseError(failure.error,failure.display))});
+ return value.warning?uiErrorMessage(responseError(value.warning)):'';
+}
 export interface LocalDocument{id:string;title:string;titleZh:string;relative:string;folder:string;size:number;publishedAt:string;contentVersion?:string}
 export interface LocalLibrary{root:string;folders:string[];documents:LocalDocument[];selected?:string;relocated?:Record<string,string>;imported?:string[];failures?:string[];cancelled?:boolean}
 export type PaperLanguage='original'|'translation'|'analysis';
@@ -18,27 +26,27 @@ const pending=new Map<string,{resolve:(value:any)=>void;reject:(error:Error)=>vo
 const statusListeners=new Set<(value:PaperStatus)=>void>();
 function statusChanged(payload:string){try{const value=JSON.parse(payload);for(const listener of statusListeners)listener(value);}catch{/* Ignore invalid unsolicited status. */}}
 export function onPaperStatus(listener:(value:PaperStatus)=>void){statusListeners.add(listener);return ()=>statusListeners.delete(listener);}
-function ready(id:string,payload:string){const job=pending.get(id);if(!job)return;pending.delete(id);job.cleanup();try{const r=JSON.parse(payload);if(r.ok)job.resolve(r.value);else job.reject(Error(r.error));}catch{job.reject(Error('论文响应无法解析。'));}}
+function ready(id:string,payload:string){const job=pending.get(id);if(!job)return;pending.delete(id);job.cleanup();try{const r=JSON.parse(payload);if(r.ok)job.resolve(r.value);else job.reject(responseError(r.error,r.display));}catch{job.reject(uiError(uiMessage('platform.the_paper_service_response_could_not_be_parsed')));}}
 function progress(id:string,payload:string){try{const p=JSON.parse(payload);if(Number.isFinite(p.received)&&Number.isFinite(p.total)&&p.received>=0&&p.total>=p.received)pending.get(id)?.progress?.(p);}catch{/* Ignore malformed progress; completion remains explicit. */}}
 export function installPapersChannel(next:PapersChannel|undefined){
   channel?.ready.disconnect?.(ready);channel?.progress.disconnect?.(progress);
   channel?.statusChanged?.disconnect?.(statusChanged);
-  for(const [id,p] of pending){channel?.cancel(id);p.cleanup();p.reject(Error('论文服务已断开。'));}pending.clear();
+  for(const [id,p] of pending){channel?.cancel(id);p.cleanup();p.reject(uiError(uiMessage('platform.the_paper_service_disconnected')));}pending.clear();
   channel=next;channel?.ready.connect(ready);channel?.progress.connect(progress);
   channel?.statusChanged?.connect(statusChanged);
 }
 export function papersAvailable(){return !!channel;}
 function invoke<T>(operation:string,args:Record<string,unknown>={},signal?:AbortSignal,onProgress?:(p:PaperProgress)=>void):Promise<T>{
-  const current=channel;if(!current)return Promise.reject(Error('请在桌面版打开论文精读，获取服务器论文并离线阅读。'));
-  if(signal?.aborted)return Promise.reject(Error('操作已取消。'));
+  const current=channel;if(!current)return Promise.reject(uiError(uiMessage('platform.open_paper_reading_in_the_desktop_version_to_obtain')));
+  if(signal?.aborted)return Promise.reject(uiError(uiMessage('platform.operation_cancelled_404')));
   const id=`paper_${++sequence}`;
   return new Promise((resolve,reject)=>{
-    const stop=(message:string)=>{if(!pending.delete(id))return;cleanup();current.cancel(id);reject(Error(message));};
-    const abort=()=>stop('操作已取消，已完成的下载保留。');
-    const timer=setTimeout(()=>stop('论文操作超时，请重试。'),['download','downloadSelected','export','importLocal','chooseLibrary'].includes(operation)?30*60*1000:60000);
+    const stop=(message:import('../i18n/index.ts').MessageDescriptor)=>{if(!pending.delete(id))return;cleanup();current.cancel(id);reject(uiError(message));};
+    const abort=()=>stop(uiMessage('platform.operation_cancelled_completed_downloads_are_retained'));
+    const timer=setTimeout(()=>stop(uiMessage('platform.the_paper_operation_timed_out_try_again')),['download','downloadSelected','export','importLocal','chooseLibrary'].includes(operation)?30*60*1000:60000);
     const cleanup=()=>{clearTimeout(timer);signal?.removeEventListener('abort',abort);};
     pending.set(id,{resolve,reject,progress:onProgress,cleanup});signal?.addEventListener('abort',abort,{once:true});
-    try{current.request(id,JSON.stringify({operation,args}));}catch{stop('无法提交论文请求。');}
+    try{current.request(id,JSON.stringify({operation,args}));}catch{stop(uiMessage('platform.the_paper_request_could_not_be_submitted'));}
   });
 }
 export function createPapers(invoke:<T>(operation:string,args?:Record<string,unknown>,signal?:AbortSignal,onProgress?:(p:PaperProgress)=>void)=>Promise<T>){return {

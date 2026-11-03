@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import {tr} from '../i18n/index.ts';
 import { computed, nextTick, ref, useId } from 'vue';
 import doulosLicense from '../assets/Doulos-OFL.txt?raw';
 import monoLicense from '../assets/JetBrainsMono-OFL.txt?raw';
@@ -6,9 +7,9 @@ import ipaLicense from '../assets/ipa-plus/OFL-PTBIPAPlus.txt?raw';
 import notoLicense from '../assets/ipa-plus/OFL-Noto.txt?raw';
 
 const fonts = [
-  { id: 'doulos', name: 'Doulos SIL', version: '7.000', usage: '国际音标字体', license: doulosLicense },
-  { id: 'mono', name: 'JetBrains Mono', version: '2.304', usage: '代码与等宽字体', license: monoLicense },
-  { id: 'ipa', name: 'PTB IPA Plus', version: '1.000', usage: '国际音标表 Plus 字体，基于 Doulos SIL，含 Noto Sans Math 的两个字形', license: ipaLicense + '\n\n' + notoLicense },
+  { id: 'doulos', name: 'Doulos SIL', version: '7.000', usage: tr('components.international_phonetic_alphabet_font'), license: doulosLicense },
+  { id: 'mono', name: 'JetBrains Mono', version: '2.304', usage: tr('components.code_and_monospace_font'), license: monoLicense },
+  { id: 'ipa', name: 'PTB IPA Plus', version: '1.000', usage: tr('components.ipa_chart_plus_font_based_on_doulos_sil_with'), license: ipaLicense + '\n\n' + notoLicense },
 ];
 const active = ref('doulos'), id = useId();
 const selected = computed(() => fonts.find(font => font.id === active.value)!);
@@ -30,7 +31,7 @@ function navigate(event: KeyboardEvent) {
 
 <template>
   <div class="font-licenses">
-    <div class="font-license-tabs" role="tablist" aria-label="内置字体" @keydown="navigate">
+    <div class="font-license-tabs" role="tablist" :aria-label="tr('components.built_in_fonts')" @keydown="navigate">
       <button v-for="font in fonts" :id="id + '-' + font.id" :key="font.id" role="tab"
         :aria-selected="active === font.id" :aria-controls="id + '-license'"
         :tabindex="active === font.id ? 0 : -1" @click="select(font.id)">{{ font.name }}</button>

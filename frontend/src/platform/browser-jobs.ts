@@ -1,3 +1,5 @@
+import {uiMessage,uiError,localized} from '../modules/module-localization.ts';
+import {tr} from '../i18n/index.ts';
 import {LocalStorageError} from './local-assets.ts';
 import type {JobView,ResearchFile,ReconstructionConfig} from './research.ts';
 
@@ -15,22 +17,22 @@ export class BrowserJobs<C=ReconstructionConfig> {
  get(id:string){return this.entries.get(id)?.job;}
  serverRetry(id:string){return this.entries.get(id)?.failure!=='local_storage';}
  source(id:string){const record=this.entries.get(id);return record?{file:record.file,config:record.config}:undefined;}
- async persist(record:RecordView<C>){if(this.closed)return;const previous=record.job.error_code;if(previous==='结果保存尚未完成，请保持页面打开后重试。')record.job.error_code=null;try{await this.ports.upload(this.spec.prefix+record.job.id+'.ptb-browser.json',new TextEncoder().encode(JSON.stringify(record)).buffer);this.pendingWrites.delete(record.job.id);}catch(error){record.job.error_code=previous;this.pendingWrites.set(record.job.id,record);throw error;}}
+ async persist(record:RecordView<C>){if(this.closed)return;const previous=record.job.error_code;if(['结果保存尚未完成，请保持页面打开后重试。','platform.saving_results_has_not_finished_keep_this_page_open'].includes(previous??''))record.job.error_code=null;try{await this.ports.upload(this.spec.prefix+record.job.id+'.ptb-browser.json',new TextEncoder().encode(JSON.stringify(record)).buffer);this.pendingWrites.delete(record.job.id);}catch(error){record.job.error_code=previous;this.pendingWrites.set(record.job.id,record);throw error;}}
  async start(file:ResearchFile,config:C){
-  if(this.closed)throw Error('项目会话已关闭');if(this.running.size)throw Error('请先等待或取消当前浏览器计算。');
+  if(this.closed)throw uiError(uiMessage('platform.the_project_session_is_closed'));if(this.running.size)throw uiError(uiMessage('platform.wait_for_or_cancel_the_current_browser_computation_first'));
   const id=crypto.randomUUID(),now=Date.now()/1000,job:JobView={id,project_id:this.project,operation:this.spec.operation,state:'running',progress:0,generation:1,created_at:now,updated_at:now,error_code:null,result_manifest:null,execution:'browser'};
   const record:RecordView<C>={schema:'ptb-browser-job/1',owner:this.owner,project:this.project,file:JSON.parse(JSON.stringify(file)),config:JSON.parse(JSON.stringify(config)),job};this.entries.set(id,record);const abort=new AbortController();this.running.set(id,abort);
   try{await this.persist(record);}catch(error){this.running.delete(id);this.entries.delete(id);this.pendingWrites.delete(id);throw error;}
   void (async()=>{
    try{
     const output=await this.ports.compute(file,config,abort.signal);if(this.closed||abort.signal.aborted)throw new DOMException('Cancelled','AbortError');
-    const names=this.spec.names;if(output.files.length!==names.length||!output.files.every(f=>names.includes(f.name))||new Set(output.files.map(f=>f.name)).size!==names.length)throw Error('计算结果清单不完整');
+    const names=this.spec.names;if(output.files.length!==names.length||!output.files.every(f=>names.includes(f.name))||new Set(output.files.map(f=>f.name)).size!==names.length)throw uiError(uiMessage('platform.the_result_manifest_is_incomplete'));
     const files=[];let coreVersion='',policyVersion:1|2=1;
     for(const item of output.files){if(this.closed||abort.signal.aborted)throw new DOMException('Cancelled','AbortError');const raw=Uint8Array.from(atob(item.data),c=>c.charCodeAt(0));if(item.name.endsWith('.json')){const meta=JSON.parse(new TextDecoder().decode(raw));coreVersion=meta.core_version??meta.runtime?.versions?.['phonetic-core'];}const asset=await this.ports.upload(id+'-'+item.name,raw.buffer);policyVersion=asset.policyVersion??1;files.push({id:asset.id,name:item.name,kind:'result' as const,size_bytes:asset.size_bytes??asset.size,expires_at:asset.expires_at??asset.expiresAt??null,sha256:asset.sha256});}
     if(this.closed||abort.signal.aborted)throw new DOMException('Cancelled','AbortError');
     job.result_manifest={kind:this.spec.kind,complete:true,operation:this.spec.operation,core_version:coreVersion,policy_version:policyVersion,files} as JobView['result_manifest'];job.state='succeeded';job.progress=1;
-   }catch(error){if(error instanceof LocalStorageError)record.failure='local_storage';job.state=abort.signal.aborted?'cancelled':'failed';if(!abort.signal.aborted)console.warn('Browser computation failed:',error);const known=String(error).match(/(?:ValueError|AcousticFailure): ([a-z0-9_]{1,80})/);job.error_code=abort.signal.aborted?'cancelled':error instanceof LocalStorageError?error.message:known?.[1]??'浏览器计算未完成，请点重试改用服务器。';}
-   finally{job.updated_at=Date.now()/1000;this.running.delete(id);await this.persist(record).catch(()=>{job.error_code='结果保存尚未完成，请保持页面打开后重试。';});}
+   }catch(error){if(error instanceof LocalStorageError)record.failure='local_storage';job.state=abort.signal.aborted?'cancelled':'failed';if(!abort.signal.aborted)console.warn('Browser computation failed:',error);const known=String(error).match(/(?:ValueError|AcousticFailure): ([a-z0-9_]{1,80})/);job.error_code=abort.signal.aborted?'cancelled':error instanceof LocalStorageError?storedError(error):known?.[1]??'platform.browser_computation_did_not_finish_click_retry_to_use';}
+   finally{job.updated_at=Date.now()/1000;this.running.delete(id);await this.persist(record).catch(()=>{job.error_code='platform.saving_results_has_not_finished_keep_this_page_open';});}
   })();return structuredClone(job);
  }
  async list(){
@@ -42,14 +44,16 @@ export class BrowserJobs<C=ReconstructionConfig> {
    if(record?.schema!=='ptb-browser-job/1'||record.owner!==this.owner||record.project!==this.project&&(!this.legacyProject||record.project!==this.legacyProject)||record.job?.id!==id||record.job.project_id!==record.project||record.job.operation!==this.spec.operation||!Number.isFinite(record.job.created_at)||!Number.isFinite(record.job.updated_at))continue;
    if((this.entries.get(id)?.job.updated_at??0)>record.job.updated_at)continue;
    const adopted=record.project!==this.project;if(adopted){record.project=this.project;record.job.project_id=this.project;}
-   if(['running','queued'].includes(record.job.state)&&Date.now()/1000-record.job.created_at>180){record.job.state='interrupted';record.job.error_code='浏览器计算已中断，请重试。';}
+   if(['running','queued'].includes(record.job.state)&&Date.now()/1000-record.job.created_at>180){record.job.state='interrupted';record.job.error_code='platform.browser_computation_was_interrupted_try_again';}
    if(adopted)await this.persist(record);
    this.entries.set(id,record);this.loaded.set(id,asset.sha256);
   }
-  for(const [id,record] of this.entries)if(!this.running.has(id)&&['running','queued'].includes(record.job.state)&&Date.now()/1000-record.job.created_at>180){record.job.state='interrupted';record.job.error_code='浏览器计算已中断，请重试。';}
+  for(const [id,record] of this.entries)if(!this.running.has(id)&&['running','queued'].includes(record.job.state)&&Date.now()/1000-record.job.created_at>180){record.job.state='interrupted';record.job.error_code='platform.browser_computation_was_interrupted_try_again';}
   return [...this.entries.values()].map(v=>structuredClone(v.job)).sort((a,b)=>b.created_at-a.created_at);
  }
- async cancel(id:string){const record=this.entries.get(id);if(!record)throw Error('重建任务不存在');if(!['running','queued'].includes(record.job.state))return structuredClone(record.job);this.running.get(id)?.abort();record.job.state='cancelled';record.job.error_code='cancelled';record.job.updated_at=Date.now()/1000;await this.persist(record);return structuredClone(record.job);}
- async retry(id:string){const record=this.entries.get(id);if(!record)throw Error('重建任务不存在');return this.start(record.file,record.config);}
+ async cancel(id:string){const record=this.entries.get(id);if(!record)throw uiError(uiMessage('platform.the_reconstruction_task_does_not_exist'));if(!['running','queued'].includes(record.job.state))return structuredClone(record.job);this.running.get(id)?.abort();record.job.state='cancelled';record.job.error_code='cancelled';record.job.updated_at=Date.now()/1000;await this.persist(record);return structuredClone(record.job);}
+ async retry(id:string){const record=this.entries.get(id);if(!record)throw uiError(uiMessage('platform.the_reconstruction_task_does_not_exist'));return this.start(record.file,record.config);}
  close(){this.closed=true;if(typeof window!=='undefined')window.removeEventListener('beforeunload',this.unload);for(const abort of this.running.values())abort.abort();this.running.clear();this.entries.clear();this.loaded.clear();this.pendingWrites.clear();}
 }
+
+function storedError(error:LocalStorageError){return error.display.key==='modules.display.composed'||Object.keys(error.display.values??{}).length?error.message:error.display.key;}

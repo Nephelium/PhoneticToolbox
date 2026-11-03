@@ -100,6 +100,19 @@ test('software-only asset overlay does not overwrite a public ID',()=>{
   assert.throws(()=>mergeManualAssets([],[{...audio,path:'../private.wav'}]),/无效/);
 });
 
+test('desktop object URLs allow only the real application origin and canonical Blob UUID path',()=>{
+  const id='01e6f3a0-e4b3-4d74-9f33-700305c620c1';
+  assert.equal(safeMediaSource('blob:ptbapp://app/'+id),'blob:ptbapp://app/'+id);
+  assert.equal(safeMediaSource('blob:https://example.org/'+id),'blob:https://example.org/'+id);
+  for(const value of [
+    'ptbapp://app/'+id,'blob:ptbapp://other/'+id,'blob:ptbapp://app.evil/'+id,
+    'blob:ptbapp://user@app/'+id,'blob:ptbapp://app:80/'+id,'blob:ptbapp://app/not-a-uuid',
+    'blob:ptbapp://app/'+id+'?x=1','blob:ptbapp://app/'+id+'#fragment',
+    'blob:ptbapp://app/nested/'+id,'blob:ptbapp://app/%2f'+id,'blob:null/'+id,
+    'blob:file:///C:/private/'+id,'blob:javascript:alert(1)','data:text/html,evil',
+  ])assert.equal(safeMediaSource(value),null,value);
+});
+
 test('chapter repository loads only requested JSON and bounds its cache',async()=>{
   const requested:string[]=[];const repo=new ManualChapterRepository(async d=>{requested.push(d.id);return chapter(d.id);},2);
   const signal=new AbortController().signal;

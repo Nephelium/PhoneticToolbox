@@ -1,18 +1,21 @@
 <script setup lang="ts">
+import {computed} from 'vue';
+import {tr} from '../i18n/index.ts';
 import type {Tier} from '../platform/research.ts';
 import {intervalLayout} from './interval-layout.ts';
 import type {Workspace} from '../state/workspace.ts';
 import {useAudioSelection} from '../state/audio-selection.ts';
-const props=withDefaults(defineProps<{state:Workspace;tiers:Tier[];start:number;end:number;selected:number;selectionStart:number;selectionEnd:number;selectedTierLabel?:string}>(),{selectedTierLabel:'当前切分层'});
+const selectedTierLabel=computed(()=>props.selectedTierLabel??tr('components.current_annotation_tier'));
+const props=withDefaults(defineProps<{state:Workspace;tiers:Tier[];start:number;end:number;selected:number;selectionStart:number;selectionEnd:number;selectedTierLabel?:string}>(),{});
 const emit=defineEmits<{select:[tier:number,start:number,end:number]}>();
 const selectionGroup=useAudioSelection();
 function select(tier:number,start:number,end:number){selectionGroup?.select(props.state);emit('select',tier,start,end);}
 </script>
-<template><section class="textgrid-timeline" aria-label="TextGrid 时间对齐标注">
+<template><section class="textgrid-timeline" :aria-label="tr('components.time_aligned_textgrid_annotations')">
 <div v-for="(tier,tierIndex) in tiers" :key="tierIndex" class="textgrid-tier" :class="{active:tierIndex===selected}">
-<header><strong>{{tier.name}}</strong><small>{{tierIndex===selected?selectedTierLabel+' · ':''}}点击片段选区试听，缩放后可查看短标签</small></header>
-<div class="textgrid-lane" :aria-label="tier.name+' 标注轨'">
-<button v-for="interval in intervalLayout(tier.intervals,start,end)" :key="interval.index" class="textgrid-interval" data-audio-selection :class="{selected:interval.xmin===selectionStart&&interval.xmax===selectionEnd}" :style="{left:interval.left+'%',width:interval.width+'%'}" :data-xmin="interval.xmin" :data-xmax="interval.xmax" :title="(interval.text||'（空标签）')+' · '+interval.xmin.toFixed(6)+'–'+interval.xmax.toFixed(6)+' s'" :aria-label="tier.name+'：'+(interval.text||'空标签')+'，'+interval.xmin+' 到 '+interval.xmax+' 秒'" @click="select(tierIndex,interval.xmin,interval.xmax)"><span class="ipa-text">{{interval.text}}</span></button>
+<header><strong>{{tier.name}}</strong><small>{{tierIndex===selected?selectedTierLabel+' · ':''}}{{tr('components.click_an_interval_to_select_and_play_it_zoom')}}</small></header>
+<div class="textgrid-lane" :aria-label="tier.name+tr('components.annotation_track')">
+<button v-for="interval in intervalLayout(tier.intervals,start,end)" :key="interval.index" class="textgrid-interval" data-audio-selection :class="{selected:interval.xmin===selectionStart&&interval.xmax===selectionEnd}" :style="{left:interval.left+'%',width:interval.width+'%'}" :data-xmin="interval.xmin" :data-xmax="interval.xmax" :title="(interval.text||tr('components.empty_label'))+' · '+interval.xmin.toFixed(6)+'–'+interval.xmax.toFixed(6)+' s'" :aria-label="tier.name+'：'+(interval.text||tr('components.empty_label_456'))+'，'+interval.xmin+tr('components.to_457')+interval.xmax+tr('components.s')" @click="select(tierIndex,interval.xmin,interval.xmax)"><span class="ipa-text">{{interval.text}}</span></button>
 </div></div>
 <div class="time-axis"><span v-for="i in 5" :key="i">{{(start+(i-1)*(end-start)/4).toFixed(end-start<.1?4:3)}}{{i===5?' s':''}}</span></div>
 </section></template>

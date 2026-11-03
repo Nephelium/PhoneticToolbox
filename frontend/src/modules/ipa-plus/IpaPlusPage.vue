@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import {ipaTextFilename} from './filename.ts';
+import {uiErrorMessage as displayErrorValue} from '../module-localization.ts';
+
+import {tr,message as localizedMessage,messageRef} from '../../i18n/index.ts';
 import {useWebSettings,settingsFields} from '../../state/web-settings.ts';
 import {syncNumberInput} from '../../design/numeric-input.ts';
 import AppIcon from '../../components/AppIcon.vue';
@@ -26,7 +30,7 @@ const emit=defineEmits<{dirty:[value:boolean];references:[]}>();
 const writer=globalThis.crypto?.randomUUID?.()??'m17-'+Date.now().toString(36)+Math.random().toString(36).slice(2);
 const draft=reactive(createDraft(writer)),history=new EditorHistory();
 const editor=ref<HTMLTextAreaElement>(),page=ref<HTMLElement>(),chart=ref<HTMLElement>();
-const loaded=ref(false),fontReady=ref(false),fontError=ref(''),dirty=ref(false),error=ref(''),notice=ref('');
+const loaded=ref(false),fontReady=ref(false),fontError=messageRef(),dirty=ref(false),error=messageRef(),notice=messageRef();
 const query=ref(''),selected=ref<SymbolEntry>(),hovered=ref<SymbolEntry>(),detailsOpen=ref(false),helpOpen=ref(false);
 const historyTick=ref(0),blocked=ref(false);let composing=false,disposed=false,saveTimer:ReturnType<typeof setTimeout>|undefined,hoverTimer:ReturnType<typeof setTimeout>|undefined;
 const playOnClick=ref(false),playRequest=ref(0),playing=ref(false),hoverStyle=ref<Record<string,string>>({visibility:'hidden'});
@@ -78,9 +82,9 @@ function activate(entry:SymbolEntry){
   insert(entry);
 }
 function insert(entry:SymbolEntry){
-  if(!loaded.value||composing){notice.value=composing?'请先结束当前输入法组合，再点选符号。':'正在读取草稿。';return;}
+  if(!loaded.value||composing){notice.value=composing?localizedMessage('modules.ipa-plus.text.c32771e9a62f'):localizedMessage('modules.ipa-plus.text.d92f8b4450d9');return;}
   selected.value=entry;notice.value='';
-  try{commit(insertSymbol(snapshot(),entry));if(entry.insertionMode==='combining'&&draft.start===entry.insertText.length)notice.value='已输入附加记号；通常放在基底字母之后，未补入虚线圆。';if(entry.representation)notice.value='已输入圈围的文本替代表示，详见该项介绍。';}catch(e){notice.value=(e as Error).message;}
+  try{commit(insertSymbol(snapshot(),entry));if(entry.insertionMode==='combining'&&draft.start===entry.insertText.length)notice.value=localizedMessage('modules.ipa-plus.text.2fdf1c744876');if(entry.representation)notice.value=localizedMessage('modules.ipa-plus.text.ff01391e56fe');}catch(e){notice.value=displayErrorValue(e);}
 }
 function positionHover(){
  if(!hoverTarget||!hovered.value||!page.value)return;
@@ -108,18 +112,18 @@ async function save():Promise<boolean>{
     const next=await persistDraft(key,value,revision);revision=next;draft.revision=next;
     const same=['text','system','introductions','textSize','editorHeight'].every(field=>(draft as unknown as Record<string,unknown>)[field]===(value as unknown as Record<string,unknown>)[field]);
     if(same)dirty.value=false;error.value='';return true;
-  }catch(e){error.value=(e as Error).message;blocked.value=true;return false;}finally{saving=undefined;}})();
+  }catch(e){error.value=displayErrorValue(e);blocked.value=true;return false;}finally{saving=undefined;}})();
   return saving;
 }
-async function forkDraft(){if(saving)await saving;key='ipa-plus.v1.'+props.stateKey+'.'+writer;revision=0;blocked.value=false;dirty.value=true;if(await save())notice.value='已另存独立草稿。请同时导出文本，原冲突记录保持不变。';}
+async function forkDraft(){if(saving)await saving;key='ipa-plus.v1.'+props.stateKey+'.'+writer;revision=0;blocked.value=false;dirty.value=true;if(await save())notice.value=localizedMessage('modules.ipa-plus.text.4420cb65222b');}
 async function copyAll(){
-  if(!draft.text){notice.value='文本为空。';return;}
-  try{await copyText(draft.text);notice.value='已复制全部文字。';}
-  catch{notice.value='剪贴板不可用，已全选文字。请按 Ctrl+C（macOS：⌘C）手工复制。';draft.start=0;draft.end=draft.text.length;void showSelection();}
+  if(!draft.text){notice.value=localizedMessage('modules.ipa-plus.text.057e0443cad7');return;}
+  try{await copyText(draft.text);notice.value=localizedMessage('modules.ipa-plus.text.d688831e0216');}
+  catch{notice.value=localizedMessage('modules.ipa-plus.text.6c7b085ae454');draft.start=0;draft.end=draft.text.length;void showSelection();}
 }
-function exportText(){const blob=new Blob([draft.text],{type:'text/plain;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='国际音标-'+new Date().toISOString().slice(0,10)+'.txt';a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);notice.value='已发起 UTF-8 文本下载，请确认目标文件已保存。';}
+function exportText(){const blob=new Blob([draft.text],{type:'text/plain;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=ipaTextFilename();a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);notice.value=localizedMessage('modules.ipa-plus.text.821407425965');}
 function selectAll(){draft.start=0;draft.end=draft.text.length;history.select(draft.start,draft.end);void showSelection();}
-function clear(){if(composing)return;commit({text:'',start:0,end:0});notice.value='文字已清空，可撤销恢复。';}
+function clear(){if(composing)return;commit({text:'',start:0,end:0});notice.value=localizedMessage('modules.ipa-plus.text.b8fa39012185');}
 function resizeDown(event:PointerEvent){const target=event.currentTarget as HTMLElement;target.setPointerCapture(event.pointerId);resizeStart={y:event.clientY,height:draft.editorHeight,scale:page.value?(page.value.getBoundingClientRect().width/page.value.offsetWidth||1):1};event.preventDefault();}
 function resizeMove(event:PointerEvent){if(resizeStart)draft.editorHeight=Math.max(96,Math.min(360,resizeStart.height+(resizeStart.y-event.clientY)/resizeStart.scale));}
 function resizeKey(event:KeyboardEvent){if(['ArrowUp','ArrowDown','Home','End'].includes(event.key)){event.preventDefault();draft.editorHeight=event.key==='Home'?96:event.key==='End'?360:Math.max(96,Math.min(360,draft.editorHeight+(event.key==='ArrowUp'?16:-16)));}}
@@ -127,37 +131,37 @@ function beforeUnload(event:BeforeUnloadEvent){if(dirty.value){event.preventDefa
 onMounted(async()=>{
   window.addEventListener('beforeunload',beforeUnload);
   window.addEventListener('resize',clearHover);
-  try{const result=restoreDraft(await loadDraft(key),writer);if(disposed)return;Object.assign(draft,result.draft);revision=draft.revision;blocked.value=result.blocked;error.value=result.message;history.current=snapshot();}
-  catch(e){error.value=(e as Error).message;blocked.value=true;}
+  try{const result=restoreDraft(await loadDraft(key),writer);if(disposed)return;Object.assign(draft,result.draft);revision=draft.revision;blocked.value=result.blocked;error.value=result.messageDisplay??result.message;history.current=snapshot();}
+  catch(e){error.value=displayErrorValue(e);blocked.value=true;}
   // Flush settings watchers while hydration is still read-only. Opening a second
   // window must not revise the saved record before that window edits anything.
   await nextTick();if(disposed)return;loaded.value=true;void showSelection(false);
   try{await document.fonts.load('24px "PTB-IPA-Plus"','z̥᫃ C⃝ 𝼆 V𐞀');if(disposed)return;if(![...document.fonts].some(f=>f.family==='PTB-IPA-Plus'&&f.status==='loaded'))throw Error('font missing');fontReady.value=true;}
-  catch{fontError.value='音标字体加载失败，文本已保留。可在关于页反馈此问题。';}
+  catch{fontError.value=localizedMessage('modules.ipa-plus.text.fa4188602f82');}
 });
 onBeforeUnmount(()=>{disposed=true;clearTimeout(saveTimer);clearTimeout(hoverTimer);window.removeEventListener('beforeunload',beforeUnload);window.removeEventListener('resize',clearHover);});
 defineExpose({save});
 useWebSettings(props.stateKey,{...settingsFields(draft,['system','introductions','textSize','textSizeVersion','editorHeight']),playOnClick},()=>loaded.value);
 </script>
 <template>
- <ModuleFrame label="国际音标表Plus 工作区" class="ipa-plus-page" :style="{'--m17-font-size':draft.textSize+'px'}" fit>
-  <template #toolbar><ModuleToolbar label="国际音标表与检索"><div class="m17-tabs" role="group" aria-label="选择音标体系"><button v-for="system in systems" :key="system.id" type="button" :aria-pressed="draft.system===system.id" :class="{primary:draft.system===system.id}" @click="draft.system=system.id;hovered=undefined">{{system.label}}</button></div><input v-model="query" class="m17-search" aria-label="查找符号、名称、码位或 CIN" placeholder="符号 / 名称 / U+ / CIN"><label class="m17-size-control">字号 <input v-model.lazy.number="textSizeInput" @change="syncNumberInput($event,textSizeInput)" type="number" min="18" max="54" step="1" aria-label="音标字号"></label><label class="m17-toggle"><input v-model="draft.introductions" type="checkbox">悬停介绍</label><label class="m17-toggle m17-toggle-unavailable" title="演示内容正在创作中，将在后续更新中开放。"><input v-model="playOnClick" type="checkbox" disabled>点击播放</label><template #actions><button type="button" @click="helpOpen=!helpOpen">帮助</button><button type="button" @click="emit('references')"><AppIcon name="book"/>方法与引用</button></template></ModuleToolbar></template>
+ <ModuleFrame :label="tr('modules.ipa-plus.text.79bb75c4a4e7')" class="ipa-plus-page" :style="{'--m17-font-size':draft.textSize+'px'}" fit>
+  <template #toolbar><ModuleToolbar :label="tr('modules.ipa-plus.text.4a89e0135494')"><div class="m17-tabs" role="group" :aria-label="tr('modules.ipa-plus.text.3eb3ed6e05cd')"><button v-for="system in systems" :key="system.id" type="button" :aria-pressed="draft.system===system.id" :class="{primary:draft.system===system.id}" @click="draft.system=system.id;hovered=undefined">{{system.label}}</button></div><input v-model="query" class="m17-search" :aria-label="tr('modules.ipa-plus.text.1508528b129b')" :placeholder="tr('modules.ipa-plus.text.e031d718828f')"><label class="m17-size-control">{{tr('modules.ipa-plus.text.f71561b5af0a')}} <input v-model.lazy.number="textSizeInput" @change="syncNumberInput($event,textSizeInput)" type="number" min="18" max="54" step="1" :aria-label="tr('modules.ipa-plus.text.4dbb035fe149')"></label><label class="m17-toggle"><input v-model="draft.introductions" type="checkbox">{{tr('modules.ipa-plus.text.c7939737e6ae')}}</label><label class="m17-toggle m17-toggle-unavailable" :title="tr('modules.ipa-plus.text.fd30e8f09aa8')"><input v-model="playOnClick" type="checkbox" disabled>{{tr('modules.ipa-plus.text.864ead58a317')}}</label><template #actions><button type="button" @click="helpOpen=!helpOpen">{{tr('modules.ipa-plus.text.a57cfcb8428d')}}</button><button type="button" @click="emit('references')"><AppIcon name="book"/>{{tr('modules.ipa-plus.text.7eaa43419522')}}</button></template></ModuleToolbar></template>
   <div ref="page" class="m17-body" :data-font-ready="fontReady" :data-loaded="loaded">
    <ModuleStatus v-if="fontError" kind="error" :message="fontError"/>
-   <ModuleStatus v-if="error" kind="error" :message="error"><button class="primary" type="button" @click="forkDraft">另存独立草稿</button></ModuleStatus>
+   <ModuleStatus v-if="error" kind="error" :message="error"><button class="primary" type="button" @click="forkDraft">{{tr('modules.ipa-plus.text.8d0eb8782a94')}}</button></ModuleStatus>
    <div ref="chart" class="m17-chart-viewport" @scroll="clearHover">
-    <div class="m17-chart-meta"><span>{{currentSystem.version}}</span><span>{{playOnClick?'点击符号播放演示':'深色符号＝独立输入 · 浅色＝完整示例'}}</span></div>
+    <div class="m17-chart-meta"><span>{{currentSystem.version}}</span><span>{{playOnClick?tr('modules.ipa-plus.text.9d743e275b4d'):tr('modules.ipa-plus.text.6dc3042751a1')}}</span></div>
     <ChartView :system="draft.system" :query="query" :selected="selected?.id" :play-on-click="playOnClick" @insert="activate" @hover="hover" @inspect="inspect"/>
    </div>
-   <div class="m17-divider" role="separator" tabindex="0" aria-label="拖动调整文本区高度" aria-orientation="horizontal" :aria-valuenow="draft.editorHeight" :aria-valuemin="96" :aria-valuemax="360" @pointerdown="resizeDown" @pointermove="resizeMove" @pointerup="resizeStart=undefined" @pointercancel="resizeStart=undefined" @keydown="resizeKey"><span></span></div>
-   <div class="m17-editor-area" :style="{height:draft.editorHeight+'px'}"><textarea ref="editor" :value="draft.text" class="m17-editor m17-ipa" :style="{fontSize:draft.textSize+'px'}" aria-label="国际音标文本" spellcheck="false" autocomplete="off" autocapitalize="off" :disabled="!loaded" placeholder="在此手动输入或粘贴，点击上方符号插入到光标处……" @input="input" @select="captureSelection" @keyup="captureSelection" @pointerup="captureSelection" @blur="captureSelection" @keydown="keydown" @beforeinput="beforeInput" @compositionstart="compositionStart" @compositionend="compositionEnd"/></div>
-   <div class="m17-editor-toolbar"><button type="button" class="primary" @click="copyAll">复制全部</button><button type="button" @click="selectAll">全选</button><button type="button" :disabled="!canUndo" @click="undo">撤销</button><button type="button" :disabled="!canRedo" @click="redo">重做</button><button class="primary" type="button" @click="exportText">保存文本</button><button type="button" :disabled="!draft.text" @click="clear">清空</button><span class="m17-save-state" role="status">{{!loaded?'读取草稿…':dirty?'本机草稿未保存':'本机草稿已保存'}}</span></div>
-   <div class="m17-status" role="status"><span>{{notice||`${Array.from(draft.text).length} 字符 · ${fontReady?'固定字体就绪':'字体加载中'} · 仅本机编辑`}}</span><code v-if="draft.end>draft.start&&selectedCodes">{{selectedCodes}}</code><span v-if="suspicious.length">检测到 {{suspicious.length}} 个控制／私用区字符，原文保留：{{suspicious.slice(0,4).map(c=>`${c.code}（第${c.position}码点）`).join('、')}}</span></div>
-   <aside v-if="detailsOpen&&selected" class="m17-detail-panel" aria-label="符号详细介绍"><div class="m17-panel-actions"><button type="button" @click="activate(selected)">{{playOnClick?'播放此项':'输入此项'}}</button><button type="button" @click="detailsOpen=false;playing=false">收起</button></div><SymbolPlayback v-if="playing&&active" :key="playRequest" :entry="selected" :request="playRequest"/><SymbolDetails :entry="selected"/></aside>
-   <aside ref="hoverPanel" v-if="hovered&&draft.introductions&&!detailsOpen" class="m17-hover-panel" :style="hoverStyle" aria-label="悬停符号介绍" role="tooltip" @mouseenter="keepHover" @mouseleave="hover(null)"><SymbolDetails :entry="hovered" compact/></aside>
-   <aside v-if="helpOpen" class="m17-help-panel" aria-label="国际音标表Plus 帮助"><button type="button" class="m17-help-close" @click="helpOpen=false">收起帮助</button><h3>输入与保存</h3><p>点击符号替换选区，或插入到最后的光标处。浅色按钮写入完整例示。虚线圆只用于展示附加记号的位置。切表和搜索保留正文与撤销历史。</p><p>附加符号区按窗口宽度分成多列，平常显示名称与符号。名称上悬停可读简释，符号上悬停可读完整介绍。IPA 和 extIPA 默认显示全部内容，也可切换分区。表区可以上下滚动，编辑框始终保留。顶部字号同时调整三套表内的音标与编辑框，范围为18–54；名称和解释保持原有字号。</p><p>范围工具包住所选内容。连音线与滑动箭头可连结选中的两个字素。Ctrl/⌘＋Z 撤销，Ctrl/⌘＋Shift＋Z 重做。中文输入法组合期间请先完成选词。</p><p>右键符号或 Alt＋Enter 可打开详细介绍。关闭悬停介绍后不再自动弹出，名称的简释提示仍可用。介绍窗在符号附近避开指针，移入后可阅读与滚动。</p><p>点击播放暂不可用。演示内容正在创作中，将在后续更新中开放；当前点击符号用于输入。</p><p>草稿在本机自动保存。跨窗口冲突停止写入，保留当前文字和原记录。保存文本会发起 UTF-8 下载，请确认文件。复制只携带字符，外部软件需要相应字体。</p><p>PTB IPA Plus 1.000 保留 Doulos SIL 7.000 原字形，补充组合括号和圈围定位，按 OFL 1.1 随包提供。多字符圈围采用显式 ⟅…⟆ 文本替代，可在该项介绍中核对差异。</p><p>网页加载资源后可以断网编辑；浏览器关闭后的离线重开未提供 PWA 缓存保证。输入不会提交给服务器，来源链接只在主动打开时访问。</p><details class="m17-font-license"><summary>字体许可（OFL 1.1）</summary><pre>{{fontLicense}}
+   <div class="m17-divider" role="separator" tabindex="0" :aria-label="tr('modules.ipa-plus.text.88c964ce8261')" aria-orientation="horizontal" :aria-valuenow="draft.editorHeight" :aria-valuemin="96" :aria-valuemax="360" @pointerdown="resizeDown" @pointermove="resizeMove" @pointerup="resizeStart=undefined" @pointercancel="resizeStart=undefined" @keydown="resizeKey"><span></span></div>
+   <div class="m17-editor-area" :style="{height:draft.editorHeight+'px'}"><textarea ref="editor" :value="draft.text" class="m17-editor m17-ipa" :style="{fontSize:draft.textSize+'px'}" :aria-label="tr('modules.ipa-plus.text.bf6f767d83cc')" spellcheck="false" autocomplete="off" autocapitalize="off" :disabled="!loaded" :placeholder="tr('modules.ipa-plus.text.6cd087f49d34')" @input="input" @select="captureSelection" @keyup="captureSelection" @pointerup="captureSelection" @blur="captureSelection" @keydown="keydown" @beforeinput="beforeInput" @compositionstart="compositionStart" @compositionend="compositionEnd"/></div>
+   <div class="m17-editor-toolbar"><button type="button" class="primary" @click="copyAll">{{tr('modules.ipa-plus.text.75c393923f87')}}</button><button type="button" @click="selectAll">{{tr('modules.ipa-plus.text.3a5040b68abf')}}</button><button type="button" :disabled="!canUndo" @click="undo">{{tr('modules.ipa-plus.text.926a50b98ece')}}</button><button type="button" :disabled="!canRedo" @click="redo">{{tr('modules.ipa-plus.text.03717b6f1070')}}</button><button class="primary" type="button" @click="exportText">{{tr('modules.ipa-plus.text.5dd6704c1e9a')}}</button><button type="button" :disabled="!draft.text" @click="clear">{{tr('modules.ipa-plus.text.1ef3de06b32e')}}</button><span class="m17-save-state" role="status">{{!loaded?tr('modules.ipa-plus.text.97ddb9bc838a'):dirty?tr('modules.ipa-plus.text.ce2e52454c5f'):tr('modules.ipa-plus.text.dbd49f29603d')}}</span></div>
+   <div class="m17-status" role="status"><span>{{notice||tr('modules.ipa-plus.text.7f471c4d1c3f',{v0:Array.from(draft.text).length,v1:fontReady?tr('modules.ipa-plus.text.d142bcb1226c'):tr('modules.ipa-plus.text.498023064041')})}}</span><code v-if="draft.end>draft.start&&selectedCodes">{{selectedCodes}}</code><span v-if="suspicious.length">{{tr('modules.ipa-plus.text.0259eebf57c8')}} {{suspicious.length}} {{tr('modules.ipa-plus.text.e3651f462d02')}}{{suspicious.slice(0,4).map(c=>tr('modules.ipa-plus.text.aa94f28ad11b',{v0:c.code,v1:c.position})).join('、')}}</span></div>
+   <aside v-if="detailsOpen&&selected" class="m17-detail-panel" :aria-label="tr('modules.ipa-plus.text.920cc94666ac')"><div class="m17-panel-actions"><button type="button" @click="activate(selected)">{{playOnClick?tr('modules.ipa-plus.text.b325ea00e74b'):tr('modules.ipa-plus.text.075b42b82b51')}}</button><button type="button" @click="detailsOpen=false;playing=false">{{tr('modules.ipa-plus.text.afd4b783536b')}}</button></div><SymbolPlayback v-if="playing&&active" :key="playRequest" :entry="selected" :request="playRequest"/><SymbolDetails :entry="selected"/></aside>
+   <aside ref="hoverPanel" v-if="hovered&&draft.introductions&&!detailsOpen" class="m17-hover-panel" :style="hoverStyle" :aria-label="tr('modules.ipa-plus.text.b89a88edf218')" role="tooltip" @mouseenter="keepHover" @mouseleave="hover(null)"><SymbolDetails :entry="hovered" compact/></aside>
+   <aside v-if="helpOpen" class="m17-help-panel" :aria-label="tr('modules.ipa-plus.text.6397772a6b0c')"><button type="button" class="m17-help-close" @click="helpOpen=false">{{tr('modules.ipa-plus.text.b222169bce16')}}</button><h3>{{tr('modules.ipa-plus.text.b89d27a1c92f')}}</h3><p>{{tr('modules.ipa-plus.text.e29e145a3a1e')}}</p><p>{{tr('modules.ipa-plus.text.730f371bdc16')}}</p><p>{{tr('modules.ipa-plus.text.f15d5bc7f5cd')}}</p><p>{{tr('modules.ipa-plus.text.f50455d33d7c')}}</p><p>{{tr('modules.ipa-plus.text.ac3b6cca7894')}}</p><p>{{tr('modules.ipa-plus.text.c468f01851c1')}}</p><p>{{tr('modules.ipa-plus.text.f6a4989f3e63')}}</p><p>{{tr('modules.ipa-plus.text.ce2f539f3077')}}</p><details class="m17-font-license"><summary>{{tr('modules.ipa-plus.text.ab225400e587')}}</summary><pre>{{fontLicense}}
 
-{{notoLicense}}</pre></details><small>{{catalog.version}} · IPA 衍生表 CC BY-SA 4.0 · extIPA 中文重排资料 CC BY-SA 3.0 · VoQS 自有分类说明，未打包论文图版</small></aside>
+{{notoLicense}}</pre></details><small>{{catalog.version}} {{tr('modules.ipa-plus.text.0ecf00d75b7f')}}</small></aside>
   </div>
  </ModuleFrame>
 </template>

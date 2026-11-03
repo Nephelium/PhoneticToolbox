@@ -97,7 +97,7 @@ class AnalysisResult:
     sampling_rate: int = 16000
     backend_events: list[dict] = field(default_factory=list)
     config_snapshot: dict = field(default_factory=dict)
-    computation_revision: str = 'acoustic/2'
+    computation_revision: str = 'acoustic/3'
 
     def to_dataframe(self) -> 'pd.DataFrame':
         """Convert result to pandas DataFrame"""

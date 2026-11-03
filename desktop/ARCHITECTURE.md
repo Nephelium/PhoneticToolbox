@@ -43,6 +43,8 @@ Assets、LocalOnly、URL校验与scheme注册共用 [web_assets.py](src/ptb_desk
 | startup_*.py、presentation.py | 准备进度、启动显示和窗口呈现 |
 | platform_paths.py、cache_location.py、cache_location_dialog.py、legacy_cache.py、cache_cleanup.py | 用户目录身份、免安装缓存位置与轻量原生选择、旧缓存检查及受控清理 |
 | app_icon.py、icon_preferences.py | 共享图标目录、窗口/打包图标与原子保存的个人图标选择 |
+| native_i18n.py、locales/、native_messages_data.py | 窗口语言、原生文案维护源及生成的冻结数据；同一源派生前端原生文案，语言代码沿公共注册表生成 |
+| manual_packs.py | 数据型外语说明书包校验、独立传输、分块导入、原子安装与有界读取缓存；关闭时取消本实例未完成传输，保留已安装包；索引读写共用由允许语言数与单包清单预算推导的上限，提交前检查实际UTF-8字节，已有格式保持兼容 |
 
 M10 的可变原生引擎与 M16 的采集工程各有独立生命周期。M16 使用 recording(request_id, JSON)/recordingReady，长处理先启动后台再轮询；停止检测、停止录音、取消处理和取消导出不能互相混同。协议见[recording/1](../contracts/recording/README.md)。
 
@@ -73,3 +75,7 @@ release/ 决定资源收集、运行时共享、安装包装和大小限制；�
 声道视频封装与MP4实现位于backend ptb_worker/vocal_video、vocal_mp4，桌面video/mp4保留兼容导入入口。通过同一冻结源码快照提供真实helper脚本，不复制编码实现。
 
 M10 ProfileStore继承核心LibraryProfile，只提供原始文件读写及旧目录接续。preset-libraries.json按说话人目录原子保存，含当前套装ID、各套装构型和常用栏；当前文件优先于legacy，读取不迁移或改写旧文件。
+
+## 2026-11-02 审查修正边界
+
+前端目录扫描、文件读取与 TextGrid 解析通过既有异步 task 通道执行，目录 capability 校验保持。协议仍使用有界 base64，峰值内存没有消除；启动 hello 的小型服务探测仍同步。标注保存锁写入进程 PID，仅对确认已退出的所有者恢复，旧空锁与无法确认的锁保留。更新签名的源内信任根默认空，签名部署阶段见 release/README.md。

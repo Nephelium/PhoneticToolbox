@@ -11,6 +11,7 @@ def decode_task_request(raw):
     if not isinstance(body,dict):raise ValueError('request_shape')
     op=body.get('op')
     limit=8_100_000 if op=='annotation_save' else 2_800_000 if op=='m14_import' else 1_000_000
+    if op=='manual_packs' and body.get('action')=='importChunk':limit=1_500_000
     if op=='m11_import':
         role=body.get('role')
         if role not in M11_INPUT_LIMITS:raise ValueError('request_role')

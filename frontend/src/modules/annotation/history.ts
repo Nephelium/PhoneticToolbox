@@ -1,3 +1,5 @@
+import {uiError as displayError,uiMessage as displayMessage} from '../module-localization.ts';
+import {tr} from '../../i18n/index.ts';
 import {LocalAssets,type AssetDatabase} from '../../platform/local-assets.ts';
 import {parseGrid} from './format.ts';
 
@@ -12,8 +14,8 @@ export class AnnotationHistory {
  async open(identity:string,audioSha:string,original:string,working=original):Promise<AnnotationHistorySession>{
   const key='audio:'+JSON.stringify([identity,audioSha]),raw=await this.local.value<string>(key)??null;
   if(raw!==null){
-   let value:Journal;try{value=JSON.parse(raw);}catch{throw Error('标注历史无法读取，请保留当前编辑并导出 TextGrid。');}
-   if(value.schema!==1||value.audioSha!==audioSha||!Array.isArray(value.versions)||!value.versions.length||!value.versions.some(v=>v.id===value.head))throw Error('标注历史不完整，请保留当前编辑并导出 TextGrid。');
+   let value:Journal;try{value=JSON.parse(raw);}catch{throw displayError(displayMessage('modules.annotation.text.1855557ed83f'));}
+   if(value.schema!==1||value.audioSha!==audioSha||!Array.isArray(value.versions)||!value.versions.length||!value.versions.some(v=>v.id===value.head))throw displayError(displayMessage('modules.annotation.text.c2c20c1bc406'));
    for(const v of value.versions)parseGrid(v.text,true);
    return {key,raw,value};
   }
@@ -29,7 +31,7 @@ export class AnnotationHistory {
   const entry=head.text===text?head:this.version(text,kind,fileName);
   if(entry!==head)versions=[versions[0],...versions.slice(1),entry].filter((v,i,a)=>i===0||i>=a.length-50);
   const value:Journal={...previous,versions,head:entry.id,view:structuredClone(view)},raw=JSON.stringify(value);
-  try{await this.local.compare(session.key,session.raw,raw);}catch{throw Error('标注历史未能保存，可能已在另一窗口更新或本机空间不足。当前编辑仍保留，请重试或导出 TextGrid。');}
+  try{await this.local.compare(session.key,session.raw,raw);}catch{throw displayError(displayMessage('modules.annotation.text.554c7ca1d77f'));}
   session.raw=raw;session.value=value;
  }
 }

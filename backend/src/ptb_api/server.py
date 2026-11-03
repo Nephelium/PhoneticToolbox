@@ -56,12 +56,8 @@ def main():
     if not (static/'index.html').is_file():
         parser.error('Build the frontend before starting the account preview')
     if args.config:
-        from .storage import no_links
-        import stat,os
-        no_links(args.config)
-        info=args.config.stat()
-        if os.name=='posix' and (info.st_uid!=os.getuid() or stat.S_IMODE(info.st_mode)!=0o600):
-            raise ValueError('Private loopback configuration must be owned and mode 0600')
+        from .private_config import validate_private_config
+        validate_private_config(args.config)
         config=json.loads(args.config.read_text('utf-8'))
     else:
         config=json.loads(sys.stdin.readline())

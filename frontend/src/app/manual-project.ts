@@ -3,6 +3,11 @@ import type {HostCapabilities} from '../platform/types.ts';
 
 export const webIntroductionChapter='web-introduction';
 
+/** Chinese resources ship with the application; other languages use a pack store. */
+export function manualProjectPath(language:string):string|null {
+  return language==='zh-CN'?'project.json':null;
+}
+
 export function manualIntroduction(kind:HostCapabilities['kind']):string {
   return kind==='browser'?webIntroductionChapter:'getting-started';
 }

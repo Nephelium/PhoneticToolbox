@@ -5,6 +5,7 @@ import argparse
 import hashlib
 import json
 import os
+import re
 from pathlib import Path
 import shutil
 import subprocess
@@ -16,6 +17,7 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / 'scripts'))
 from verification_artifacts import verification_run
 from workbench_source import configure
+from manual.capture_locale import CaptureLocale
 
 os.environ['QT_QPA_PLATFORM'] = 'windows'
 os.environ['QTWEBENGINE_CHROMIUM_FLAGS'] = '--mute-audio'
@@ -25,6 +27,7 @@ for key in ('QT_ENABLE_HIGHDPI_SCALING', 'QT_SCALE_FACTOR', 'QT_SCREEN_SCALE_FAC
 
 def main(args):
     configure()
+    ui = CaptureLocale(args.locale, ('geolinguistics', 'workbench', 'common'))
     from PyQt6 import sip
     from PyQt6.QtCore import QEventLoop, QTimer, Qt
     from PyQt6.QtGui import QImage
@@ -32,13 +35,25 @@ def main(args):
     from ptb_desktop.host import Workbench, register_scheme
     from ptb_worker.local_workspace import prepare_workspace
     native_directory = args.data_directory.resolve()
+    source_paths = {
+        'captureScript': Path(__file__),
+        'captureLocaleHelper': ROOT / 'scripts/manual/capture_locale.py',
+        'frontendIndex': args.frontend_dist / 'index.html',
+        'geolinguisticsPage': ROOT / 'frontend/src/modules/geolinguistics/GeolinguisticsPage.vue',
+        'geolinguisticsChineseCatalogue': ROOT / 'frontend/src/i18n/locales/zh-CN/geolinguistics.json',
+        'geolinguisticsTargetCatalogue': ROOT / 'frontend/src/i18n/locales' / args.locale / 'geolinguistics.json',
+        'desktopHost': ROOT / 'desktop/src/ptb_desktop/host.py',
+        'desktopPresentation': ROOT / 'desktop/src/ptb_desktop/presentation.py',
+        'dataManifest': args.data_directory / 'data-manifest.json',
+    }
+    source_snapshot = {role: dict(path=str(path), sha256=hashlib.sha256(path.read_bytes()).hexdigest()) for role, path in source_paths.items()}
 
     register_scheme()
     app = QApplication(['M19 manual screenshots'])
     recipe = ('Actual Windows Qt, isolated project; light, native DPR1.5, page100, '
               'maximized with collapsed navigation; neutral phonology/solar vocabulary '
               'and explicitly illustrative custom sites; no scanned pages or physical devices')
-    with verification_run('m19-manual', 'screenshots-20261024', recipe) as (out, scratch):
+    with verification_run('m19-manual', 'screenshots-20261024' if args.locale == 'zh-CN' else 'localized-' + args.locale, recipe) as (out, scratch):
         print(out, flush=True)
         if not args.reader_only:
             from package_geolinguistics_data import package_data
@@ -66,7 +81,7 @@ def main(args):
         window.page.setAudioMuted(True)
         report = dict(success=False, captures=[], checks=[], exports=[], scope=recipe,
                       frontend=str(args.frontend_dist.resolve()), sourceChapter='m19',
-                      ownedPid=os.getpid(), physicalCompositorVerified=False)
+                      ownedPid=os.getpid(), physicalCompositorVerified=False, locale=args.locale)
         picker = QFileDialog.getSaveFileName
         chosen = []
 
@@ -102,6 +117,7 @@ def main(args):
             raise AssertionError(code + '\n' + str(js('document.body.innerText.slice(-2500)')))
 
         def click(name):
+            name = ui.label(name)
             expression = ('[...document.querySelectorAll("button")].find(b=>b.offsetParent&&'
                           '(b.getAttribute("aria-label")===' + json.dumps(name) +
                           '||b.textContent.trim()===' + json.dumps(name) + '))')
@@ -109,7 +125,15 @@ def main(args):
             js(expression + '.click()')
             pause(200)
 
+        def localized_selector(selector):
+            def label(match):
+                source = match.group(1)
+                translated = (ui.key('modules.geolinguistics.comparison_map') + source[len('对照图 '):]) if source.startswith('对照图 ') else ui.label(source)
+                return '[aria-label=' + json.dumps(translated, ensure_ascii=False) + ']'
+            return re.sub(r'\[aria-label="([^"]+)"\]', label, selector)
+
         def fill(selector, value, event='input'):
+            selector = localized_selector(selector)
             assert js('(()=>{const e=document.querySelector(' + json.dumps(selector) +
                       ');if(!e)return false;e.value=' + json.dumps(value) +
                       ';e.dispatchEvent(new Event(' + json.dumps(event) +
@@ -117,6 +141,7 @@ def main(args):
             pause(160)
 
         def capture(name):
+            metrics = ui.metrics(js)
             until('document.fonts.status==="loaded"')
             until('!document.querySelector(".map-loading")')
             assert not js('!!document.querySelector(".atlas-message.error")')
@@ -124,6 +149,19 @@ def main(args):
             pause(150)
             text = js('document.body.innerText')
             assert all(term not in text for term in ('F77_L', 'F73_L', '屄', '阴门', '脧', '𡳞'))
+            if args.locale == 'en':
+                assert not re.search(r'Phoneticsvolume|variants\.Click|theBroad|categorieslevel|\b1 items\b', text), 'Localized UI sentence fragments were concatenated'
+            if name in ('phonology-broad-filter', 'two-maps', 'four-maps'):
+                expected = ui.key('modules.geolinguistics.catalogSummary', {'count': 1, 'volume': ui.key('modules.geolinguistics.phonetics'), 'scope': ui.key('modules.geolinguistics.readable_legend')})
+                assert js('document.querySelector(".catalog-meta").textContent.trim()') == expected
+            if name == 'two-place-comparison':
+                assert ui.key('modules.geolinguistics.comparisonRecordsExplanation') in text
+                expected = ui.key('modules.geolinguistics.comparisonMeaningLevel', {'level': ui.key('modules.geolinguistics.broad_categories')})
+                assert expected in text
+                assert ui.key('modules.geolinguistics.selectedSitesCount', {'count': 2}) in text
+            if name == 'dialect-distribution':
+                assert ui.key('modules.geolinguistics.dialect_subgroup') in text
+                assert ui.key('modules.geolinguistics.dialect_sub_subgroup') in text
             pause(800)
             window.view.repaint()
             pause(160)
@@ -141,12 +179,15 @@ def main(args):
             report['captures'].append(dict(name=name, file=path.name, image=[2560, 1600],
                 raw_image=raw, dpr=dpr, pageZoom=1, maximized=True, theme='light',
                 navigationCollapsed=True, sha256=hashlib.sha256(path.read_bytes()).hexdigest(),
-                visibleText=text))
+                visibleText=text, locale=metrics['locale'], fontLocale=metrics['fontLocale'], fontFamily=metrics['fontFamily']))
             print('Captured ' + name, flush=True)
 
         def export(name, suffix):
             before = len(chosen)
             click(name)
+            if name in ('SVG', 'PNG'):
+                until('!!document.querySelector(".export-options")')
+                click('导出图片')
             deadline = time.monotonic() + 40
             while time.monotonic() < deadline:
                 if len(chosen) > before and chosen[-1].is_file() and chosen[-1].stat().st_size:
@@ -171,10 +212,11 @@ def main(args):
 
         try:
             until('!!document.querySelector(".language-atlas")')
+            ui.prepare_qt(js, until)
             click('设置')
             click('浅色')
-            click('语言地图')
-            click('关闭 设置')
+            js('document.querySelector("#tab-M19").click()')
+            js('document.querySelector("#tab-settings").closest(".tab-wrap").querySelector(".tab-close").click()')
             click('收起侧栏')
             if args.reader_only:
                 chapter = json.loads((ROOT / 'manual/chapters/m19.json').read_text('utf-8'))
@@ -232,10 +274,10 @@ def main(args):
                 report['checks'].append('M19 help opens its stable chapter; eight source/public hashes, packaged identities and exact decoded pixels, plus light/dark image decode/zoom pass')
                 report['success'] = True
                 return
-            until('document.querySelector(".atlas-empty")?.textContent.includes("下载地图资料")')
+            until('document.querySelector(".atlas-empty")?.textContent.includes(' + json.dumps(ui.key('modules.geolinguistics.download_map_data_to_view_survey_sites_linguistic_phenomena')) + ')')
             if js('!!document.querySelector(".atlas-message.error")'):
                 js('document.querySelector(".atlas-message.error button:last-child").click()')
-            assert js('document.querySelectorAll(".atlas-empty button").length===1&&document.querySelector(".atlas-empty button").textContent.trim()==="下载资料"')
+            assert js('document.querySelectorAll(".atlas-empty button").length===1&&document.querySelector(".atlas-empty button").textContent.trim()===' + json.dumps(ui.label('下载资料')))
             capture('data-download')
             # Supply real File bytes to the existing directory-input handler.
             # Hidden Qt cannot activate a physical native chooser. This step
@@ -243,7 +285,7 @@ def main(args):
             window.assets.geolinguistics_root = native_directory
             manifest = json.loads((native_directory / 'data-manifest.json').read_text('utf-8'))
             names = ['data-manifest.json', *[entry['path'] for entry in manifest['files']]]
-            js('window.__manualFolderImport={phase:"reading"};(async()=>{const dt=new DataTransfer();for(const name of ' + json.dumps(names) + '){const response=await fetch("ptbapp://app/geolinguistics/"+name);if(!response.ok)throw Error("Local file read failed: "+name);const file=new File([await response.blob()],name.split("/").at(-1));Object.defineProperty(file,"webkitRelativePath",{value:"geolinguistics-data/"+name});dt.items.add(file);}const input=document.querySelector("[aria-label=选择语言地图资料夹]");input.files=dt.files;input.dispatchEvent(new Event("change",{bubbles:true}));window.__manualFolderImport={phase:"selected",files:dt.files.length};})().catch(error=>{window.__manualFolderImport={phase:"failed",error:String(error)}})')
+            js('window.__manualFolderImport={phase:"reading"};(async()=>{const dt=new DataTransfer();for(const name of ' + json.dumps(names) + '){const response=await fetch("ptbapp://app/geolinguistics/"+name);if(!response.ok)throw Error("Local file read failed: "+name);const file=new File([await response.blob()],name.split("/").at(-1));Object.defineProperty(file,"webkitRelativePath",{value:"geolinguistics-data/"+name});dt.items.add(file);}const input=document.querySelector(' + json.dumps(localized_selector('[aria-label="选择语言地图资料夹"]')) + ');input.files=dt.files;input.dispatchEvent(new Event("change",{bubbles:true}));window.__manualFolderImport={phase:"selected",files:dt.files.length};})().catch(error=>{window.__manualFolderImport={phase:"failed",error:String(error)}})')
             until('window.__manualFolderImport.phase!=="reading"', 45)
             assert js('window.__manualFolderImport.phase') == 'selected', js('window.__manualFolderImport')
             until('!!document.querySelector(".atlas-workbench")&&document.querySelectorAll(".ol-layer canvas").length>0', 90)
@@ -303,7 +345,7 @@ def main(args):
             capture('two-place-comparison')
             comparison = export('导出对照表', '.csv')
             assert '北京' in comparison.read_text('utf-8-sig') and '广州' in comparison.read_text('utf-8-sig')
-            click('关闭对话框')
+            js('document.querySelector("dialog[open] .dialog-header .icon-button").click()')
             report['checks'].append('Actual Beijing/Guangzhou phonology comparison and current-scope CSV export')
 
             click('我的研究地图')
@@ -347,16 +389,8 @@ def main(args):
                 pass
             raise
         finally:
-            source_paths = {
-                'captureScript': Path(__file__),
-                'frontendIndex': args.frontend_dist / 'index.html',
-                'geolinguisticsPage': ROOT / 'frontend/src/modules/geolinguistics/GeolinguisticsPage.vue',
-                'desktopHost': ROOT / 'desktop/src/ptb_desktop/host.py',
-                'desktopPresentation': ROOT / 'desktop/src/ptb_desktop/presentation.py',
-                'dataManifest': args.data_directory / 'data-manifest.json',
-            }
-            report['sources'] = {role: dict(path=str(path), sha256=hashlib.sha256(path.read_bytes()).hexdigest())
-                                 for role, path in source_paths.items()}
+            report['sources'] = source_snapshot
+            report['sourceChangesDuringRun'] = [role for role, path in source_paths.items() if hashlib.sha256(path.read_bytes()).hexdigest() != source_snapshot[role]['sha256']]
             (out / 'report.json').write_text(json.dumps(report, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
             QFileDialog.getSaveFileName = picker
             window.closing = True
@@ -372,6 +406,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--frontend-dist', type=Path, default=ROOT / 'frontend/dist')
     parser.add_argument('--data-directory', type=Path, default=ROOT / 'local-data/geolinguistics')
+    parser.add_argument('--locale', choices=('zh-CN', 'en', 'ja'), default='zh-CN')
     parser.add_argument('--reader-only', action='store_true')
     parser.add_argument('--preflight-only', action='store_true')
     parser.add_argument('--child', action='store_true')
@@ -384,7 +419,7 @@ if __name__ == '__main__':
         result = subprocess.run([sys.executable, '-B', '-X', 'utf8', __file__, *sys.argv[1:], '--child'],
                                 capture_output=True, text=True, encoding='utf-8', errors='replace')
         print(result.stdout + result.stderr, flush=True)
-        prefix = str(ROOT / 'output/validation/m19-manual/screenshots-20261024-')
+        prefix = str(ROOT / 'output/validation/m19-manual' / ('screenshots-20261024-' if args.locale == 'zh-CN' else 'localized-' + args.locale + '-'))
         runs = [Path(line.strip()) for line in result.stdout.splitlines() if line.strip().startswith(prefix)]
         if runs:
             # verification_run has already attempted cleanup once in the child.

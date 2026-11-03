@@ -1,3 +1,5 @@
+import {uiError as displayError,uiMessage as displayMessage} from '../module-localization.ts';
+import {tr} from '../../i18n/index.ts';
 import {fontsReady} from '../../state/fonts.ts';
 import {quoteFamily} from '../../design/fonts.ts';
 import {effectiveIpaSize,type ConversionToken,type MandarinIpaDraft} from './state.ts';
@@ -17,9 +19,9 @@ async function paintBackground(ctx:CanvasRenderingContext2D,width:number,height:
   const base=background?.mode==='image'?background.baseColor:background?.color??'#ffffff';
   ctx.fillStyle=base;ctx.fillRect(0,0,width,height);
   if(background?.mode==='image'){
-    if(!/^(blob:|data:image\/(?:png|jpeg|webp);base64,)/i.test(background.imageUrl))throw Error('请选择本机背景图片后再导出。');
+    if(!/^(blob:|data:image\/(?:png|jpeg|webp);base64,)/i.test(background.imageUrl))throw displayError(displayMessage('modules.mandarin-ipa.text.b78ce2aebd38'));
     const image=new Image();image.src=background.imageUrl;
-    try{await image.decode();}catch{throw Error('背景图片无法读取，请重新选择图片。');}
+    try{await image.decode();}catch{throw displayError(displayMessage('modules.mandarin-ipa.text.6114bd8eaf42'));}
     const blur=Math.max(0,Math.min(40,background.blur))*scale,opacity=Math.max(0,Math.min(100,background.opacity))/100;
     ctx.save();
     if(typeof (ctx as {filter?:unknown}).filter==='string'){
@@ -30,7 +32,7 @@ async function paintBackground(ctx:CanvasRenderingContext2D,width:number,height:
       // and preserve the Gaussian radius in output coordinates.
       const ratio=Math.min(1,1024/Math.max(width,height)),layer=document.createElement('canvas');
       layer.width=Math.max(1,Math.round(width*ratio));layer.height=Math.max(1,Math.round(height*ratio));
-      const buffer=layer.getContext('2d');if(!buffer)throw Error('背景绘制环境不可用。');
+      const buffer=layer.getContext('2d');if(!buffer)throw displayError(displayMessage('modules.mandarin-ipa.text.117294e6ad07'));
       buffer.fillStyle=base;buffer.fillRect(0,0,layer.width,layer.height);buffer.globalAlpha=opacity;
       const rect=coverImage(layer.width,layer.height,image.naturalWidth,image.naturalHeight,blur*ratio);
       buffer.drawImage(image,rect.x,rect.y,rect.width,rect.height);
@@ -51,8 +53,12 @@ async function paintBackground(ctx:CanvasRenderingContext2D,width:number,height:
 const clamp=(value:number,min:number,max:number)=>Math.min(max,Math.max(min,value));
 function font(size:number,family:string,bold=false,italic=false){return `${italic?'italic ':''}${bold?'700 ':'400 '}${size}px ${family}`;}
 function layout(ctx:CanvasRenderingContext2D,snapshot:MandarinIpaExportSnapshot){
-  const {draft,tokens}=snapshot,ipaSize=effectiveIpaSize(draft),padding=28,titleHeight=38,contentWidth=clamp(snapshot.width,420,1200)-padding*2;
+  const {draft,tokens}=snapshot,ipaSize=effectiveIpaSize(draft),padding=28,contentWidth=clamp(snapshot.width,420,1200)-padding*2;
   const uiFont=snapshot.uiFont||'sans-serif',hanziFont=draft.hanziFont?quoteFamily(draft.hanziFont)+', '+uiFont:uiFont,ipaFont='"PTB-Doulos", "Doulos SIL", serif';
+  const title=tr('modules.mandarin-ipa.text.a2db90c45c1f'),standard=snapshot.standardName??draft.standard;
+  ctx.font=font(18,uiFont,true);const titleWidth=ctx.measureText(title).width;
+  ctx.font=font(11,uiFont);const standardWidth=ctx.measureText(standard).width;
+  const stackedHeader=titleWidth+16+standardWidth>contentWidth,titleHeight=stackedHeader?56:38;
   const {ipaHeight,unitHeight,lineAdvance,columnGap}=resultMetrics(draft);
   const widths=tokens.map(token=>{
     if(token.kind==='literal'&&token.newline)return 0;
@@ -76,11 +82,11 @@ function layout(ctx:CanvasRenderingContext2D,snapshot:MandarinIpaExportSnapshot)
     placed.push({token,x:padding+x+width/2,y:padding+titleHeight+row*lineAdvance,width});x+=width;
   });
   const rows=Math.max(1,row+1),height=Math.ceil(padding*2+titleHeight+unitHeight+(rows-1)*lineAdvance);
-  return {placed,width:contentWidth+padding*2,height,padding,titleHeight,lineAdvance,ipaSize,ipaHeight,ipaFont,uiFont,hanziFont};
+  return {placed,width:contentWidth+padding*2,height,padding,titleHeight,title,titleWidth,standard,stackedHeader,lineAdvance,ipaSize,ipaHeight,ipaFont,uiFont,hanziFont};
 }
 
 export async function renderMandarinIpaPng(snapshot:MandarinIpaExportSnapshot,hooks:ExportHooks={}){
-  if(!snapshot.draft.text.trim())throw Error('请输入汉字后再导出。');
+  if(!snapshot.draft.text.trim())throw displayError(displayMessage('modules.mandarin-ipa.text.88133ae6b1aa'));
   try{
     if(hooks.ready)await hooks.ready();
     else{
@@ -90,24 +96,24 @@ export async function renderMandarinIpaPng(snapshot:MandarinIpaExportSnapshot,ho
       if(bundled)await bundled.loaded;else await fontsReady();
       await document.fonts.ready;
     }
-  }catch{throw Error('Doulos SIL 字体加载失败，请恢复字体资源后重试。');}
+  }catch{throw displayError(displayMessage('modules.mandarin-ipa.text.62a7cf153e0a'));}
   // Chromium may report `document.fonts.check()` as false for a loaded local
   // face with combining IPA text. Inspect the exact named FontFace instead.
   const check=hooks.fontAvailable??(()=>[...document.fonts].some(face=>face.family==='PTB-Doulos'&&face.status==='loaded'));
-  if(!check(`${effectiveIpaSize(snapshot.draft)}px "PTB-Doulos"`,'a ɑ tʰ ã ˥˩'))throw Error('Doulos SIL 字体未就绪，请等待字体加载后重试。');
-  if(snapshot.draft.hanziFont)try{await new FontFace('PTB-M13-check',`local(${quoteFamily(snapshot.draft.hanziFont)})`).load();}catch{throw Error(`汉字字体 ${snapshot.draft.hanziFont} 在当前设备不可用，请选择已安装的字体后重试。`);}
-  const canvas=(hooks.createCanvas??(()=>document.createElement('canvas')))(),probe=canvas.getContext('2d');if(!probe)throw Error('图像绘制环境不可用。');
+  if(!check(`${effectiveIpaSize(snapshot.draft)}px "PTB-Doulos"`,'a ɑ tʰ ã ˥˩'))throw displayError(displayMessage('modules.mandarin-ipa.text.8f51740e1344'));
+  if(snapshot.draft.hanziFont)try{await new FontFace('PTB-M13-check',`local(${quoteFamily(snapshot.draft.hanziFont)})`).load();}catch{throw displayError(displayMessage('modules.mandarin-ipa.text.cb440c78d901',{v0:snapshot.draft.hanziFont}));}
+  const canvas=(hooks.createCanvas??(()=>document.createElement('canvas')))(),probe=canvas.getContext('2d');if(!probe)throw displayError(displayMessage('modules.mandarin-ipa.text.3e6b1bb072a8'));
   const model=layout(probe,snapshot),scale=Math.min(3,16384/model.width,16384/model.height,Math.sqrt(24_000_000/((model.width+1)*(model.height+1))));
-  if(scale<1)throw Error('输出内容过长，请分段导出。');
+  if(scale<1)throw displayError(displayMessage('modules.mandarin-ipa.text.377a117a005d'));
   canvas.width=Math.max(1,Math.ceil(model.width*scale));canvas.height=Math.max(1,Math.ceil(model.height*scale));
-  const ctx=canvas.getContext('2d');if(!ctx)throw Error('图像绘制环境不可用。');
+  const ctx=canvas.getContext('2d');if(!ctx)throw displayError(displayMessage('modules.mandarin-ipa.text.3e6b1bb072a8'));
   try{
   const {ink,color}=await paintBackground(ctx,canvas.width,canvas.height,scale,snapshot.background);
   const candidate=backgroundColor(snapshot.ipaColor||'#215bd6');
   const ipaColor=snapshot.draft.ipaColor||(contrast(candidate,color)>=4.5?candidate:ink),hanziColor=snapshot.draft.hanziColor||ink;
   ctx.scale(scale,scale);
-  ctx.textAlign='left';ctx.textBaseline='alphabetic';ctx.fillStyle=ink;ctx.font=font(18,model.uiFont,true);ctx.fillText('国际音标',model.padding,model.padding+20);
-  ctx.font=font(11,model.uiFont);ctx.fillStyle=ink;ctx.fillText(snapshot.standardName??snapshot.draft.standard,model.padding+88,model.padding+20);
+  ctx.textAlign='left';ctx.textBaseline='alphabetic';ctx.fillStyle=ink;ctx.font=font(18,model.uiFont,true);ctx.fillText(model.title,model.padding,model.padding+20);
+  ctx.font=font(11,model.uiFont);ctx.fillStyle=ink;ctx.fillText(model.standard,model.stackedHeader?model.padding:model.padding+model.titleWidth+16,model.padding+(model.stackedHeader?40:20));
   for(const item of model.placed){
     const {token,x,y}=item;
     if(token.kind==='mapped'){
@@ -122,7 +128,7 @@ export async function renderMandarinIpaPng(snapshot:MandarinIpaExportSnapshot,ho
       if(snapshot.draft.display==='paired'&&snapshot.draft.underline&&token.char.trim()){const measured=ctx.measureText(token.char).width;ctx.beginPath();ctx.moveTo(x-measured/2,literalY+snapshot.draft.hanziSize*1.15);ctx.lineTo(x+measured/2,literalY+snapshot.draft.hanziSize*1.15);ctx.strokeStyle=hanziColor;ctx.stroke();}
     }
   }
-  return await new Promise<Blob>((resolve,reject)=>canvas.toBlob(blob=>blob?resolve(blob):reject(Error('PNG 编码失败。')),'image/png'));
+  return await new Promise<Blob>((resolve,reject)=>canvas.toBlob(blob=>blob?resolve(blob):reject(displayError(displayMessage('modules.mandarin-ipa.text.557dcca5f3c8'))),'image/png'));
   }
   finally{canvas.width=canvas.height=1;}
 }

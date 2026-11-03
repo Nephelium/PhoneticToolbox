@@ -1,6 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {installUpdatesChannel,updater,updatesAvailable,checkMessage,type UpdatesChannel,type DownloadProgress} from '../src/platform/updates.ts';
+import {updateDisplayMessage,UpdatesError} from '../src/platform/updates.ts';
+import {messageRef,setLocale,tr} from '../src/i18n/index.ts';
+import {uiErrorMessage} from '../src/modules/module-localization.ts';
 class Signal{
   callbacks=new Set<(id:string,payload:string)=>void>();
   connect(callback:(id:string,payload:string)=>void){this.callbacks.add(callback);}
@@ -54,4 +57,25 @@ test('native errors and invalid response are clear and do not resolve success',a
   try{const a=updater.download('selected','portable',false);channel.ready.emit(channel.requests.at(-1)!.id,{ok:false,error:{code:'CONFIRM_REQUIRED',message:'请确认后下载。'}});await assert.rejects(a,/确认/);
     const b=updater.preferences();channel.ready.emit(channel.requests.at(-1)!.id,'invalid');await assert.rejects(b,/无法解析/);
   }finally{installUpdatesChannel(undefined);}
+});
+
+test('one failed native update and partial source results retranslate without another request',async()=>{
+ const channel=new Channel();installUpdatesChannel(channel);
+ try{
+  await setLocale('en');
+  const pending=updater.check({manual:true}),request=channel.requests.at(-1)!;
+  channel.ready.emit(request.id,{ok:false,error:{code:'PACKAGE_CONFLICT',message:'同版本两来源的更新包摘要不一致，已阻止换版。'}});
+  let failure:unknown;try{await pending;}catch(error){failure=error;}
+  assert(failure instanceof UpdatesError);assert.equal(failure.code,'PACKAGE_CONFLICT');
+  const notice=messageRef(uiErrorMessage(failure));
+  const raw='发布来源返回 HTTP 503。',display={key:'native.errors.updates.sourceHttp',values:{status:503}};
+  for(const language of ['en','ja','zh-CN']as const){
+   await setLocale(language);
+   assert.equal(notice.value,tr('native.errors.updates.sourceConflict'));
+   assert.equal(updateDisplayMessage(raw,display),tr('native.errors.updates.sourceHttp',{status:503}));
+   assert.equal(updateDisplayMessage('网络地区'),tr('native.errors.updates.networkRegion'));
+   assert.equal(updateDisplayMessage('Third-party diagnostic: 原文 {V}'),'Third-party diagnostic: 原文 {V}');
+  }
+  assert.equal(channel.requests.length,1);assert.equal(channel.cancelled.length,0);
+ }finally{installUpdatesChannel(undefined);await setLocale('zh-CN');}
 });

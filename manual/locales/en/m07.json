@@ -1,0 +1,782 @@
+{
+  "schemaVersion": "ptb-manual-localization/1",
+  "locale": "en",
+  "entries": {
+    "c9af0ab41178150fbad4e6e16ae1987e64bb3aa2eb7247e3dd72abdaef185315": {
+      "source": "发声类型合成",
+      "translation": "Phonation synthesis"
+    },
+    "0d1c39bdceb92480016ec5838272105b88abc680e17289d3034d48749124e8c6": {
+      "source": "选源与目标，检查并应用 F0，制作三类双向连续统，按端点/中间步/整组试听并保存完整结果。",
+      "translation": "Select source and target, inspect and apply F0, create three types of bidirectional continua, listen to endpoints, intermediate steps, and complete sets, and save complete results."
+    },
+    "03a73eb382178a6738126f58bb1627e95a2d9dbae1a6bf175dde183bfd37a9cf": {
+      "source": "视频教程：<s id=\"0\">观看本章视频</s>。",
+      "translation": "Video tutorial: <s id=\"0\">watch this chapter's video</s>."
+    },
+    "fe074aa25fac0080c26827881871835764851e433e1f00736300eea74d86c887": {
+      "source": "选择源音频与目标音频",
+      "translation": "Select source and target audio"
+    },
+    "e97f911162937c3e69ced53fac85c3ed64c27ee524bc7ddd81cf81dec36985a3": {
+      "source": "先确定要改变什么",
+      "translation": "Decide what to change first"
+    },
+    "40f6e74c0093ff40ee0c87cc9c8e698f649e2ba162d9fb429ff8d1a8ba5bdd4e": {
+      "source": "准备两份短 WAV，就可以逐级改变 F0、发声类型，或同时改变两者。每组以当前方向源音频的时长和声道滤波特性为基础，适合制作经过检查和预测试的实验刺激。先从一组九步结果开始，熟悉后再生成全部六组。",
+      "translation": "With two short WAVs, progressively change F0, phonation type, or both. Each set uses the duration and vocal-tract filtering characteristics of the source in the current direction, suitable for experimental stimuli after inspection and pilot testing. Begin with one nine-step set before generating all six sets."
+    },
+    "53cb3a6eaf00fb38efdaf527af78dc61aff613b4b20dba780d51c77335bbf5de": {
+      "source": "准备短 WAV",
+      "translation": "Prepare short WAVs"
+    },
+    "f5e95e9d5e1b7c2e2f83c4e91796adbd571f2e57d7146f2062c3e8860baba2fa": {
+      "source": "尽量选择内容相近、有声部分清楚的材料，先核对音节、发音者与录音质量。两份录音不必等长，但这些差异会影响比较。每份须同时满足 <s id=\"0\">10 秒、480000 帧、8000000 字节</s>，原采样率允许 1000–192000 Hz。例如 10 秒、96000 Hz 已超过帧数限制，需先另存短片段。",
+      "translation": "Prefer similar content with clear voiced portions; check syllables, speakers, and recording quality first. Recordings need not be equally long, but such differences affect comparisons. Each must satisfy <s id=\"0\">10 seconds, 480000 frames, and 8000000 bytes</s> simultaneously; original sample rates can be 1000–192000 Hz. For example, 10 seconds at 96000 Hz exceeds the frame limit; save a short segment first."
+    },
+    "06437d089e4806fa4597e4a472da3480124ce51898ace8c67b98f1141069860a": {
+      "source": "<s id=\"0\">波形选区只用于试听，不会裁剪分析输入。</s> 需要只分析一段时，请先在音频编辑工具中另存该段。分析统一使用 11025 Hz。",
+      "translation": "<s id=\"0\">Waveform selection is for listening only and does not trim analysis input.</s> To analyze only a segment, save it separately in an audio editor first. All analysis uses 11025 Hz."
+    },
+    "54504cc4ace7714f2a31422ae4ccfb5a0753bdd66c6c1f8212119ba73f8de26b": {
+      "source": "打开目录并试听两份材料",
+      "translation": "Open a directory and listen to both materials"
+    },
+    "0406e2e84de58ad5adb6bf3af6d777ee2a70d4b89bb68a4ca9ee071d17f3afaa": {
+      "source": "点击顶部 <s id=\"0\">打开音频目录</s>，选择包含两份 WAV 的目录。文件刚加入或改写时，点击 <s id=\"1\">刷新文件</s>。",
+      "translation": "Click <s id=\"0\">Open audio directory</s> at the top and choose the directory containing both WAVs. Click <s id=\"1\">Refresh files</s> after adding or modifying files."
+    },
+    "a29879d0ccde43566b574023e15a64228b2284cf40ae296eb5e99d07981b78ba": {
+      "source": "在左栏 <s id=\"0\">源音频</s> 和 <s id=\"1\">目标音频</s> 中分别选择文件，等待中栏出现两幅实际波形。",
+      "translation": "Select files separately under <s id=\"0\">Source audio</s> and <s id=\"1\">Target audio</s> on the left, and wait for both actual waveforms in the center."
+    },
+    "cf2a078ac8ca1b34868d911c2803228851e3a13c6638e0ed8dca13906ab753ca": {
+      "source": "在波形上拖出选区，再用图下播放条试听。播放另一份音频时，前一份会停止。空格用于当前活动音频的播放控制。",
+      "translation": "Drag a waveform selection and listen using its playback bar. Playing the other audio stops the first. Space controls the currently active audio."
+    },
+    "3d772454cb9812471ed86d5763c9a22876cb4f494f4023c221483c99db6bf510": {
+      "source": "源与目标 WAV 已载入，两幅原文件波形可见；F0 曲线、控制表与合成结果尚未建立。",
+      "translation": "Source and target WAVs loaded with both original waveforms visible; F0 curves, control table, and synthesis results are not yet established."
+    },
+    "6f843ae8e2d0aa21dd5edd3f245d9dd7b683dc551df3db2d6b05818e3c4be8ac": {
+      "source": "发声类型合成载入两份 WAV 后的最大化工作台，源和目标波形可见，F0 和合成图为空。",
+      "translation": "Maximized phonation-synthesis workbench after loading two WAVs, with source/target waveforms visible and F0/synthesis plots empty."
+    },
+    "a07590425981b3cda2be43a1b70149483e127f87049bde2efd2cc1916ebd3e9e": {
+      "source": "本章两份原音如下。先听清各自的音高走向与边界，后面的例音始终使用这同一对材料。播放器使用 MP3 试听副本，正式测量请使用保存的 WAV。",
+      "translation": "The two original recordings used in this chapter follow. Listen to their pitch contours and boundaries first; all later examples use this same pair. Players use MP3 listening copies; use saved WAVs for formal measurements."
+    },
+    "e91e483a665bfe33929129cb40ae6b12045b1fb3ab5c5cb903826522a54d3d43": {
+      "source": "原始源音频：后续正向连续统的时长与声道基础。",
+      "translation": "Original source audio: duration and vocal-tract basis of subsequent forward continua."
+    },
+    "563a4ef8b549e234962ea1ab8b26fc1a377702817ab05c5afce7455077766b69": {
+      "source": "原始目标音频：后续仅 F0 变化示例的另一端控制来源。",
+      "translation": "Original target audio: the other endpoint's control source in the later F0-only example."
+    },
+    "3e75e3c378e5677e6a8e1c2078b136dd3da1fe1c6fa45d0a6b9539cb1f932803": {
+      "source": "网页使用当前项目中的 WAV，有添加入口时点击 <s id=\"0\">添加 WAV</s>。输入和结果按项目权限、额度与有效期管理。合成控制 F0 的查看请使用桌面工作台。",
+      "translation": "The web uses WAVs in the current project; click <s id=\"0\">Add WAV</s> when available. Inputs and results follow project permissions, quotas, and expiration. Use the desktop workbench to inspect synthesis-control F0."
+    },
+    "d02e2010c69439c7cadb3f223226103fe4b46bf4f411eec539e78a82f202116d": {
+      "source": "快速辨认工作台",
+      "translation": "Workbench quick tour"
+    },
+    "c47c7d3c3b7a6f58c77e620b2133f6c07f608829817fb6ab6bdc2069a93111fc": {
+      "source": "<s id=\"0\">顶部</s>：打开/刷新文件、输出位置、保存参数草稿、帮助与方法与引用。",
+      "translation": "<s id=\"0\">Top</s>: open/refresh files, output location, Save parameter draft, Help, and Methods and references."
+    },
+    "ea528e5fc528d4d5a0ff26e6c6508c5adcc44431414386cb0df88d70731cdec7": {
+      "source": "<s id=\"0\">左栏</s>：选材料，提取 F0，调整对齐与点数，编辑数值并应用。较长的控制表在栏内滚动。",
+      "translation": "<s id=\"0\">Left</s>: select materials, extract F0, set alignment and point count, edit values, and apply. Scroll within the panel for long control tables."
+    },
+    "2ac2af0ab503e3aaa5d25c855e93eaf46c171005c724872a75e35a5b2637fe0c": {
+      "source": "<s id=\"0\">中栏</s>：源、目标、F0、合成四图按 2×2 排列。源、目标、合成各有播放条；窄窗可滚动查看。",
+      "translation": "<s id=\"0\">Center</s>: source, target, F0, and synthesis plots in a 2×2 layout. Source, target, and synthesis each have playback bars. Scroll in narrow windows."
+    },
+    "2fd007eb59543ca84b8cb2b1d07b35dcf15be7c5eddcbb8179ff6b64708d9b0a": {
+      "source": "<s id=\"0\">右栏</s>：设置连续统，查看任务进度，选择历史组并试听、保存。",
+      "translation": "<s id=\"0\">Right</s>: configure continua, inspect progress, choose historical sets, listen, and save."
+    },
+    "60ac59a9dc42677382c44b1753c740520cdcb9c32985d3c5965798a3ff579bca": {
+      "source": "<s id=\"0\">底栏</s>：论文、原始仓库、复制引用、改写说明。复制失败时可选中引用文字手动复制。",
+      "translation": "<s id=\"0\">Bottom</s>: paper, original repository, Copy citation, and adaptation notes. If copying fails, select citation text and copy manually."
+    },
+    "83dad8e4faf6638da213836409d4bc0c02a628dd638c32f970832fa569b3c84d": {
+      "source": "提取并检查 F0",
+      "translation": "Extract and inspect F0"
+    },
+    "4fccc78a1429b73cd000abea1f6fac89527446fb11180dfac60cd95198b6fa29": {
+      "source": "首次提取",
+      "translation": "First extraction"
+    },
+    "70955f4cd6510067b414ec0b80156aca1d27e29d694bf605d8f650ef5471f0c8": {
+      "source": "两份波形都载入后，在左栏核对分析参数，点击 <s id=\"0\">提取 F0</s>。选择文件后需要手动执行这一步。完成时会出现源/目标控制曲线和数值表，合成图此时仍为空。",
+      "translation": "After both waveforms load, inspect analysis parameters on the left and click <s id=\"0\">Extract F0</s>. This must be performed manually after file selection. On completion, source/target control curves and a value table appear; the synthesis plot remains empty."
+    },
+    "b7bc75236fdcfac8fbfa02dacd608b01b5aa006f0cd38a4d2c9e18f944280bdb": {
+      "source": "常用 F0 分析设置",
+      "translation": "Common F0 analysis settings"
+    },
+    "cf2b9939631b8f51a0b276a591b2fe6feeb5324f486c9b88aeafeff21cc615dd": {
+      "source": "参数",
+      "translation": "Parameter"
+    },
+    "1777b1f61d4238ccadbd95122cdf86eca7a1c0ada1092f3ed808687c7862f105": {
+      "source": "初始值",
+      "translation": "Initial value"
+    },
+    "656d77c89e8922bcf6a535c6630b596086bab318e73046096af3619ef6f2b2c4": {
+      "source": "如何选",
+      "translation": "How to choose"
+    },
+    "d1e18cc882940f1c9c9d89ea680bf2763eb299782fb24cb918176260fd1368f0": {
+      "source": "F0 后端",
+      "translation": "F0 backend"
+    },
+    "58bd6944e14736b0fdb3c8fd2e34ea83c6eb032cfd92d8b043a933686bf5bc64": {
+      "source": "可切换 REAPER；切换后重新提取。",
+      "translation": "Can switch to REAPER; extract again afterward."
+    },
+    "8e99229b7408c6ce1624e4c41830e5f7795a6b103243bfb7b48c877d944fa5ab": {
+      "source": "最低 / 最高 F0 (Hz)",
+      "translation": "Minimum / maximum F0 (Hz)"
+    },
+    "60ba7daeebf153fdf0645d339629b04d4806dc3485081f83325975b59bfbaad2": {
+      "source": "按材料设定。最低允许 20–500，最高 50–1000，最低须小于最高。",
+      "translation": "Set for the material. Minimum allows 20–500, maximum 50–1000; minimum must be lower."
+    },
+    "f486db8f9c90ee3eda8f355fd497e8842ef62648645b885744178b908590e956": {
+      "source": "F0 帧间隔 (ms)",
+      "translation": "F0 frame interval (ms)"
+    },
+    "dcb8c0338f2b9b5d31bda9d8c92ec799aaea08b75dc191991155c48dec362f8e": {
+      "source": "允许 0.5–20；表示提取间隔。保存轨迹统一为 1 ms。",
+      "translation": "Allows 0.5–20, indicating extraction interval. Saved tracks uniformly use 1 ms."
+    },
+    "fb0b889f1155898f3d2a3c3170ee19394634dd6813bb34b41e392520264e4874": {
+      "source": "嘎裂声或 F0 不规则材料可以比较 <s id=\"0\">REAPER</s> 的结果。它是本工具新增的提取选项，结合波形和听感检查提取效果。提取方法由当前选择确定，更换方法后需重新分析。",
+      "translation": "For creaky voice or irregular F0, compare <s id=\"0\">REAPER</s>. This added extraction option should be checked against waveforms and listening. The current selection determines the method; reanalyze after switching."
+    },
+    "9ab6e3794d5e818d88250f5f29b31955978bd8fc1c6eebf45ba178e02c583f5b": {
+      "source": "提取 F0 完成后，左栏出现 21 点控制表，图中出现源实线与目标虚线；合成音频仍为空。本例最高 F0 为 600 Hz。",
+      "translation": "After F0 extraction, a 21-point control table appears on the left, with solid source and dashed target curves. Synthesized audio remains empty. This example uses maximum F0 600 Hz."
+    },
+    "671240393b27b9af9ad1c4bb84dc9b398e6d94e865c1cf2a000ebe4e8d09d544": {
+      "source": "分析完成的最大化工作台，归一化有声时长的 21 点表及源和目标 F0 曲线可见，未生成结果。",
+      "translation": "Maximized analyzed workbench with a 21-point normalized-voiced-duration table and source/target F0 curves, before result generation."
+    },
+    "0080884d0c23a7cb7dc36be3b0e0dcc10241faeb345fd1f6dd352a62f04a66b8": {
+      "source": "本章例音和结果图使用 <s id=\"0\">50–600 Hz</s>，初始上限仍为 300 Hz。先查看曲线是否有明显倍频、半频或尖跳，再决定是否编辑。",
+      "translation": "This chapter's examples and figures use <s id=\"0\">50–600 Hz</s>; the initial maximum remains 300 Hz. Check obvious doubling, halving, or spikes before deciding whether to edit."
+    },
+    "e9ce2bb420f4070f2990b105cffafddfb721efb6eba26ecf7a772b1c8391d3ab": {
+      "source": "必要时调整高级分析参数",
+      "translation": "Adjust advanced analysis parameters if needed"
+    },
+    "762ae5fbd3ddf610a49361987e03b07069abb810f1df6a0b8a005fbbbf11257b": {
+      "source": "点击 <s id=\"0\">高级分析参数</s> 展开。初次可保留默认值，遇到分析问题再逐项改变并记录。<s id=\"1\">更换材料或修改任一分析参数后，都要重新提取 F0。</s>",
+      "translation": "Expand <s id=\"0\">Advanced analysis parameters</s>. Keep defaults initially; change and record items individually when problems occur. <s id=\"1\">Reextract F0 after changing materials or any analysis parameter.</s>"
+    },
+    "a11040e47e2f0f245a0d8bcdac63d0926ea38796b68e3963f07cb5378b507430": {
+      "source": "展开高级分析参数后，可以逐项核对 LPC 帧长、帧移、阶数、窗函数与残差脉冲设置；图中各项使用初始默认值。",
+      "translation": "Advanced parameters expanded for checking LPC frame length, shift, order, window, and residual-pulse settings individually. All shown use initial defaults."
+    },
+    "a16cbd816c458392b9f0be211712de071bf99b47b5a8c3e4ea99192a8496d16d": {
+      "source": "最大化工作台左栏展开高级分析参数，显示 128 点帧长、32 点帧移、20 阶 LPC 和其余默认参数。",
+      "translation": "Maximized workbench with advanced analysis expanded on the left, showing frame length 128 samples, shift 32 samples, LPC order 20, and other defaults."
+    },
+    "31e39ca26a2b0870cfb298325b1f3d4ab48fb1857bb36bbf6580d5c9963a6db9": {
+      "source": "高级参数的默认值与主要约束",
+      "translation": "Advanced defaults and key constraints"
+    },
+    "9aa63f70b1e8caf291767d2f441a4ef74eaf92208e1721fa1d21d3f44f8b05bc": {
+      "source": "控件",
+      "translation": "Control"
+    },
+    "d520c5cae7f3ebc8c0bcdfbe47a42739628dbfdaabf7c8631dea8f227732eb7d": {
+      "source": "检查要点",
+      "translation": "Checks"
+    },
+    "f5939ac974ae432496b282f3244f88ca7b8579ee9e970cffb44425ea9159ed25": {
+      "source": "帧长 / 帧移 (采样点)、LPC 阶数",
+      "translation": "Frame length / shift (samples), LPC order"
+    },
+    "790698ce0aa6c01cb97efa2d1a276e01b6b95faa486c14d889cae5f31bf9963f": {
+      "source": "范围分别为 32–1024、8–512、4–60；帧移和阶数须小于帧长。采样点以 11025 Hz 计。",
+      "translation": "Ranges respectively 32–1024, 8–512, and 4–60. Shift and order must be below frame length. Samples refer to 11025 Hz."
+    },
+    "f26b88d26916fdf1eb00df4cc30998521ad141f0ee47f612583c9c188fb65ae3": {
+      "source": "预加重、窗函数",
+      "translation": "Pre-emphasis, window"
+    },
+    "28cfd7564e0ffefac5744d9c497cb7c403ce331b91594658c4fa52d83860a1b4": {
+      "source": "预加重 0≤值&lt;1；窗函数另有 hann、blackman、rectangular。",
+      "translation": "Pre-emphasis 0≤value&lt;1; alternative windows are hann, blackman, and rectangular."
+    },
+    "61d9c160f2d23a0bebe29a952a585e7e4f521c7ad9fd859fa38e494f02a17580": {
+      "source": "负峰阈值",
+      "translation": "Negative-peak threshold"
+    },
+    "e383097ee88aee48170f0ef596a5895d124d9d7416b1d5407ba4d9be39366bad": {
+      "source": "允许 −0.2–0，影响残差脉冲检测。",
+      "translation": "Allows −0.2–0; affects residual-pulse detection."
+    },
+    "90727b4864efc42fd6d806ccfac67436aa899120f9aa43a3940ee538aab5820a": {
+      "source": "脉冲内窗 / 外窗 (周期)",
+      "translation": "Pulse inner / outer window (periods)"
+    },
+    "904b9ed41df4c42f60cfbdbb80a5af763f687f5567b2821524621aad75f37401": {
+      "source": "范围 0.1–1.2 / 0.6–3；外窗须大于内窗。",
+      "translation": "Ranges 0.1–1.2 / 0.6–3; outer must exceed inner."
+    },
+    "dfbb52f14234163213dd11620318ceccb47e14cdfd20c3ab3b756c30b5b2b540": {
+      "source": "静音裁剪、静音阈值 (dB)",
+      "translation": "Silence trimming, silence threshold (dB)"
+    },
+    "02146a8902bfdc60a7ca76db6c3a68c5b326d8f69156dc4dc2f194a0befb6f39": {
+      "source": "开启、−45",
+      "translation": "Enabled, −45"
+    },
+    "f918da0dde8143be2ca8e6667ed8631f5dcb0935d5a9e6bd256347659e27adc9": {
+      "source": "阈值允许 −80 至 −10；裁剪会改变分析信号长度，原波形仍显示原 WAV。",
+      "translation": "Threshold −80 to −10. Trimming changes analysis-signal length; original waveforms still show original WAVs."
+    },
+    "2c04a2c168aa303f0991da4c36f9f3de1d4563ff4dd28eb15b2efd70a4716531": {
+      "source": "静音 padding / 有声边界余量 (ms)",
+      "translation": "Silence padding / voiced-boundary margin (ms)"
+    },
+    "e569cf86739021726db2583044b0cf45089d7d0b8876db1fe0ebfc20373f3b20": {
+      "source": "分别允许 0–80 / 0–120；调整后检查较弱起声和末尾。",
+      "translation": "Allow 0–80 / 0–120 respectively. Check weak onsets and endings after adjustment."
+    },
+    "173ccf4982f17e17b90357ee78ee1a524cdc7300b058b36e7b34d931a6ceca72": {
+      "source": "这些范围表示软件可接受的输入，具体组合还要结合材料判断。帧长、帧移与 F0 帧间隔的单位不同，填写时看清括号即可。",
+      "translation": "These ranges indicate accepted software inputs; judge combinations against the material. Frame length, shift, and F0 frame interval have different units; check the parentheses."
+    },
+    "6bc21c3049a6b888f13102ab1cf84c4560e41dd1e0b4bf51d13a324789317c11": {
+      "source": "编辑 F0 与查看曲线",
+      "translation": "Edit F0 and inspect curves"
+    },
+    "3697d725ae95ea19502b1dce4f759e2e1c9b626947a17733b6b3b61cfb3a0a9b": {
+      "source": "先定对齐和点数",
+      "translation": "Set alignment and point count first"
+    },
+    "c5573cd0cfab12ff8e8928f40ad931ed10947f6ca88d8e48607bb604b0f82ad7": {
+      "source": "<s id=\"0\">归一化有声时长</s> 将两轨各自的有声部分映射到 0–100%。<s id=\"1\">起点对齐</s> 从各自有声起点计毫秒，保留长短差异，较短轨末尾可能为空白。两种对齐都不会改变 WAV 时长。",
+      "translation": "<s id=\"0\">Normalized voiced duration</s> maps each track's voiced portion to 0–100%. <s id=\"1\">Onset alignment</s> measures milliseconds from each voiced onset, retaining length differences; the shorter track may end in blanks. Neither changes WAV duration."
+    },
+    "3ddddc5c8ec1be47fd74f407d748545b183c39f3f5e4849ad28f6334b59c65e6": {
+      "source": "<s id=\"0\">F0 控制点数量</s> 初始为 21，允许 20–200。先定好对齐与点数，再编辑数值。改变任一设置会重建表格，尚未应用的手工值可能被替换。",
+      "translation": "<s id=\"0\">F0 control-point count</s> starts at 21, allowing 20–200. Set alignment and count before editing. Changing either rebuilds the table and may replace unapplied manual values."
+    },
+    "a9f659cf5c7703115d2328c911d1ceb887fb927a1a845ee67736b65a3d02ae26": {
+      "source": "修改数值并应用",
+      "translation": "Edit and apply values"
+    },
+    "47bc537f3c60c08892eac37ba5c0d7531d4fa1325c115c6d2f38a5d6cf2b36b7": {
+      "source": "在 <s id=\"0\">源 F0 (Hz)</s> 或 <s id=\"1\">目标 F0 (Hz)</s> 列输入数值。允许 0–1000，每轨至少保留一个正值，时间列不可编辑。",
+      "translation": "Enter values in <s id=\"0\">Source F0 (Hz)</s> or <s id=\"1\">Target F0 (Hz)</s>. Allowed range is 0–1000, with at least one positive value per track. Time columns are read-only."
+    },
+    "3be922f8707c84b5ad65048c8905171eb13bcd5b3298139ccb1bf588895a5fb2": {
+      "source": "核对曲线和右栏的未应用提示，然后点击 <s id=\"0\">应用编辑</s>。成功后提示编辑已应用，生成按钮恢复可用。",
+      "translation": "Inspect curves and the unapplied-edit message on the right, then click <s id=\"0\">Apply edits</s>. Success marks edits applied and enables generation again."
+    },
+    "0443ef623c87c3e421b023b863aa8bf82d85a8cd203e4a0b9f53034184977ea1": {
+      "source": "如需保存本次应用轨迹，点击 <s id=\"0\">保存 F0 CSV</s>。文件为完整 1 ms 轨迹，行数通常多于表格控制点数。",
+      "translation": "To save the applied tracks, click <s id=\"0\">Save F0 CSV</s>. It contains complete 1 ms tracks, usually more rows than control points."
+    },
+    "06ee084311a397e0d13abd3ef2303b6f7b1a3a1f0e4f17d96481cb2174bbbfd2": {
+      "source": "第一项源 F0 从分析值改为 110 Hz 后，表格和曲线已更新。右栏仍提示未应用修改，需点击应用编辑后才能生成。",
+      "translation": "After changing the first source F0 to 110 Hz, the table and curve update. The right still reports unapplied changes; Apply edits is required before generation."
+    },
+    "8fae34deb583b783bc68b58a88039791472b8a350736d45194329a1baae089ec": {
+      "source": "源 F0 第一控制点被改为 110 Hz，右栏出现未应用编辑提示，应用编辑可用，生成按钮禁用。",
+      "translation": "First source F0 control point changed to 110 Hz, unapplied-edit message on the right, Apply edits available, and generation disabled."
+    },
+    "5377b999fa924ccc87aed3ae7166ae104151d09d38c8744c09768ff912d25877": {
+      "source": "源和目标 F0 控制点分别填写，改完还需应用修改。",
+      "translation": "Enter source and target F0 controls separately, then apply edits."
+    },
+    "8ffce0d7396c90d075a4cd6b0dd7729380ceeaa90090c6df5c469341243393f1": {
+      "source": "<s id=\"0\">修改数值后须点击应用编辑，才会用于生成。</s> 空白按 0 处理，有效正值之间会插值，删空一个单元格不能用来精确插入一段静音。",
+      "translation": "<s id=\"0\">After changing values, click Apply edits before they are used for generation.</s> Blanks count as 0; valid positive values are interpolated. Clearing a cell cannot insert a precisely timed silence."
+    },
+    "8f4f3004d54e09871394106e53958e220a8dd022c07f3ced5fdef940381ccb1f": {
+      "source": "<s id=\"0\">应用编辑</s> 更新 F0，继续复用已有声道、残差和脉冲分析。需要更新这些分析时，重新 <s id=\"1\">提取 F0</s>。未修改控制点时可以直接生成。",
+      "translation": "<s id=\"0\">Apply edits</s> updates F0 while reusing existing vocal-tract, residual, and pulse analyses. To update these, <s id=\"1\">Extract F0</s> again. Without control edits, generation is directly available."
+    },
+    "3950ea7fe5563efdf0f643255fe777a9fddd868005939d900b888508f0659213": {
+      "source": "纵轴与曲线显示",
+      "translation": "Vertical axis and curve display"
+    },
+    "bc07ffb47e2a13d7faeeeb3d5f0eaaca04b4dda505f9094beea73d0599474b05": {
+      "source": "源 F0 为实线、目标 F0 为虚线，彩色 step 曲线对应所选结果。它们显示当前控制轨迹；选择历史组时，图面改用该组记录。",
+      "translation": "Source F0 is solid, target F0 dashed, and colored step curves represent selected results. They show current control tracks; selecting a historical set displays that set's records."
+    },
+    "d66d872260767e68ac5ef5d524c4daf5c437f9b77bb56b4836935d98b0979102": {
+      "source": "<s id=\"0\">彩色合成 F0 是生成控制轨迹，未从输出 WAV 重新测量。</s> 仅发声类型变化时，各步 F0 可以重合。若要核查实际输出，请另用参数估计等工具测量单步 WAV。",
+      "translation": "<s id=\"0\">Colored synthesis F0 curves are generation controls, not remeasurements from output WAVs.</s> F0 steps may overlap in phonation-only continua. Independently measure individual WAVs with Parameter estimation or similar tools to verify actual output."
+    },
+    "83689e87f33f4a6bc5c1f83fcd00e39c898a2bb2e9e38e06c3bfaa2ae8289576": {
+      "source": "在左栏 <s id=\"0\">F0 图窗纵轴</s> 输入下限、上限，只改变显示。下限须为非负数，上限须大于下限；上限留空自动计算，<s id=\"1\">自动范围</s> 恢复下限 0 和自动上限。无效输入会保留最近有效图面并提示，显示范围独立记忆。",
+      "translation": "Enter minimum/maximum under <s id=\"0\">F0 plot vertical axis</s> on the left; display only changes. Minimum must be nonnegative and maximum greater. Blank maximum is automatic; <s id=\"1\">Automatic range</s> restores minimum 0 and automatic maximum. Invalid input retains the last valid view and shows a message. Display range is remembered separately."
+    },
+    "9b08edf1cb2759aebac1fb1bea3f5543bb42f8f691150cf30cc54047b06fa5af": {
+      "source": "设置连续统并生成",
+      "translation": "Configure and generate continua"
+    },
+    "d723f4100b96f6893ee5d9217b16616afa913733916dc3d96995048808d1b5ce": {
+      "source": "类型、方向与步数",
+      "translation": "Type, direction, and steps"
+    },
+    "d3aceb2f165302063f4d502afa2382e81f07a8505847f8d08d4e5a1e8d43a95b": {
+      "source": "选择变化对象",
+      "translation": "Choose what changes"
+    },
+    "1d144ac6888c9169c1ec916b65ca74f03d6ac61b1af422eaa7d812331728226c": {
+      "source": "三种连续统的变化对象",
+      "translation": "What the three continuum types change"
+    },
+    "f956f06836b06ab5dfcf094e7ba561493e396c227bb54ca5fee80c0b0e1be6eb": {
+      "source": "类型",
+      "translation": "Type"
+    },
+    "0859dddae6fdbd719bb6df7117358b9a26659a092837e1c9f70f0afb217c6c5f": {
+      "source": "逐级改变",
+      "translation": "Progressive change"
+    },
+    "559fadf5c4a56780d2ebd5f1c9320fd2230a0f0d48bb5b76161d9945596d4310": {
+      "source": "保留的基础",
+      "translation": "Retained basis"
+    },
+    "5ca1c8e7ed79a29ec1985460ce468472e949ee01c1394caa8e9f85717fd5d7ed": {
+      "source": "仅 F0 变化",
+      "translation": "F0 only"
+    },
+    "f7f0745fddfd4c6918ccec7f602793b67fdaa3c9225e28c9ef9ff85d47ed07ea": {
+      "source": "F0 向另一端过渡",
+      "translation": "F0 transitions toward the other endpoint"
+    },
+    "550950c2ea5e53d9f549b996d495680d5c84f65dfeaf3f3e19f61610665ff1f5": {
+      "source": "方向源的残差周期形态、声道与时长。",
+      "translation": "Directional source's residual-period shape, vocal tract, and duration."
+    },
+    "726dd5b36f0b430d7d67ed76472e2977f3ed6865538912b34a142f88d87e302b": {
+      "source": "仅发声类型变化",
+      "translation": "Phonation type only"
+    },
+    "8727a1f425579620854d85c7e67ccd27e357143c3117c7034dbd58e17e9432c2": {
+      "source": "混合源/目标残差脉冲形态",
+      "translation": "Blend source/target residual-pulse shapes"
+    },
+    "3f250f962779ec75405af37b1be4349128704e4ea89246a9d771eaa04bb18378": {
+      "source": "方向源的 F0、声道与时长。",
+      "translation": "Directional source's F0, vocal tract, and duration."
+    },
+    "eba75841729effa04234c84506c019b23e98d84315adba348566feec7cd9af92": {
+      "source": "F0 与发声类型同时变化",
+      "translation": "F0 and phonation type together"
+    },
+    "7a698c7478ae1a8281429726966f16e155e651c6670ca8fc3f26af10a458ac7f": {
+      "source": "同时改变上述两项",
+      "translation": "Change both above"
+    },
+    "2e7f72d570fe233ada016280ca173f1ee9fae794cf327d788aa5947900c97b20": {
+      "source": "方向源的声道与时长。",
+      "translation": "Directional source's vocal tract and duration."
+    },
+    "5e5138106a4bc7bcfed6099ff4a4371c59f0d2e9773d34f054ab297003a11ec9": {
+      "source": "<s id=\"0\">合成方向</s> 可选源到目标或目标到源。反向会交换计算角色，时长和声道基础也随之改变，下拉框中的文件角色仍保持原样。请用结果描述核对方向。",
+      "translation": "<s id=\"0\">Synthesis direction</s> offers source-to-target or target-to-source. Reversing exchanges computational roles and the duration/vocal-tract basis; file roles in dropdowns remain unchanged. Check direction in result descriptions."
+    },
+    "0e4ef5547525ed57350f3533a2371e2840da10d5036fa5ddd2b384c8a1ab1026": {
+      "source": "<s id=\"0\">连续统步数</s> 初始 9，允许 2–50，包含两端。九步中 step01、step05、step09 分别对应 0、0.5、1 的控制比例。两端均经过重合成，比较时请保留原目标音频作为对照。",
+      "translation": "<s id=\"0\">Continuum steps</s> defaults to 9, allows 2–50, and includes both endpoints. In nine steps, step01, step05, and step09 correspond to control ratios 0, 0.5, and 1. Both endpoints are resynthesized; retain original target audio for comparison."
+    },
+    "5234b510289f1d2b98342279f48033ae63970831f49975a5716630f823bb3138": {
+      "source": "幅度设置初始为 <s id=\"0\">周期能量匹配</s> 开启、<s id=\"1\">输出幅度匹配源音频</s> 开启、<s id=\"2\">输出峰值限制</s> 0.98。前两项分别匹配残差周期绝对峰值和全段平均绝对振幅；物理能量和主观响度需另行测量。峰值限制须大于 0 且不超过 1，原录音有削波时请先更换材料。",
+      "translation": "Amplitude defaults: <s id=\"0\">Period energy matching</s> on, <s id=\"1\">Match output amplitude to source</s> on, and <s id=\"2\">Output peak limit</s> 0.98. The first two match absolute residual-period peaks and full-duration mean absolute amplitude respectively; physical energy and perceived loudness require separate measurement. Peak limit must exceed 0 and not exceed 1. Replace clipped original recordings first."
+    },
+    "ffe2451214271ecc18f077fee6cdfcd7f726e030a847cf94b3f3144d8ec19cbf": {
+      "source": "生成一组或全部六组",
+      "translation": "Generate one set or all six"
+    },
+    "fb8383bce8e997f6dfd9b46e2dd4809acfc46ef9abea1cae4e0aa667da63f724": {
+      "source": "初次可选 <s id=\"0\">仅 F0 变化、源到目标、9 步</s>，点击 <s id=\"1\">生成当前</s>。任务进行时显示进度和取消任务，生成按钮暂时禁用。",
+      "translation": "Initially choose <s id=\"0\">F0 only, source-to-target, 9 steps</s> and click <s id=\"1\">Generate current</s>. Progress and Cancel task appear while generation buttons are disabled."
+    },
+    "37fdf9ce3b07a7372949ae341fc98e6c5b049ca711fb25ac002c8b7f388244e9": {
+      "source": "需要双向三类结果时，点击 <s id=\"0\">生成全部六组</s>。顺序为正向仅 F0、仅发声类型、同时变化，再反向重复三类。",
+      "translation": "For bidirectional results of all three types, click <s id=\"0\">Generate all six sets</s>. Order is forward F0-only, phonation-only, both, then the same three in reverse."
+    },
+    "5e4b3b68892bd503597339829a0e482ac996ee1806c00f8de153a2e961729fc8": {
+      "source": "等状态变为完整成功。每个成功组独立出现试听和保存入口，默认载入整组波形，<s id=\"0\">不会自动播放</s>。",
+      "translation": "Wait for complete success. Each successful set independently offers listening and saving, loading its full waveform by default, <s id=\"0\">without automatic playback</s>."
+    },
+    "4d70a93219a841a29e9963ea9d3344db56ace5d42e612ea7cb49108c9bf15a82": {
+      "source": "九步任务已经提交，右栏显示 0 / 1 组完成并提供取消任务；正在执行时生成按钮禁用，尚无成功结果按钮。",
+      "translation": "Nine-step task submitted; the right shows 0 / 1 sets complete and Cancel task. Generation is disabled while running, with no successful-result buttons yet."
+    },
+    "60563fe3036b1e4fd42753521ca2cfe51a3a4ab9d5cd5cb09925ebead32e5987": {
+      "source": "真实九步生成任务运行中，右栏显示取消任务与 0 / 1 组完成，合成图仍为空。",
+      "translation": "Actual nine-step task running, with Cancel task and 0 / 1 sets complete on the right, and the synthesis plot empty."
+    },
+    "b1cb30f966728d7c768e8a978e12a4360a41521fe764dd54a0ec0544a2bb2500": {
+      "source": "源到目标、仅 F0 变化的九步结果已完整成功，整组波形、各步生成控制 F0、任务描述和保存入口可见。",
+      "translation": "Source-to-target F0-only nine-step set fully successful, with concatenated waveform, each step's F0 generation controls, task description, and save controls."
+    },
+    "77357e58fa772802ddccf985f8781b8964e04adb8c9a54122dc2817806a00e49": {
+      "source": "六组共用提交时的步数与幅度设置。每组九步时，共 54 个单步和六个拼接文件。提交后改控件不会改变已生成结果。取消或失败时，已成功组仍保留。",
+      "translation": "All six sets share submitted step count and amplitude settings. At nine steps each, there are 54 single-step files and six concatenations. Later control edits do not alter generated results. Successful sets remain after cancellation or failure."
+    },
+    "06fa677adb8996ee8546beb04bde9641e5017057c150abf3bd8915f380dfbcf9": {
+      "source": "先比较两端",
+      "translation": "Compare endpoints first"
+    },
+    "bf6aae683e245b702c5f3d0e8a2b97a4d60c2ca1d04c6afbd6dd34965ca3f41b": {
+      "source": "以下处理后例音来自同一次 <s id=\"0\">仅 F0 变化、源到目标、9 步</s> 任务：50–600 Hz、1 ms、归一化有声时长、21 点。提取后未手改数值，按这 21 点应用编辑；两项幅度匹配开启、峰值限制 0.98，其余高级参数为默认值。",
+      "translation": "The processed examples below come from one <s id=\"0\">F0-only, source-to-target, 9-step</s> task: 50–600 Hz, 1 ms, normalized voiced duration, 21 points. No manual edits followed extraction; those 21 points were applied. Both amplitude matches were enabled, peak limit 0.98, and other advanced parameters default."
+    },
+    "7e5b7be17dc08ef15a177f271967fb7a0c906dd2aa994ebc2de86b9cb58af517": {
+      "source": "处理后第 1 步：同组起点，先与前面的原始源音频比较。",
+      "translation": "Processed step 1: starting point of this set; compare first against the original source above."
+    },
+    "40d38602554bdf517b0ec7da7f4efcfe8be0723039eeb2d45ed2422708724dae": {
+      "source": "处理后第 9 步：同组终点，仍使用正向源音频的声道和时长。",
+      "translation": "Processed step 9: endpoint of the same set, retaining the forward source's vocal tract and duration."
+    },
+    "5681d627b388c56bafac87019f2c6ca4e6cce26731153e35eaa0c4d97b8404e0": {
+      "source": "先听两端的音高走向，再返回原音作对照。核对末级与目标原音的音质差异；发声类别需结合相关声学指标与听辨检查。",
+      "translation": "Listen to both pitch contours, then return to originals. Check final-step versus original-target voice quality; assess phonation categories with relevant acoustic metrics and listening."
+    },
+    "657c26152ba9e9b0475e00ec3726a1ed04e7b8fc8edcbcae45d29afcbf5342c9": {
+      "source": "单步与整组对照试听",
+      "translation": "Compare individual steps and the full set"
+    },
+    "037b9d620eb1934b3d4281feb24965271c61f1228a046ee35af0f836ca360eed": {
+      "source": "选中要比较的任务",
+      "translation": "Select the task to compare"
+    },
+    "3331743995d9b8e2e2da154c82c96a45ea9a25d9f7ccc96246366bd8f267310e": {
+      "source": "在右栏历史中选择成功生成任务，核对 <s id=\"0\">方向、类型、步数和任务短 ID</s>。分析、应用或失败条目没有合成组。选择旧组只更换结果图面，左栏当前输入不会自动切回旧材料。",
+      "translation": "Select a successful generation task in right-panel history and check <s id=\"0\">direction, type, step count, and short task ID</s>. Analysis, application, or failed entries contain no synthesis set. Selecting an old set changes result views only; current left-panel inputs do not revert."
+    },
+    "bde6b52ceacb829c957d3608ad904e5b9ccf63a16d189d2022020358d2154b38": {
+      "source": "点击 <s id=\"0\">stepXX</s>，立即载入并播放该步全长音频。合成波形及 F0 随之切换，图下当前试听文字显示文件和任务。",
+      "translation": "Click <s id=\"0\">stepXX</s> to load and immediately play that step's full audio. Synthesis waveform and F0 change accordingly; current-listening text below shows file and task."
+    },
+    "51fa3a4cf68c86759d0dd21c463c8805716b9ae7b120c55db34ee30c75259af2": {
+      "source": "需要只听局部时，在合成波形拖选范围，再用播放条试听。",
+      "translation": "To hear only part, drag a selection in the synthesis waveform and use its playback bar."
+    },
+    "2e97303c2ca666b7a9e4781690acfb4a415c201ad598a58afec75685083f4cde": {
+      "source": "点击 <s id=\"0\">整组试听</s>，按 step01 到末级连续播放。F0 图叠加各步曲线并突出当前步骤；曲线横轴按每步独立对齐，合成波形则是拼接时间轴。",
+      "translation": "Click <s id=\"0\">Play full set</s> for sequential playback from step01 to the last step. The F0 plot overlays all steps and emphasizes the current step. Its time axes align each step independently; the synthesis waveform uses concatenated time."
+    },
+    "904f4bd32c8b625d8a927af4d0731bbcee82fb0a1a63c8e736043cd723e3212f": {
+      "source": "点击 step05 后载入该步的独立波形，F0 图仅加入第五步生成控制曲线；右下当前试听信息标出步骤文件和任务。",
+      "translation": "After clicking step05, its independent waveform loads and only the fifth-step generation-control curve is added to the F0 plot. Current-listening text at lower right names the step file and task."
+    },
+    "36310b1ce8659dcadf1ae6d853a213e7bd10a28db05da624f472677787c0dacd": {
+      "source": "同一九步组选择第五步后的工作台，单步波形、step05 图例和当前试听说明可见。",
+      "translation": "Workbench after selecting the fifth step of the same nine-step set, showing its waveform, step05 legend, and listening description."
+    },
+    "303ab052dcc2fe55ac407f76d1115b53f6b9134c65b559f5db5fc5c320d63311": {
+      "source": "原音、中间步与整组比较",
+      "translation": "Compare original, midpoint, and full set"
+    },
+    "c3d2cd163eb79bb06ba525dafca67cf7beccb500b28d8bad128a648748f1a9c8": {
+      "source": "再听同一任务的第 5 步，它位于控制比例的中点。和原始源音频、前面的两端对照，留意音高走向、边界、异常噪声与级间突变。",
+      "translation": "Listen to step 5 of the same task, the midpoint of the control ratio. Compare with the original source and both endpoints above for pitch contour, boundaries, abnormal noise, and abrupt interstep changes."
+    },
+    "958f772dd4c5157845cdcb2de70d49d28ff40a3fce4cd094d3af337c0ee576d2": {
+      "source": "原始源音频：与下面同一组第 5 步作近邻对照。",
+      "translation": "Original source audio: close comparison with step 5 of the same set below."
+    },
+    "86c45767e3bb6fd15d0d7c738be9b717ccfa1e403eacc11673b71908b1ac74c7": {
+      "source": "处理后第 5 步：同一九步组的中间控制比例。",
+      "translation": "Processed step 5: middle control ratio of the same nine-step set."
+    },
+    "e833384025b32f059df176e4c07f63457ddc1784ec72b1b9741bec7e7c64f981": {
+      "source": "最后听九步拼接，观察变化是否连贯。拼接不会自动加入步间静音，正式实验应使用独立 step 文件。",
+      "translation": "Finally listen to the nine-step concatenation for continuity. No interstep silence is automatically added; use independent step files in formal experiments."
+    },
+    "3924c682600849d94c638b7351fe7f767cb1c8b9901a059744e48fe7b7486b4a": {
+      "source": "处理后九步拼接：按第 1 至第 9 步顺序连续试听。",
+      "translation": "Processed nine-step concatenation: continuous playback from step 1 through step 9."
+    },
+    "2c696036497c9de633c207213db43eaee8473df151c58387240bb4f2557a669a": {
+      "source": "暂停、停止、播放结束、切换任务或源/目标接管播放时，即时高亮会清除，曲线和结果仍在。正式使用前还需检查单步波形、实际 F0 和所需声学指标，并做小规模预测试。",
+      "translation": "Pausing, stopping, reaching playback end, switching tasks, or source/target taking over playback clears live highlighting while curves and results remain. Before formal use, inspect individual waveforms, actual F0, and required acoustic metrics, and conduct a small pilot."
+    },
+    "1adcc835567a9bb0ee449920c47bd935fea5953c627dfb84f0b1b9cf9f559b93": {
+      "source": "保存结果与恢复历史",
+      "translation": "Save results and restore history"
+    },
+    "d5a3a3b558c9dcfc7619320b3091b9820cf6491c9a61a439a5a0e4354f88433d": {
+      "source": "完整组包含什么",
+      "translation": "What a complete set contains"
+    },
+    "16c8ab35e47c732fcf1049f0b0a0a321f018354d6ac3c921a3ffd5dcc2d97bfa": {
+      "source": "音频、数据、参数和图片",
+      "translation": "Audio, data, parameters, and figures"
+    },
+    "85489369f74138cf328c542ab54ce932d26487b8d8f4aee54e4cf7c7f02d2539": {
+      "source": "文件",
+      "translation": "File"
+    },
+    "47a203a189364f43c07bf00b9a288b2546655b26b6c470763f794eb3054fe3c4": {
+      "source": "用途",
+      "translation": "Purpose"
+    },
+    "8bdbd5954c8688e3c492e8dee7cbae4e4553538cfe21f62d6defc89301d6b020": {
+      "source": "step01.wav 至 stepNN.wav",
+      "translation": "step01.wav through stepNN.wav"
+    },
+    "717ae4909221ed50f29bd64539bd9f86b55dab7e5d4d473110fbf179d194b773": {
+      "source": "11025 Hz、PCM16、单声道的独立刺激。",
+      "translation": "Independent 11025 Hz PCM16 mono stimuli."
+    },
+    "9ab617cb4f2b0a9717d244099cfb278ffd58209d8774fb1bd7ecad4c52964104": {
+      "source": "同组按步骤顺序拼接的试听文件。",
+      "translation": "Listening file concatenating the same set in step order."
+    },
+    "a29e31cba9934d2e60fd05ed4279674d8cc34a8c8095145374d5a3852eadc152": {
+      "source": "time_ms、source_f0、target_f0，完整 1 ms 源/目标控制轨迹；0 表示无有效值。",
+      "translation": "time_ms, source_f0, target_f0: complete 1 ms source/target control tracks; 0 means no valid value."
+    },
+    "8ad75b5c05b1d6cc4a0dee2ee288fa132ef8d6a70062a703d8663befe14298be": {
+      "source": "输入身份、参数、对齐、控制点、算法/运行时版本及输出清单。",
+      "translation": "Input identities, parameters, alignment, control points, algorithm/runtime versions, and output manifest."
+    },
+    "648e577c625509360dc1a4af8a9d1f4506d25b627ab12715a6425775cfc02a01": {
+      "source": "F0 图 PNG",
+      "translation": "F0 plot PNG"
+    },
+    "01a45b42266cf7f7f7ff1f9e5d1be8eaae7e2f04e5ab23269895765a71d0764f": {
+      "source": "另行导出的当前 F0 图，300 dpi。",
+      "translation": "Separately exported current F0 plot at 300 dpi."
+    },
+    "a305a320f57ee627f9a7b5ea527e35189bb121e2370f949fc4640ed699695acc": {
+      "source": "先保存完整组",
+      "translation": "Save the complete set first"
+    },
+    "8cb62f222ff015dce6603889c49b696437684dfee1cba247515c5fe343dc99cc": {
+      "source": "选择成功组，点击 <s id=\"0\">保存完整组</s>。桌面未选输出位置时会先请求选择目录，结果保存在其内的 任务结果 子目录。已有不同内容文件采用保护名称。",
+      "translation": "Select a successful set and click <s id=\"0\">Save complete set</s>. On desktop, if no output location is selected, a directory is requested first. Results go in its 任务结果 subdirectory; different existing content receives protected names."
+    },
+    "fc2de03a2e564802a39b8955733cb4c785fcbc2bf64ff4aba4162f444d0fae7f": {
+      "source": "网页点击 <s id=\"0\">下载完整组</s>，得到 完整组 ZIP 包。解压后检查所有单步、拼接 WAV、CSV 和 JSON。",
+      "translation": "On the web, click <s id=\"0\">Download complete set</s> for a complete-set ZIP. Extract and inspect every step, concatenated WAV, CSV, and JSON."
+    },
+    "2c7c743d3f891eeea33e239ab87396422138100b1fb4fa089cb2fd434781c136": {
+      "source": "保存失败时检查目录是否可访问、空间和写入权限，再保存同一成功组。取消目录选择只退出此次保存。",
+      "translation": "On save failure, check directory access, space, and write permissions, then save the same successful set again. Cancelling directory selection only exits this save attempt."
+    },
+    "a4290f211d7912af5bb42afb389e7bd08604f20806102ec9d1a08911fcfb76a4": {
+      "source": "完整九步组保存成功后，右栏显示已保存本组完整文件和参数清单，顶部显示所选输出位置；F0 图像仍需另行导出。",
+      "translation": "After saving the full nine-step set, the right confirms complete files and parameter manifest saved, while the top shows the output location. Export the F0 image separately."
+    },
+    "23ca9509e400b85908fa7610cb512c5cd2464e7a7983cb0afcb076ad56c968b4": {
+      "source": "保存完整九步组成功的工作台，顶部输出位置和右栏保存成功提示可见。",
+      "translation": "Workbench after successfully saving the complete nine-step set, with output location at the top and save success on the right."
+    },
+    "d6e1320ee1f2d9116372acba594d33cf229f48904b80412d2d41f3552ad0978b": {
+      "source": "<s id=\"0\">选中 step05 试听后，保存完整组仍会保存全部步骤。</s> 需要单个 WAV 时，从已保存的组目录取出对应文件。",
+      "translation": "<s id=\"0\">Even after selecting step05 for listening, Save complete set still saves every step.</s> For one WAV, take the corresponding file from the saved set directory."
+    },
+    "c56253fb76724d280ae919ff87a166769c37f27ea8c0caab53afaafbcc757af4": {
+      "source": "再保存 F0 图与单独文件",
+      "translation": "Save the F0 figure and separate files"
+    },
+    "fb4c2703cc15c94de444007dd6f1a8866d610bccb3de7092375a65ac077299c8": {
+      "source": "选回需要的历史组和单步/整组，调整左栏纵轴。",
+      "translation": "Return to the desired historical set and step/full set, then adjust the left-panel vertical axis."
+    },
+    "ed741a0464c3acb13f838d1d2546006c04cf4321dd31cbdd8a4067cfb1e03995": {
+      "source": "点击 F0 图右上 <s id=\"0\">导出图片</s>。PNG 保留点击时的轴、曲线与完整图例，超出范围的曲线裁剪在图框内，瞬时播放高亮不写入图片。",
+      "translation": "Click <s id=\"0\">Export image</s> at the F0 plot's upper right. PNG retains axes, curves, and the full legend at that moment. Out-of-range curves are clipped inside the frame; transient playback highlighting is omitted."
+    },
+    "cadcc1e44a593513f51420352a7982b5c28fee6e741d2e74422e4372484189b9": {
+      "source": "核对图像的任务、轴单位及 step 图例，把图片同组文件一起保存。PNG 不自动包含在完整组中。",
+      "translation": "Check task, axis units, and step legends, and keep the image with its set files. PNG is not automatically included in the complete set."
+    },
+    "aeeff33e0561c8a69f70002caed5a3fdba92a6a2a163f91bed22104f003c8b26": {
+      "source": "<s id=\"0\">保存 F0 CSV</s> 导出左栏当前已应用轨迹，<s id=\"1\">参数与结果清单</s> 导出所选组 JSON，<s id=\"2\">导出图片</s> 保存当前图面。保存旧组时，优先保留该组目录内 CSV，避免混入后来分析的文件。CSV 与 JSON 当前没有导入入口。",
+      "translation": "<s id=\"0\">Save F0 CSV</s> exports currently applied left-panel tracks; <s id=\"1\">Parameter and result manifest</s> exports selected-set JSON; <s id=\"2\">Export image</s> saves the current view. Prefer the CSV in an old set's directory when saving it, avoiding later-analyzed files. CSV and JSON have no import function currently."
+    },
+    "dd459558f14d921f2ea98ae923c03fdfdbc2c1e3725fa79b829d9d3ac49814df": {
+      "source": "历史与参数草稿",
+      "translation": "History and parameter drafts"
+    },
+    "b9519b67141ef87b0b561111e6171a58863b64428c43e38a6d4c46722cb9cc99": {
+      "source": "点击 <s id=\"0\">刷新任务历史</s> 找回成功组。其试听、曲线和保存都使用该组记录，后来改变输入或参数不会改写旧组。可下载参数与结果清单，核对旧组输入和版本。",
+      "translation": "Click <s id=\"0\">Refresh task history</s> to recover successful sets. Listening, curves, and saving use each set's records; later input or parameter changes do not rewrite old sets. Download the parameter/result manifest to check inputs and versions."
+    },
+    "bb98e77021d141ef265ea64c13ce3822285dba2d11dc22862f9015135af0dec8": {
+      "source": "需要稍后继续编辑时，点击顶部 <s id=\"0\">保存参数草稿</s>。任务进行中先等待完成或取消。草稿会保留参数和未应用控制点。",
+      "translation": "To continue editing later, click <s id=\"0\">Save parameter draft</s> at the top. Wait for completion or cancellation of running tasks first. Drafts retain parameters and unapplied control points."
+    },
+    "f425d51a7eef6dc36e667a27d893799827de3dda6e3a4e619a06fa83fbe50d64": {
+      "source": "重开后重新选择目录和输入，再 <s id=\"0\">提取 F0</s>。只有文件内容、分析设置、点数和对齐均匹配时，才恢复草稿控制点。",
+      "translation": "After reopening, reselect the directory and inputs, then <s id=\"0\">Extract F0</s>. Draft controls restore only when file content, analysis settings, point count, and alignment all match."
+    },
+    "7652ace5661ca1460098f8c1975cc5c23bb9894db5f95bab964728a48c88abd2": {
+      "source": "恢复控制点后仍点击 <s id=\"0\">应用编辑</s>，再生成。草稿不保存长期目录授权。",
+      "translation": "After restoration, still click <s id=\"0\">Apply edits</s> before generating. Drafts do not retain long-term directory permissions."
+    },
+    "f7c3e3bfa03e41a035199562840bbb2984dbcb3595fca540ba4f43295bae5074": {
+      "source": "遇到提示时怎么继续",
+      "translation": "Continue after messages"
+    },
+    "90e55801998e3e571879cf202b21eeec87f99935aa340bb6d1be6c8e96f34be2": {
+      "source": "按钮暂时不可用",
+      "translation": "Temporarily unavailable buttons"
+    },
+    "94d5d94c22bc55e50088fbe72e20008ce7fa3e18a99a1637d669f4a7b4bf7df6": {
+      "source": "<s id=\"0\">提取 F0</s> 禁用：确认两份文件均已选择、波形读取成功，没有正在执行的任务。",
+      "translation": "<s id=\"0\">Extract F0</s> disabled: check both files are selected, waveforms loaded, and no task running."
+    },
+    "0381d81972f99a24d23cdeb5de812242547dd101c77457e9b8de5e2eb2fbdbbe": {
+      "source": "提示 <s id=\"0\">原分析失效</s>：材料或分析参数改变，重新提取 F0。",
+      "translation": "<s id=\"0\">Original analysis invalid</s>: materials or analysis parameters changed; reextract F0."
+    },
+    "7ca126d35ff9a5f599369714eb559ab610765fa50e3ed461a7c7d06f84c844ae": {
+      "source": "提示 <s id=\"0\">未应用修改</s>：核对控制表后应用编辑。此时保存 F0 CSV 也暂不可用，旧成功组仍可保存。",
+      "translation": "<s id=\"0\">Unapplied changes</s>: inspect the control table and apply edits. Save F0 CSV is also temporarily unavailable; old successful sets remain savable."
+    },
+    "b4f40d9efd9cbdfbd62d6ce58bfc25141a4f3edcdc0d9fd4a04ce0a8dfd4c4d1": {
+      "source": "输入或分析失败",
+      "translation": "Input or analysis failures"
+    },
+    "bafe6263ac613d04cda91dd0fea25abeb851e79f97c37b02d2a61e6066defafc": {
+      "source": "常见提示的处理",
+      "translation": "Handling common messages"
+    },
+    "5d6b701acbf66f82275d00efbf856090daaa914f8fc9479c6513dd8b960813c6": {
+      "source": "提示或现象",
+      "translation": "Message or symptom"
+    },
+    "abd10bd6b69cfdb2399b83b5551469dd23a13a89819353f0cfbd3de49453d423": {
+      "source": "接下来做什么",
+      "translation": "Next action"
+    },
+    "95963e8cd992888712090c625599910b2f6d75d72e22259442e69451bfad0351": {
+      "source": "超过输入预算 / 音频损坏",
+      "translation": "Input budget exceeded / damaged audio"
+    },
+    "fb0653c53e7fa9b10e8475c5d26e55fa45ed8870c6f8e848bb9c5fe47141cab2": {
+      "source": "检查时长、帧数、文件大小和 WAV 可读性，另存合适短材料后刷新、重选。",
+      "translation": "Check duration, frames, file size, and WAV readability. Save suitable short material, then refresh and reselect."
+    },
+    "90a8f5f4d40bf665009cb59ed97370d9c2ae0cf3114c7de4bed82435c250b5d6": {
+      "source": "没有有效有声区 / F0 分析失败",
+      "translation": "No valid voiced region / F0 analysis failure"
+    },
+    "b5e46b12784345d66ab24b6c15acb25696591b30492a474200491f395279ffe6": {
+      "source": "先听原材料，再调整 F0 范围并重新分析。不要仅凭失败判定材料无发声。",
+      "translation": "Listen to originals, adjust F0 range, and reanalyze. Failure alone does not show that no phonation exists."
+    },
+    "1787100c22d028d95e4e820a9f8723eb8c93d4c3d53ce3741055604da20acfeb": {
+      "source": "有效脉冲不足",
+      "translation": "Insufficient valid pulses"
+    },
+    "3b8acd459726683ee2d77bd9e01fc369ffe3fb02f9f383673ac0f3d3bd7b5105": {
+      "source": "检查负峰阈值和脉冲内/外窗，从默认值逐项尝试，每次重提取。",
+      "translation": "Check negative-peak threshold and pulse inner/outer windows. Try one change at a time from defaults, reextracting each time."
+    },
+    "f22ccac54e7cb8e660908155e027638fb388f530a6922ca0879e08b8afe8ca32": {
+      "source": "REAPER 不可用",
+      "translation": "REAPER unavailable"
+    },
+    "f0af46c6f34a2da0841402055bc5429164111bc5aabad8f2f6b665eaffa88c2d": {
+      "source": "可手动选择 Parselmouth 并重新分析，记录提取方法的改变。",
+      "translation": "Manually select Parselmouth and reanalyze; record the extraction-method change."
+    },
+    "9af427ca0e1c6b005b5fd00825e34e6e7a79b6a03d708d42e59c61f6a1221de5": {
+      "source": "控制点或参数无效",
+      "translation": "Invalid controls or parameters"
+    },
+    "8b8823f91cbb54226716514693675cf59cb3da93953912c255be7b80c2c2bdce": {
+      "source": "使用有限数值、每轨至少一个正值，核对帧长/帧移/阶数及内外窗关系。",
+      "translation": "Use finite values with at least one positive per track. Check frame length/shift/order and inner/outer window relationships."
+    },
+    "ff5b0073835f81d2994107ab5063f99892659f376676a8e3d75dc85a668cfabd": {
+      "source": "合成 F0 读取失败 / 入口未提供曲线",
+      "translation": "Synthesis F0 loading failed / curves unavailable in this interface"
+    },
+    "b51f0a8cb02b9ebaf062c09975d3601b9a91fa823342358b3b8f14e805489b9a": {
+      "source": "刷新并重选完整成功组。仍可保存有效 WAV 到外部核查。",
+      "translation": "Refresh and reselect a fully successful set. Valid WAVs can still be saved for external verification."
+    },
+    "abb2212ca64d8ab19b40accc6f0a63ede1e34049b1f32855a24b419938409f1b": {
+      "source": "取消、部分完成与重试",
+      "translation": "Cancellation, partial completion, and retry"
+    },
+    "3c2d4fcc0f72251e3e11fd548b1e0e7192b8712cf67844fffa6a88e4dfaef60b": {
+      "source": "点击 <s id=\"0\">取消任务</s>，或历史行的 <s id=\"1\">取消此任务</s>，等待状态结束。核对已完成组数，刷新历史并保存成功组。未完整成功的组和后续未提交组不会自动补算。",
+      "translation": "Click <s id=\"0\">Cancel task</s> or <s id=\"1\">Cancel this task</s> in a history row, and wait for the status to finish. Check completed-set count, refresh history, and save successful sets. Incomplete sets and later unsubmitted sets are not automatically completed."
+    },
+    "9c6a70bb63dd2fc145325a4296c53a5c41c55b9279aa3570c01460eaebfc0b6b": {
+      "source": "失败、取消或中断条目可点击 <s id=\"0\">重试</s>，再刷新查看。重试沿用该任务原输入与参数。要使用新参数，请重新分析/应用后生成；再次生成全部六组会建立新批次。",
+      "translation": "Failed, cancelled, or interrupted entries offer <s id=\"0\">Retry</s>; refresh afterward. Retry uses the task's original inputs and parameters. For new parameters, reanalyze/apply and generate anew. Generate all six again creates a new batch."
+    },
+    "4992410767635718a5839e98065113501b3a8eb1ad6ce24f36a6ffdcd4ca8270": {
+      "source": "读取与下载失败",
+      "translation": "Loading and download failures"
+    },
+    "1ddbb95b58435b4a1cb2cdf28c2095b9ee21463dd1152867aad25a360bd23417": {
+      "source": "结果缺失或读取失败时，刷新任务历史后重新读取；仍缺失时重新生成完整组。网页权限、额度或有效期变化时，核对项目资源状态；仍有效的成功组可继续保存。单独下载 CSV、JSON、PNG 后，也请确认实际下载位置和完成状态。",
+      "translation": "If results are missing or fail to load, refresh history and reload; regenerate the complete set if still missing. For changed web permissions, quotas, or expiration, inspect project resources. Still-valid successful sets remain savable. After separate CSV/JSON/PNG downloads, confirm actual locations and completion."
+    },
+    "97fb34387ba911e4951ab19ff676d98cbc4da7ceb9c472c749328243e049a085": {
+      "source": "方法与材料检查",
+      "translation": "Methods and material checks"
+    },
+    "6ffefeae2d37e3008779a020e4ae41c87ad3ebbc997f67ff67da8af971a9bc6d": {
+      "source": "论文与原始实现",
+      "translation": "Paper and original implementation"
+    },
+    "3253645b4a593b25b29d1c0ad212b92db44469df6cdc2fcce7ab8dff634c265e": {
+      "source": "本模块参考 Lu、Liang、Kong 的载瓦语声调研究及配套重合成代码。经 2026-09-10 作者邮件许可，将相关 MATLAB 代码改写为 Python，并引用、署名和说明改写。代码改写许可与论文、原录音、统计数据的使用范围分别适用。",
+      "translation": "This module draws on Lu, Liang, and Kong's Zaiwa tone study and accompanying resynthesis code. With permission by author email on 2026-09-10, the MATLAB code was adapted to Python with citation, attribution, and adaptation notes. Permission to adapt code is separate from use of the paper, original recordings, and statistical data."
+    },
+    "cf3fd7ab8c432b7ec14b9eb50af4f7731ae301f4f5ce3a68f50891fdfda989cd": {
+      "source": "底栏的 <s id=\"0\">论文</s> 打开出版方页面，<s id=\"1\">原始仓库</s> 提供作者实现，<s id=\"2\">改写说明</s> 介绍本工具适配；<s id=\"3\">方法与引用</s> 可查看来源登记。",
+      "translation": "At the bottom, <s id=\"0\">Paper</s> opens the publisher page, <s id=\"1\">Original repository</s> provides the authors' implementation, <s id=\"2\">Adaptation notes</s> explains this tool's adaptation, and <s id=\"3\">Methods and references</s> shows source registration."
+    },
+    "6a11fd547944de2da1baa203be894b6388961417d953718ab6af8a55a4936ee5": {
+      "source": "效果需要结合材料判断",
+      "translation": "Judge performance against materials"
+    },
+    "4ac3575b0409b626f16ef7c7cf59290e844b7ea982df12190c28ffcfc150ffd0": {
+      "source": "本工具增加了 REAPER 嘎裂声 F0 提取、控制点编辑和任务对照等操作。合成效果不理想时，可检查材料、F0、脉冲与声道估计，也可尝试作者团队的官方代码。本工具适配未声明精确复现论文全部流程，其表现应与原方法分别判断。",
+      "translation": "This tool adds REAPER F0 extraction for creaky voice, control editing, and task comparisons. For poor synthesis, check materials, F0, pulses, and vocal-tract estimation, or try the authors' official code. This adaptation does not claim exact reproduction of the paper's full workflow; judge it separately from the original method."
+    },
+    "729f4a2a4083f2426b818b6bb75877b82f354448d9e9fe02d284dfcff16b7849": {
+      "source": "正式实验前的检查",
+      "translation": "Checks before formal experiments"
+    },
+    "991e5c0d6a0e9504b5a90045000f08441ace24468454766668f30d6fee297743": {
+      "source": "本模块用 LPC 残差操纵制作连续统刺激。步数表示控制比例分级，知觉间距和发声类别需通过听辨预测试核对。正式实验前，请保留输入、参数和版本，检查波形、实际 F0 及研究所需指标；涉及声门生理状态时还需相应生理测量。",
+      "translation": "This module manipulates LPC residuals to create continuum stimuli. Steps grade control ratios; perceptual spacing and phonation categories require listening pilots. Retain inputs, parameters, and versions, inspect waveforms, actual F0, and research metrics before formal experiments. Glottal physiological claims require appropriate physiological measurements."
+    },
+    "89b11309772f9800e080a1841b300f36cdf8da5d47f92e944242262b0dd82905": {
+      "source": "参考资料",
+      "translation": "References"
+    },
+    "5b530287226ab08f9b61115ea4e45526059b639be76107b349da91b36e83101f": {
+      "source": "<s id=\"0\">作者团队的官方仓库</s>",
+      "translation": "<s id=\"0\">Authors' official repository</s>"
+    },
+    "b531a61b59ec19d44ed7b67c849447ff0e0e39a551f76b587cfd58b13b742064": {
+      "source": "<s id=\"0\">Parselmouth 官方文档</s>",
+      "translation": "<s id=\"0\">Official Parselmouth documentation</s>"
+    },
+    "f5d09e8d3dfa130e94af1b919665797189119bb04d7df3d884924ecba83974f3": {
+      "source": "<s id=\"0\">REAPER 官方仓库</s>",
+      "translation": "<s id=\"0\">Official REAPER repository</s>"
+    }
+  }
+}

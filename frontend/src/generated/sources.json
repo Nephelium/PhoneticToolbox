@@ -6804,5 +6804,19 @@
       "source": "https://datav.aliyun.com/portal/school/atlas/area_selector",
       "documentation": "https://help.aliyun.com/zh/datav/datav-7-0/user-guide/datav-geoatlas-widgets/"
     }
+  },
+  {
+    "id": "LIB-VUE-I18N",
+    "title": "Vue I18n and Intlify runtime dependencies",
+    "modules": [],
+    "kind": "software-library",
+    "acknowledgement_group": "software",
+    "authors": "kazuya kawaguchi and Intlify contributors",
+    "version": "vue-i18n 11.4.16; @intlify/core-base 11.4.16, @intlify/devtools-types 11.4.16, @intlify/message-compiler 11.4.16, @intlify/shared 11.4.16, @vue/devtools-api 6.6.4",
+    "license": "MIT",
+    "urls": {
+      "repository": "https://github.com/intlify/vue-i18n",
+      "documentation": "https://vue-i18n.intlify.dev/"
+    }
   }
 ]

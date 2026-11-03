@@ -1,9 +1,10 @@
-import type {ObjectDirective} from 'vue';
+import {watch,type ObjectDirective} from 'vue';
+import {locale,tr} from '../i18n/index.ts';
 import {projects} from '../platform/browser.ts';
 import {fitPanels,layoutKey,panelWidth,type PanelLimit} from './panelWidths.ts';
 import styles from './resizablePanels.css?inline';
 
-interface Panel extends PanelLimit { selector:string; side:'left'|'right'; label:string; variable?:string; savedVariable?:string; initialFractionOfRemaining?:number }
+interface Panel extends PanelLimit { selector:string; side:'left'|'right'; label:string|(()=>string); variable?:string; savedVariable?:string; initialFractionOfRemaining?:number }
 export interface PanelLayout { key:string; legacyKey?:string; center:string; centerMin?:number; panels:Panel[]; disabled?:boolean }
 type Store={read<T>(key:string,fallback:T):T;write(key:string,value:unknown):boolean};
 const controllers=new WeakMap<HTMLElement,ReturnType<typeof resizePanels>>();
@@ -17,8 +18,7 @@ export function resizePanels(root:HTMLElement,options:PanelLayout,store:Store=pr
   const saved=raw&&typeof raw==='object'?raw as Record<string,unknown>:{};
   const entries=options.panels.map(panel=>{
     const variable=panel.variable??'--panel-'+panel.side,handle=doc.createElement('div');
-    handle.className='panel-resize-handle';handle.setAttribute('role','separator');handle.setAttribute('aria-orientation','vertical');handle.setAttribute('aria-label',panel.label+'宽度');handle.tabIndex=0;
-    handle.title='拖动边界调整宽度；方向键微调，Home / End 调至最小 / 最大';
+    handle.className='panel-resize-handle';handle.setAttribute('role','separator');handle.setAttribute('aria-orientation','vertical');handle.tabIndex=0;
     root.append(handle);
     const wanted=panelWidth(saved[panel.savedVariable??variable],panel);
     // Each nested layout owns its variables; never inherit the navigation width.
@@ -26,9 +26,20 @@ export function resizePanels(root:HTMLElement,options:PanelLayout,store:Store=pr
     return {panel,variable,handle,wanted,width:panel.initial,max:panel.max,visible:false,automatic:typeof saved[panel.savedVariable??variable]!=='number'&&typeof panel.initialFractionOfRemaining==='number'};
   });
   const message=doc.createElement('span');message.className='panel-resize-message';message.setAttribute('role','status');root.append(message);
-  let frame=0,dead=false,disabled=!!options.disabled;
+  let frame=0,dead=false,disabled=!!options.disabled,saveFailed=false;
   type Entry=typeof entries[number];
   let drag:{entry:Entry;id:number;x:number;width:number;scale:number;shield:HTMLElement;wanted:number;automatic:boolean}|undefined;
+  function display(){
+    for(const e of entries){
+      const label=typeof e.panel.label==='function'?e.panel.label():e.panel.label;
+      e.handle.setAttribute('aria-label',tr('components.panel_width',{label}));
+      e.handle.title=tr('components.panel_resize_help');
+      e.handle.setAttribute('aria-valuetext',tr('components.panel_width_pixels',{width:Math.round(e.width)}));
+    }
+    message.textContent=saveFailed?tr('components.panel_width_save_failed'):'';
+  }
+  const stopLocale=watch(locale,display,{flush:'sync'});
+  display();
   const schedule=()=>{if(!dead){win.cancelAnimationFrame(frame);frame=win.requestAnimationFrame(measure);}};
   function measure(){
     if(dead)return;
@@ -59,12 +70,12 @@ export function resizePanels(root:HTMLElement,options:PanelLayout,store:Store=pr
       e.width=r.width/scale;e.max=Math.max(e.panel.min,Math.min(e.panel.max,e.width+content.width/scale-(options.centerMin??280)));
       const edge=e.panel.side==='left'?r.right:r.left;
       Object.assign(e.handle.style,{left:((edge-outer.left)/scale+root.scrollLeft-root.clientLeft-4)+'px',top:((Math.min(r.top,content.top)-outer.top)/scale+root.scrollTop-root.clientTop)+'px',height:((Math.max(r.bottom,content.bottom)-Math.min(r.top,content.top))/scale)+'px'});
-      e.handle.setAttribute('aria-valuemin',String(e.panel.min));e.handle.setAttribute('aria-valuemax',String(Math.round(e.max)));e.handle.setAttribute('aria-valuenow',String(Math.round(e.width)));e.handle.setAttribute('aria-valuetext',Math.round(e.width)+' 像素');
+      e.handle.setAttribute('aria-valuemin',String(e.panel.min));e.handle.setAttribute('aria-valuemax',String(Math.round(e.max)));e.handle.setAttribute('aria-valuenow',String(Math.round(e.width)));e.handle.setAttribute('aria-valuetext',tr('components.panel_width_pixels',{width:Math.round(e.width)}));
     }
   }
   function persist(){
     const widths={...saved,...Object.fromEntries(entries.map(e=>[e.panel.savedVariable??e.variable,e.wanted]))};
-    message.textContent=store.write(key,widths)?'':'栏宽未能保存，下次打开可能恢复默认宽度。';
+    saveFailed=!store.write(key,widths);display();
   }
   function finish(cancel=false){
     if(!drag)return;const d=drag;drag=undefined;
@@ -99,6 +110,6 @@ export function resizePanels(root:HTMLElement,options:PanelLayout,store:Store=pr
   mutation.observe(doc.documentElement,{attributes:true,attributeFilter:['style','data-columns']});
   for(const p of options.panels){const el=root.querySelector(p.selector);if(el)mutation.observe(el,{attributes:true,attributeFilter:['style','class']});}
   win.addEventListener('resize',schedule);win.addEventListener('blur',blur);root.addEventListener('scroll',schedule);schedule();
-  return {update(value:PanelLayout){if(!root.classList.contains('resizable-panels'))root.classList.add('resizable-panels');disabled=!!value.disabled;schedule();},destroy(){finish(true);dead=true;win.cancelAnimationFrame(frame);resize.disconnect();mutation.disconnect();win.removeEventListener('resize',schedule);win.removeEventListener('blur',blur);root.removeEventListener('scroll',schedule);entries.forEach(e=>e.handle.remove());message.remove();}};
+  return {update(value:PanelLayout){if(!root.classList.contains('resizable-panels'))root.classList.add('resizable-panels');disabled=!!value.disabled;for(const e of entries){const panel=value.panels.find(p=>p.selector===e.panel.selector&&p.side===e.panel.side);if(panel)e.panel={...e.panel,label:panel.label};}display();schedule();},destroy(){finish(true);dead=true;stopLocale();win.cancelAnimationFrame(frame);resize.disconnect();mutation.disconnect();win.removeEventListener('resize',schedule);win.removeEventListener('blur',blur);root.removeEventListener('scroll',schedule);entries.forEach(e=>e.handle.remove());message.remove();}};
 }
 export const vResizablePanels:ObjectDirective<HTMLElement,PanelLayout>={mounted(el,{value}){controllers.set(el,resizePanels(el,value));},updated(el,{value}){controllers.get(el)?.update(value);},unmounted(el){controllers.get(el)?.destroy();controllers.delete(el);}};

@@ -1,3 +1,5 @@
+import {uiError,uiErrorMessage,uiMessage,joinMessages} from '../module-localization.ts';
+import {tr} from '../../i18n/index.ts';
 import type {LpcResult} from './state.ts';
 
 /** Explicit relative display only; neither saved FFT nor LPC values are edited. */
@@ -12,11 +14,11 @@ export function referenceTrace(result:LpcResult){
 export function axisLimits(result:LpcResult,dynamic:boolean,minimum:unknown,maximum:unknown):[number,number]{
   if(dynamic){
     const values=result.spectrum.magnitude_db.filter((_,i)=>result.spectrum.frequencies_hz[i]<=result.config.freq_max_hz);
-    if(!values.length)throw Error('当前频率范围没有可显示的谱值。');
+    if(!values.length)throw uiError(uiMessage("modules.lpc-spectrum.no_spectral_values_to_display_in_this_frequency_range"));
     return [Math.min(...values)-5,Math.max(...values)+5];
   }
   const a=Number(minimum),b=Number(maximum);
   if(String(minimum).trim()===''||String(maximum).trim()===''||!Number.isFinite(a)||!Number.isFinite(b)||a<-200||b>100||b<=a)
-    throw Error('固定纵轴须满足 −200 ≤ dB 下限 < 上限 ≤ 100。');
+    throw uiError(uiMessage("modules.lpc-spectrum.fixed_vertical_axis_requires_200_minimum_db_maximum_db"));
   return [a,b];
 }

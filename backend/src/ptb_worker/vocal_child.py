@@ -80,7 +80,7 @@ def main():
                 if op in ('status','heartbeat','preview','live','audio/test','animation/play'):
                     value['playback_generation']=runtime.live.output_history.generation
                 result={'ok':True,'value':value}
-            except (ValueError,TypeError,KeyError,OverflowError) as exc:result={'ok':False,'error':str(exc)}
+            except (ValueError,TypeError,KeyError,OverflowError) as exc:result={'ok':False,'error':str(exc),**({'display':exc.display} if hasattr(exc,'display') else {})}
             except ImportError:result={'ok':False,'error':'服务器视频编码组件尚未准备，请稍后重试。'}
             except (OSError,RuntimeError):result={'ok':False,'error':'声道计算失败，请重新打开工作区后重试。'}
             result['request_id']=message['request_id']

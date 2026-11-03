@@ -1,10 +1,11 @@
 <script setup lang="ts">
+import {tr} from '../i18n/index.ts';
 import { computed,ref,onMounted,onUnmounted } from 'vue';import type { Workspace } from '../state/workspace.ts';import { envelope,selection,positionSelection } from '../platform/wav.ts';
 import SpectrogramViewport from './SpectrogramViewport.vue';import type {Spectrogram,SpectrogramView} from '../platform/research.ts';
 import {useAudioSelection} from '../state/audio-selection.ts';
 import {stop} from '../state/audio.ts';
 import {playback,isCurrentAudio} from '../state/audio.ts';import {amplitudeLimit,amplitudeLabel,sampleWavePath,endpointClickTime} from '../platform/waveform.ts';
-const props=withDefaults(defineProps<{state:Workspace;emptyMessage?:string;spectrogramLoader?:(view:SpectrogramView)=>Promise<Spectrogram>;spectrogramSelectable?:boolean;maxWindowSeconds?:number;compactOverview?:boolean;overviewTop?:boolean;hideOverviewControls?:boolean;autoAmplitude?:boolean;normalizeDisplay?:boolean;clickMovesSelection?:boolean;selectionRequiresShift?:boolean;doubleClickAction?:'zoom'|'annotation';shiftWheelPan?:boolean;continuousDetail?:boolean;trackHeight?:number;hideTimeAxis?:boolean;timelineDuration?:number;pixelAnnotations?:boolean;timeAxisInsets?:{left:number;right:number}}>(),{autoAmplitude:true,continuousDetail:true,emptyMessage:'选择音频后显示实际波形。'});let anchor:number|null=null,anchorX=0,selectionLength=0,dragged=false,boundaryDrag=false;
+const props=withDefaults(defineProps<{state:Workspace;emptyMessage?:string;spectrogramLoader?:(view:SpectrogramView)=>Promise<Spectrogram>;spectrogramSelectable?:boolean;maxWindowSeconds?:number;compactOverview?:boolean;overviewTop?:boolean;hideOverviewControls?:boolean;autoAmplitude?:boolean;normalizeDisplay?:boolean;clickMovesSelection?:boolean;selectionRequiresShift?:boolean;doubleClickAction?:'zoom'|'annotation';shiftWheelPan?:boolean;continuousDetail?:boolean;trackHeight?:number;hideTimeAxis?:boolean;timelineDuration?:number;pixelAnnotations?:boolean;timeAxisInsets?:{left:number;right:number}}>(),{autoAmplitude:true,continuousDetail:true});const emptyMessage=computed(()=>props.emptyMessage??tr('components.choose_audio_to_display_its_waveform'));let anchor:number|null=null,anchorX=0,selectionLength=0,dragged=false,boundaryDrag=false;
 const emit=defineEmits<{'selection-end':[start:number,end:number];'time-double-click':[time:number,ctrl:boolean];'boundary-start':[event:PointerEvent,time:number,tolerance:number];'boundary-move':[event:PointerEvent,time:number];'boundary-end':[]}>();
 const selectionGroup=useAudioSelection();const unregister=selectionGroup?.register(()=>props.state);onUnmounted(()=>unregister?.());
 function select(){selectionGroup?.select(props.state);stop();}
@@ -78,29 +79,29 @@ function wheel(event:WheelEvent){
 <template>
 <div ref="viewport" class="wave-viewport" :data-selection-active="selectionGroup?.selected(state)" :style="insetStyle" :class="{'compact-overview':compactOverview,'top-overview':overviewTop,'amplitude-scaled':autoAmplitude}">
 <div v-if="!compactOverview" class="wave-toolbar">
-<span>原始波形 <small>· 振幅 / 秒</small>
+<span>{{tr('components.original_waveform')}} <small>{{tr('components.amplitude_seconds')}}</small>
 </span>
 <div>
-<button :disabled="state.zoom<=minZoom" aria-label="缩小波形" @click="zoom(state.zoom/2)">−</button>
+<button :disabled="state.zoom<=minZoom" :aria-label="tr('components.zoom_out_waveform')" @click="zoom(state.zoom/2)">−</button>
 <span class="mono">{{Number(state.zoom.toFixed(1))}}×</span>
-<button :disabled="state.zoom>=maxZoom" aria-label="放大波形" @click="zoom(state.zoom*2)">+</button>
-<button @click="zoom(1);state.offset=0">适合窗口</button>
+<button :disabled="state.zoom>=maxZoom" :aria-label="tr('components.zoom_in_waveform')" @click="zoom(state.zoom*2)">+</button>
+<button @click="zoom(1);state.offset=0">{{tr('components.fit_window')}}</button>
 </div>
 </div>
-<div v-if="!compactOverview" class="display-options"><slot name="controls"/><label v-if="state.asset&&state.asset.channels.length>1"><input v-model="state.showBoth" type="checkbox"/>显示两个声道</label><label v-if="spectrogramLoader"><input v-model="state.showSpectrogram" type="checkbox"/>显示语谱图（Praat）</label><small class="muted">振幅随可见窗调整 · 细节显示原始采样点</small></div>
+<div v-if="!compactOverview" class="display-options"><slot name="controls"/><label v-if="state.asset&&state.asset.channels.length>1"><input v-model="state.showBoth" type="checkbox"/>{{tr('components.show_both_channels')}}</label><label v-if="spectrogramLoader"><input v-model="state.showSpectrogram" type="checkbox"/>{{tr('components.show_spectrogram_praat')}}</label><small class="muted">{{tr('components.amplitude_follows_the_visible_window_original_samples_shown_in')}}</small></div>
 <div v-if="!state.asset&&emptyMessage" class="wave-track waveform-placeholder" :aria-busy="state.loading||undefined">
-<div v-if="!compactOverview" class="track-label"><span>波形</span><small>等待音频</small></div>
+<div v-if="!compactOverview" class="track-label"><span>{{tr('components.waveform')}}</span><small>{{tr('components.waiting_for_audio')}}</small></div>
 <svg :viewBox="'0 0 '+waveformBox.width+' '+waveformBox.height" :style="trackHeight?{height:trackHeight+'px'}:undefined" role="img" :aria-label="emptyMessage"/>
 <p class="wave-empty-message">{{emptyMessage}}</p>
-<div v-if="!hideTimeAxis" class="time-axis" aria-label="波形时间轴（秒）"><span v-for="i in 5" :key="i">—{{i===5?' s':''}}</span></div>
+<div v-if="!hideTimeAxis" class="time-axis" :aria-label="tr('components.waveform_time_axis_s')"><span v-for="i in 5" :key="i">—{{i===5?' s':''}}</span></div>
 </div>
 <div v-for="track in tracks" :key="track.index" class="wave-track">
 <div v-if="!compactOverview||state.showBoth" class="track-label">
-<span>声道 {{track.index+1}}</span>
-<small>{{track.index===state.channel?'试听声道':'原始数据'}}</small>
+<span>{{tr('components.channel')}} {{track.index+1}}</span>
+<small>{{track.index===state.channel?tr('components.playback_channel'):tr('components.original_data')}}</small>
 </div>
-<div v-if="autoAmplitude" class="amplitude-axis" aria-label="波形振幅刻度" :data-limit="track.limit"><span v-for="(value,i) in [track.limit,0,-track.limit]" :key="i" :style="{top:(8.888889+i*41.111111)+'%'}">{{amplitudeLabel(value)}}</span></div>
-<svg :viewBox="'0 0 '+waveformBox.width+' '+waveformBox.height" preserveAspectRatio="none" role="img" tabindex="0" :data-start="left" :data-end="left+windowLength" :style="trackHeight?{height:trackHeight+'px'}:undefined" :aria-label="'声道 '+(track.index+1)+' 原始波形；拖动选择时间范围'" @wheel="wheel" @dblclick="double" @pointerdown="down" @pointermove="move" @pointerup="up" @pointercancel="cancel">
+<div v-if="autoAmplitude" class="amplitude-axis" :aria-label="tr('components.waveform_amplitude_scale')" :data-limit="track.limit"><span v-for="(value,i) in [track.limit,0,-track.limit]" :key="i" :style="{top:(8.888889+i*41.111111)+'%'}">{{amplitudeLabel(value)}}</span></div>
+<svg :viewBox="'0 0 '+waveformBox.width+' '+waveformBox.height" preserveAspectRatio="none" role="img" tabindex="0" :data-start="left" :data-end="left+windowLength" :style="trackHeight?{height:trackHeight+'px'}:undefined" :aria-label="tr('components.channel_529')+(track.index+1)+tr('components.original_waveform_drag_to_select_a_time_range')" @wheel="wheel" @dblclick="double" @pointerdown="down" @pointermove="move" @pointerup="up" @pointercancel="cancel">
 <g :transform="pixelAnnotations?'scale('+waveformBox.width/1000+' '+waveformBox.height/90+')':undefined">
 <path d="M0 45H1000" class="wave-baseline"/>
 <rect :x="x(state.start)" y="0" :width="Math.max(0,x(state.end)-x(state.start))" height="90" class="wave-selection"/>
@@ -109,29 +110,29 @@ function wheel(event:WheelEvent){
 </g>
 <slot name="annotations" :x="(t:number)=>x(t)*waveformBox.width/1000" :height="waveformBox.height" :start="left" :end="left+windowLength"/>
 </svg>
-<div v-if="!hideTimeAxis" class="time-axis" aria-label="波形时间轴（秒）"><span v-for="i in 5" :key="i">{{(left+(i-1)*windowLength/4).toFixed(windowLength<.1?4:3)}}{{i===5?' s':''}}</span></div>
+<div v-if="!hideTimeAxis" class="time-axis" :aria-label="tr('components.waveform_time_axis_s')"><span v-for="i in 5" :key="i">{{(left+(i-1)*windowLength/4).toFixed(windowLength<.1?4:3)}}{{i===5?' s':''}}</span></div>
 </div>
 <div v-if="state.showSpectrogram&&spectrogramLoader" class="wave-aligned-layer">
 <SpectrogramViewport :loader="spectrogramLoader" :start="left" :end="left+windowLength" :channel="state.channel" :width="width" :selectable="spectrogramSelectable" :selection-start="state.start" :selection-end="state.end" @selection-end="selectSpectrogram" @view-wheel="wheel" @view-double-click="double"/>
-<div class="time-axis spectrogram-time-axis" aria-label="语谱图时间轴（秒）">
+<div class="time-axis spectrogram-time-axis" :aria-label="tr('components.spectrogram_time_axis_s')">
 <span v-for="i in 5" :key="i">{{(left+(i-1)*windowLength/4).toFixed(windowLength<.1?4:3)}}{{i===5?' s':''}}</span>
 </div>
 </div>
 <div v-if="$slots.timeline" class="wave-aligned-layer"><slot name="timeline" :start="left" :end="left+windowLength"/></div>
 <div v-if="compactOverview&&!hideOverviewControls" class="wave-toolbar overview-controls">
-<strong>音频总览</strong>
-<label v-if="state.asset&&state.asset.channels.length>1"><input v-model="state.showBoth" type="checkbox"/>显示两个声道</label>
+<strong>{{tr('components.audio_overview')}}</strong>
+<label v-if="state.asset&&state.asset.channels.length>1"><input v-model="state.showBoth" type="checkbox"/>{{tr('components.show_both_channels')}}</label>
 <div>
-<button :disabled="state.zoom<=minZoom" aria-label="缩小波形" @click="zoom(state.zoom/2)">−</button>
+<button :disabled="state.zoom<=minZoom" :aria-label="tr('components.zoom_out_waveform')" @click="zoom(state.zoom/2)">−</button>
 <span class="mono">{{Number(state.zoom.toFixed(1))}}×</span>
-<button :disabled="state.zoom>=maxZoom" aria-label="放大波形" @click="zoom(state.zoom*2)">+</button>
-<button @click="zoom(1);state.offset=0">适合窗口</button>
+<button :disabled="state.zoom>=maxZoom" :aria-label="tr('components.zoom_in_waveform')" @click="zoom(state.zoom*2)">+</button>
+<button @click="zoom(1);state.offset=0">{{tr('components.fit_window')}}</button>
 </div>
-<small><template v-if="clickMovesSelection">单击定位 · </template>{{selectionRequiresShift?'Shift＋拖动选区':'拖动选区'}} · Ctrl＋滚轮缩放<span v-if="shiftWheelPan"> · Shift＋滚轮平移</span><span v-if="maxWindowSeconds"> · 最多 {{maxWindowSeconds}} 秒视窗</span></small>
+<small><template v-if="clickMovesSelection">{{tr('components.click_to_seek')}} </template>{{selectionRequiresShift?tr('components.shift_drag_to_select'):tr('components.drag_to_select')}} {{tr('components.ctrl_wheel_to_zoom')}}<span v-if="shiftWheelPan"> {{tr('components.shift_wheel_to_pan')}}</span><span v-if="maxWindowSeconds"> {{tr('components.up_to')}} {{maxWindowSeconds}} {{tr('components.s_window')}}</span></small>
 </div>
-<label v-if="state.zoom>1" class="pan-label">时间窗起点 <input v-model.number="state.offset" type="range" min="0" :max="duration-windowLength" :step="1/(state.asset?.sampleRate||1)" aria-label="平移波形时间窗"/>
+<label v-if="state.zoom>1" class="pan-label">{{tr('components.time_window_start')}} <input v-model.number="state.offset" type="range" min="0" :max="duration-windowLength" :step="1/(state.asset?.sampleRate||1)" :aria-label="tr('components.pan_waveform_window')"/>
 </label>
-<p v-if="!compactOverview" class="hint">{{selectionRequiresShift?'Shift＋拖动选区':'拖动选区'}} · Ctrl＋滚轮缩放 · 双击{{maxWindowSeconds?'恢复总览':'显示全长'}}；时间控件可输入精确选区。</p>
+<p v-if="!compactOverview" class="hint">{{tr(selectionRequiresShift?(maxWindowSeconds?'components.waveform_hint_shift_reset':'components.waveform_hint_shift_full'):(maxWindowSeconds?'components.waveform_hint_reset':'components.waveform_hint_full'))}}</p>
 </div>
 </template>
 <style scoped>

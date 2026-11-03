@@ -8,10 +8,11 @@ from fastapi import APIRouter, Depends, HTTPException
 from pydantic import Field, JsonValue
 from psycopg.types.json import Jsonb
 from .models import WireModel
+from .language_codes import SUPPORTED_UI_LOCALES
 
 ModuleId = Literal['APP','M01','M02','M03','M04','M05','M06','M07','M08','M09','M10','M11','M12','M13','M14','M15','M16','M17','M18']
 FIELDS = {
- 'APP': 'theme palette collapsed buttonAppearance waveformAppearance pageScale backgroundAppearance customPaletteColor homeIconScale fonts panelWidths automaticAudioGain',
+ 'APP': 'theme palette collapsed buttonAppearance waveformAppearance pageScale backgroundAppearance customPaletteColor homeIconScale fonts panelWidths automaticAudioGain uiLocale',
  'M01': 'settings sameDirectory recursive parameters showBoth showSpectrogram max_duration_s audio_channel egg panelWidths',
  'M02': 'groups reaper correction recursive showBoth showSpectrogram panelWidths',
  'M03': 'autoDbEnabled order signal_mode flip_channels micro_width_ms gci_method goi_method peak_prominence valley_prominence auto_prominence highpass_cutoff lowpass_cutoff spec_window_ms spec_vmin spec_vmax keep_praat_f0 keep_gci_f0 keep_reaper_f0 f0_min_hz f0_max_hz silence_threshold generate_images batchConfig showBoth showSpectrogram panelWidths',
@@ -66,6 +67,7 @@ PRIMITIVE_MAPS.update('frame.models.'+speaker+'.source' for speaker in ('JD2','W
 NESTED = {key:text.split() for key,text in NESTED.items()}
 
 def validate_values(module, values):
+    if module=='APP' and 'uiLocale' in values and (not isinstance(values['uiLocale'],str) or values['uiLocale'] not in SUPPORTED_UI_LOCALES):raise ValueError('invalid_settings_field')
     if module=='APP' and 'automaticAudioGain' in values and type(values['automaticAudioGain']) is not bool:raise ValueError('invalid_settings_field')
     if module=='M15' and 'playbackVolume' in values:
         volume=values['playbackVolume']

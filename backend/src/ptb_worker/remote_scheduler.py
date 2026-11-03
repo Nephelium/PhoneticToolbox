@@ -9,7 +9,7 @@ import json
 import secrets
 from uuid import uuid4
 
-from .store import JobError, canonical
+from .store import JobError, canonical, QUEUE_WAIT_SECONDS
 
 OPERATIONS = frozenset({'lpc_analysis', 'egg_analysis', 'acoustic_analysis'})
 NETWORK_ERRORS = frozenset({'network_error', 'transfer_stalled', 'lease_expired'})
@@ -167,7 +167,8 @@ class RemoteCoordinator:
                 code = 'transfer_stalled'
             if code: self._end(tx, a, j, code, code in NETWORK_ERRORS)
         for row in self.sql(tx, '''SELECT j.* FROM {jobs} j JOIN @remote_jobs r ON j.id=r.job_id
-                WHERE j.state='queued' AND j.deadline<=?''', (now,)).fetchall():
+                WHERE j.state='queued' AND ((j.generation=0 AND j.created_at<=?)
+                    OR (j.generation>0 AND j.deadline<=?))''', (now-QUEUE_WAIT_SECONDS,now)).fetchall():
             j = dict(row)
             tx.execute("UPDATE {jobs} SET state='failed',error_code='deadline_exceeded' WHERE id=?", (j['id'],))
             j['state'] = 'failed'; self.store._event(tx, j, 'deadline_exceeded', now)
@@ -240,6 +241,11 @@ class RemoteCoordinator:
                 j['state'] = 'failed'; self.store._event(tx, j, error.code, now); continue
             aid = str(uuid4()); location = node['id'] if node else 'server'
             worker = 'remote:'+aid; gen = j['generation']+1
+            # Initial queue wait is separate from execution. Network retries keep
+            # the first attempt's absolute deadline and cannot renew the budget.
+            if j['generation']==0:
+                j['deadline']=now+max(0,j['deadline']-j['created_at'])
+                tx.execute('UPDATE {jobs} SET deadline=? WHERE id=?',(j['deadline'],j['id']))
             lease = min(now+(self.policy.lease_seconds if node else self.store.lease_seconds), j['deadline'])
             if node:
                 lease = min(lease, node['token_until'], *(i['expires_at'] for i in inputs))

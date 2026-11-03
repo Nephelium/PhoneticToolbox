@@ -76,7 +76,10 @@ class LocalService:
                     process.wait(timeout=10)
                 except subprocess.TimeoutExpired:
                     process.terminate()
-                    process.wait(timeout=5)
+                    try:process.wait(timeout=5)
+                    except subprocess.TimeoutExpired:
+                        process.kill()
+                        process.wait(timeout=5)
             self.exit_code = process.returncode
         finally:
             process.stdin.close()

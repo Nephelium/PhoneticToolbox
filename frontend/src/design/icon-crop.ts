@@ -1,3 +1,6 @@
+import {messageRef} from '../i18n/index.ts';
+import {uiMessage,uiError,uiErrorMessage,localized} from '../modules/module-localization.ts';
+import {tr} from '../i18n/index.ts';
 export interface IconCrop {x:number;y:number;width:number;height:number}
 export interface IconBackgroundRemoval {enabled:boolean;color:string;tolerance:number}
 /** Remove edge-connected colour only, preserving isolated details of that colour. */
@@ -23,7 +26,7 @@ export function resizeIconCrop(crop:IconCrop,w:number,h:number,width:number,heig
 }
 export function renderIconCrop(image:HTMLImageElement,crop:IconCrop,canvas:HTMLCanvasElement,removal?:IconBackgroundRemoval){
  canvas.width=canvas.height=256;
- const context=canvas.getContext('2d');if(!context)throw Error('当前环境无法处理图片。');
+ const context=canvas.getContext('2d');if(!context)throw uiError(uiMessage('state.images_cannot_be_processed_in_this_environment'));
  const scale=256/Math.max(crop.width,crop.height),w=crop.width*scale,h=crop.height*scale;
  context.clearRect(0,0,256,256);context.drawImage(image,crop.x,crop.y,crop.width,crop.height,(256-w)/2,(256-h)/2,w,h);
  if(removal?.enabled){const data=context.getImageData(0,0,256,256),color=[1,3,5].map(i=>parseInt(removal.color.slice(i,i+2),16)) as [number,number,number];removeIconBackground(data.data,256,256,color,removal.tolerance);context.putImageData(data,0,0);}

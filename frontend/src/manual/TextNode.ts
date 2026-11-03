@@ -1,3 +1,4 @@
+import {tr} from '../i18n/index.ts';
 import {defineComponent,h,type PropType,type VNodeChild} from 'vue';
 import type {ManualNode,ManualTarget} from './types.ts';
 import {safeLink,validStableId} from './content.ts';
@@ -22,8 +23,8 @@ export default defineComponent({
         const href=safeLink(mark.attrs?.href);
         if(href?.startsWith('#')&&validStableId(href.slice(1)))value=h('a',{href:'#'+href.slice(1),onClick:(event:MouseEvent)=>{event.preventDefault();emit('navigate',{chapterId:props.chapterId,targetId:href.slice(1)});}},[value]);
         else if(href)value=h('a',{href,target:/^https?:/i.test(href)?'_blank':undefined,rel:'noopener noreferrer'},[value]);
-        else value=h('span',{class:'manual-invalid-link',title:'此链接无效，文字已保留。'},[value]);
-      }else value=h('span',{class:'manual-unsupported-mark',title:'尚未支持的文字格式：'+mark.type},[value]);
+        else value=h('span',{class:'manual-invalid-link',title:tr('manual.reader.invalidLink')},[value]);
+      }else value=h('span',{class:'manual-unsupported-mark',title:tr('manual.reader.unsupportedMark',{type:mark.type})},[value]);
     }return value;
   };}
 });

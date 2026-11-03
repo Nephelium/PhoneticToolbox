@@ -11,10 +11,12 @@ class MemoryAccountStore:
     def get_user(self, username):
         return self.users.get(username)
     def allow_login(self, username, ip):
-        keys = [('user:'+username,10),('ip:'+ip,50)]
+        keys = [('user-ip:'+username+'\0'+ip,10),('ip:'+ip,50)]
         for key,limit in keys:
             self.attempts[key] = self.attempts.get(key,0)+1
         return all(self.attempts[key]<=limit for key,limit in keys)
+    def login_succeeded(self,username,ip):
+        self.attempts['user-ip:'+username+'\0'+ip]=0
     def issue_session(self,user,token_hash,csrf,expires,old_hash):
         self.revoke(old_hash)
         self.sessions[token_hash] = dict(id=user['id'],username=user['username'],csrf_token=csrf,expires_at=expires,revoked=False)

@@ -1,4 +1,5 @@
 """M08 desktop transport to the same durable HTTP service, no scientific work."""
+from .native_i18n import native_error
 import base64
 import hashlib
 import os
@@ -65,7 +66,7 @@ class M08Bridge:
         job=self.service.get('/api/v1/jobs/'+str(UUID(body['job'])))
         if job['operation']!='pitch_manipulation' or job['state']!='succeeded':raise FileAccessError('结果未完成。')
         item=next((f for f in job['result_manifest']['files'] if f['id']==body['id'] and f['name'].endswith('.wav')),None)
-        if not item or item['id'] in job['result_manifest'].get('deleted',[]):raise FileAccessError('结果不可用。')
+        if not item or item['id'] in job['result_manifest'].get('deleted',[]):raise native_error(FileAccessError('结果不可用。'),'errors.m08.resultUnavailable')
         direct=body.get('direct') is True
         name=job['result_manifest'].get('aliases',{}).get(item['id'],item['name'])
         sequence_prefix=''

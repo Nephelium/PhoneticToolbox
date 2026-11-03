@@ -1,0 +1,23 @@
+{
+  "schema": "ptb-website-videos/1",
+  "files": [
+    {
+      "file": "v3.0.4-vocal-tract-chunjiang.mp4",
+      "source": "井井提供的春江花月夜.mp4",
+      "usage": "试听小实验 / 生理参数合成；v3.0.4更新小记",
+      "transformation": "逐字节复制，保留H.264/AAC音视频",
+      "duration_seconds": 2.36,
+      "width": 1280,
+      "height": 720,
+      "bytes": 662593,
+      "sha256": "c0f19521fdde5e2c34162588280e57b906975bb640744e405f0f4d827a7766ae"
+    },
+    {
+      "file": "v3.0.4-vocal-tract-chunjiang.jpg",
+      "source": "v3.0.4-vocal-tract-chunjiang.mp4",
+      "transformation": "FFmpeg提取0.4秒画面，JPEG q:v=2",
+      "bytes": 69466,
+      "sha256": "9b8d236bb51cb6ee5371ef99c9f35a55fc2614797f6c959617be8ba701a89794"
+    }
+  ]
+}

@@ -1,0 +1,666 @@
+{
+  "schemaVersion": "ptb-manual-localization/1",
+  "locale": "en",
+  "entries": {
+    "bc4f43e39350467cb5922fee1312ae2dbcedff2058cc7f97c319940108246588": {
+      "source": "MFA 自动标注",
+      "translation": "MFA alignment"
+    },
+    "161b7ba5c72213b324d8cc8c511492ed1ee9fe22722d3fe32af460bf2506f757": {
+      "source": "安装独立 MFA 组件，选择配套模型、词典和转写，完成资源检查、对齐、取消与恢复，保存 TextGrid 和溯源文件后人工复核。",
+      "translation": "Install separate MFA components, choose matching models, dictionaries and transcripts, check resources, align, cancel or recover tasks, then save TextGrid and provenance files for manual review."
+    },
+    "f2b8c2de04db91586664c16c63bab1d796967b29d88c7a2b562e24a17b366537": {
+      "source": "视频教程：<s id=\"0\">观看本章视频</s>。",
+      "translation": "Video tutorial: <s id=\"0\">watch this chapter's video</s>."
+    },
+    "14837fff53f44b0116b66ea6f352d23677be9cc04342622c8d68e2b4a1ef8d8c": {
+      "source": "用途与输入准备",
+      "translation": "Purpose and input preparation"
+    },
+    "50541916e114bcaf8ff4a2b5076e27eb4c83fc8c9e42dbf3ad0e9a3f1043ce9a": {
+      "source": "MFA 自动标注把<s id=\"0\">已有转写与录音</s>强制对齐，生成词和音素时间边界的 TextGrid。适合已经知道录音内容、需要初步标注的语料。词层的单位由转写分词和词典决定。",
+      "translation": "MFA force-aligns <s id=\"0\">existing transcripts and recordings</s>, producing TextGrid word and phone boundaries. Use it for preliminary annotation when the recorded content is already known. Word-tier units depend on transcript tokenization and the dictionary."
+    },
+    "2f90b6f0cd675e545c20cffa786cf396bbdd4391c65d1a8b946aa061b9a0fb0a": {
+      "source": "使用前核对文字，完成后检查边界。<s id=\"0\">自动边界需要人工复核。</s> 请先准备录音对应的转写。",
+      "translation": "Check the transcript before use and the boundaries afterward. <s id=\"0\">Automatic boundaries require manual review.</s> Prepare a transcript corresponding to the recording first."
+    },
+    "3b2f1ce56b8d8f1399abcba2b65cac6758aef7301e715b15bcb2c7f3681c60ae": {
+      "source": "继续阅读 TextGrid标注与人工复核",
+      "translation": "Continue to TextGrid annotation and manual review"
+    },
+    "f5f8f672ee30c57452ad33ed94004af49947ebd2a3c2504b60395875ea92a76f": {
+      "source": "当前本地流程使用 <s id=\"0\">Windows x86_64 的 MFA 3.3.8</s>。MFA 3.3.8 对齐组件使用 CPU。主程序与 MFA 独立组件分开提供，首次使用需安装组件。资源就绪后，本地对齐可离线运行。",
+      "translation": "The current local workflow uses <s id=\"0\">MFA 3.3.8 on Windows x86_64</s>. The MFA 3.3.8 alignment component uses the CPU. The main application and separate MFA components are provided separately; install components before first use. Once resources are ready, local alignment works offline."
+    },
+    "5332a4cd013ce9a374380cfc00804d258780b25346b3307024193a64be450853": {
+      "source": "输入准备",
+      "translation": "Input preparation"
+    },
+    "c55a9ae1a650582c85f80b6285ca63fe6049c2df55bf89ae64e3f6d0891901d0": {
+      "source": "先用一份短 WAV 和同名 LAB/TXT 跑通流程。试听录音，核对漏词、重复词及未读出的文字。转写只写实际内容，建议保存为 <s id=\"0\">UTF-8</s>，备注另存。",
+      "translation": "First complete the workflow with a short WAV and matching LAB/TXT. Listen for omitted, repeated or unspoken words. Transcribe only actual speech; save as <s id=\"0\">UTF-8</s> and keep notes separately."
+    },
+    "b5b2271f91d4309492a6871b5a2ec13d5de9bc6cd415837caf4e63ab2c44da6a": {
+      "source": "音频与转写的配对",
+      "translation": "Pairing audio and transcripts"
+    },
+    "56296f7f5fed45fe9398dfb4beb28376e6cda894694538286ac76355908c3326": {
+      "source": "每份 WAV 配一份<s id=\"0\">同目录、同基本名</s>的 LAB、TXT 或 TextGrid，例如 <s id=\"1\">sample.wav</s> 配 <s id=\"2\">sample.lab</s>。不同说话人子目录可保留同名文件。",
+      "translation": "Each WAV needs a LAB, TXT or TextGrid in the <s id=\"0\">same folder with the same base name</s>, such as <s id=\"1\">sample.wav</s> and <s id=\"2\">sample.lab</s>. Different speaker subfolders may retain identical filenames."
+    },
+    "fc0962e951d9aeec7233d5fa15d24642f191a2a6ef52ab1661f6224196580495": {
+      "source": "单任务最多 <s id=\"0\">100 份 WAV</s>，每份最多 <s id=\"1\">120 秒</s>，接受单/双声道，总输入最多 <s id=\"2\">64 MB（64,000,000 B）</s>。超限时分批或自行切分并准备对应转写。",
+      "translation": "A task accepts up to <s id=\"0\">100 WAV files</s>, each up to <s id=\"1\">120 seconds</s>, mono or stereo, with total input up to <s id=\"2\">64 MB (64,000,000 B)</s>. For larger input, split batches or recordings and prepare matching transcripts."
+    },
+    "4c08e786aca1d31290c66dfd8afdfb4b1098c08e30625f36c0c62dc324a0361f": {
+      "source": "目录读取最多 10,000 条目，单份转写非空且不超过 2 MB。相对 WAV 路径最多 110 个 UTF-8 字节，路径提示超长时选更具体的目录或缩短语料副本路径。",
+      "translation": "Folder reading supports up to 10,000 entries. Each transcript must be nonempty and no larger than 2 MB. Relative WAV paths support up to 110 UTF-8 bytes; if a path is too long, select a more specific folder or shorten the corpus copy's path."
+    },
+    "0c997d8c5e48520ffc83f671f68c2a9327c1a69aa7feaaff488b013c74cc0cbf": {
+      "source": "<s id=\"0\">自动 · 唯一同名转写</s>要求每份 WAV 只有一个候选。LAB、TXT、TextGrid 共存时，在<s id=\"1\">转写来源</s>中明确选一种。<s id=\"2\">更改来源后，必须重新读取目录或导入文件。</s> 所选格式缺失时不会改用另一格式。",
+      "translation": "<s id=\"0\">Automatic · unique matching transcript</s> requires a single candidate per WAV. When LAB, TXT and TextGrid coexist, choose one under <s id=\"1\">Transcript source</s>. <s id=\"2\">After changing the source, reload the folder or import the files again.</s> A missing selected format does not fall back to another format."
+    },
+    "858389d56f9572f9e0aa7c5307825df4381d3c7aef0760bf17e1cc1f69068a11": {
+      "source": "TextGrid 可使用独立转写区间层。若没有可用独立转写层，且只有一个非空 <s id=\"0\">words</s> 层，程序会按顺序取其词标签重新对齐，<s id=\"1\">原 words 边界不约束新结果。</s> <s id=\"2\">phones</s> 层不能作词转写。原文件保留。",
+      "translation": "TextGrid may use a dedicated transcript interval tier. If no suitable dedicated tier exists and there is one nonempty <s id=\"0\">words</s> tier, its labels are taken in order for new alignment. <s id=\"1\">Original words boundaries do not constrain the new results.</s> The <s id=\"2\">phones</s> tier cannot supply word transcripts. Originals are retained."
+    },
+    "66e38cc5b2b45519c1561b0f737f1a7308eeebd995bcb15ca24a1a87bf1adcbb": {
+      "source": "工作台与初始配置",
+      "translation": "Workbench and initial setup"
+    },
+    "096a6f7423f6e52ade7e882a2278fa9f2cdd3467b883317ebf594193a3f000cd": {
+      "source": "<s id=\"0\">左栏</s>：安装独立组件，选择环境、模型、词典，检查新资源，设置 Beam 和 Retry beam。<s id=\"1\">组件、资源与校验信息</s>可查看版本及摘要。",
+      "translation": "<s id=\"0\">Left panel</s>: install components; select the environment, model and dictionary; check new resources; and set Beam and Retry beam. <s id=\"1\">Component, resource and verification details</s> shows versions and digests."
+    },
+    "b1fe429203596b65b1f1cd7aae353bbb04de24780823091783e6379374f8cb20": {
+      "source": "<s id=\"0\">中区</s>：选转写来源，核对文件清单和组数，选择输出目录。清单无逐行勾选，提交包含全部已读入语料。",
+      "translation": "<s id=\"0\">Center</s>: choose the transcript source, check the file list and pair count, and select the output folder. The list has no per-row selection; submission includes all loaded corpus files."
+    },
+    "2aefff41bacad80bc28b18fcc3721ea76e2aa5687852dcc8dda2cc33c0a2c619": {
+      "source": "<s id=\"0\">右栏</s>：运行或取消任务，选择历史任务、刷新状态、查看日志及保存成果。顶部另有<s id=\"1\">保存参数草稿</s>、<s id=\"2\">帮助</s>和<s id=\"3\">方法与引用</s>。",
+      "translation": "<s id=\"0\">Right panel</s>: run/cancel tasks, select history, refresh status, view logs and save results. The top also provides <s id=\"1\">Save parameter draft</s>, <s id=\"2\">Help</s> and <s id=\"3\">Methods and references</s>."
+    },
+    "2f45df6abee987e1546ab8be565b8f3f3a2c0b1c3d88726ef88f352da4aa831b": {
+      "source": "MFA 工作台初始配置。左栏准备环境、模型与词典，中区读取配对语料，右栏查看任务和成果。",
+      "translation": "Initial MFA setup: prepare the environment, model and dictionary on the left, load paired files in the center, and view tasks and results on the right."
+    },
+    "8eeccb957218c9746a3a85703cc8c5d718ffbaf07104aa1d566b2502f04b7f8b": {
+      "source": "最大化 MFA 自动标注初始工作台，环境与模型未选择，语料及结果为空，Beam 100 与 Retry beam 400。",
+      "translation": "Maximized initial MFA workbench: no environment or model selected, empty corpus and results, Beam 100 and Retry beam 400."
+    },
+    "68de12645b83234e09306faeecdca52854173430ab1a7af736501708c42dec07": {
+      "source": "安装组件并选择模型与词典",
+      "translation": "Install components and select model/dictionary"
+    },
+    "eed4f407a8e2f756c4a5bce9f36e0438ab1b3230046300add19a0e31edff11de": {
+      "source": "独立组件 ZIP 包含运行环境 <s id=\"0\">env/</s> 和配套资源 <s id=\"1\">models/</s>，默认提供官方普通话声学模型 <s id=\"2\">mandarin_mfa.zip</s> 与发音词典 <s id=\"3\">mandarin_mfa.dict</s>。组件安装成功后自动应用这套汉字转写组合，模型与词典仍可单独更换。",
+      "translation": "The component ZIP contains the runtime in <s id=\"0\">env/</s> and matching resources in <s id=\"1\">models/</s>, including the official Mandarin acoustic model <s id=\"2\">mandarin_mfa.zip</s> and pronunciation dictionary <s id=\"3\">mandarin_mfa.dict</s>. Installation applies this character-transcript combination automatically; models and dictionaries can still be replaced individually."
+    },
+    "21df24d92d70529aaabf509e284860a099abf3b92b512468560c9ee5646c21b8": {
+      "source": "安装并应用独立组件",
+      "translation": "Install and apply separate components"
+    },
+    "02e72f3dd7a31114a7767472b5df20728da4aef97d06b674c6d62aeaec50e2ba": {
+      "source": "组件内已附普通话模型和词典。可从官网安装组件，也可选择下载好的 ZIP 或已解压文件夹；另有两个按钮打开官方资源目录，便于更换模型和词典。",
+      "translation": "Mandarin models and dictionaries are included. Install from the official site or choose a downloaded ZIP/extracted folder. Two further buttons open official resource catalogs for changing models and dictionaries."
+    },
+    "16ab0ea8f8672ba619a40dc78128f5504e96b0b768ea0a729391968d53b8fc73": {
+      "source": "MFA 组件安装三个入口和官方声学模型、发音词典下载按钮。",
+      "translation": "Three MFA installation options and official model/dictionary download buttons."
+    },
+    "77017fd66f966e72499b20b83d988dbd8202a175d982871293cc645f07f930dc": {
+      "source": "展开左栏的 <s id=\"0\">组件安装与环境检查</s>。首次安装无须预先选择运行环境、声学模型或词典。",
+      "translation": "Expand <s id=\"0\">Component installation and environment checks</s> in the left panel. First installation does not require preselecting a runtime, acoustic model or dictionary."
+    },
+    "e9a644de3346b45879adb125a8fac9c77d24a0b10b298d8d24d4e5514305dd01": {
+      "source": "按文件准备情况选择一种入口：",
+      "translation": "Choose an option according to your files:"
+    },
+    "8ee8e1eba538983f3e044185cc76ea1c087e08c32f3ef0e2c1b40282df652344": {
+      "source": "<s id=\"0\">下载并安装组件</s>：从官网固定版本入口取得组件 ZIP，下载完成后自动进入安装。",
+      "translation": "<s id=\"0\">Download and install components</s>: obtains the fixed-version ZIP from the official site, then starts installation automatically."
+    },
+    "85c9b96f01709a5b01432158f6552458aa9054f2204d5c8e155b9716b94fb464": {
+      "source": "<s id=\"0\">选择组件压缩包</s>：在原生文件对话框选择已下载的同版 ZIP。网盘提供的同一 ZIP 也使用此入口，选中后自动安装。",
+      "translation": "<s id=\"0\">Choose component archive</s>: select a downloaded ZIP of the same version in the native file dialog. The same ZIP from a cloud drive uses this option and installs automatically."
+    },
+    "543838cce0326654a192180a44b8d4c48ad4e282768e4303d6cde247c4f05a84": {
+      "source": "<s id=\"0\">选择已解压文件夹</s>：在原生目录对话框选择同版 ZIP 解压后的单包根目录。这个目录应同时包含 <s id=\"1\">env/</s> 与 <s id=\"2\">models/</s>，不要只选 <s id=\"3\">env/</s> 子目录。",
+      "translation": "<s id=\"0\">Choose extracted folder</s>: choose the root of the extracted same-version package in the native directory dialog. It must contain both <s id=\"1\">env/</s> and <s id=\"2\">models/</s>; do not select only the <s id=\"3\">env/</s> subfolder."
+    },
+    "53f8f08364629eeaea2b298dd8077e088c657da322c07a3a66f1a5ae9dd7cda7": {
+      "source": "下载阶段显示进度条、百分比、已下载/总大小（MB 或 GB）及实时下载速度（KB/s 或 MB/s）。下载完成后自动转入校验、解压和 MFA 对齐检查。选择后等待程序完成文件校验、安装和运行检查。<s id=\"0\">文件完整性由程序自动校验。</s>检查结束前请等待当前操作完成。",
+      "translation": "Download shows a progress bar, percentage, downloaded/total size (MB or GB) and current speed (KB/s or MB/s). It then proceeds to verification, extraction and MFA alignment checks. Wait for file verification, installation and runtime checks. <s id=\"0\">File integrity is verified automatically.</s> Wait for the operation to finish before continuing."
+    },
+    "faab9922f84d1f080f2631f47248e107ba542ca13897b92bce86fd44027c7774": {
+      "source": "成功后核对运行环境、声学模型与发音词典。程序自动登记并应用包内的 <s id=\"0\">mandarin_mfa.zip</s> 和 <s id=\"1\">mandarin_mfa.dict</s>，随后即可读入汉字转写语料。要使用拼音或其他资源，再按下节更换并检查。",
+      "translation": "After success, check the runtime, model and dictionary. The program registers and applies <s id=\"0\">mandarin_mfa.zip</s> and <s id=\"1\">mandarin_mfa.dict</s> automatically; character-transcript corpora can then be loaded. For pinyin or other resources, replace and check them as described next."
+    },
+    "2f37525511aea596f8fb08d5e681a26f7abdfd906acbf1ad289b7ab07b814803": {
+      "source": "官网下载入口使用固定的 <s id=\"0\">MFA 3.3.8-r1 组件目录</s>。官网下载不可用时，可使用发布者提供的同版 ZIP 离线安装。失败时按提示重新选择组件文件或安装位置，并检查可用空间，当前已应用环境与资源保留。日常对齐无需重复安装。",
+      "translation": "The official download uses the fixed <s id=\"0\">MFA 3.3.8-r1 component directory</s>. If unavailable, install the same-version ZIP supplied by the publisher offline. On failure, reselect the component file or destination and check free space; currently applied resources are retained. Routine alignment does not require reinstalling."
+    },
+    "216540ad3206a01d8f1d75a2cb2e13b23e6bfec58f8f232608b37e2d1cf17868": {
+      "source": "模型与词典需要配套，转写还要与词典词条一致。<s id=\"0\">词条未收录</s>和<s id=\"1\">音素不兼容</s>是两类错误，分别检查词条覆盖和音素集匹配。",
+      "translation": "Models and dictionaries must match, and transcripts must match dictionary entries. <s id=\"0\">Missing vocabulary entries</s> and <s id=\"1\">incompatible phones</s> are separate errors: check vocabulary coverage and phone inventories respectively."
+    },
+    "752a35393c3b34a6a02910439f83bc1c3c58de6a84115ec6bf3e0206ff789c09": {
+      "source": "普通话模型、词典与转写的配套关系",
+      "translation": "Matching Mandarin transcripts, models and dictionaries"
+    },
+    "60c7d4125df041ca9feb3885fa7b6a4628cda71be25864b579d8ee37bee544b9": {
+      "source": "转写",
+      "translation": "Transcript"
+    },
+    "40c40f787ab299327fd8a3e1020ba5da06ab7579061b507f2a0c9352c9fcb6bb": {
+      "source": "声学模型",
+      "translation": "Acoustic model"
+    },
+    "97bc17523e6d93bf79f8e723b79f41447cceff6fad54e1dc633197db7f39a006": {
+      "source": "发音词典",
+      "translation": "Pronunciation dictionary"
+    },
+    "5ca9ba36fd54c22a67ee142fa485a986c36a10272558617d7a7e4c8ba8610a44": {
+      "source": "填写方式",
+      "translation": "Entry format"
+    },
+    "652933e38822a9ebfb237726b272f530d5f2997150dd576a24de62800fa65df9": {
+      "source": "汉字",
+      "translation": "Chinese characters"
+    },
+    "ae95b132eb3411c464f1f87e82d07a72384a4a0de7e2c85be903929eac94e809": {
+      "source": "使用该词典收录的汉字词条，检查分词。",
+      "translation": "Use character entries included in this dictionary and check word segmentation."
+    },
+    "54caa1242c99ed487a7b199aa122989dfb42f90071f07ec1205c7230be678f4d": {
+      "source": "拼音",
+      "translation": "Pinyin"
+    },
+    "091f95335e8a4487e2ac6042ab6690b0d39f1dfed656ff53ac1f665bbb18f544": {
+      "source": "指定的 <s id=\"0\">mandarin_pinyin_tab.dict</s>",
+      "translation": "The specified <s id=\"0\">mandarin_pinyin_tab.dict</s>"
+    },
+    "e2bb6254b6124bbf043cb80247f8b47750915fbd595f838da94fd7ff0c353e73": {
+      "source": "拼音和数字声调，词条之间用空格，例如 <s id=\"0\">dai1 dai1 tai2 tai2 tai1 tai1</s>。",
+      "translation": "Pinyin with numerical tones, with spaces between entries, for example <s id=\"0\">dai1 dai1 tai2 tai2 tai1 tai1</s>."
+    },
+    "317e8b23bed08234de8ca9d3883e81f5fe7f592d86b3c94401a56d7e3e8a31c5": {
+      "source": "<s id=\"0\">指定拼音词典不能与 mandarin_mfa.zip 混配。</s> 更换词典时查其第一列词条，确认 <s id=\"1\">ü</s>/<s id=\"2\">v</s>、轻声、大小写和分词写法。V2 的 <s id=\"3\">lv4 se4 de5 ye4 zi5</s> 只适用于对应词典。中英混读也需要词条覆盖和兼容音素。",
+      "translation": "<s id=\"0\">Do not pair the specified pinyin dictionary with mandarin_mfa.zip.</s> When changing dictionaries, inspect the first-column entries for <s id=\"1\">ü</s>/<s id=\"2\">v</s>, neutral tone, case and segmentation. The V2 example <s id=\"3\">lv4 se4 de5 ye4 zi5</s> applies only to its matching dictionary. Mixed Chinese/English also needs vocabulary coverage and compatible phones."
+    },
+    "3beaa221244e0220b06abc9606bf34924d02c4ee6b90f0d64d2a833ae62a679d": {
+      "source": "更换并检查模型与词典",
+      "translation": "Replace and check model/dictionary"
+    },
+    "2c3229d71e978ac95b6defa5612a2dc5cd3a5d98a952502432a1aaf6582838ce": {
+      "source": "在 <s id=\"0\">运行环境</s> 中选已检查环境。首次使用先完成上述组件安装。使用包内默认模型和词典时无需重复导入，要改用其他资源再继续以下步骤。",
+      "translation": "Select a checked environment under <s id=\"0\">Runtime environment</s>. Complete component installation first. The bundled defaults need no reimport; continue below only to change resources."
+    },
+    "1db4bdb672326877b3185e03e8b17acaea0138de26194acf2aed5a2eddc13c1f": {
+      "source": "默认组件已经包含普通话模型与词典，使用这套组合无需另外下载。需要换语言时，点资源区下方的 <s id=\"0\">下载声学模型（官方）</s> 和 <s id=\"1\">下载发音词典（官方）</s>，分别打开官方资源目录。按目录中的兼容说明选择适用于 MFA 3.3.8、目标语言和音素集相匹配的模型与词典。声学模型保留 <s id=\"2\">ZIP</s> 格式，词典使用 <s id=\"3\">.dict</s> 文件，下载后回到本页继续导入和检查。",
+      "translation": "The default components include Mandarin resources. To change languages, open <s id=\"0\">Download acoustic models (official)</s> and <s id=\"1\">Download pronunciation dictionaries (official)</s> below the resource area. Follow catalog compatibility instructions to select resources matching MFA 3.3.8, the language and phone inventory. Keep the acoustic model as <s id=\"2\">ZIP</s> and the dictionary as <s id=\"3\">.dict</s>, then return here to import and check."
+    },
+    "c4343ac437c41675de5a3b349bf5e0a10da345fc168a72ce0916a69ba22c49e7": {
+      "source": "上方<s id=\"0\">声学模型</s>下拉框选<s id=\"1\">导入其他声学模型…</s>，再从<s id=\"2\">发音词典</s>导入配套词典。选入后显示<s id=\"3\">待检查</s>，开始对齐暂不可用。取消文件对话框会保留原选择。",
+      "translation": "In the upper <s id=\"0\">Acoustic model</s> menu, choose <s id=\"1\">Import another acoustic model…</s>, then import its matching dictionary through <s id=\"2\">Pronunciation dictionary</s>. Selections show <s id=\"3\">Pending check</s> and alignment is disabled. Cancelling the file dialog retains the previous choice."
+    },
+    "b5b4dab71fee1300d37e2d4caaee9d95d2007bebbbf8630612ee2a6bbed8a87a": {
+      "source": "顶部导入两份新资源后显示待检查。旧的已应用组合仍保留，检查通过前暂停提交对齐。",
+      "translation": "After importing both resources, they are pending checks. The previously applied combination remains; alignment submission waits for successful checks."
+    },
+    "7af23026667a87696e47c01f80fb60e738d9a7acf4c827cfb25177fca9c6fa0d": {
+      "source": "最大化 MFA 工作台，声学模型与发音词典显示待检查，上方有检查并应用和取消选择按钮，开始对齐禁用。",
+      "translation": "Maximized MFA workbench: model and dictionary are pending checks, with Check and apply and Cancel selection buttons above; Start alignment is disabled."
+    },
+    "8487b0cd736bbae3f7705a5d8bf26bead7f99f53ef4d36550b9b508805e2cd60": {
+      "source": "红框中的模型和词典需要配套。选好后按检查并应用所选资源，再开始对齐。",
+      "translation": "The red-framed model and dictionary must match. Select them, check and apply, then begin alignment."
+    },
+    "ff81c89881c90bd6815f0868847e9f951dfbc70c02be7494df4bab2841eac04b": {
+      "source": "点<s id=\"0\">检查并应用所选资源</s>，等待资源检查结束。首次检查可能较慢，请稍候。",
+      "translation": "Click <s id=\"0\">Check and apply selected resources</s> and wait. The first check may take longer."
+    },
+    "ac6545d0790b19636c495ff6dc129c900dc42513efbf6b040e138edd5397b600": {
+      "source": "检查中请等待操作结束，再根据结果继续。",
+      "translation": "Wait for checks to finish, then continue according to the result."
+    },
+    "5789c2d6e5fb8b838af566fcf562c29d7e480ddd6ddbfab8788f613d77cbd761": {
+      "source": "最大化 MFA 工作台正在检查已选模型与词典，资源及提交控件暂时禁用。",
+      "translation": "Maximized MFA workbench checking the selected model/dictionary; resource and submission controls are temporarily disabled."
+    },
+    "f3180ffc1e7e957b0d1f92496b1e4ec817b7f0c8a3be6c9c2b011d05edf82262": {
+      "source": "通过后核对<s id=\"0\">已检查并应用</s>提示和模型、词典名称。待检查提示消失，组合自动登记并记住。",
+      "translation": "On success, check <s id=\"0\">Checked and applied</s> and both resource names. Pending status disappears; the combination is registered and remembered."
+    },
+    "890ce69ad91ade7bea973d09441f3c71d711b9499455bcdf50c6dee63cd089b9": {
+      "source": "mandarin.zip 与配套拼音词典检查通过，页面显示已检查并应用。",
+      "translation": "mandarin.zip and the matching pinyin dictionary passed checks; the page confirms application."
+    },
+    "5a18fb606f0f2a99962fa675dcaa8b53288581327e9d067e0d1aecea46868b97": {
+      "source": "最大化 MFA 工作台显示已检查并应用资源，模型为 mandarin.zip，词典为 mandarin_pinyin_tab.dict，待检查提示消失。",
+      "translation": "Maximized MFA workbench with applied mandarin.zip and mandarin_pinyin_tab.dict; pending status has disappeared."
+    },
+    "ccada6c06ef5a715bd08065cb9adf015cf238c5f1ba40ec1f933e09500a6954b": {
+      "source": "失败时重选有问题的文件并检查，或点<s id=\"0\">取消待检查选择</s>恢复当前已应用组合。若提示选择记忆保存失败，下次需重新选择。",
+      "translation": "On failure, reselect the problematic files and check again, or use <s id=\"0\">Cancel pending selections</s> to return to the applied combination. If remembering the choice fails, reselect it next time."
+    },
+    "125eb76e93d4cd7cd7366db8652c4e59ed5af27155a4b0405e86a2a566264b53": {
+      "source": "当前资源检查要求词典含有 <s id=\"0\">a</s>、<s id=\"1\">啊</s> 或 <s id=\"2\">a1</s>。请使用含有这些词条的配套模型与词典。",
+      "translation": "Current resource checks require a dictionary entry <s id=\"0\">a</s>, <s id=\"1\">啊</s> or <s id=\"2\">a1</s>. Use a matching model/dictionary containing one of these."
+    },
+    "fa86ea9a437ede03e39c297c189417e0d7c6ea9ce877d6f16e7f67cf309e152f": {
+      "source": "高级：使用其他已有环境",
+      "translation": "Advanced: use another existing environment"
+    },
+    "b9524676b010e882dd6fea52c3e66eb2ad85834274938ace7839b23d7ca46e0e": {
+      "source": "已准备其他兼容环境时，展开组件管理内的 <s id=\"0\">高级：使用其他已有环境</s>，点 <s id=\"1\">选择已有环境</s> 并指定 MFA 3.3.8 / Windows x86_64 环境根目录。",
+      "translation": "For another compatible environment, expand <s id=\"0\">Advanced: use another existing environment</s>, click <s id=\"1\">Choose existing environment</s>, and select the MFA 3.3.8 / Windows x86_64 environment root."
+    },
+    "01b2fd2bd646cf27cb81bee70227024653f45e44b6df27a14ed244e2e151174f": {
+      "source": "在上方 <s id=\"0\">声学模型</s> 与 <s id=\"1\">发音词典</s> 中选择配套资源，再点 <s id=\"2\">检查并应用所选资源</s>。环境版本、依赖、模型与词典必须一同检查通过。",
+      "translation": "Select matching resources in <s id=\"0\">Acoustic model</s> and <s id=\"1\">Pronunciation dictionary</s>, then click <s id=\"2\">Check and apply selected resources</s>. Environment version, dependencies, model and dictionary must all pass together."
+    },
+    "9bbadcf66ce204df4e25d60294520c4116a33f95d08e212b35d80f6e3fc1cfa5": {
+      "source": "成功后核对已应用组合。检查失败时保留原登记，修正环境或资源后重新检查；要继续使用原组合，可点 <s id=\"0\">取消待检查选择</s>。",
+      "translation": "Check the applied combination after success. Failed checks retain the previous registration; fix the environment/resources and retry. To keep the old combination, click <s id=\"0\">Cancel pending selections</s>."
+    },
+    "506071c97ae849f671284c4f2ee4ccd008e889aa24c2337edbc2478bdd118e9f": {
+      "source": "单文件对齐的完整操作",
+      "translation": "Complete single-file alignment workflow"
+    },
+    "423b967823101adc4e7889046b944e069db466c7bed3621b7e547d0c3ae26211": {
+      "source": "先确认左栏<s id=\"0\">已应用</s>的模型与词典适合转写，没有待检查提示。",
+      "translation": "Confirm that the <s id=\"0\">applied</s> model and dictionary suit the transcript and no checks are pending."
+    },
+    "ee0512532ac1dfe03d9d54528cc5ef79d4751a082b743c46e1bb58a33055b341": {
+      "source": "选定<s id=\"0\">转写来源</s>。桌面点<s id=\"1\">打开音频目录</s>递归读取目录及子目录；也可点<s id=\"2\">导入音频与转写</s>同时选 WAV 与转写，仅读取手选文件。核对格式和总组数。",
+      "translation": "Choose <s id=\"0\">Transcript source</s>. On desktop, <s id=\"1\">Open audio folder</s> reads folders recursively; <s id=\"2\">Import audio and transcripts</s> reads only manually selected WAVs and transcripts. Check format and pair count."
+    },
+    "015152d74049134d4549927eb78aeae85f258b88a66e9d9b099d261db4178960": {
+      "source": "点<s id=\"0\">选择输出目录</s>指定可写文件夹，也可留到保存时选择。先用 Beam <s id=\"1\">100</s>、Retry beam <s id=\"2\">400</s>，旧草稿则核对当前显示值。",
+      "translation": "Use <s id=\"0\">Choose output folder</s> to select a writable folder, or select one when saving. Start with Beam <s id=\"1\">100</s> and Retry beam <s id=\"2\">400</s>; for older drafts, check the displayed values."
+    },
+    "074622231c24ead85f4fc1978c1928840e140e372c999d29e83587fa3b063196": {
+      "source": "点<s id=\"0\">开始对齐</s>。右栏选中本次任务，显示阶段、进度和日志。等待<s id=\"1\">完整结果已发布</s>后保存；失败按错误提示修正后提交新任务。",
+      "translation": "Click <s id=\"0\">Start alignment</s>. The task is selected on the right with stages, progress and logs. Save after <s id=\"1\">Complete results published</s>; on failure, correct the reported issue and submit a new task."
+    },
+    "425070acdf869bd8df8bbef10509bef4238d04af91df9a2f75fa328505fccc2a": {
+      "source": "点<s id=\"0\">保存完整结果到输出目录</s>，核对保存提示中的子目录，再用原 WAV 与 TextGrid 人工复核。网页则按结果行逐项<s id=\"1\">下载</s>。",
+      "translation": "Click <s id=\"0\">Save complete results to output folder</s>, check the reported subfolder, then manually review the original WAV with TextGrid. On web, use <s id=\"1\">Download</s> on each result row."
+    },
+    "02c4c958d04effd1fe106f1a6854cff0184de8237fe4cc89b90df646a08481e3": {
+      "source": "同名 LAB 与 TextGrid 共存时的读入实例",
+      "translation": "Example: coexisting LAB and TextGrid transcripts"
+    },
+    "f4f2ad6cd528db973a232e34abe20493f41c2c5125fd9b9fb90426335d0cde6e": {
+      "source": "以下公开合成样例只演示来源选择。已应用 <s id=\"0\">mandarin.zip</s> 与指定拼音词典，LAB 和 TextGrid 的 words 层均写四个 <s id=\"1\">a1</s>。两份转写可一起保留。",
+      "translation": "This public synthetic example demonstrates source selection only. <s id=\"0\">mandarin.zip</s> and the specified pinyin dictionary are applied; LAB and the TextGrid words tier each contain four <s id=\"1\">a1</s> entries. Both transcripts can be retained."
+    },
+    "546bfe8f57b46d6c752e2db5e016db630c1a2cab5d5db5f1407530b4249fe02a": {
+      "source": "保持<s id=\"0\">自动</s>并打开样例目录，会提示同名转写不唯一。改选所需格式即可，无需删除另一份文件。",
+      "translation": "With <s id=\"0\">Automatic</s>, opening the example folder reports non-unique matching transcripts. Choose the required format; the other file need not be deleted."
+    },
+    "4fc6673a587a5bff1c642177b1779088a233a36cc8e4dcd6a35696c56af36c86": {
+      "source": "自动来源遇到多种同名转写会报歧义。明确选择本次使用的格式后重新读取。",
+      "translation": "Automatic mode reports ambiguity for multiple matching transcripts. Select a format and reload."
+    },
+    "c81348e036a603e3cdf2764fed9309b20b4b5b98511cb036c9bcafb1d15eff4c": {
+      "source": "最大化 MFA 工作台的自动转写来源读入同名 LAB 与 TextGrid 后报告唯一同名转写歧义，清单没有可提交配对。",
+      "translation": "Maximized MFA workbench: automatic source reports ambiguous matching LAB/TextGrid; no pairs are available for submission."
+    },
+    "ac8e5d6421fefd8dfb0a501c920d6f5683c9772f801fecbfd7f0f209528ec833": {
+      "source": "选 <s id=\"0\">LAB</s> 后重新打开目录。清单应显示 <s id=\"1\">probe.wav</s>、<s id=\"2\">.lab</s> 和 <s id=\"3\">1 组</s>。",
+      "translation": "Select <s id=\"0\">LAB</s> and reopen the folder. The list should show <s id=\"1\">probe.wav</s>, <s id=\"2\">.lab</s> and <s id=\"3\">1 pair</s>."
+    },
+    "face8b051c17d38ed590cc25e4e65f4e0332335e74556342fa200f4757d01dc1": {
+      "source": "显式选择 LAB 并重读后，清单采用 .lab，其余转写可同目录保留。",
+      "translation": "After selecting LAB and reloading, .lab is used; other transcript files can remain in the same folder."
+    },
+    "dfebe459e0422cc7c5c234ba7ede2ffe1d6a05c892fb5c3f15e96fd8151ad0eb": {
+      "source": "最大化 MFA 工作台，转写来源为 LAB，清单一组 probe.wav 与 .lab，已应用兼容模型词典，Beam 100、Retry beam 400。",
+      "translation": "Maximized MFA workbench with LAB source, one probe.wav/.lab pair, matching applied resources, Beam 100 and Retry beam 400."
+    },
+    "da676c72ced41459d1713cf5bebe64e5c6a9f0bae872038b5461e013c73fea9a": {
+      "source": "改选 <s id=\"0\">TextGrid</s> 时，页面提示重新读取，开始对齐暂不可用。此时旧清单仍是 LAB。",
+      "translation": "Switching to <s id=\"0\">TextGrid</s> requests a reload and disables Start alignment. The old list still uses LAB."
+    },
+    "861ae980bf8a390b9c686150140af377fb19231071e17facead6d375fb903fd1": {
+      "source": "来源改变后旧清单暂停提交，需重新打开目录或导入文件。",
+      "translation": "Changing source pauses submission of the old list; reopen the folder or import again."
+    },
+    "635a59519d888b29c9e47ad21a274795a30c2631cadf7f483ff7b0f8db1308f5": {
+      "source": "最大化 MFA 工作台，转写来源已经改为 TextGrid，但清单仍显示旧 LAB，提示重新读取且开始对齐禁用。",
+      "translation": "Maximized MFA workbench after switching to TextGrid: the list still shows old LAB, with a reload notice and alignment disabled."
+    },
+    "1d620cb4e55216ccbd8afc688c9985f0bfa683fc68f1d0e2f2400cbabaf0381b": {
+      "source": "重新打开同一目录，确认清单为 <s id=\"0\">.TextGrid</s>，再开始对齐。词标签用于新对齐，原 LAB/TextGrid 保留。",
+      "translation": "Reopen the same folder, confirm <s id=\"0\">.TextGrid</s> in the list, then align. Word labels supply new alignment; original LAB/TextGrid files remain."
+    },
+    "50ed73cc46a9febd3868a61248700fb2e3add0febfee69c75167b7d0fed18570": {
+      "source": "重读后的清单明确采用 TextGrid，任务按这一来源提交。",
+      "translation": "The reloaded list explicitly uses TextGrid and submits the task with that source."
+    },
+    "5a7b386015db70050bc090c9a85d6d95c00e7f7b14f3b6b1b6cf65c3563987d1": {
+      "source": "最大化 MFA 工作台，TextGrid 来源读入完成，清单一组 probe.wav 与 .TextGrid，开始对齐可用。",
+      "translation": "Maximized MFA workbench with TextGrid loaded, one probe.wav/.TextGrid pair and Start alignment enabled."
+    },
+    "e153f24e8d767450be46549428b13f9b87466f9fb6ce113519d537100b3d1dfc": {
+      "source": "搜索参数与控件查阅",
+      "translation": "Search parameters and controls"
+    },
+    "f76cf02cc2e056e29b98beddd95c81362d04d54a484280b3790f389cd1701aa9": {
+      "source": "常用设置和操作",
+      "translation": "Common settings and actions"
+    },
+    "9aa63f70b1e8caf291767d2f441a4ef74eaf92208e1721fa1d21d3f44f8b05bc": {
+      "source": "控件",
+      "translation": "Control"
+    },
+    "70f5b5aa779b0a1219bff5863d73376f2c7bcfe3c566b83ce8f9543a0cf7b4f9": {
+      "source": "使用要点",
+      "translation": "Usage"
+    },
+    "8af5fb0339f67e8fd419338904a68af913992ba9416f050c263afd95ab1ebec3": {
+      "source": "新草稿 100，整数 1–10000。调高时 Retry beam 至少升到四倍，调低不会把 Retry beam 自动降回。",
+      "translation": "New drafts use 100, with integers 1–10000. Increasing Beam raises Retry beam to at least four times Beam; decreasing does not lower Retry beam automatically."
+    },
+    "51d43929850c93337cb7156c0b4ab3a31e836e81df6749c7a9497ba283e89e02": {
+      "source": "新草稿 400，整数 1–40000。保存/提交时若不大于 Beam，会改为 Beam 的四倍。",
+      "translation": "New drafts use 400, with integers 1–40000. On save/submission, Retry beam at or below Beam becomes four times Beam."
+    },
+    "3ed9f3eace93db951c9fe8f019e300790623ce4ce07a23d7f594194b067aeb68": {
+      "source": "<s id=\"0\">转写来源</s>",
+      "translation": "<s id=\"0\">Transcript source</s>"
+    },
+    "678e3d9029c716e35d99dc669d47c81ce280bfd8158966e48d460fab1eda0d81": {
+      "source": "默认自动。多种同名转写共存时选 LAB、TXT 或 TextGrid，并重新读取。",
+      "translation": "Automatic by default. If formats share a base name, choose LAB, TXT or TextGrid and reload."
+    },
+    "86992a1944e816139e3788bd2537a4693221951b28da41dd852da42aab544f73": {
+      "source": "<s id=\"0\">下载声学模型（官方） / 下载发音词典（官方）</s>",
+      "translation": "<s id=\"0\">Download acoustic models (official) / Download pronunciation dictionaries (official)</s>"
+    },
+    "cc9935a58ebf77073fa9a1b37d3ac34f119e3e8f7a1b6ddf8da79b6740877c14": {
+      "source": "分别打开官方声学模型与发音词典目录。默认普通话组合已包含在组件中；换语言时选择兼容 MFA 3.3.8、语言和音素集匹配的资源，再从上方下拉框导入检查。",
+      "translation": "Opens the official model and dictionary catalogs separately. Mandarin defaults are bundled; for other languages, choose resources compatible with MFA 3.3.8 and matching language/phones, then import and check from the menus."
+    },
+    "8a926103b7b8b19f18ced8b98a8ff1e9d8f75f5b7b5ebec5744f5dde9426d2a7": {
+      "source": "<s id=\"0\">保存参数草稿</s>",
+      "translation": "<s id=\"0\">Save parameter draft</s>"
+    },
+    "76c6a5b29f063075700c8b9e8a56cfe531920e6579b4dbfed7fc7472e29c987a": {
+      "source": "保存参数、环境、模型组合和转写来源。重开后需重新选择待提交语料、输出目录及未登记网页词典。",
+      "translation": "Saves parameters, environment, model combination and transcript source. On reopening, reselect corpus files, output folder and unregistered web dictionaries."
+    },
+    "2b88f69c6573d63275395d1cfdd47c07c347f495c43a7432d53769128b3e09e2": {
+      "source": "<s id=\"0\">组件、资源与校验信息</s>",
+      "translation": "<s id=\"0\">Component, resource and verification details</s>"
+    },
+    "6b357861d30e509c3e9f6052919748ddc9c14001fda76294bd4627da19625920": {
+      "source": "查看组件与资源的来源、版本和文件信息。",
+      "translation": "View component/resource sources, versions and file details."
+    },
+    "35f5dd995b07eedfd4dc04db263d419394f7a8f0fae797df27cb286888bc66c4": {
+      "source": "<s id=\"0\">任务记录 / 刷新任务</s>",
+      "translation": "<s id=\"0\">Task history / Refresh tasks</s>"
+    },
+    "2d9677fd5ffe829ecc2f9792187c96e9fbb0b0c3f197c250727f1b1d1e3548f8": {
+      "source": "选历史任务看状态与日志。刷新只更新显示，不重新执行。",
+      "translation": "Select history to view status and logs. Refresh updates display only; it does not rerun tasks."
+    },
+    "3e8c4e5b1a255f75948b87d0b8f914bef7ac140fdcdf6e185458d706b950b7a0": {
+      "source": "<s id=\"0\">下载 / 保存完整结果到输出目录</s>",
+      "translation": "<s id=\"0\">Download / Save complete results to output folder</s>"
+    },
+    "e2d749ee31abb81052a26c6138f3b9de00a68a1590476ef3dce665ced9cb38bc": {
+      "source": "针对右栏选中的成功任务。参数草稿与任务成果分别保存。",
+      "translation": "Applies to the successful task selected on the right. Save parameter drafts and task results separately."
+    },
+    "84839ce9ab039cdb26bc1bad77a1018d28693be637ee9891f791f50d53aa6e84": {
+      "source": "<s id=\"0\">帮助 / 方法与引用</s>",
+      "translation": "<s id=\"0\">Help / Methods and references</s>"
+    },
+    "cdef78e7a1af483d0715194749c2615029e05507c06c704543d1301fbb132a14": {
+      "source": "查看操作摘要或方法、资源与许可信息，可复制引用和打开来源。",
+      "translation": "View operation summaries, methods, resources and licenses; copy citations or open sources."
+    },
+    "baf6302ec9033b71a76a54025647533fd3f9e9f58c93626c259c0dad31a8ab75": {
+      "source": "旧草稿的已存参数保留，调整只影响下一次提交。<s id=\"0\">保存参数草稿后，仍需单独保存任务成果。</s>",
+      "translation": "Older saved parameters remain; adjustments affect only the next submission. <s id=\"0\">After saving a parameter draft, save task results separately.</s>"
+    },
+    "c2adcd15c4457e271b0b2ab271c0ec61d55497d1e759906f0b01bbfebcfa3dbb": {
+      "source": "任务管理、日志与边界复核",
+      "translation": "Task management, logs and boundary review"
+    },
+    "8c5bf84ec9b53a0821b0e42c477420c8ff52a5566df0c55d470248aaabd139f1": {
+      "source": "词典兼容性、未登录词与参数调整",
+      "translation": "Dictionary compatibility, OOV and parameter adjustment"
+    },
+    "be286f055097a40ca40c22406e57fffb9bbfbd033cbed17ad03372da8c527c04": {
+      "source": "<s id=\"0\">OOV</s> 表示词典未收录转写中的词。选失败任务，展开<s id=\"1\">查看脱敏 MFA 日志</s>找具体词，检查汉字/拼音、声调、分词与大小写。修改源转写后<s id=\"2\">重新读取</s>，已读入文件不会自动更新。",
+      "translation": "<s id=\"0\">OOV</s> means a transcript word is absent from the dictionary. Select the failed task, expand <s id=\"1\">View redacted MFA log</s> to locate the word, and check characters/pinyin, tones, segmentation and case. After editing the source transcript, <s id=\"2\">reload</s>; loaded files do not update automatically."
+    },
+    "2583e7e9b05ff2eb4f6fcc4800431fcd9e8344a2410c19919a1d8ce8536452f4": {
+      "source": "音素不兼容时恢复配套模型与词典，或导入兼容组合重新检查。提高 Beam 无法解决这种错误。",
+      "translation": "For phone incompatibility, restore matching resources or import and check another compatible combination. Increasing Beam cannot resolve this error."
+    },
+    "93a237c3637ace7623edf3b0ed9d3e8b63312f6a41210fb328d5f6fdb6936ad5": {
+      "source": "Beam 和 Retry beam 是搜索宽度，无物理单位。先用 <s id=\"0\">100/400</s>；输入与资源无误但仍不能有效对齐时再试调整。更宽搜索可能增加耗时，边界质量仍需人工复核。例如 Beam 改为 200，Retry beam 至少升为 800。实际参数可在 <s id=\"1\">m11-provenance.json</s> 核对。",
+      "translation": "Beam and Retry beam are search widths without physical units. Start with <s id=\"0\">100/400</s>, and adjust only if valid input/resources still fail to align effectively. Broader searches can take longer; boundary quality still needs manual review. For example, Beam 200 requires Retry beam at least 800. Check actual values in <s id=\"1\">m11-provenance.json</s>."
+    },
+    "dc7bf4658b84c06d3340fbbd2a5b66bc9d2835d264a5680b079fc59eef1a4c42": {
+      "source": "批量处理、进度与取消",
+      "translation": "Batch processing, progress and cancellation"
+    },
+    "121e8dd5d8097669899d793449a5da49b7f98c686dad0fafbcf0c6d0a6175729": {
+      "source": "多个短文件可在输入上限内一并提交。环境和词典初始化需要时间，<s id=\"0\">进度只表示阶段</s>，不估算剩余时间。对齐阶段较久时可看日志；当前对齐期限 180 秒，临时空间预算 512 MB，未超输入上限也可能触及执行限制。",
+      "translation": "Submit multiple short files together within input limits. Environment/dictionary initialization takes time. <s id=\"0\">Progress shows stages only</s>, with no remaining-time estimate. For long alignment stages, inspect logs. The current deadline is 180 seconds and temporary space budget 512 MB; execution limits can be reached even below input limits."
+    },
+    "af2a665f35c54e41cb16df77632a404989cbed333b1ed8ada2caac596bdcd9e1": {
+      "source": "CPU 对齐任务显示当前运行阶段与事件。",
+      "translation": "CPU alignment displays its current stage and events."
+    },
+    "3ea6a79d0c8811dbdd8d1fe4172a307483720ad46c483c980d82ce8e79af558b": {
+      "source": "最大化 MFA 工作台真实 TextGrid 任务处于 MFA 正在对齐阶段，右栏显示阶段进度、任务记录、取消按钮和事件。",
+      "translation": "Maximized MFA workbench with a real TextGrid task in the alignment stage; the right panel shows progress, history, cancellation and events."
+    },
+    "c9229c73f699d29d3747345d1679e06acd79f077acf9a09f9d717fd782d391f9": {
+      "source": "在<s id=\"0\">任务记录</s>选中目标任务，运行或排队中点<s id=\"1\">取消任务</s>。等待停止状态，再<s id=\"2\">刷新任务</s>或等自动刷新。",
+      "translation": "Select the task under <s id=\"0\">Task history</s> and click <s id=\"1\">Cancel task</s> while running or queued. Wait for a stopped state, then <s id=\"2\">Refresh tasks</s> or wait for automatic refresh."
+    },
+    "83f189ca71c6379cd8d997185a319a9078bd62d7c720fef11934c501740958ca": {
+      "source": "确认<s id=\"0\">任务已取消</s>后再提交。关闭页面不会自动取消任务，之后可从任务记录继续查看。",
+      "translation": "Confirm <s id=\"0\">Task cancelled</s> before resubmitting. Closing the page does not cancel tasks; reopen history to inspect them."
+    },
+    "c7f211431ff3c9c24d9c3be268dc85eccc883f9ca525c3465cc310531a99be42": {
+      "source": "修正文件或资源，重新读取有变化的语料，再点<s id=\"0\">开始对齐</s>建立新任务。本页没有一键重试，失败/取消的部分输出只用于诊断。",
+      "translation": "Correct files/resources, reload changed material, then use <s id=\"0\">Start alignment</s> to create a new task. There is no one-click retry; partial failed/cancelled outputs are diagnostic only."
+    },
+    "f80fda082031323a5e0fa977b03d307c606e0685939418e48bf4b68be22a9b6e": {
+      "source": "结果边界的人工复核",
+      "translation": "Manual boundary review"
+    },
+    "aafc9eab890e048accb05305b56d4aa1849df2c5915bdbe4b3763321abdf9480": {
+      "source": "把原 WAV 与结果 TextGrid 一起送入 <s id=\"0\">TextGrid标注</s>或 Praat，核对时长、词序、词和音素层，再检查停顿、弱读、连读及研究关注的边界。修订另存，保留原始对齐结果。",
+      "translation": "Open the original WAV with its TextGrid in <s id=\"0\">TextGrid annotation</s> or Praat. Check duration, word order, word/phone tiers, pauses, reduced and connected speech and research-relevant boundaries. Save revisions separately and retain the original alignment."
+    },
+    "b2b26eb047b824d7e8c3b4b035b5cbe401a685abedf6822b69d121e24a781845": {
+      "source": "查看 TextGrid 中的选择、边界移动与撤销操作",
+      "translation": "View TextGrid selection, boundary movement and undo"
+    },
+    "aca4a24f46edd1ace3e8200d773cb8abdfe8d270334668c95b60815c754ee449": {
+      "source": "输出与保存",
+      "translation": "Outputs and saving"
+    },
+    "0a8391e549feb88e71d03715632192c406620d98f50efdf190a670bb38070591": {
+      "source": "完整成功后，每份 WAV 输出一份与原 WAV 同基本名的 TextGrid，例如 <s id=\"0\">sample.TextGrid</s>。不加前置序号，不同子目录的同名结果从第二份起只在末尾补号，并避开已有原名。另有 <s id=\"1\">m11-provenance.json</s> 保存输入对应关系、资源版本/摘要、实际参数和对齐信息。",
+      "translation": "After full success, each WAV produces a TextGrid with the same base name, such as <s id=\"0\">sample.TextGrid</s>. No leading sequence number is added. For matching names in different subfolders, later results receive a trailing number, avoiding existing original names. <s id=\"1\">m11-provenance.json</s> records input mappings, resource versions/digests, actual parameters and alignment information."
+    },
+    "1b56ce75fc827226bdebe9764fa1690049f7149650907ce98b7d9cac7c6f25e4": {
+      "source": "成功任务显示完整结果已发布，下方 TextGrid 与溯源区域列出成果，可在右栏继续向下滚动查看完整清单。",
+      "translation": "Successful tasks show Complete results published. TextGrid and provenance lists below contain the files; scroll down the right panel for the full list."
+    },
+    "843402afa0bef0ad81ec42faa3ca798ed5353d959996c09bfd6fd50c6f084f12": {
+      "source": "最大化 MFA 工作台真实任务完整结果已发布，进度 100%，事件包含 TextGrid 回读，右栏下方显示 001_probe.TextGrid 下载行。",
+      "translation": "Maximized MFA workbench with complete real-task results, progress 100%, a TextGrid readback event and a 001_probe.TextGrid download row below."
+    },
+    "7e616473ac4801214a1f8fb2a6daf107e23e93dd3caa012ea1d62db1d88eeb2f": {
+      "source": "长期保存时一并保留原 WAV、转写和使用的模型/词典版本，溯源 JSON 不包含完整原音频。",
+      "translation": "For long-term archiving, retain the WAV, transcript and model/dictionary versions together. Provenance JSON does not contain the complete original audio."
+    },
+    "b0b44568a8bbb927c6a469df44312b3c567d40f82b89f656c9598b14056d64ef": {
+      "source": "完整保存和单文件下载",
+      "translation": "Complete saves and individual downloads"
+    },
+    "22c22b4f23ae885691e560208bd15a4543f3f3a8115d52af622b5c1cd6893d25": {
+      "source": "在<s id=\"0\">任务记录</s>确认选中所需成功任务，状态为<s id=\"1\">完整结果已发布</s>。<s id=\"2\">保存针对右栏选中任务。</s> 中区当前语料可能与历史任务不同。",
+      "translation": "In <s id=\"0\">Task history</s>, select the required successful task with <s id=\"1\">Complete results published</s>. <s id=\"2\">Saving targets the selected task on the right.</s> Current corpus files in the center may differ from that task."
+    },
+    "c807a3b87429e71c48e1d6fc6f6859d1370cc701f47c6852cf95e9d857e7614b": {
+      "source": "点<s id=\"0\">选择输出目录</s>，再点<s id=\"1\">保存完整结果到输出目录</s>。若未提前选目录，首次保存会弹出目录选择；取消选择不影响已完成成果。",
+      "translation": "Click <s id=\"0\">Choose output folder</s>, then <s id=\"1\">Save complete results to output folder</s>. Without an earlier selection, saving opens a folder dialog. Cancelling it does not affect completed results."
+    },
+    "29c93a2ac27a18d39d9d9a05a67430ada452c34af0dde31c0383d8690358b77a": {
+      "source": "按保存提示找到新建的 <s id=\"0\">MFA-任务号-随机串</s> 子目录。输出目录可与输入目录相同，结果另放子目录，原文件保留；再次保存会新建子目录。",
+      "translation": "Follow the save notice to the new <s id=\"0\">MFA-任务号-随机串</s> subfolder. Output may share the input folder; results are placed in a new subfolder and originals retained. Saving again creates another subfolder."
+    },
+    "556a8a295b67d4677951c1dfe783e8f5cfe9e5b1a711a199ccec055a867f664f": {
+      "source": "完整保存后提示本次创建的 MFA 子目录。按自己选中的输出目录核对 TextGrid 和溯源 JSON。",
+      "translation": "Complete saving reports the newly created MFA subfolder. Check its TextGrid and provenance JSON in your selected destination."
+    },
+    "f348b74e5d54e070a604563e74b819b26d7376259994789411a93c2c970a0dbf": {
+      "source": "最大化 MFA 工作台显示完整保存成功及独立 MFA 结果子目录，当前任务为完整结果已发布，输出目录为 saved。",
+      "translation": "Maximized MFA workbench confirming complete saving in a separate MFA result subfolder; the current task is complete and output directory is saved."
+    },
+    "58d26a50652f9b24a071d76831ca789d82e666e462849b8b59554f79a2ca95c4": {
+      "source": "核对 TextGrid 数量和 <s id=\"0\">m11-provenance.json</s>，打开结果检查。保存中断时已写文件保留，换可写目录后重新完整保存，核对新子目录。",
+      "translation": "Check the TextGrid count and <s id=\"0\">m11-provenance.json</s>, then open results. Interrupted saves retain written files; choose a writable folder, save all again and check the new subfolder."
+    },
+    "4474526500dadd72a7f9aa626cf590b47b1f944c451c33074399c443c5502715": {
+      "source": "单文件用结果行的<s id=\"0\">下载</s>，位置按平台下载设置。需要完整档案时下载全部 TextGrid 和溯源 JSON。",
+      "translation": "Use <s id=\"0\">Download</s> on individual result rows; destinations follow platform settings. For a complete archive, download every TextGrid and provenance JSON."
+    },
+    "6068f7dc8a8b6e39cd0a89ca0e3860a1463feca26173da9d2da8eca9aa24c5ad": {
+      "source": "查看 TextGrid标注的保存与导出",
+      "translation": "View TextGrid saving and export"
+    },
+    "95e16fff859fe822482f5f9cb0e4e346c1b90dde0ce5b16e1f7ad9a436258a69": {
+      "source": "数据保留",
+      "translation": "Data retention"
+    },
+    "5540d60358878af5e6f2af5fd355752ed13177371e1a92768aa4f0abe9efdfbc": {
+      "source": "MFA 对齐当前请使用桌面版，网页版暂不提供在线对齐。请及时将完整 TextGrid 与溯源文件保存到自己的研究目录并备份。应用管理的结果缓存按设置中的保留期限清理，MFA 已完成任务的临时工作目录与诊断默认保留 7 天，未完成或运行中的任务受保护。自行导出的研究成果由用户管理。网页文件与缓存策略请参阅网页入门和设置章节。",
+      "translation": "Use the desktop version for MFA alignment; online alignment is currently unavailable on the web. Save complete TextGrid and provenance files to your research folder promptly and keep a backup. Application-managed result caches follow the retention periods in Settings. Temporary work folders and diagnostics for completed MFA tasks are retained for 7 days by default; incomplete or active tasks are protected. You manage your own exported research files. See Web introduction and Settings for web file and cache policies."
+    },
+    "c4f493dde605f8d351d453deb6229c47cd172a7e3e93f1993dbf4be64bff4dcf": {
+      "source": "查看存储保留与清理设置",
+      "translation": "View storage retention and cleanup settings"
+    },
+    "a2985d26e1d2f05d80be96a5c08375a9f65ecc732f77303b003b60426850f845": {
+      "source": "错误恢复",
+      "translation": "Error recovery"
+    },
+    "703aa86c1079fbfe7767db7d8e998f1d7c39a390a37b62cb0905ed3d9f1159b8": {
+      "source": "开始对齐不可用或读取失败",
+      "translation": "Alignment unavailable or input unreadable"
+    },
+    "1d4d2fbb3242bc763b4d93ff7a52353c330feb2224f50e1d110cc33c0214aebb": {
+      "source": "<s id=\"0\">开始对齐灰色</s>：确认环境/模型、语料组数、待检查提示和来源更改提示。完成资源检查，或取消待检查选择，再重新读取语料。",
+      "translation": "<s id=\"0\">Start alignment is disabled</s>: check environment/model, corpus count, pending resources and changed-source notices. Check resources or cancel pending choices, then reload corpus files."
+    },
+    "4c1a3a0963a23b231d50bf7e0317766147ce4080b64bb7ab9fe3f56d12174649": {
+      "source": "<s id=\"0\">同名转写缺失或不唯一</s>：核对目录、基本名和扩展名。多格式共存时明确选来源；缺少所选格式时补齐该文件。",
+      "translation": "<s id=\"0\">Matching transcript missing or non-unique</s>: check folder, base name and extension. Select a source when formats coexist; provide the file if the chosen format is missing."
+    },
+    "602df7b58378b68de084faa485e709684f12827371b82c0a215f8438d0e3c760": {
+      "source": "<s id=\"0\">TextGrid 转写层不可用</s>：整理独立转写区间层或唯一非空 words 层，或改用同名 LAB/TXT。多个 words 层不能自动猜选。",
+      "translation": "<s id=\"0\">TextGrid transcript tier unavailable</s>: provide a dedicated transcript interval tier or one nonempty words tier, or use matching LAB/TXT. Multiple words tiers cannot be selected by guessing."
+    },
+    "4f8836ee84bf4d64fa5dc8b2c5f4d176f980951d3501343415d66459a5004cc4": {
+      "source": "<s id=\"0\">输入或路径超限</s>：选更具体目录、缩短副本路径或分批。切分长音频时同步准备各片段转写并保留切分位置。",
+      "translation": "<s id=\"0\">Input/path exceeds limits</s>: select a more specific folder, shorten a copy's path or split batches. When splitting long audio, prepare transcripts for each segment and retain split positions."
+    },
+    "df3d46bdee4138b387249590334db0b8884f5230bd964b481e502ff8b3359d9c": {
+      "source": "资源或环境检查失败",
+      "translation": "Resource/environment check failures"
+    },
+    "82e4245dd20b8e34175dd37f42599d39aff92765aa2183111f951e731250f43e": {
+      "source": "<s id=\"0\">官网下载失败</s>：官网下载不可用时，取得发布者提供的完整同版 ZIP，使用离线安装入口。",
+      "translation": "<s id=\"0\">Official download failed</s>: obtain the publisher's complete ZIP of the same version and use offline installation."
+    },
+    "a583cf4387fa7411740c7b0291cc1c1d56fa0287c28fc278fcbfa72a5f8eed6c": {
+      "source": "<s id=\"0\">已解压目录识别失败</s>：选择同时包含 <s id=\"1\">env/</s> 与 <s id=\"2\">models/</s> 的单包根目录，保留包内清单与文件结构，不混用多个版本的文件。",
+      "translation": "<s id=\"0\">Extracted folder not recognized</s>: select the package root containing both <s id=\"1\">env/</s> and <s id=\"2\">models/</s>. Retain its manifest and structure; do not mix versions."
+    },
+    "4b8b20b0b1172a8aa3f499cac5a62e11b543744a41ac12c7b824a8e79c7dbe07": {
+      "source": "<s id=\"0\">环境不存在、版本或依赖错误</s>：重新安装发布者提供的组件，或从高级入口选择实际可用的 MFA 3.3.8 环境重新检查。",
+      "translation": "<s id=\"0\">Environment missing or incorrect version/dependencies</s>: reinstall the publisher's components or select a working MFA 3.3.8 environment under Advanced and recheck."
+    },
+    "a1f59ca9906f8ef0bbeaf081b492d4b3c062a9785f8cebf3f971cc52905c4005": {
+      "source": "<s id=\"0\">模型/词典不兼容</s>：按上方配套表重新选择，检查词典格式、音素和转写。资源内容变更后需要重新导入检查。",
+      "translation": "<s id=\"0\">Incompatible model/dictionary</s>: reselect using the matching table above and check dictionary format, phones and transcript. Changed resource content needs reimport and checks."
+    },
+    "2ddc0519ec993a187d1d04efe401ed995b14342b7ef54fbc4a08af0c96c6f89c": {
+      "source": "<s id=\"0\">检查词条缺失</s>：当前只支持 <s id=\"1\">a</s>、<s id=\"2\">啊</s>、<s id=\"3\">a1</s>，请使用包含其中词条的配套资源。",
+      "translation": "<s id=\"0\">Missing check entry</s>: currently supported entries are <s id=\"1\">a</s>, <s id=\"2\">啊</s> and <s id=\"3\">a1</s>. Use compatible resources containing one of them."
+    },
+    "cf3527d629e167dcab060295776fe960ada84708354d682fcdcfbd58c3085ebc": {
+      "source": "<s id=\"0\">组件文件、路径或空间错误</s>：重新取得发布者提供的同版 ZIP，或重新解压后选择单包根目录。检查剩余空间，路径过长时使用较短组件位置。",
+      "translation": "<s id=\"0\">Component file/path/space error</s>: obtain the publisher's same-version ZIP again or re-extract it and select the package root. Check free space and use a shorter component location for long paths."
+    },
+    "1ca74e717131709f6109c682d2812cffd465e0cf87565fcafb6b5dc9473d71ca": {
+      "source": "任务失败、取消、等待或保存失败",
+      "translation": "Task failure, cancellation, waiting or save failure"
+    },
+    "801f589debf628cd73346d3a5db6a1cd8912672f2922ad78f333231dc433e27b": {
+      "source": "<s id=\"0\">未登录词</s>：选失败任务看具体 OOV，纠正源转写或换兼容词典，再重新读取并提交。",
+      "translation": "<s id=\"0\">Out-of-vocabulary words</s>: inspect the failed task's OOV entries, correct the transcript or use a compatible dictionary, then reload and submit."
+    },
+    "73fb0f7c99ac2c76c72eeb71579ba191f58fa9529fb3fecd831ce087030a9d1d": {
+      "source": "未登录词使任务失败，完整成果不发布。展开日志后可在日志框继续滚动查具体词，修正并重新读入后提交新任务。",
+      "translation": "OOV causes task failure without complete results. Scroll the expanded log for the exact word, correct the source, reload and submit a new task."
+    },
+    "85e85794a28932139c02d424302bc09c1f6ed3089d0cc3ce41687e6ce2b51458": {
+      "source": "最大化 MFA 工作台公开测试词未被词典收录，右栏任务失败并提示核对汉字拼音与声调，脱敏 MFA 日志已展开。",
+      "translation": "Maximized MFA workbench: a public test word is absent from the dictionary. The failed task prompts checks of characters, pinyin and tones, with the redacted MFA log expanded."
+    },
+    "72774edfbadb60ec024ba6b70471642ba8708ad9ca4deedc7375cb58c43988e8": {
+      "source": "<s id=\"0\">未得到有效对齐 / 特征提取失败</s>：先检查音频可读且有语音、转写完整及资源匹配，再考虑搜索参数。",
+      "translation": "<s id=\"0\">No valid alignment / feature extraction failed</s>: first check readable audio containing speech, complete transcripts and matching resources; consider search parameters afterward."
+    },
+    "934b63b4c3d25b5126e64385a020b6b1df7161c7f94af8b9ddff784dfee665f2": {
+      "source": "<s id=\"0\">任务超时或运行失败</s>：减小批次后重新提交；使用包内默认资源仍反复失败时，保存错误提示并反馈问题。",
+      "translation": "<s id=\"0\">Task timed out or failed</s>: reduce the batch and resubmit. If bundled default resources repeatedly fail, keep the error message and report it."
+    },
+    "93eac6d360eff60e3adf8fb4ca8960c800cdf6a9a05320afdc0405d392eb477f": {
+      "source": "<s id=\"0\">任务已取消</s>：确认任务已停止后，再重新提交。",
+      "translation": "<s id=\"0\">Task cancelled</s>: confirm it has stopped before resubmitting."
+    },
+    "c152f0ca6e9debd74aa0fc8200a325770a621945e913ccb29088be2856a07300": {
+      "source": "<s id=\"0\">下载或保存失败</s>：刷新并选中正确成功任务，确认结果未到期。完整性错误时重试下载；目录不可写时重新选择并完整保存。",
+      "translation": "<s id=\"0\">Download/save failed</s>: refresh, select the correct successful task and confirm results have not expired. Retry downloads for integrity errors; choose a writable folder and save all again for permission failures."
+    },
+    "5d096d7053c30c3d9e4219f848ff8e519bc62624d93cf6c9417e96fc2075db02": {
+      "source": "需要诊断时记下任务时间、错误提示和使用的资源。提供日志前检查是否含语料、个人信息或私有路径。",
+      "translation": "For diagnosis, record task time, errors and resources. Before sharing logs, check for corpus text, personal information and private paths."
+    },
+    "e3e3230b26b924dcfe3a995c0a2ac2e422de06daba02f0f3002d832808bb12dd": {
+      "source": "方法来源与解释边界",
+      "translation": "Methods and interpretation limits"
+    },
+    "b3fef844f1fc97e9647fce75725cada4432a5b3cac00e3e2a9524e3189942163": {
+      "source": "本模块采用 Montreal Forced Aligner 与 Kaldi。<s id=\"0\">方法与引用</s>可查看方法、资源和许可信息。运行环境、模型和词典的适用范围及许可分别判断。",
+      "translation": "This module uses Montreal Forced Aligner and Kaldi. <s id=\"0\">Methods and references</s> lists methods, resources and licenses. Assess the runtime, model and dictionary scope/licenses separately."
+    },
+    "6fb82f5529cc44c53390b9c7b55618fe764fafd6c0e51fdcfb12ab9425dca25e": {
+      "source": "科研使用时记录模型/词典版本、实际参数、转写来源和人工复核规则，并结合研究语料评估词与音素边界的质量。",
+      "translation": "For research, record model/dictionary versions, actual parameters, transcript source and review rules. Assess word and phone boundaries on your own corpus."
+    },
+    "89b11309772f9800e080a1841b300f36cdf8da5d47f92e944242262b0dd82905": {
+      "source": "参考资料",
+      "translation": "References"
+    }
+  }
+}

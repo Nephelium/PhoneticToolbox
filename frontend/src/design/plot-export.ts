@@ -1,11 +1,14 @@
+import {messageRef} from '../i18n/index.ts';
+import {uiMessage,uiError,uiErrorMessage,localized} from '../modules/module-localization.ts';
+import {tr} from '../i18n/index.ts';
 import {paintSvg,styledSvg} from './svg-fonts.ts';
 import {exportSize,png300dpi} from './png.ts';
 import {waveformExportColor} from './waveform-color.ts';
 
 /** Snapshot only panel titles, axes and data; UI legends never enter PNGs. */
 export function scientificPlotsSvg(panels:HTMLElement[]){
-  if(!panels.length)throw Error('图形尚未就绪。');
-  const charts=panels.map(panel=>{const svg=panel.querySelector<SVGSVGElement>('.scientific-plot>svg');if(!svg)throw Error('图形尚未就绪。');return {panel,svg,copy:styledSvg(svg)};});
+  if(!panels.length)throw uiError(uiMessage('state.the_figure_is_not_ready_yet'));
+  const charts=panels.map(panel=>{const svg=panel.querySelector<SVGSVGElement>('.scientific-plot>svg');if(!svg)throw uiError(uiMessage('state.the_figure_is_not_ready_yet'));return {panel,svg,copy:styledSvg(svg)};});
   const ns='http://www.w3.org/2000/svg',root=document.createElementNS(ns,'svg');
   const columns=charts.length>1?2:1,gap=16,padding=36;
   const w=Math.max(...charts.map(c=>c.svg.viewBox.baseVal.width)),h=Math.max(...charts.map(c=>c.svg.viewBox.baseVal.height));
@@ -41,7 +44,7 @@ export function scientificPlotsSvg(panels:HTMLElement[]){
 export async function scientificPlotsPng(panels:HTMLElement[]){
   const {text,width,height}=scientificPlotsSvg(panels),size=exportSize(width,height);
   const canvas=document.createElement('canvas');canvas.width=size.width;canvas.height=size.height;
-  try{await paintSvg(canvas,text,width,height);const blob=await new Promise<Blob>((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(Error('PNG 编码失败。')),'image/png'));return new Blob([png300dpi(new Uint8Array(await blob.arrayBuffer()))],{type:'image/png'});}
+  try{await paintSvg(canvas,text,width,height);const blob=await new Promise<Blob>((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(uiError(uiMessage('state.png_encoding_failed'))),'image/png'));return new Blob([png300dpi(new Uint8Array(await blob.arrayBuffer()))],{type:'image/png'});}
   finally{canvas.width=canvas.height=1;}
 }
 

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import {tr} from '../i18n/index.ts';
 import {syncNumberInput} from '../design/numeric-input.ts';
 import {vTimePrecision} from '../design/time-precision.ts';
 import {useAudioSelection} from '../state/audio-selection.ts';
@@ -37,22 +38,22 @@ onMounted(()=>window.addEventListener('keydown',key));onUnmounted(()=>window.rem
 <template>
 <div ref="transport" class="transport-controls" :class="{'transport-compact':compact}">
 <div v-if="!compact" class="selection-controls">
-<strong>时间选区</strong>
-<label>起点 <input v-time-precision="'s'" v-model.lazy.number="startInput" type="number" min="0" :max="rangeState.asset?.duration||0" step="0.001" :disabled="!rangeState.asset" @change="syncNumberInput($event,startInput)"/> s</label>
+<strong>{{tr('components.time_selection')}}</strong>
+<label>{{tr('components.start')}} <input v-time-precision="'s'" v-model.lazy.number="startInput" type="number" min="0" :max="rangeState.asset?.duration||0" step="0.001" :disabled="!rangeState.asset" @change="syncNumberInput($event,startInput)"/> s</label>
 <span>—</span>
-<label>终点 <input v-time-precision="'s'" v-model.lazy.number="endInput" type="number" min="0" :max="rangeState.asset?.duration||0" step="0.001" :disabled="!rangeState.asset" @change="syncNumberInput($event,endInput)"/> s</label>
-<button data-audio-selection :disabled="!rangeState.asset" @click="select();rangeState.start=0;rangeState.end=rangeState.asset!.duration;stop()">全部</button>
+<label>{{tr('components.end')}} <input v-time-precision="'s'" v-model.lazy.number="endInput" type="number" min="0" :max="rangeState.asset?.duration||0" step="0.001" :disabled="!rangeState.asset" @change="syncNumberInput($event,endInput)"/> s</label>
+<button data-audio-selection :disabled="!rangeState.asset" @click="select();rangeState.start=0;rangeState.end=rangeState.asset!.duration;stop()">{{tr('components.all')}}</button>
 </div>
 <div class="audio-transport">
 <button :class="{primary:!compact}" :disabled="!state.asset||state.end<=state.start" @click="toggle">
-<AppIcon :name="playing?'pause':'play'"/>{{playing?'暂停':'播放选区'}}</button>
+<AppIcon :name="playing?'pause':'play'"/>{{playing?tr('components.pause'):tr('components.play_selection')}}</button>
 <button :disabled="!state.asset" @click="stopPlayback">
-<AppIcon name="stop"/>停止</button>
+<AppIcon name="stop"/>{{tr('components.stop')}}</button>
 <span class="mono">{{position.toFixed(3)}} / {{(state.asset?.duration||0).toFixed(3)}} s</span>
-<label class="playback-seek"><span class="visually-hidden">播放进度（当前选区）</span><input type="range" :min="state.start" :max="state.end" step="0.001" :value="scrub??Math.max(state.start,Math.min(position,state.end))" :disabled="!state.asset||state.end<=state.start" :aria-valuetext="(scrub??Math.max(state.start,position)).toFixed(3)+' 秒'" @input="scrub=Number(($event.target as HTMLInputElement).value)" @change="seekTo" @pointercancel="scrub=null" @blur="scrub=null"/></label>
+<label class="playback-seek"><span class="visually-hidden">{{tr('components.playback_position_within_selection')}}</span><input type="range" :min="state.start" :max="state.end" step="0.001" :value="scrub??Math.max(state.start,Math.min(position,state.end))" :disabled="!state.asset||state.end<=state.start" :aria-valuetext="(scrub??Math.max(state.start,position)).toFixed(3)+tr('components.s')" @input="scrub=Number(($event.target as HTMLInputElement).value)" @change="seekTo" @pointercancel="scrub=null" @blur="scrub=null"/></label>
 <label class="volume">
 <AppIcon name="speaker"/>
-<input type="range" aria-label="播放音量" min="0" max="1" step="0.05" :value="playback.volume" @input="volume(Number(($event.target as HTMLInputElement).value))"/>
+<input type="range" :aria-label="tr('components.playback_volume')" min="0" max="1" step="0.05" :value="playback.volume" @input="volume(Number(($event.target as HTMLInputElement).value))"/>
 <small>{{Math.round(playback.volume*100)}}%</small>
 </label>
 </div>

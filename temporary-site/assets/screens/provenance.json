@@ -309,19 +309,6 @@
       "page_scale_percent": 150
     },
     {
-      "file": "home-everforest-light.png",
-      "module": "home",
-      "palette": "everforest",
-      "mode": "light",
-      "width": 2560,
-      "height": 1440,
-      "page_scale_percent": 150,
-      "input": null,
-      "sha256": "22e31537d9d70d6a38962decd5e71bd71c7e8dd0974e500d31991046b67e4037",
-      "bytes": 366600,
-      "source": "Current Vue application in isolated Chrome, unmodified whole viewport"
-    },
-    {
       "file": "appearance-tokyo-night-dark.png",
       "module": "settings",
       "palette": "tokyo-night",
@@ -383,6 +370,199 @@
       "label": "DeepSeek 自定义背景设置",
       "source_sha256": "05a0d617bdc4432d518db758ca3c61009024d7942fee7a2692ec62929996062a",
       "sha256": "05a0d617bdc4432d518db758ca3c61009024d7942fee7a2692ec62929996062a"
+    },
+    {
+      "file": "paper-original-notion-light.png",
+      "module": "M18",
+      "palette": "notion",
+      "mode": "light",
+      "width": 2561,
+      "height": 1440,
+      "sha256": "30ee9c5d9659b148e1f0d7962189a6b2c939d22096f96e0baf3cd0afe31f43e8",
+      "bytes": 640236,
+      "caption": "原文",
+      "source": "Current source, isolated real Windows Qt WebEngine, whole unmodified viewport"
+    },
+    {
+      "file": "paper-analysis-notion-light.png",
+      "module": "M18",
+      "palette": "notion",
+      "mode": "light",
+      "width": 2561,
+      "height": 1440,
+      "sha256": "83cecf255dad3a32297b459a6cb80d3d17cabca999e138c982c0ffb8854dfb41",
+      "bytes": 558326,
+      "caption": "论文解读",
+      "source": "Current source, isolated real Windows Qt WebEngine, whole unmodified viewport"
+    },
+    {
+      "file": "paper-translation-notion-light.png",
+      "module": "M18",
+      "palette": "notion",
+      "mode": "light",
+      "width": 2561,
+      "height": 1440,
+      "sha256": "7409057f9052396367f19c748c54aff3d1df6eb4d39a2251b08c7398bb6da1ff",
+      "bytes": 702485,
+      "caption": "中文译文",
+      "source": "Current source, isolated real Windows Qt WebEngine, whole unmodified viewport"
+    },
+    {
+      "file": "map-dialects-lobster-dark.png",
+      "module": "M19",
+      "palette": "lobster",
+      "mode": "dark",
+      "width": 2561,
+      "height": 1440,
+      "sha256": "1327e97d9ba245557e4dbe06d8cea21de5fa7754537ad32494950b6f09bbf25c",
+      "bytes": 485248,
+      "caption": "方言分布",
+      "source": "Current source, isolated real Windows Qt WebEngine, whole unmodified viewport"
+    },
+    {
+      "file": "map-feature-lobster-dark.png",
+      "module": "M19",
+      "palette": "lobster",
+      "mode": "dark",
+      "width": 2561,
+      "height": 1440,
+      "sha256": "364051b59d235dc4b185c8cd245789d5b5eddd80151ee099d7423f30375ab84c",
+      "bytes": 420298,
+      "caption": "韵尾分布",
+      "source": "Current source, isolated real Windows Qt WebEngine, whole unmodified viewport"
+    },
+    {
+      "file": "map-compare-lobster-dark.png",
+      "module": "M19",
+      "palette": "lobster",
+      "mode": "dark",
+      "width": 2561,
+      "height": 1440,
+      "sha256": "6f83d9717d9801804c0cf0896d35e1f5d1bd823074d26f3d28314569b266e9fe",
+      "bytes": 472469,
+      "caption": "两图对照",
+      "source": "Current source, isolated real Windows Qt WebEngine, whole unmodified viewport"
+    },
+    {
+      "file": "paper-notice-lobster-dark.png",
+      "module": "M18",
+      "palette": "lobster",
+      "mode": "dark",
+      "width": 2561,
+      "height": 1440,
+      "sha256": "920629fc85e45cc341cc88974c406cdc9a4008ba94282d00a3a0bda76ef65ee2",
+      "bytes": 530539,
+      "caption": "请看这里~",
+      "source": "Current source, isolated real Windows Qt WebEngine, whole unmodified viewport"
+    },
+    {
+      "file": "paper-reading-lobster-dark.png",
+      "module": "M18",
+      "palette": "lobster",
+      "mode": "dark",
+      "width": 2561,
+      "height": 1440,
+      "sha256": "12e5096e4909e583e59d165e9609878646dc4adf51e28d0091a110f8816d13eb",
+      "bytes": 829719,
+      "caption": "论文与中文译文",
+      "source": "Current source, isolated real Windows Qt WebEngine, whole unmodified viewport"
+    },
+    {
+      "file": "paper-annotated-lobster-dark.png",
+      "module": "M18",
+      "palette": "lobster",
+      "mode": "dark",
+      "width": 2561,
+      "height": 1440,
+      "sha256": "ac57019477c319ecea7bf2c2e5957e5b669437575d34ae3a8b07fff563b0c481",
+      "bytes": 810378,
+      "caption": "全屏阅读、荧光标注与批注",
+      "source": "Current source, isolated real Windows Qt WebEngine, whole unmodified viewport"
+    },
+    {
+      "file": "map-dialects-notion-light.png",
+      "module": "M19",
+      "palette": "notion",
+      "mode": "light",
+      "width": 2558,
+      "height": 1440,
+      "sha256": "156fcd8c5443e60eb0c230560ebe55223f11227534f7dd18b85be402f710386f",
+      "bytes": 488118,
+      "caption": "方言分布",
+      "source": "Current source, isolated real Windows Qt WebEngine, whole unmodified viewport"
+    },
+    {
+      "file": "map-feature-notion-light.png",
+      "module": "M19",
+      "palette": "notion",
+      "mode": "light",
+      "width": 2558,
+      "height": 1440,
+      "sha256": "31fe5b2883da6330c20adcad771c1ab7757f7b8ee6e6525f67ed5346c077590e",
+      "bytes": 425082,
+      "caption": "韵尾分布",
+      "source": "Current source, isolated real Windows Qt WebEngine, whole unmodified viewport"
+    },
+    {
+      "file": "map-compare-notion-light.png",
+      "module": "M19",
+      "palette": "notion",
+      "mode": "light",
+      "width": 2558,
+      "height": 1440,
+      "sha256": "dccf132ee630c44a56f7cf1d49d1defa5c7f6fa38691dd329a0b5c95c1d7b9be",
+      "bytes": 483660,
+      "caption": "两图对照",
+      "source": "Current source, isolated real Windows Qt WebEngine, whole unmodified viewport"
+    },
+    {
+      "file": "map-sites-notion-light.png",
+      "module": "M19",
+      "palette": "notion",
+      "mode": "light",
+      "width": 2558,
+      "height": 1440,
+      "sha256": "fb57a61c8fc64d2d8082b402b5a94a36e452d897b3eb3cd3a7056cc40058284f",
+      "bytes": 397302,
+      "caption": "苏州、广州、西安、哈尔滨与南京调查点对照",
+      "source": "Current source, isolated real Windows Qt WebEngine, whole unmodified viewport"
+    },
+    {
+      "file": "home-everforest-light.png",
+      "module": "home",
+      "palette": "everforest",
+      "mode": "light",
+      "width": 2561,
+      "height": 1440,
+      "sha256": "7a19302c0dc6ad2d040913979c21d7b79fd91da00b602979e79d096ca689792a",
+      "bytes": 382747,
+      "caption": "当前十九个工具首页",
+      "source": "Current source, isolated real Windows Qt WebEngine, whole unmodified viewport"
+    },
+    {
+      "file": "map-similarity-notion-light.png",
+      "module": "M19",
+      "palette": "notion",
+      "mode": "light",
+      "width": 2561,
+      "height": 1440,
+      "sha256": "c7daf93b3841e6ebacafd7c8ec1b692a1ff22320d600c60d7fdfd0ce43611c00",
+      "bytes": 410340,
+      "caption": "方言相似性",
+      "source": "Current source, isolated real Windows Qt WebEngine, whole unmodified viewport"
     }
-  ]
+  ],
+  "learningShowcases": {
+    "paper": {
+      "id": "arxiv-2408-05641-v1",
+      "title": "Towards a Quantitative Analysis of Coarticulation with a Phoneme-to-Articulatory Model",
+      "authors": "Chaofei Fan、Jaimie M. Henderson、Chris Manning、Francis R. Willett",
+      "sourceUrl": "https://arxiv.org/abs/2408.05641v1",
+      "license": {
+        "id": "CC-BY-4.0",
+        "url": "https://creativecommons.org/licenses/by/4.0/"
+      }
+    },
+    "mapManifestSha256": "e86ed70dfcb9f61eb61d601575db45a80bbc9a9b745746bd54db8a3c2fc5d7bd"
+  }
 }

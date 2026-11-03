@@ -1,32 +1,33 @@
 <script setup lang="ts">
+import {tr} from '../../i18n/index.ts';
 import {ref,computed} from 'vue';import ModalDialog from '../../components/ModalDialog.vue';import type {ResearchFile,EggTaskConfig} from '../../platform/research.ts';
 const props=defineProps<{files:ResearchFile[];config:EggTaskConfig;busy:boolean;error?:string}>();const emit=defineEmits<{close:[];cancel:[];submit:[files:ResearchFile[],config:EggTaskConfig]}>();
 const settings=ref({...props.config}),selected=ref(props.files.map(f=>f.id));const all=computed(()=>props.files.length>0&&selected.value.length===props.files.length);
 </script>
 <template>
-<ModalDialog title="EGG 批量分析" wide :close-disabled="busy" @close="emit('close')">
-  <p class="batch-intro">分析所选文件的完整滤波信号，每个文件独立保存结果。单文件选区不带入批次。</p>
+<ModalDialog :title="tr('modules.egg-analysis.egg_batch_analysis')" wide :close-disabled="busy" @close="emit('close')">
+  <p class="batch-intro">{{tr('modules.egg-analysis.analyses_complete_filtered_signals_for_selected_files_saving_each')}}</p>
   <p v-if="error" role="alert" class="error-banner">{{error}}</p>
   <fieldset class="batch-settings" :disabled="busy">
-    <legend class="visually-hidden">批次参数</legend>
-    <section class="batch-section"><h3>滤波与事件</h3><div class="batch-values">
-      <label>高通 Hz<input v-model.number="settings.highpass_cutoff" type="number" min="1" max="47999" step="1"/></label>
-      <label>低通 Hz<input v-model.number="settings.lowpass_cutoff" type="number" min="1" max="47999" step="1"/></label>
-      <label>GCI<select v-model="settings.gci_method"><option value="slope">斜率</option><option value="scale">尺度 0.25</option></select></label>
-      <label>GOI<select v-model="settings.goi_method"><option value="scale">尺度 0.25</option><option value="slope">斜率</option></select></label>
+    <legend class="visually-hidden">{{tr('modules.egg-analysis.batch_parameters')}}</legend>
+    <section class="batch-section"><h3>{{tr('modules.egg-analysis.filters_and_events')}}</h3><div class="batch-values">
+      <label>{{tr('modules.egg-analysis.high_pass_hz')}}<input v-model.number="settings.highpass_cutoff" type="number" min="1" max="47999" step="1"/></label>
+      <label>{{tr('modules.egg-analysis.low_pass_hz')}}<input v-model.number="settings.lowpass_cutoff" type="number" min="1" max="47999" step="1"/></label>
+      <label>GCI<select v-model="settings.gci_method"><option value="slope">{{tr('modules.egg-analysis.slope')}}</option><option value="scale">{{tr('modules.egg-analysis.scale_0_25')}}</option></select></label>
+      <label>GOI<select v-model="settings.goi_method"><option value="scale">{{tr('modules.egg-analysis.scale_0_25')}}</option><option value="slope">{{tr('modules.egg-analysis.slope')}}</option></select></label>
     </div></section>
-    <section class="batch-section"><h3>输出选项</h3><div class="batch-options">
-      <label><input v-model="settings.flip_channels" type="checkbox"/>交换 EGG / 音频声道</label>
-      <label><input v-model="settings.generate_images" type="checkbox"/>同时导出三张图片</label>
+    <section class="batch-section"><h3>{{tr('modules.egg-analysis.output_options')}}</h3><div class="batch-options">
+      <label><input v-model="settings.flip_channels" type="checkbox"/>{{tr('modules.egg-analysis.swap_egg_audio_channels')}}</label>
+      <label><input v-model="settings.generate_images" type="checkbox"/>{{tr('modules.egg-analysis.also_export_three_images')}}</label>
       <label><input v-model="settings.keep_praat_f0" type="checkbox"/>Praat F0</label>
       <label><input v-model="settings.keep_gci_f0" type="checkbox"/>GCI F0</label>
-      <label title="音频 REAPER，搜索范围 30–800 Hz"><input v-model="settings.keep_reaper_f0" type="checkbox"/>REAPER F0</label>
-    </div><label class="batch-silence">静音阈值<input v-model.number="settings.silence_threshold" type="number" min="0" max="1" step=".001"/></label>
-    <p class="hint">20 ms 平均绝对振幅，仅遮罩 CSV。批次参数独立保存。</p></section>
+      <label :title="tr('modules.egg-analysis.audio_reaper_search_range_30_800_hz')"><input v-model="settings.keep_reaper_f0" type="checkbox"/>REAPER F0</label>
+    </div><label class="batch-silence">{{tr('modules.egg-analysis.silence_threshold')}}<input v-model.number="settings.silence_threshold" type="number" min="0" max="1" step=".001"/></label>
+    <p class="hint">{{tr('modules.egg-analysis.20_ms_mean_absolute_amplitude_masking_csv_only_batch')}}</p></section>
   </fieldset>
-  <div class="batch-file-heading"><h3>待处理文件</h3><label><input type="checkbox" :checked="all" :disabled="busy" @change="selected=all?[]:files.map(f=>f.id)"/>全选（{{selected.length}} / {{files.length}}）</label></div>
+  <div class="batch-file-heading"><h3>{{tr('modules.egg-analysis.files_to_process')}}</h3><label><input type="checkbox" :checked="all" :disabled="busy" @change="selected=all?[]:files.map(f=>f.id)"/>{{tr('modules.egg-analysis.batchSelectAll',{selected:selected.length,total:files.length})}}</label></div>
   <div class="batch-files"><label v-for="file in files" :key="file.id"><input v-model="selected" type="checkbox" :value="file.id" :disabled="busy"/><span>{{file.name}}</span></label></div>
-  <template #footer><button v-if="busy" @click="emit('cancel')">取消提交</button><button :disabled="busy" @click="emit('close')">返回工作台</button><button class="primary" :disabled="busy||!selected.length" @click="emit('submit',files.filter(f=>selected.includes(f.id)),settings)">{{busy?'正在提交…':'提交所选文件'}}</button></template>
+  <template #footer><button v-if="busy" @click="emit('cancel')">{{tr('modules.egg-analysis.cancel_submission')}}</button><button :disabled="busy" @click="emit('close')">{{tr('modules.egg-analysis.back_to_workbench')}}</button><button class="primary" :disabled="busy||!selected.length" @click="emit('submit',files.filter(f=>selected.includes(f.id)),settings)">{{busy?tr('modules.egg-analysis.submitting'):tr('modules.egg-analysis.submit_selected_files')}}</button></template>
 </ModalDialog>
 </template>
 <style scoped>

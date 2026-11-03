@@ -35,7 +35,7 @@ def test_real_child_and_dual_format_reopening(tmp_path,storage):
     response=run(tmp_path,request(storage))
     assert response['success']
     meta=json.loads((tmp_path/'result.ptb.json').read_text('utf-8'))
-    assert meta['computation_revision']=='acoustic-bounded/1' and meta['tables']['egg_cycles']['rows']>150
+    assert meta['computation_revision']=='acoustic-bounded/2' and meta['tables']['egg_cycles']['rows']>150
     view=dict(start=0.,end=2.,width=4000,parameters=['F0 - Praat','CQ','SQ','F0 - GCI'])
     first=window(tmp_path/'result.ptb.sqlite','a'*64,view)
     reopened=read_bundle(dict(source=str(tmp_path/'result.xlsx'),cache=str(tmp_path/'cache.sqlite'),name='result.xlsx',sha256='a'*64,view=view))

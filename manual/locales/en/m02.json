@@ -1,0 +1,1450 @@
+{
+  "schemaVersion": "ptb-manual-localization/1",
+  "locale": "en",
+  "entries": {
+    "71e362dfef998576c0929e4ad5ebbfb56980b43712a75c06a06d080fbd1cc55a": {
+      "source": "参数显示",
+      "translation": "Parameter display"
+    },
+    "39bdcd195c705380e445f0582f86f4fbcbb3db0075504439074b359f7be6e821": {
+      "source": "视频教程：<s id=\"0\">观看本章视频</s>。",
+      "translation": "Video tutorial: <s id=\"0\">watch this chapter's video</s>."
+    },
+    "199a41a5c9ed5653bfbe84af8a63806d67aabd6c75a658027562c44e70324a88": {
+      "source": "准备音频和结果文件",
+      "translation": "Prepare audio and result files"
+    },
+    "f08285e7f8983d31284d0b154a7ad0eeacbcb2047dae533330f0ff756976b02d": {
+      "source": "想把几种参数放在一起看，或对照波形、文字和语谱图？先打开已有结果，再选择要显示的列。本页保留原数值，需要重算参数时请返回参数估计。",
+      "translation": "To view parameters together or compare them with waveform, text, and spectrogram, open existing results and choose the columns to display. This page preserves original values. Return to Parameter estimation if recalculation is needed."
+    },
+    "7f9c2c5f317451881a7cd56c6e3e3a73b1dc7a383fcba71d2d3dee462c5796ab": {
+      "source": "音频和参数怎样配对",
+      "translation": "Pair audio with parameters"
+    },
+    "0c15acb5d9424b2b91bd20d1e91689fe601e0892c0234053e0fbbd2beb70982c": {
+      "source": "准备 WAV 及同一次分析的 XLSX、.ptb.sqlite 或 .ptb.sqlite3。通常放在同一目录最方便；分开放时，含子文件夹的两边要保持相同相对路径。没有结果也能看波形、试听。",
+      "translation": "Prepare WAV and XLSX, .ptb.sqlite, or .ptb.sqlite3 from the same analysis. Keeping them in one folder is usually easiest. If stored separately with subfolders, retain matching relative paths on both sides. Waveform viewing and playback remain available without results."
+    },
+    "9434e799d7b002feffe15bb56bb7a5fd80eed9770c2f039f9963d0b852c91315": {
+      "source": "例如，音频与参数分开放时可这样对应。sample 只是示例文件名。",
+      "translation": "For example, separately stored audio and parameters can be paired as follows. sample is only an example file name."
+    },
+    "9bdca49ad4c98eb38e3e00b8dac75eb99040a987032ca8c5d6e2e9c5382734e5": {
+      "source": "同名文件依次优先关联 .ptb.sqlite、.ptb.sqlite3、.xlsx、.lip.json、V2 数值 .pkl，名称匹配忽略大小写。同一优先级有重名候选时，请手动选择。优先关联的文件不一定最新，旧结果要留意。",
+      "translation": "Same-name associations prefer .ptb.sqlite, .ptb.sqlite3, .xlsx, .lip.json, then V2 numeric .pkl, ignoring case. Choose manually if multiple candidates share a priority. The preferred file is not necessarily the newest; watch for old results."
+    },
+    "8392df4a8987ede74aa1bac90c6641fe0363f54ca6c3fc793f62793d39de45b4": {
+      "source": "关联后先核对：<s id=\"0\">结果确实来自这段 WAV</s>，时长、起点及分析设置正确。文件改名或剪裁后尤其要检查。",
+      "translation": "After linking, check that <s id=\"0\">the results actually come from this WAV</s> and that duration, onset, and analysis settings are correct. Take particular care after renaming or trimming files."
+    },
+    "2d2169524c57bd5ca778c6070e60107d394b6d251c590d1ebb4aa6979baf2182": {
+      "source": "支持哪些结果",
+      "translation": "Supported results"
+    },
+    "ed662f67be3894f6a8e3fb9e41ec7c6b9c57589faeaa345c4b86fc77f100e8d7": {
+      "source": "普通参数表：XLSX 或约定的 SQLite params 表。需有数值时间列 Time_s，列名不重复，时间按顺序排列。",
+      "translation": "Ordinary parameter tables: XLSX or the specified SQLite params table, with a numeric Time_s column, unique column names, and ordered times."
+    },
+    "13be5912dda5799078cf92bc82075a20e71242d89846212161b418958fbd30d7": {
+      "source": "参数估计 长结果：本机支持 m01-bundle/2 的 XLSX、SQLite，可直接选择 CQ、SQ、F0 - GCI 等 EGG 列。网页暂只支持旧单表。",
+      "translation": "Long Parameter estimation results: local processing supports m01-bundle/2 XLSX and SQLite, with EGG columns such as CQ, SQ, and F0 - GCI directly selectable. The web app currently supports only legacy single tables."
+    },
+    "842202e95fcdb380d7af243f10890f546b10007fb425d940de41d2b19551bcc3": {
+      "source": "文字标注：来自表内 text_层名、TextGrid、TextGrid_层名等文字列。只有独立 TextGrid 时，先在参数估计中生成带文字列的结果。",
+      "translation": "Text annotations come from text_层名, TextGrid, TextGrid_层名, and similar text columns in the table. If you have only a separate TextGrid, first generate results with text columns in Parameter estimation."
+    },
+    "0d643222065c9244b58095e80933d6f0b334a1ed7a8067c5481f89c866f099bd": {
+      "source": "唇形记录：.lip.json；桌面还可读 V2 数值 .pkl 及配套时间戳文件。关联后会出现 LipArea、LipWidth、LipOpen、LipCirc。",
+      "translation": "Lip records: .lip.json; desktop also reads V2 numeric .pkl and companion timestamp files. Linking exposes LipArea, LipWidth, LipOpen, and LipCirc."
+    },
+    "cd835045acd73acfbb18a5d2762f14cc24865b9f5660c5480710458d4bfdf26e": {
+      "source": "CSV 不能直接从本页导入。请使用参数估计保存的受支持结果，不要只改扩展名。",
+      "translation": "CSV cannot be imported directly here. Use supported results saved by Parameter estimation; changing the extension alone is insufficient."
+    },
+    "9c3d3fbc162af7e55b513a603ef8f4ef7232c50268c9f85fd0fbb6b55a6c83cc": {
+      "source": "画出第一组曲线",
+      "translation": "Draw the first set of curves"
+    },
+    "2020d84e52ffb83d9cbe3565c6869729095abf38ca76fd9c81742e5a19846c79": {
+      "source": "左侧选音频，中间看波形与曲线，右侧选参数，底部试听。拖动侧栏与中间图面的边界可调宽度；栏宽会记住。窄窗或大字号下，中间图面可一起横向滚动。",
+      "translation": "Select audio on the left, view waveforms and curves in the centre, select parameters on the right, and listen below. Drag panel boundaries to adjust widths, which are remembered. In a narrow window or with large fonts, the central plots can scroll horizontally together."
+    },
+    "7b8c36a360428c561894b824502f0bb038d0242444510ee2f97fce6f60188cc1": {
+      "source": "打开合成示例 WAV 与同名 SQLite 后，图窗和右侧勾选均为空。新建图窗也从空选择开始。",
+      "translation": "After opening the synthesized example WAV and same-name SQLite, both the plot and right-hand selection are empty. New plots also begin with no selection."
+    },
+    "60068aa92250ce4d7cb302404e35c8232716c09aa9da064b2ab9439a7cfa4104": {
+      "source": "顶部：选择目录、<s id=\"0\">刷新文件</s>、<s id=\"1\">保存绘图配置</s>，以及帮助和<s id=\"2\">方法与引用</s>。",
+      "translation": "Top: folder selection, <s id=\"0\">Refresh files</s>, <s id=\"1\">Save plot configuration</s>, Help, and <s id=\"2\">Methods and references</s>."
+    },
+    "88fcadf774885ccc0a5f22a7c403be2526e0d64c721a0b42739ac1e60e8b0b74": {
+      "source": "左侧：音频搜索和文件列表。文件多时在列表内滚动；子目录显示相对路径。",
+      "translation": "Left: audio search and file list. Scroll within long lists; subfolders show relative paths."
+    },
+    "0b45fa8b9adb8f36309ed74550461a3dd5c696d20fd45a118bece8cd2a9192c0": {
+      "source": "中间上方：<s id=\"0\">参数表关联</s>、波形、可选语谱图，以及时间窗控件。",
+      "translation": "Upper centre: <s id=\"0\">Parameter table association</s>, waveform, optional spectrogram, and time-window controls."
+    },
+    "7a4724c7846dfb3e23fab1a8acefe2c01fc831e4fd17249e1f64dcb437e8d84a": {
+      "source": "中间下方：曲线图窗、图例、文字层和导出按钮。",
+      "translation": "Lower centre: curve plots, legends, text tiers, and export buttons."
+    },
+    "e14e02b55d909ac429e2a19dddb61da0c7a00ca635df5c71a0608f90fd8bce42": {
+      "source": "右侧：选择当前图窗，搜索、筛选并勾选参数。勾选立即绘制，取消立即移除。",
+      "translation": "Right: select the current plot, search/filter parameters, and check them. Checking draws immediately; unchecking removes immediately."
+    },
+    "aafb26bb029925e5514cf8b916e13eb28b7daa5787a5c43c6218a190d77ea69a": {
+      "source": "底部：选区起止、全部、播放/暂停、停止、播放定位和音量。",
+      "translation": "Bottom: selection start/end, All, play/pause, stop, playback seeking, and volume."
+    },
+    "2fc4a105a93438513fb0c5119bb4367cb697770a7f2928bebe8c230812e4eed4": {
+      "source": "第一次打开有一个空图窗。保存过绘图配置时，会恢复原选择，包括空图窗或零图窗；仍需重新打开源文件。",
+      "translation": "The first visit starts with an empty plot. Saved plot configuration restores previous selections, including empty plots or no plots, but source files must still be reopened."
+    },
+    "25d5590c6431c441eb61d6f3ab3b2bc28a232bd9c2cadecd8357a43d9f5d5e61": {
+      "source": "按这几步开始",
+      "translation": "Start with these steps"
+    },
+    "3f0f381f27b28d04eec3ba74ade526671f07f375d8cc5e75a7b4d9674a7d7aad": {
+      "source": "点击<s id=\"0\">打开音频目录</s>。结果分开放时再选参数目录。网页先在项目上传 WAV 和受支持结果，再<s id=\"1\">刷新文件</s>。",
+      "translation": "Click <s id=\"0\">Open audio folder</s>. If results are stored separately, select their folder too. On the web, upload WAV and supported results to the project, then <s id=\"1\">Refresh files</s>."
+    },
+    "a0e778bb35d30125b157b2715f3d1d384655a46bfe1fdcdd71f9ee22941a4a53": {
+      "source": "有子目录时勾选<s id=\"0\">包含子文件夹</s>。点击左侧音频，检查<s id=\"1\">参数表关联</s>；必要时手动选择正确结果。",
+      "translation": "Enable <s id=\"0\">Include subfolders</s> when needed. Click audio on the left and check <s id=\"1\">Parameter table association</s>; select the correct result manually if necessary."
+    },
+    "436703c7725dbab463d2f6512140f1ad7859075f1425908cab8c7147625ebe88": {
+      "source": "在右侧搜索 F0，勾选要比较的列。找不到时<s id=\"0\">清除筛选</s>，检查原结果是否含该列。",
+      "translation": "Search F0 on the right and check the columns to compare. If a column is missing, <s id=\"0\">Clear filters</s> and check whether it exists in the source result."
+    },
+    "109e9f97567ebbc4fba1e1cc0e67a7cb6298fa0db3548d1453315a6bd5117bb4": {
+      "source": "下图已关联 XLSX 并勾选两项 F0，两条轨迹立即显示在当前图窗。右侧勾选始终对应当前图窗的内容。",
+      "translation": "The figure links XLSX and selects two F0 columns; both trajectories appear immediately in the current plot. The right-hand selection always represents that plot's contents."
+    },
+    "0d44c79cd0208642bd14ea7728fc9304e96993c2307d633f05714c62f30fcf23": {
+      "source": "关联 XLSX 后搜索并勾选两项 F0，曲线立即显示，无需分配。",
+      "translation": "After linking XLSX, search and check two F0 columns. Curves appear immediately without a separate assignment step."
+    },
+    "d9c83307ac0d3d7d7602b71cce59fcc776cfbba0f091efaad24e8686c5f56429": {
+      "source": "当前图窗的勾选即对应已绘制参数。取消勾选移除该曲线，清空勾选清空当前图窗。",
+      "translation": "The current plot's checks correspond to its drawn parameters. Unchecking removes a curve; Clear selection empties that plot."
+    },
+    "372fbe914e9a7f348aeda6268839f28cb4c7a0b5e43ad64db17ba4d863663cd1": {
+      "source": "确认当前图窗为图窗 1，勾选后即出现曲线和图例。取消任一勾选，对应曲线立即移除。",
+      "translation": "Confirm Plot 1 is current. Checking parameters displays curves and a legend; unchecking either immediately removes its curve."
+    },
+    "866f09fd5e9fe4b8f38452dc7a8959aff7cd51cfb47e761e3f9fab0a366179c8": {
+      "source": "两项 F0 即时叠加，紧凑图例标出名称和线色。示例曲线含保留的缺口。",
+      "translation": "Two F0 curves overlay immediately, with names and colours in a compact legend. Gaps in the example curves are retained."
+    },
+    "ef5b84eefa1097f549d98d694b6f38b04b8f2aeb4a31f093367da76994ec0898": {
+      "source": "需要文字时，清空搜索并勾选文字列，标签立即出现在当前图及上方波形。",
+      "translation": "For text, clear the search and select a text column. Labels appear immediately in the current plot and waveform above."
+    },
+    "9e5e47f12ac361c909e63eaa7e62c3de1202a85a254641581a6cb6e35422d208": {
+      "source": "左键拖出试听选区；<s id=\"0\">Ctrl＋滚轮</s>看局部。参数图可用 <s id=\"1\">Shift＋拖动</s>平移，也可输入<s id=\"2\">时间窗起点</s>和长度。",
+      "translation": "Drag with the left button to select playback; use <s id=\"0\">Ctrl + wheel</s> for detail. <s id=\"1\">Shift + drag</s> pans parameter plots; you can also enter <s id=\"2\">Time window start</s> and duration."
+    },
+    "c9e5a737b4299f0f32dd720c69b042f0676cd43fad91ad108de567107a5ff332": {
+      "source": "需要语谱时勾选<s id=\"0\">显示语谱图（Praat）</s>并等待。点击底部<s id=\"1\">播放选区</s>试听，停止结束；全部可选整段。",
+      "translation": "For a spectrogram, enable <s id=\"0\">Show spectrogram (Praat)</s> and wait. Use <s id=\"1\">Play selection</s> below to listen and Stop to end; All selects the full duration."
+    },
+    "8b55955b62e6194cbc0cab8276a51dffd9cfea112b4be33c8b8fec7427ac52eb": {
+      "source": "读取完成后<s id=\"0\">保存当前图</s>，或<s id=\"1\">保存整幅 PNG</s>。打开输出文件，核对范围、文字和坐标轴。",
+      "translation": "After reading finishes, <s id=\"0\">Save current plot</s> or <s id=\"1\">Save full PNG</s>. Open the output and check range, text, and axes."
+    },
+    "756a21d6ae053e5d5af7c444707d5eac6e92f54da9ecbf6363f2573b8e325412": {
+      "source": "最后<s id=\"0\">保存绘图配置</s>，并另行保留原 WAV、参数表和分析设置。",
+      "translation": "Finally, <s id=\"0\">Save plot configuration</s> and separately retain the original WAV, parameter table, and analysis settings."
+    },
+    "ab811fe59981f76a72f000d5d0cc79d7b443eb170f93c27101503290bc6ad5c2": {
+      "source": "目录与关联按钮速查",
+      "translation": "Folder and association controls at a glance"
+    },
+    "76c9ba87b9576d58f078a776f83eb7c3773eb3f53c3cdd862e3c17d65a40ec37": {
+      "source": "目录、列表与关联控件",
+      "translation": "Folders, lists, and association controls"
+    },
+    "dfeb0027273dfa74dbbbf6abe4f701cc8fe4c1b6bd63ff55d32000e7b742ed89": {
+      "source": "控件或参数",
+      "translation": "Control or parameter"
+    },
+    "6d9a6fe9460f7a0d7c3bd77a5d1403ad4f44bbad0d140b4f8758fcc889e941ee": {
+      "source": "位置/单位",
+      "translation": "Location / unit"
+    },
+    "d96b5f223f71d2e565ac20aefaa3a64a543420fb7b82fd54a93781cecf9e7a48": {
+      "source": "默认值",
+      "translation": "Default"
+    },
+    "65be762e1110940fb22750b73c8ae5d8aa83aa4ba7c0a13ae0c9e3bfb803e0cd": {
+      "source": "操作与影响",
+      "translation": "Action and effect"
+    },
+    "bffcc1ca90cd930f54b8305f65b2449e42dbc9ee6d13c07d66a151f8b08ad123": {
+      "source": "<s id=\"0\">打开音频目录</s>",
+      "translation": "<s id=\"0\">Open audio folder</s>"
+    },
+    "ce41e9837ebcc61c8d716e3f696dda2c5de31ae09f77d7486c1e4320373abc7a": {
+      "source": "公共工具栏／目录",
+      "translation": "Shared toolbar / folder"
+    },
+    "40b3ba334b3ee3cc703fde7afacec54303b0c7672c0710aa8f7e2a1a60a06182": {
+      "source": "未选择",
+      "translation": "Not selected"
+    },
+    "6ac6b5d263911512f6f326a447c02a50c811188dd3e3d64257fe2c33d95fc49a": {
+      "source": "选含 WAV 的目录。确认新目录后，参数回到同目录查找；取消不改变当前内容。",
+      "translation": "Choose a folder containing WAV. Confirming a new folder returns parameter lookup to that folder; cancelling retains current content."
+    },
+    "3bd3627f67607b6eac8d5e03958acb7d29858ca958ba2e04aa01f3ff0183ada8": {
+      "source": "<s id=\"0\">选择参数目录</s>",
+      "translation": "<s id=\"0\">Select parameter folder</s>"
+    },
+    "66eff9d49c7f9c23f15fa0d6f54d8c3b62ca7eb5978db64cbd93b7d7a4e2da6b": {
+      "source": "同音频目录",
+      "translation": "Audio folder"
+    },
+    "bfbe9b423dbdab8cc19d68d7abb4d682161d2d52e12517462ac5b0c5664189fe": {
+      "source": "结果分开放时选择其目录。重新<s id=\"0\">打开音频目录</s>后，需再选一次独立参数目录。",
+      "translation": "Select a separate results folder when needed. After <s id=\"0\">Open audio folder</s> is used again, reselect the independent parameter folder."
+    },
+    "65283d410e045e1e2a77528194c8a1705a82b1517e01a7c1a1d71b674b86fe2a": {
+      "source": "<s id=\"0\">包含子文件夹</s>",
+      "translation": "<s id=\"0\">Include subfolders</s>"
+    },
+    "48f9759ad7afb44fab7785e3ae6322acd8b0143b08e499b6a896b2126412a09b": {
+      "source": "公共工具栏／开关",
+      "translation": "Shared toolbar / switch"
+    },
+    "4f90971621aee2a5e446ac530b16fa7099c2e6378293f7f0c572968f1df7cdfc": {
+      "source": "关闭",
+      "translation": "Off"
+    },
+    "3740747482dbacf109e2e1c6edaa3c3e0a656f03f0afb4e81f67db5ae48560d0": {
+      "source": "同时扫描两边的子文件夹，按相对路径匹配。最多 10000 条目、512 个目录。",
+      "translation": "Scans both sets of subfolders and matches relative paths. Up to 10000 entries and 512 folders."
+    },
+    "05a85a935947033a152666816ef582b01a6954ee4a519ff74998d27e365bf1d2": {
+      "source": "<s id=\"0\">刷新文件</s>",
+      "translation": "<s id=\"0\">Refresh files</s>"
+    },
+    "0f8fc0b94527a99e4c45574596ac0885045a3b1cc4c5decab10e405f59f60741": {
+      "source": "公共工具栏／动作",
+      "translation": "Shared toolbar / action"
+    },
+    "fcea9f8593765b8d5cb0769f2f4d8ba28e8dd4505c613e0fae76ca7237b921e8": {
+      "source": "可用，读取中禁用",
+      "translation": "Available; disabled while reading"
+    },
+    "7063571626eef8db9d2be389ca0d32f07223af060d30bf4a3ff935be149fd561": {
+      "source": "文件新增或替换后刷新。当前音频会重读，视野与试听选区回到全长。",
+      "translation": "Refresh after adding or replacing files. Current audio is reread; view and playback selection return to full duration."
+    },
+    "928e0e1da864fbfcb0a427076d0fc25a75d1bbc118ead1810955469580fabf66": {
+      "source": "添加文件",
+      "translation": "Add files"
+    },
+    "6fe444270a532fd461fecb161df4a9100ea63c8d79e17b6c21e32ad76ebd739d": {
+      "source": "预览文件环境／文件选择",
+      "translation": "Preview-file environment / file picker"
+    },
+    "54909f7a1ab52b4bed83b2919661e32302ff8779dd03a81d98cc31f2e9195db1": {
+      "source": "无文件",
+      "translation": "No files"
+    },
+    "5a56ea431807e7b6e7145d5e22c144021fb587c355ca029238496fb8c130dc13": {
+      "source": "在提供此按钮的环境中，可同时选 WAV、XLSX、SQLite、.lip.json；读表还需该环境支持。",
+      "translation": "Where this button is provided, WAV, XLSX, SQLite, and .lip.json can be selected together; table reading also requires support in that environment."
+    },
+    "bd5ff9b4bd5414f1cb6aa68e1cb5d2d5e203e6bc8cfecf81d9dc413239ee01e9": {
+      "source": "音频搜索",
+      "translation": "Audio search"
+    },
+    "b1f0503e354fe5b08882684616fc1c49d016d3319597c4d10e18329148e064f5": {
+      "source": "左栏／文字",
+      "translation": "Left panel / text"
+    },
+    "fe9535fe5eee47ed51f779bfd92677e9fe5b65a08bf31942d41d1dff9411a6b3": {
+      "source": "空",
+      "translation": "Empty"
+    },
+    "16e0890cdb432b62b485609c19cf2fec878a2d460da87384946f692cd8e8dfc0": {
+      "source": "输入文件名或相对路径的一部分，忽略大小写；只筛列表，不停止已载入音频。",
+      "translation": "Enter part of a file name or relative path, ignoring case. This filters only the list and does not stop loaded audio."
+    },
+    "d5ed27ad174b4bf18f93fde97937e678364fa750f3d20fbc2d2fbb5dc1651ea1": {
+      "source": "音频名称",
+      "translation": "Audio name"
+    },
+    "dc6f40ffe7e2d9f4ddb545aff2e36649541cdd2153cdb55f38c546f1f2fd1c8f": {
+      "source": "左栏／动作",
+      "translation": "Left panel / action"
+    },
+    "956e03417c6342d7bbc7cecce53a9ee93d1da5463f9c80a13f605a2072b00b0f": {
+      "source": "点击读取并尝试同名关联。此前试听停止，视野和选区回全长，试听第 1 声道。",
+      "translation": "Click to load and attempt same-name association. Previous playback stops; view and selection reset to full duration, with channel 1 for playback."
+    },
+    "885057b584a968d009689733256426a06e749b772d9131edab3d9747d3f5fc61": {
+      "source": "<s id=\"0\">参数表关联</s>",
+      "translation": "<s id=\"0\">Parameter table association</s>"
+    },
+    "eba1be6e09729f6ee180d741fe2d9cbfd0ac8519677b122f080d3dd9fff7bc69": {
+      "source": "中间上部／文件下拉框",
+      "translation": "Upper centre / file selector"
+    },
+    "6b8416c954016074ce5dcba066d2f9809b4589fee0e1acfa43611c51a72a5712": {
+      "source": "自动同名关联，缺失时未关联参数表",
+      "translation": "Same-name association automatically; no linked table if missing"
+    },
+    "4cb0f9f1b76b922de496f17e287b4a15965aa07e147dc46349378691fa3aef4b": {
+      "source": "选择正确结果或未关联参数表。重新读表后，保留新表中存在的参数，图窗与右侧勾选保持一致。",
+      "translation": "Select the correct result or No parameter table linked. After rereading, parameters present in the new table are retained; plot contents and right-hand checks stay consistent."
+    },
+    "54ea2ab557e1d0e8c9c05daaa6a0ba0723b59d7cda76cb2e172917cb2038f81d": {
+      "source": "<s id=\"0\">保存绘图配置</s>",
+      "translation": "<s id=\"0\">Save plot configuration</s>"
+    },
+    "fd70c7769edad52dae2f9d787059d92cf9b315ee291e79f62fde4a58363896f4": {
+      "source": "公共工具栏／本机存储",
+      "translation": "Shared toolbar / local storage"
+    },
+    "c1a1bf587ae4585fe378455d8952f1b3610644c27a5ed64058c2dcd637f3c47a": {
+      "source": "未保存",
+      "translation": "Unsaved"
+    },
+    "721e60e38c375958d4772ac2c6d40b8e70627b83e88e51de4e973bf6df69bbdb": {
+      "source": "保存图窗和参数选择。若提示失败，保留页面并重试。",
+      "translation": "Saves plots and parameter selections. If saving fails, keep the page open and retry."
+    },
+    "224f04843e5506fd1d381ab9ff4cf5828f0f77215829474a618182fb335c88f3": {
+      "source": "<s id=\"0\">方法与引用</s>",
+      "translation": "<s id=\"0\">Methods and references</s>"
+    },
+    "c769aca9bfcbd86ada0c57308bb3066688ce304833cd45192dda47430e716a3b": {
+      "source": "查看和复制当前模块的来源、许可与论文链接。",
+      "translation": "View and copy this tool's sources, licenses, and paper links."
+    },
+    "93c165ce37d4d0395ae1247592c0e4f8a4158143fe17a8480846a4bffc928ecb": {
+      "source": "帮助",
+      "translation": "Help"
+    },
+    "28143c0dd9b4de150fb304ed3b482a5c5804f99839218a9dce8df9b32a197313": {
+      "source": "打开本章，阅读后可返回模块。",
+      "translation": "Opens this chapter, with a return path to the tool."
+    },
+    "615f8548641835fa3098bd75b061999bd0ea0686fede1580ae7c606fce3cc1e8": {
+      "source": "下图没有同名结果。波形和试听仍可用；确认另一份表来自该 WAV 后，再手动关联。",
+      "translation": "The figure has no same-name result. Waveform and playback remain available; confirm another table comes from this WAV before linking it manually."
+    },
+    "61930ec1b1a1b9e62c6249981d9888b7531cbcadcbd0f02d7ca8f0390539735f": {
+      "source": "未关联参数的合成示例仍可查看波形及试听，需手动关联正确结果。",
+      "translation": "The synthesized example without linked parameters still supports waveform and playback; the correct result must be linked manually."
+    },
+    "afc371cfec631fa04a8ea8fbb156125f7c8c3763393087c0598c2ff3d5226b70": {
+      "source": "选择参数与安排图窗",
+      "translation": "Select parameters and arrange plots"
+    },
+    "7659b7a2c50a634c896a80b7a9ed937a9d703375c492bbbf99afba040b9cc6da": {
+      "source": "下面列出常用按钮。默认状态指第一次打开；已存配置会恢复图窗选择。",
+      "translation": "Common buttons are listed below. Defaults refer to the first visit; saved configurations restore plot selections."
+    },
+    "d4e5b3ce8757a48feea3f2a09831bf1370faa567c9768f84fb45a98946a45c31": {
+      "source": "参数栏按钮速查",
+      "translation": "Parameter-panel buttons at a glance"
+    },
+    "592f9eeb3d843db41fe75082a992cc1fc8a12c6306d50ebe602fd724b4c2de48": {
+      "source": "参数筛选、勾选与图窗管理控件",
+      "translation": "Parameter filtering, selection, and plot controls"
+    },
+    "47f9158257a0f5c329b737508386a0958b65b8df0f9b09828b11e1111f1cc06f": {
+      "source": "参数搜索",
+      "translation": "Parameter search"
+    },
+    "dd8d6774e4ef93555279fcbfbc6f71f42d63e24321940ca4f9e2f8403cf1d23e": {
+      "source": "右栏／文字",
+      "translation": "Right panel / text"
+    },
+    "0c50156c4ef352eac1d547df31e9e2a55d2ece3e1f1f6f03d7f4658cc6410569": {
+      "source": "输入列名的一部分，忽略大小写和首尾空格。",
+      "translation": "Enter part of a column name; case and surrounding whitespace are ignored."
+    },
+    "64f9205c516735abea8f8aea39812dbe38704ab76c3fffcd993f40cd5ecdfe28": {
+      "source": "右栏／开关",
+      "translation": "Right panel / switch"
+    },
+    "ea8b837edd202e0dac5363d8fa880906542231fc009bfa7a7da45860a821ffef": {
+      "source": "勾选",
+      "translation": "Checked"
+    },
+    "2ba7e37bfab7db01379f6bc44951c002fd6dc322e2abfd8242d92282a1914094": {
+      "source": "取消可隐藏含 rF0 的候选列。F0 - REAPER 不含 rF0，仍会显示。",
+      "translation": "Uncheck to hide candidate columns containing rF0. F0 - REAPER does not contain rF0 and remains visible."
+    },
+    "8e6b28f46f966d3fdc373fc6025466f4513cc5466cdaaa17c75e99c400d98c38": {
+      "source": "不勾选",
+      "translation": "Unchecked"
+    },
+    "26742a931bae29067330fc15c072ccbc3d446d91e41c8b015aa6c86962400b2e": {
+      "source": "勾选可显示带 * 的候选列，不会重新校正参数。",
+      "translation": "Check to show candidate columns containing *. This does not recalculate correction."
+    },
+    "c41131fc126f668beda1763e924ddc12f38142148fc205289430c70be5c1bfd6": {
+      "source": "参数复选框",
+      "translation": "Parameter checkbox"
+    },
+    "981fdeb9fd75114c8ca5bc9b942ab34dab406f6e75938987668b140d9d0f6831": {
+      "source": "右栏候选区／开关",
+      "translation": "Right candidate area / switch"
+    },
+    "65bcba02f14f0a1f2cb0a2ee369c4b5017fab9a052f395fc44e80deba5e2d4c7": {
+      "source": "新窗全不勾选",
+      "translation": "New plots start with none checked"
+    },
+    "59f0fa8f9e459863a770d8bf35226a3256159216e15d6f7e7739ec3fec1ccfe9": {
+      "source": "勾选即在当前图窗绘制，取消即移除。切换图窗恢复对应勾选，长名称悬停查看。",
+      "translation": "Checking draws in the current plot; unchecking removes. Switching plots restores its checks; hover for long names."
+    },
+    "7ba37a2f8db376b212d99f5d853c5c67dcbfec708b910a85c45db7606b8b9a94": {
+      "source": "<s id=\"0\">全选可见参数</s>",
+      "translation": "<s id=\"0\">Select all visible parameters</s>"
+    },
+    "5c2ca02ed21c44c73db7b817e77512a7e5a8db36be80fac4478a5a151cf1d39e": {
+      "source": "右栏／动作",
+      "translation": "Right panel / action"
+    },
+    "327b5b26f162959bcd2b92d58968dc46beb581135175ca6be6c2249910c307ee": {
+      "source": "无候选时禁用",
+      "translation": "Disabled without candidates"
+    },
+    "edcabfde10d9e8306148ec1189133c80f928f9fef31a9fe70328aa4b086eba67": {
+      "source": "追加当前可见列，以前勾选但被隐藏的列仍保留。",
+      "translation": "Adds visible columns while retaining previously checked hidden columns."
+    },
+    "8be5e233b7466c292bd122ef4ed1d726d10ba125f27047e7721afd57a0d3d4e5": {
+      "source": "清空勾选",
+      "translation": "Clear selection"
+    },
+    "a44cc6727006a446bb1e56c0a707e4bd339aea52d7df0c9d247a83576f5e0931": {
+      "source": "当前窗为空时禁用",
+      "translation": "Disabled when current plot is empty"
+    },
+    "dfa57f46d8f77cbbbb41bab9c8b708badd9f10b6a690ff9ab4fa8fff8ae3daaa": {
+      "source": "清掉当前图窗全部参数，包括筛选隐藏项，曲线和文字一起移除，图窗保留。",
+      "translation": "Clears all parameters in the current plot, including filtered-out items. Curves and text are removed together; the plot remains."
+    },
+    "efebb0f6f002cd8d4a529ce407b83e220b401f603a24fe3ea75c66631527ac0e": {
+      "source": "<s id=\"0\">清除筛选</s>",
+      "translation": "<s id=\"0\">Clear filters</s>"
+    },
+    "4bfaf015f6f7bb5db9946d507565c7bade571640e0e35990364273917e5411c4": {
+      "source": "无匹配参数提示旁／动作",
+      "translation": "Beside No matching parameters / action"
+    },
+    "a8a00dfa8394849cb07b47783cc2b888fbd1252bf56341037eb66d5f390a143e": {
+      "source": "仅无可见候选且已读表时出现",
+      "translation": "Appears only after reading a table with no visible candidates"
+    },
+    "7f2e92968ea137ca1435f71db37a8258d1bac1fa378d88822d543863b5e6ee16": {
+      "source": "清空搜索，勾选 reaper 和 correction；不清掉勾选或曲线。",
+      "translation": "Clears search and enables reaper and correction; keeps selections and curves."
+    },
+    "6b85232306171f348cfb261e6bdd36a9ff3c574a675e61ffb303b0f7eb5cb7a5": {
+      "source": "当前图窗",
+      "translation": "Current plot"
+    },
+    "fbcb0032d9d6b3bc8bc2dea0595bd1ce4071752906416ffe9bc8fa3250c60db6": {
+      "source": "右栏／图窗下拉框",
+      "translation": "Right panel / plot selector"
+    },
+    "b95d0018aed62025785325e72595472705fd952f248183e7bf042c828016cb10": {
+      "source": "第一个已保存图窗，首次为图窗 1",
+      "translation": "First saved plot; Plot 1 on first visit"
+    },
+    "49d9d03cf4bbf0273ffa9ae05ba742b14f4586240134bf3e18d2028f938bfbd1": {
+      "source": "切换当前编辑图窗并恢复它的勾选。也可点击图窗标题或图面。",
+      "translation": "Changes the edited plot and restores its selection. Clicking its title or plotting area also selects it."
+    },
+    "e409c1d680f2c5530c502f36a7a395d77de1eeffffbab944974069ac767a950d": {
+      "source": "新建图窗",
+      "translation": "New plot"
+    },
+    "c90d37d598c6e1b378b8618a38c4c9fcbe2aeabf664872bfdfac5b6760fdb9f5": {
+      "source": "首次已有一个空图窗",
+      "translation": "One empty plot already present on first visit"
+    },
+    "6e6eafa2f173ac4d9f8024b4945ba0f750cac5b9b7eb578d93061ec62200b7dd": {
+      "source": "新增空图窗并立即选中，右侧默认空选择，原图窗保持。最后一窗删除后也可重建。",
+      "translation": "Adds and selects an empty plot; right-hand selection starts empty and existing plots remain. Can also recreate a plot after deleting the last one."
+    },
+    "975fb6be85db9d4feaf628facf72d4ebde4b8f61b9cd3d685d7114a906924dc5": {
+      "source": "删除图窗",
+      "translation": "Delete plot"
+    },
+    "36a0d9cb79c695f99ca271c35924991addbde20a3ce2baf2378e654c85cb3abd": {
+      "source": "右栏及图窗内／动作",
+      "translation": "Right panel and inside plot / action"
+    },
+    "edcbab38df483b8d0c35fb67665bcd4585fae09b979b213b12c485b31fc3272e": {
+      "source": "有图窗时可用",
+      "translation": "Available when a plot exists"
+    },
+    "d5b1ea845816f1ab8af261dab17f1f367247cfaebed8718a2bea8bb501c4685a": {
+      "source": "删除对应图窗及其参数选择，不转移曲线。当前窗删除后切回第一个保留图窗。",
+      "translation": "Deletes the plot and its selections without moving curves elsewhere. Deleting the current plot switches to the first remaining one."
+    },
+    "91812e6e92474e221caee758e8a5999682d363386aa2b0a251d5b91c61bba105": {
+      "source": "勾选后怎样显示或移除",
+      "translation": "How selection displays or removes content"
+    },
+    "f8d7a3b997252880ac6cbd31ee079b16d66fbe5f8ffdc362dfcbf957a06a39ad": {
+      "source": "数值列画曲线，文字列显示标签。Time_s、Source_Time_s 用于时间，不在候选中。点击图窗标题或图面，右侧会切换到该图窗的参数选择。",
+      "translation": "Numeric columns draw curves; text columns show labels. Time_s and Source_Time_s supply time and are not candidates. Click a plot title or area to display its parameter selection on the right."
+    },
+    "b4f96b2b971bb107c03491b91cac70a69022b820fd10fa08a09fc7f092e61b0c": {
+      "source": "点击要编辑的图窗，或从右侧当前图窗下拉框选择。被选中的窗显示当前标记，右栏恢复它已有的勾选。",
+      "translation": "Click the plot to edit or choose it from Current plot on the right. The selected plot shows a Current marker and its previous checks return on the right."
+    },
+    "f6c0d34a42cadc833985ef45e05b3e0471ab03406e1af5805c73dc91f0877c8b": {
+      "source": "搜索并勾选参数，曲线或文字立即显示；取消勾选立即移除。",
+      "translation": "Search and select parameters to display curves or text immediately; uncheck to remove immediately."
+    },
+    "ac2329fccd49e78a3a8d4bdbb8dba41eb47a52489e3fefc0573ffbd67352eb94": {
+      "source": "搜索和筛选只改变候选列表。全选可见参数追加当前可见列，已选隐藏项仍保留。",
+      "translation": "Search and filters change only the candidate list. Select all visible parameters adds visible columns while retaining hidden selections."
+    },
+    "bf52554886eadb7287983f1b2ccd85133bb48c7640fac92f0b0f232488a489f6": {
+      "source": "清空勾选移除当前图窗全部数值曲线和文字层，保留空窗。其他图窗不受影响。",
+      "translation": "Clear selection removes all numeric curves and text tiers from the current plot, retaining the empty plot. Other plots are unaffected."
+    },
+    "29d65b2fc5682e4138e64600e7a4fbd12e982800634553d587c2efb9e05e66f8": {
+      "source": "各图窗分别保留自己的选择，同一参数可以在多个图窗中对照。",
+      "translation": "Each plot retains its own selection; the same parameter can be compared across several plots."
+    },
+    "5bad05699cc7bf9ce0a04ef9c96f1b2c80fcb433d565afcd77a2283442cebfe9": {
+      "source": "右栏按宽度显示两至四列，可在候选区内滚动。搜索和筛选保留当前图窗已有的勾选；清空勾选会移除该窗的全部参数，包括暂时隐藏的项。",
+      "translation": "The right panel uses two to four columns according to width and scrolls within the candidate area. Search/filters retain the current plot's checks; Clear selection removes every parameter in it, including temporarily hidden ones."
+    },
+    "fad60ea4b21386c719c8fe90844fb8d760b2cdb2353af65377ebd6297356e38a": {
+      "source": "读懂单纵轴和双纵轴",
+      "translation": "Read shared and dual vertical axes"
+    },
+    "796d56a1ee49aa9bc96f03b0dda543469cabc113394bb00d227f0bd63298ce65": {
+      "source": "曲线叠加时保留原数值，通常共用纵轴。当前时间窗各列平均绝对值都大于 0，且最大/最小比超过 50 时，平均绝对值大于 100 的列使用右轴。请看图例的 [左]、[右]。",
+      "translation": "Overlaid curves retain original values and usually share a vertical axis. If all columns' mean absolute values in the current window exceed 0 and their maximum/minimum ratio exceeds 50, columns with mean absolute value above 100 use the right axis. Check [left] and [right] in the legend."
+    },
+    "edc214e6b9a0d050b782765ee25fd6a0a974cd11693f537e420ced93198982d3": {
+      "source": "自动分轴依据数值量级，不按单位分类。",
+      "translation": "Automatic axis assignment uses numerical magnitude, not units."
+    },
+    "7456cb2fe64697cdd7e6226ce80842a41f11e434aedd501c8711ac05e43922c9": {
+      "source": "例如 F1 和 SHR 同图时可能分到左右两轴；两种 F0 通常共用一轴。",
+      "translation": "For example, F1 and SHR may use different axes in one plot; two F0 measures usually share an axis."
+    },
+    "22e807dd323c40fc4ecd342f97379208289dc6c38d7c4523c41c8f099bcac978": {
+      "source": "轴范围随可见数据自动留边。缩放或平移后，刻度及轴归属可能变化，比较前再看一眼图例。",
+      "translation": "Axis limits automatically pad visible data. Zooming or panning can change ticks and axis assignments; check the legend again before comparison."
+    },
+    "6805889180b38d947a524ae417a5d64fcc470903a30110ca162c4fc1d1d1e6ac": {
+      "source": "轴范围和左右归属自动确定。需要分开不同单位时，可放进不同图窗；比较双轴曲线时分别读取各自刻度。",
+      "translation": "Axis ranges and sides are automatic. Use separate plots to separate units; when comparing dual-axis curves, read each scale independently."
+    },
+    "23dc47f0f5d172b831bf5ee98dd480c5ffa7e05f49c37b2481007334e128da97": {
+      "source": "下图 F1 - Praat 使用右轴，SHR (pF0) 使用左轴。线色相近时结合轴归属和刻度辨认。",
+      "translation": "The figure places F1 - Praat on the right and SHR (pF0) on the left. When colours are similar, use axis assignments and scales to distinguish them."
+    },
+    "a3ffcc3cdf495156c498ca24a5c0fc74638fa345826d86e9dd521186f79ef23b": {
+      "source": "F1 与 SHR 保留原数值自动双轴，图例完整显示轴归属，右轴曲线使用虚线。",
+      "translation": "F1 and SHR retain original values on automatically assigned dual axes. The legend shows full axis assignments and right-axis curves use dashed lines."
+    },
+    "12a7a4964544736e50ee1461ae909ec9970013aabdcced61ae39eec7ac32b8d7": {
+      "source": "拆分、合并和删除",
+      "translation": "Split, merge, and delete plots"
+    },
+    "8fd9e980b2db5d0e8594b8f5df5983637d5ac637b086f3d9ae89469988245292": {
+      "source": "在图窗 1 勾选同类参数，例如两种 F0。",
+      "translation": "Select comparable parameters in Plot 1, such as two F0 measures."
+    },
+    "ff4df46548d49e2bbf53d889e54fa850240395c9007e759c46b60819aff8671f": {
+      "source": "点击新建图窗，当前窗立即切到新窗，右侧默认没有勾选。",
+      "translation": "Click New plot to switch immediately to a new empty plot, with nothing checked on the right."
+    },
+    "13172d32f37bbef257cafbcf9407b135641258657e57068fca52d5f4fcb6f149": {
+      "source": "直接勾选另一组参数，各窗共用时间窗和选区，纵轴独立。点击原图窗可继续编辑原来的参数。",
+      "translation": "Select another parameter set directly. Plots share the time window and selection, with independent vertical axes. Click the original plot to continue editing its parameters."
+    },
+    "aa44fd6482116a343ddce27992597172767847c83787b5ab23f95ae9e4b4fbc5": {
+      "source": "向下滚动查看其他图窗。示例把 F2、F3 放进图窗 2，图窗 1 原有曲线保留。",
+      "translation": "Scroll down to other plots. The example places F2 and F3 in Plot 2 while retaining Plot 1's curves."
+    },
+    "80d4f6f6bc95643f0b40e4a17965b12694f1d4ea92d5e9c3e4635e76b69d3b58": {
+      "source": "新窗从空选择开始。勾选 F2、F3 后在图窗 2 显示，图窗 1 的 F1、SHR 保持。",
+      "translation": "New plots start empty. After selecting F2 and F3, they appear in Plot 2; F1 and SHR remain in Plot 1."
+    },
+    "becd5e43305938e5412dd2c8df6d4002bde5a3cbf6859c0fdb8edfe9dc4ccb94": {
+      "source": "要在另一窗显示同一参数，切到该窗后直接勾选。原窗的曲线保持。",
+      "translation": "To show the same parameter elsewhere, switch to that plot and check it. The original plot retains its curve."
+    },
+    "77272ef4217ee870b65ae2b5eee51ef10e9bb643b79fedd0315abf49eaa9d537": {
+      "source": "合并并保留参数：在后续图窗点击合并回首图，所有参数并入第一窗，同名项只保留一次。随后核对纵轴。",
+      "translation": "To merge while retaining parameters, click Merge into first plot in a later plot. All its parameters join the first plot, with duplicates included once. Then check the vertical axis."
+    },
+    "30fac97742b0cff470f534a58f9de773f2c3cad57ed1280477dc772dd53e1688": {
+      "source": "留下空窗用清空勾选；连窗一起去掉用删除图窗。最后一窗也可删除，再点新建图窗重新开始。",
+      "translation": "Clear selection leaves an empty plot; Delete plot removes the plot too. Even the last plot can be deleted and recreated with New plot."
+    },
+    "aac5dd721b3dd1f51ff258a4416bac7df1479b9714821fa4b753ad045730c362": {
+      "source": "布局满意后保存绘图配置，关闭前留意未保存提示。",
+      "translation": "Save plot configuration when satisfied with the layout; check for unsaved changes before closing."
+    },
+    "5346cc6c4484435e8e6614e3419f6a62e2f000097356b17e6ab2cbece067270d": {
+      "source": "放大图窗会扩大当前面板并隐藏其他参数窗，右侧参数仍可操作。切换当前图窗可直接查看另一窗，点击还原图窗恢复多窗。查看时间细节请缩短时间窗。",
+      "translation": "Enlarge plot expands the current panel and hides other parameter plots, leaving right-hand controls usable. Changing the current plot opens another directly. Restore plot returns the multiple-plot layout. Shorten the time window for temporal detail."
+    },
+    "ff903e94908da108173bfbf0c80ee3c8a8bc3e710dbbd3e19914d38c74ab312b": {
+      "source": "图窗内按钮速查",
+      "translation": "In-plot buttons at a glance"
+    },
+    "cd4290f2f8be2f7a23dfca375ebc2098ff19cfab49885d58846806318f9512f5": {
+      "source": "图窗显示与导出控件",
+      "translation": "Plot display and export controls"
+    },
+    "2dec21e41da23a0b222fcc5ebb46d2ce94440e3f4a8f66948bc86f5ec5f5a8dc": {
+      "source": "<s id=\"0\">放大图窗</s> / <s id=\"1\">还原图窗</s>",
+      "translation": "<s id=\"0\">Enlarge plot</s> / <s id=\"1\">Restore plot</s>"
+    },
+    "179a75f616e5c554480213782cfce1a2fc2c1b78f1bc8a76f0229455a93854c2": {
+      "source": "图窗顶栏／动作",
+      "translation": "Plot header / action"
+    },
+    "2dc385f5eb2f4e2ef210395feb5f2d0ee69f6a660deb3f0670c2747dbf7ce260": {
+      "source": "普通面板尺寸",
+      "translation": "Normal panel size"
+    },
+    "275220e871524f6171c82e945e0caac1965c55141826387cf7edb5975ab36f74": {
+      "source": "放大当前面板，再点还原恢复布局；时间和数据不变。",
+      "translation": "Enlarges the current panel; Restore returns the layout. Time and data are unchanged."
+    },
+    "c24bca0573a54eac886b9f0d5064da042f8d358720255f835f458e4614f8429c": {
+      "source": "<s id=\"0\">合并回首图</s>",
+      "translation": "<s id=\"0\">Merge into first plot</s>"
+    },
+    "1ed5c751a1d90f913a9fdc44f9c02b7006ea687153cd224a5901c6480e90ca5d": {
+      "source": "仅后续图窗且多个图窗时出现",
+      "translation": "Only later plots when multiple plots exist"
+    },
+    "d2f1bc39338d4c28d6d4154a8468e4b59c164a645e64f41b5bed2fc30679ac06": {
+      "source": "把当前窗的选择并入剩余首窗，重复列只保留一次。",
+      "translation": "Merges this plot's selection into the first remaining plot, retaining duplicate columns once."
+    },
+    "cf904df8b40a84c01cf8f11e6d9a63000d00a8440fd95c6d1f602e682cd44fb9": {
+      "source": "图窗存在即显示",
+      "translation": "Shown whenever a plot exists"
+    },
+    "f95773056d94f54ed35a3ac609cf8332e546b6f841e89e7206073db284d4e9ca": {
+      "source": "删除当前窗及选择。需恢复时重新新建、选择，没有删除撤销。",
+      "translation": "Deletes this plot and its selection. To restore it, create a new plot and select parameters; deletion has no undo."
+    },
+    "7961e8fd659acf35bdebd2f8a4a290ec96738be53bb1bf0040f7a7f9f7505930": {
+      "source": "图片格式 PNG / SVG",
+      "translation": "Image format PNG / SVG"
+    },
+    "b093d1bd4ccd4e5a8a864d41aa1b66903d05d4e52b5e24d1fe0b483da512d245": {
+      "source": "图窗顶栏／格式下拉框",
+      "translation": "Plot header / format selector"
+    },
+    "ad8f79e6c8a3234178167719ffde35b46476e69a33c2a45c95d8bba044600cd5": {
+      "source": "仅决定<s id=\"0\">保存当前图</s>的格式；整幅 PNG 始终为 PNG。格式不随配置保存。",
+      "translation": "Affects only <s id=\"0\">Save current plot</s>; full images always use PNG. Format is not saved with plot configuration."
+    },
+    "8ed49aaf3482b9de4f1fcc0f9297765690504f37581cd692460da688fd2cd6f5": {
+      "source": "<s id=\"0\">保存当前图</s>",
+      "translation": "<s id=\"0\">Save current plot</s>"
+    },
+    "7f453fd94a2293b458b7cc9bb4599966fa6973fdb0b863a3aeea11cfbbbf0033": {
+      "source": "图窗顶栏／导出",
+      "translation": "Plot header / export"
+    },
+    "161995038b18a14d61b45e03770eb2d436c4da1b844083050abafe0e31c03f60": {
+      "source": "PNG；无选择、读取中或导出中禁用",
+      "translation": "PNG; disabled without selection or while reading/exporting"
+    },
+    "bf6c35a531c9a1684b11e86991b7e4c81be7f8afc0662897401cba3feceb7d24": {
+      "source": "只导出该参数图。PNG 白底 300 dpi，SVG 保留当前配色和可编辑文字。",
+      "translation": "Exports only this parameter plot. PNG uses white at 300 dpi; SVG retains current colours and editable text."
+    },
+    "8c40677205b265100843cbf82e59253d455af958874b011f87526e3ed6060271": {
+      "source": "<s id=\"0\">保存整幅 PNG</s>",
+      "translation": "<s id=\"0\">Save full PNG</s>"
+    },
+    "a48fdd5514b2f6ad8dc77bc92ed92d3ae41fd0066aed3519f0b1d9a484da3f37": {
+      "source": "白底 300 dpi；无选择、读取中或导出中禁用",
+      "translation": "White at 300 dpi; disabled without selection or while reading/exporting"
+    },
+    "60a89228c27f30f864e3341f89558e79e66a553f06791fe43a930ea02bba092b": {
+      "source": "组合可见声道波形、文字、已就绪语谱及该参数图；不含其他图窗。",
+      "translation": "Combines visible-channel waveforms, text, ready spectrogram, and this parameter plot; excludes other plots."
+    },
+    "9a134a1d71e0b66c06fe51ae253a96db922d8ecaa0cbc1d48d576a3633c948c9": {
+      "source": "曲线图例与悬停提示",
+      "translation": "Curve legends and hover hints"
+    },
+    "f1fad88c41b74ef4ba5e0bbd16270d2ab832f6a0e8df659b9d42bca2ed297e87": {
+      "source": "绘图区空白角落或图上方／列名与轴",
+      "translation": "Empty plot corner or above plot / column names and axes"
+    },
+    "d91dacd1ebc652fd4541fb284659ffbfb003f177726f168b7b0cbc023804bbcd": {
+      "source": "来自当前已选择数值列",
+      "translation": "From selected numeric columns"
+    },
+    "3ad7cc6bbc88de9cc784f5e45031493e56f971ec366d3be481d4009d61cfe8ef": {
+      "source": "结合颜色、线型和图例读取；双轴附 [左]/[右]。图例避让曲线，长名称完整换行。",
+      "translation": "Use colour, line style, and legend together; dual axes add [left]/[right]. Legends avoid curves and wrap long names in full."
+    },
+    "089e2ed35341ebea44fb79500a3dd1936a82fcba7fa0fb165bb70463c5409c1c": {
+      "source": "点击图窗 2 后，右侧对应勾选 F2、F3。图窗 1 原有曲线保留，勾选操作直接作用于当前窗。",
+      "translation": "After clicking Plot 2, the right shows F2 and F3 checked. Plot 1 retains its curves; checking operates directly on the current plot."
+    },
+    "b25d9b1c7feeffa5ec2262651290578b4e8f17cb3076e1b3077cd57da4b4f788": {
+      "source": "当前双图窗界面，图窗 2 高亮，右侧勾选与该窗曲线一致，分配及单独移除按钮已取消。",
+      "translation": "Current two-plot interface with Plot 2 highlighted. Right-hand checks match its curves; separate Assign and Remove buttons are gone."
+    },
+    "8d8bfccd49d615d5b39e22b79602e55afa60643f3bc5997a4af65dfbb96ceeb3": {
+      "source": "对照波形、语谱和文字",
+      "translation": "Compare waveforms, spectrograms, and text"
+    },
+    "57099915f9aa632fb885d3e0c96b9cab93f5f2297308f7aeda0dafe3b1ccb5f7": {
+      "source": "查看波形和时间窗",
+      "translation": "View waveform and time window"
+    },
+    "92d075ef58c3880215b44f07941cf0fdec492319a6c1fc433b8fe3efe8ad6e0d": {
+      "source": "波形与查看时间窗控件",
+      "translation": "Waveform and time-window controls"
+    },
+    "21ea4d2c127d73d578bb663cd70a4de52983a10577d8165a76f448f3e04d34ca": {
+      "source": "显示两个声道",
+      "translation": "Show both channels"
+    },
+    "bb3bfe886b14fbd895684322ae428baf0a5bd7d968447c51c815198c75298212": {
+      "source": "波形下方音频总览／开关",
+      "translation": "Audio overview below waveform / switch"
+    },
+    "14f05e97422684830718f1ef5075ab1fa350cf518214f20864e7b4cf5400bda5": {
+      "source": "关闭；仅多声道时出现",
+      "translation": "Off; multichannel audio only"
+    },
+    "045b6626d5ee446a3f087b60dcf3ed0a7ba41ce4d096b54151363cccbb8b781f": {
+      "source": "显示第 1、2 声道波形，试听仍为第 1 声道。",
+      "translation": "Shows channel 1 and 2 waveforms; playback remains channel 1."
+    },
+    "b2526efe58e2555ed20ef343376a4c2e14be6cf9fcad2bd1526d28ec68c1ebbd": {
+      "source": "音频总览／倍率",
+      "translation": "Audio overview / zoom"
+    },
+    "7b64cb737d82558c6dda6ba3366bb80ca0b0eaeb8e62e48e4e4bc3dddfc1774a": {
+      "source": "按约 2 倍缩放查看时间窗，参数图和语谱同步。",
+      "translation": "Zooms the time window by about 2, with parameter plots and spectrogram synchronized."
+    },
+    "b80e55bc0b5e610f7a1539ebba667abadb70ca95bde4b62a6b2ce0f66470c93d": {
+      "source": "<s id=\"0\">适合窗口</s>",
+      "translation": "<s id=\"0\">Fit window</s>"
+    },
+    "e598f0a27e15217f20c1a700d4c130d12e33592f880732dc996aec2bf81ee086": {
+      "source": "音频总览／动作",
+      "translation": "Audio overview / action"
+    },
+    "0130a6fb58f11bace0e6adb3f7ad20570dccb178a1a6855966334f7536d552f1": {
+      "source": "全长视野",
+      "translation": "Full-duration view"
+    },
+    "b7da3d0b49416df7e3e15552a9546df268192b8572ced513af43abf99a777ae4": {
+      "source": "恢复全长视野，保留原试听选区。",
+      "translation": "Restores full-duration view, retaining the playback selection."
+    },
+    "5541d784855cf5f2e730e1a19c19c3bab2e29fae7846ad51f6f4c6496a8b2747": {
+      "source": "<s id=\"0\">时间窗起点</s>滑条",
+      "translation": "<s id=\"0\">Time window start</s> slider"
+    },
+    "d139b13583b2c97ac6a515a71d6b525d84c982228335d33f0f2c0b3dfdc18076": {
+      "source": "波形下方／秒",
+      "translation": "Below waveform / seconds"
+    },
+    "5a91ffab27059520313d61f9ae9e2b6944219dbacfc0c4e6e580baa96e2e1c80": {
+      "source": "全长时不显示；放大后从 0 开始",
+      "translation": "Hidden at full duration; starts at 0 when zoomed"
+    },
+    "dcb4a012b2b14c901be0638e9d2d038fd7f721eeb898507c89df0b2d62282331": {
+      "source": "放大后拖动查看其他时间位置，选区不变。",
+      "translation": "Drag when zoomed to view another time position, leaving selection unchanged."
+    },
+    "8698ee8577f57aa4664877b3f0220e5dfc9d2ac668cfae284516d77b88c6c0b5": {
+      "source": "<s id=\"0\">显示语谱图（Praat）</s>",
+      "translation": "<s id=\"0\">Show spectrogram (Praat)</s>"
+    },
+    "495a3e729638fb574fe23dd765443a3c9d4b8d2fd35df38513c2007ce2e22395": {
+      "source": "中间时间窗控件／开关",
+      "translation": "Central time-window controls / switch"
+    },
+    "2d1656eff85d3fab55bbdd9a50e038e6e271dd765f1c6454c69246721bcfe4f5": {
+      "source": "关闭；需当前环境支持语谱能力",
+      "translation": "Off; requires spectrogram support in the current environment"
+    },
+    "e215487e16169f9caf1dd4414d7bed1fa1ae5272e275d7892e12c9bf61552ae8": {
+      "source": "计算当前时间窗、第 1 声道语谱。等待完成再保存整幅图。",
+      "translation": "Computes the current-window channel 1 spectrogram. Wait until ready before saving a full image."
+    },
+    "a12d183eb9e959055c95fdf279fe1fb902673fe32a0247aa9ed5fadce10b1793": {
+      "source": "<s id=\"0\">时间窗起点</s>（秒）",
+      "translation": "<s id=\"0\">Time window start</s> (seconds)"
+    },
+    "a6dafee86750e79b0bc02d407330afe97ccb6f8ac9fcb92821e1a255a098622f": {
+      "source": "中间工具行／s",
+      "translation": "Central toolbar / s"
+    },
+    "9801d4f4146a0badaf338eb1e8e1ffea2b0a6cfe31101f5a77562e077b71dd55": {
+      "source": "输入视野左端，按 Enter 或离开字段提交；自动限制在音频内。",
+      "translation": "Enter the view's left edge; commit with Enter or leaving the field. Clamped to audio bounds."
+    },
+    "641d979371fc49179d708c66901fd519d0550580a9a71cff7abc298b7c6c05ff": {
+      "source": "<s id=\"0\">时间窗长度</s>（秒）",
+      "translation": "<s id=\"0\">Time window duration</s> (seconds)"
+    },
+    "b8f98d71a1aec82ac8636d4c75c7201a4ea990a3911e6cdb7b8012253c07f0dd": {
+      "source": "当前音频全长",
+      "translation": "Current audio's full duration"
+    },
+    "1211e96fb4fe2f174c5351b2149472f0d80b18926c32967ef7f7cd6e21de8d58": {
+      "source": "输入要看的时长，最短 0.01 秒，最长全长。",
+      "translation": "Enter duration to view, from 0.01 seconds to full duration."
+    },
+    "b23a007dc26130e00648a5d449782c814215d5a599826b696d748f528721cc8a": {
+      "source": "全长与选区时长",
+      "translation": "Full duration and selection duration"
+    },
+    "017e3d8e299aa349a4044ff2e8337914e9b1221334be859887fbb90456a40e68": {
+      "source": "全长与全长选区",
+      "translation": "Full duration and full-duration selection"
+    },
+    "95badf5354afa75031fa3214f11e1a5bfd56454413620afd600820cb1e8cf64b": {
+      "source": "分别显示音频总时长和试听选区时长。",
+      "translation": "Shows total audio duration and playback-selection duration separately."
+    },
+    "b36b201869d95988c098a36050dfff12b62e66f21dbc50efdc3dea1e256efa2e": {
+      "source": "拖选、缩放与平移",
+      "translation": "Select, zoom, and pan"
+    },
+    "6467b06afdc3e59bf75077108f297e63ac4849365b1d6f595c8efc2e3c87e7ff": {
+      "source": "<s id=\"0\">时间窗决定看哪一段及导图范围，选区决定听哪一段。</s>导图范围以时间窗为准。",
+      "translation": "<s id=\"0\">The time window controls the displayed and exported interval; the selection controls playback.</s> Image export follows the time window."
+    },
+    "26417e322bbde786a9dfb84fddc1852ef1173640e942e6da59ff1accda9497eb": {
+      "source": "左键拖动波形、语谱或参数绘图区，正反方向都能选区。轴刻度区域不能拖选。零长度选区需重新拖出范围或点全部。",
+      "translation": "Drag within waveform, spectrogram, or parameter plotting areas in either direction to select. Axis-tick areas do not select. For a zero-length selection, drag a new interval or click All."
+    },
+    "f9ced50b231b61aaf77843814012e487ac8f61545745c86683df30ab447b37e5": {
+      "source": "<s id=\"0\">Ctrl＋滚轮</s>在鼠标附近缩放：波形/语谱约 2 倍，参数图约 1.25 倍，时间范围同步。",
+      "translation": "<s id=\"0\">Ctrl + wheel</s> zooms near the pointer: about 2 for waveform/spectrogram and 1.25 for parameter plots, with synchronized time ranges."
+    },
+    "39495e47acaf8c18dd0be1bcae83d6a86788eb3bc22a19a2cf2bbc7503ebbb87": {
+      "source": "<s id=\"0\">Shift＋拖动</s>仅在参数图中平移。其他图面用<s id=\"1\">时间窗起点</s>字段或滑条平移。",
+      "translation": "<s id=\"0\">Shift + drag</s> pans parameter plots only. For other plots, pan with <s id=\"1\">Time window start</s> or its slider."
+    },
+    "f10dafda3be5205069a742e97025647308b14d0c406d90580d61814c32c34fd9": {
+      "source": "普通滚轮滚动页面或列表。",
+      "translation": "Ordinary wheel movement scrolls the page or list."
+    },
+    "8996bf6d49068052005afddacfa4c11706cfa8f19ef13593d40dc931b988a933": {
+      "source": "双击图面或点<s id=\"0\">适合窗口</s>恢复全长视野。要试听全段，另点底部全部。",
+      "translation": "Double-click a plot or click <s id=\"0\">Fit window</s> to restore full-duration view. For full-audio playback, separately click All below."
+    },
+    "6ac5316957a969332e39ff80af61fa7ba2c0837da48c99f53bdc2e944ac33942": {
+      "source": "各图按同一时间对齐。窄窗时共同横向滚动，按横轴刻度读时间。",
+      "translation": "All plots share time alignment. They scroll horizontally together in narrow windows; read time from the horizontal scale."
+    },
+    "e1e5803b23d539ae39a1b29fdafba06053b533c9cafba4f0b0585043b84d8bb0": {
+      "source": "只导出选中的一段：将选区起点填到<s id=\"0\">时间窗起点</s>，将终点减起点填到<s id=\"1\">时间窗长度</s>，再核对横轴。最短窗长 0.01 秒。",
+      "translation": "To export only a selected interval, enter its start as <s id=\"0\">Time window start</s> and end minus start as <s id=\"1\">Time window duration</s>, then check the horizontal axis. Minimum duration is 0.01 seconds."
+    },
+    "cc0ea7b99b28101c5a5a34e449f0d709ce37db486e5c440277b8e3ec72ae06c4": {
+      "source": "试试看：把<s id=\"0\">时间窗长度</s>填为 0.25 秒，提交后各图同步缩短。",
+      "translation": "Try entering 0.25 seconds in <s id=\"0\">Time window duration</s>. After committing, all plots shorten together."
+    },
+    "266f371f3d47ae038bdb3feb4274ec2d6641cb6725c2740b7d59007612589cb4": {
+      "source": "在参数图区按 Ctrl 向上滚一格，窗长会变成约 0.20 秒。",
+      "translation": "Hold Ctrl and scroll up one notch in a parameter plot; duration becomes approximately 0.20 seconds."
+    },
+    "edc3b3ed72ea5dbfd1475f5a5030a52ce1198c3b3d15283f208b8d6298e9413b": {
+      "source": "按 Shift 向左拖，查看较晚的时间；松开后拖出试听选区。",
+      "translation": "Shift-drag left to view later times; release, then drag out a playback selection."
+    },
+    "79ca9c00d21582a9876d058be141ba98afa4af3903587490e0417140b219d8c9": {
+      "source": "核对时间窗与底部选区。下图视野长 0.20 秒，试听选区约 0.076 秒。",
+      "translation": "Check the time window and bottom selection. This figure shows a 0.20-second view and an approximately 0.076-second playback selection."
+    },
+    "a6a328a13d4e33d673364f7a8f786f7594356545d5955670f9c01725dbdbe43b": {
+      "source": "时间窗显示约 0.8 至 2.6 秒，波形与当前参数图共享时间位置。",
+      "translation": "The time window covers approximately 0.8 to 2.6 seconds; waveform and current parameter plot share time positions."
+    },
+    "b32c6c98d6a221aae3fbfdff1f3ecbdc18efe81ee797ec8135204b6e5a8bab0b": {
+      "source": "开启语谱图",
+      "translation": "Enable the spectrogram"
+    },
+    "0da97521caa109978dc8c29887db24301ac409efdab450be4eaf2d04d46dc860": {
+      "source": "语谱由 Praat/Parselmouth 生成，用来对照频率结构。灰度表示相对强弱，声压比较需另行标定；轻量预览的频率细节受带宽限制。",
+      "translation": "Praat/Parselmouth generates the spectrogram for comparing frequency structure. Grayscale shows relative strength; sound-pressure comparison needs separate calibration. Lightweight previews limit frequency detail through bandwidth."
+    },
+    "b49e7fb90af779135f98d6e3cbffaa9cba74388d56fcbc82443f9c6fad44976a": {
+      "source": "勾选<s id=\"0\">显示语谱图（Praat）</s>，等读取提示消失、灰度图出现。",
+      "translation": "Enable <s id=\"0\">Show spectrogram (Praat)</s> and wait for the reading notice to disappear and the grayscale plot to appear."
+    },
+    "6b6a3cf77bfe4d8d050479f0f976cb495cf80d5e1b3585ac5e3fa482b69425a5": {
+      "source": "改变时间窗后等新图完成。保存整幅图前也要确认目标参数图已就绪。",
+      "translation": "After changing the time window, wait for the new spectrogram. Before saving a full image, also ensure the target parameter plot is ready."
+    },
+    "dd7b82053ce0503a90891dce8e13da63780cd95f1dce0c1b824dbff836385daf": {
+      "source": "同一合成示例的本机 Praat 语谱图已读取，与波形和参数图共用查看时间窗。",
+      "translation": "The local Praat spectrogram for the same synthesized example is loaded, sharing its viewing window with waveform and parameter plot."
+    },
+    "78667662d68fcae0213d7c080669c88449988c82951dc29858780b039968db86": {
+      "source": "波形会随当前视野自动调幅。比较录音强弱时，请查看刻度和原信号。",
+      "translation": "Waveform amplitude scaling follows the current view automatically. To compare recording strength, inspect the scale and original signals."
+    },
+    "65cd6a32f48c2aab7963a7c401c04c6bbb2742410fe315b4afdd4523b5104a72": {
+      "source": "显示表内文字层",
+      "translation": "Display text tiers from tables"
+    },
+    "01ec5d25201607209123efae864c81b4e9391dce8448850feeec9cb974757207": {
+      "source": "清空搜索，找到所需文字列。独立 TextGrid 需先生成带文字列的参数表。",
+      "translation": "Clear search and find the text column. A separate TextGrid first requires a parameter table with text columns."
+    },
+    "a7e3412fbfff0faea38cfae0c24a73ef86fb4cb381bc35a4e61616f30db76950": {
+      "source": "选择当前图窗并勾选一层或多层文字，图上方立即出现文字及区间边界。",
+      "translation": "Choose the current plot and check one or more text tiers; text and interval boundaries appear above the plot immediately."
+    },
+    "eec75b0118e82640b0d60aed55643f4b119095a356d74a90b187d4136474a639": {
+      "source": "波形汇总所有已选择文字层。把该列从所有图窗移除后，波形标签也消失。",
+      "translation": "The waveform combines all selected text tiers. Removing that column from every plot also removes its waveform labels."
+    },
+    "f7cc2992902325948900d9fe2c6104d3c5d4096d01b397bd0c1c435975531b21": {
+      "source": "放大到词或音节附近检查。空字符串和 sil、&lt;sil&gt;、eps、nan 不显示正文。",
+      "translation": "Zoom near a word or syllable. Empty strings, sil, &lt;sil&gt;, eps, and nan show no label text."
+    },
+    "a1125179abe345577035ed43ba4102168adf3c2471ed24b6e32762100db9b4fc": {
+      "source": "要编辑标签或查精确边界，进入 TextGrid 标注。",
+      "translation": "Use TextGrid annotation to edit labels or inspect precise boundaries."
+    },
+    "4fe224bf9d669f223032b8a41e89ba84a9a9ef768d66e441ec1092eb9f673e70": {
+      "source": "下图用示例表展示英文和 IPA 标签的显示方式。",
+      "translation": "The example table below illustrates English and IPA labels."
+    },
+    "ca5963066236ced26710f21e6e5e68f2b96eb467a4e803749487e41135d3b154": {
+      "source": "勾选表内文字列后，文字和区间边界立即显示在波形及参数图中。标签与参数均为合成示例。",
+      "translation": "Selecting text columns displays text and interval boundaries immediately in waveform and parameter plots. Labels and parameters are synthesized examples."
+    },
+    "bf1a156253543cef6473842874ae92898290708f16c2b51c0a30280d105fb1b7": {
+      "source": "表内标签映射到分析帧，边界可能受帧移和显示抽样影响。密集标注要放大；精确边界以原 TextGrid 为准。",
+      "translation": "Table labels map to analysis frames, so frame step and display sampling may affect boundaries. Zoom for dense annotations; use the original TextGrid for precise boundaries."
+    },
+    "9a26cfa05ed93a5d95af6d3f9e9a53eace2775b0f538898f61756dd3b52b0aba": {
+      "source": "查看长结果、EGG与唇形轨迹",
+      "translation": "View long results, EGG, and lip trajectories"
+    },
+    "239812665acc1c00fbc1f2c38cf901f3739a13b2b6cecea6dd488e7f22290fa6": {
+      "source": "长表勾选或缩放后会显示正在读取当前时间窗…。请<s id=\"0\">等提示消失、导出按钮恢复</s>，再判断曲线或保存。",
+      "translation": "Selecting or zooming a long table shows Reading current time window…. <s id=\"0\">Wait until the notice disappears and export buttons return</s> before interpreting curves or saving."
+    },
+    "f4c0247a31b4677ccfe30722c9591990d3b40ce39b47e6424e51514cab8f0add": {
+      "source": "全长图按像素简化显示，原表不变。短事件和密集标签请放大核查；缺失或无穷值断线，不补零。",
+      "translation": "Full-duration plots simplify display by pixels without changing the source table. Zoom to check short events and dense labels. Missing/infinite values break lines rather than becoming zeros."
+    },
+    "c493245798d9770d5674b3ae4c6a66f0dab50ff4ae224a775c248e914082509d": {
+      "source": "参数估计 插值模式显示已插值/平滑的 CQ、SQ、F0 - GCI；原始周期模式按周期自己的时间显示。改变模式或平滑需回 参数估计 重算。",
+      "translation": "Parameter estimation interpolation mode shows interpolated/smoothed CQ, SQ, and F0 - GCI; raw-cycle mode uses each cycle's own time. Return to Parameter estimation and recompute to change mode or smoothing."
+    },
+    "2df4211f3949e1ada4fe0745bc7e6fa47cd2317ba3025e5045a6ecbdbf031722": {
+      "source": "(pF0)、(rF0)、(gF0) 表示不同 F0 来源或派生路径，解释时查生成设置。",
+      "translation": "(pF0), (rF0), and (gF0) indicate different F0 sources or derivation paths. Check generation settings when interpreting them."
+    },
+    "a37d8af15fc494b67fc59df9757bd190e882d6f018616d43045631c153893a87": {
+      "source": "唇形沿用记录时间、缺口及偏移，需要调整偏移或重新测量时，回到唇形提取或标注页面核查来源和时间。",
+      "translation": "Lip trajectories retain recorded times, gaps, and offsets. For offset adjustment or remeasurement, return to Lip extraction or Annotation and check source and timing."
+    },
+    "35b0e45ba8c86ae87bf48caad14c136e5d25e470abb7797c29894d96808eda9f": {
+      "source": "本页试听固定第 1 声道。若它是 EGG，请另用音频声道文件；显示两个声道仅增加波形。",
+      "translation": "Playback on this page is fixed to channel 1. If that is EGG, use an audio-channel file separately; Show both channels only adds waveforms."
+    },
+    "02602cedb671fa89530d31e92959cccee36f2f3eef7b1d2fc1b83b62071b85fe": {
+      "source": "试听当前音频",
+      "translation": "Listen to the current audio"
+    },
+    "3acc6afe4dab280435b736278efa467d3c7981a84887179f3b640b1faf722242": {
+      "source": "时间选区与公共试听控件",
+      "translation": "Time selection and shared playback controls"
+    },
+    "a2924ae7ea78701b7de03573860bbf611704ae7df895b11b3da785d5c4591c3f": {
+      "source": "时间选区起点 / 终点",
+      "translation": "Selection start / end"
+    },
+    "63b6bbeb3cf06bae139e7f712eb7d4c2f4c200bcf9a211a15a92477243cb7f91": {
+      "source": "底部／s",
+      "translation": "Bottom / s"
+    },
+    "cea4f941f8019b3c01457c419edf5a315133398a5fc12836795eef80f581af32": {
+      "source": "读入音频后 0 至全长",
+      "translation": "0 to full duration after loading"
+    },
+    "31ea07ea14fc490895de0851f2fe86a2322862e87a8bcaa811680af6c65c3f56": {
+      "source": "输入精确试听区间，提交后按时间顺序限制到音频内；选区改变会停止播放。",
+      "translation": "Enter precise playback times. Committing orders and clamps them within audio bounds; changing selection stops playback."
+    },
+    "468816d066bc12b4432c1ff43a84a92ccecf1de25b9cc9f1b88172bb1edb9650": {
+      "source": "全部",
+      "translation": "All"
+    },
+    "0ccd502d91556e3e0fb6a2d6a023567a952e37562aff7d4ee8e1e034dfe649ea": {
+      "source": "底部／动作",
+      "translation": "Bottom / action"
+    },
+    "b5c98dbadf0f1da48710eae6302bd635a1775367ac7531ca856916f9cb84575c": {
+      "source": "可用音频后可用",
+      "translation": "Available after usable audio loads"
+    },
+    "ab41638d5e109a1248b7436dd7507c5df5e251f77eb4dbdbba281278a00e03fb": {
+      "source": "恢复全长选区并停止此前试听，不改变查看时间窗。",
+      "translation": "Restores full-audio selection and stops previous playback without changing the viewing window."
+    },
+    "03c6ae5ecd1729fc53c97bfb3801eb2cfd831ea0aeef674f921f2e036eacd9ce": {
+      "source": "<s id=\"0\">播放选区</s> / 暂停",
+      "translation": "<s id=\"0\">Play selection</s> / pause"
+    },
+    "123b830077094953c7115835ce6231130a5d71047dd8f4acb1b667aec5637746": {
+      "source": "停止",
+      "translation": "Stop"
+    },
+    "e23ec76f61bc54a6c2a84e261005a8e41b6d0d4162235fb8324e4adab26113e6": {
+      "source": "播放第 1 声道选区；可暂停后继续。零长度选区时不可播放。",
+      "translation": "Plays channel 1 within selection; pause/resume is supported. Zero-length selections cannot play."
+    },
+    "97a0689ecbe80d43e666384aaba5e9c6405203e605360946092eb8eb198737d2": {
+      "source": "无音频时禁用",
+      "translation": "Disabled without audio"
+    },
+    "4e945c7f8007d9ad52e84edfe482ef0ad06d02b3d52ab260696553ae39409b31": {
+      "source": "结束播放；换音频也会停止。",
+      "translation": "Ends playback; switching audio also stops it."
+    },
+    "ff556dcd0986b1df86d4fd127e6ae2af4c0dce11f5236ca82b0e9b23955c8258": {
+      "source": "播放进度（当前选区）",
+      "translation": "Playback progress (current selection)"
+    },
+    "2e5eb0401068542a26e44d1bdea0940cc9477ca93068707667d290844b738c9f": {
+      "source": "底部／选区内定位滑条",
+      "translation": "Bottom / seek slider within selection"
+    },
+    "2346b6628f200d11ef0cbe92aecc95d22617f21390ae29344e2da5eb77ed6406": {
+      "source": "选区起点",
+      "translation": "Selection start"
+    },
+    "f65001ac77385b56b8897016833e2e55295a56c8204d710143b0b3ef86d31dcd": {
+      "source": "在当前选区内定位，不改变查看时间窗。",
+      "translation": "Seeks within selection without changing the viewing window."
+    },
+    "4b0a460dcb5bfc76195327491e0df13f5b8c43af2cd04be4edc0ade4f6c72f1b": {
+      "source": "播放音量",
+      "translation": "Playback volume"
+    },
+    "bbfb9edb44eea71b95b4dc938f9218f4f61cd5cec70d5bafff76831ff8b6ab2f": {
+      "source": "底部／0–100%",
+      "translation": "Bottom / 0–100%"
+    },
+    "94d7745b9b914788b8a1c27f7ee2912900ca92f199da078966fe0e0d17145620": {
+      "source": "按 5% 调试听音量，不改变原录音或参数。",
+      "translation": "Adjusts playback volume in 5% steps without changing original recordings or parameters."
+    },
+    "c596f4afac9a175da5f6d07557b997b7e4c42ae63cad28a1a47ca2f3acc476e4": {
+      "source": "空格键",
+      "translation": "Space key"
+    },
+    "e81d8438b9c9c05a6eeeedf9055925720d818f91105073accb217e10d1cb2918": {
+      "source": "工作区快捷键／动作",
+      "translation": "Workspace shortcut / action"
+    },
+    "aefabe5dd30f5e925cac035bee466680d489e9c241be420669e3f8323119348d": {
+      "source": "当前有效选区",
+      "translation": "Current valid selection"
+    },
+    "9f4ded132ba24db28a771b1f7674071d726b4db859e965df94dfe2ba299f9924": {
+      "source": "普通工作区内切换播放/停止；输入框、按钮、下拉框或对话框内不接管空格。",
+      "translation": "Toggles play/stop in ordinary workspace areas. Does not intercept Space in inputs, buttons, selectors, or dialogs."
+    },
+    "640e4d69a24420dfd5b767ef9c4eebfc1d70787516b93913cc20163348e81176": {
+      "source": "保存图片和绘图配置",
+      "translation": "Save images and plot configuration"
+    },
+    "f1b14a84e8174d77da322f77d4c6aa7620689f04c2c9caa3f1ad3d2c8446fd67": {
+      "source": "保存当前参数图",
+      "translation": "Save the current parameter plot"
+    },
+    "14554cce33e57c1a7961df6470cf079d04f69d2f03eebe22a6ac4ce2f6e6cc97": {
+      "source": "先核对曲线、文字、时间窗及图例。空图窗不能导出，仅文字层也可保存。",
+      "translation": "Check curves, text, time window, and legend first. Empty plots cannot export; text-only plots can be saved."
+    },
+    "aa41cc03c305615492ee75efa0dcc4ef3b6d2b3ff3f49890096007b810218979": {
+      "source": "调好图窗宽度与公共图表字体，等待字体加载。",
+      "translation": "Adjust plot width and shared chart fonts, then wait for fonts to load."
+    },
+    "5d544d2a7c231b6474cf8e73d1445672b7190b248c7c3d04f358f5b57f748c2e": {
+      "source": "选择 PNG 或 SVG，点击<s id=\"0\">保存当前图</s>。桌面在保存框选择位置，网页查看浏览器下载。",
+      "translation": "Choose PNG or SVG and click <s id=\"0\">Save current plot</s>. Select a location in the desktop save dialog; check browser downloads on the web."
+    },
+    "96d28040e23189cf6a3e2774edfaaf118de8d9a0e62477bd07098ecd833ba7e6": {
+      "source": "默认名为图窗 N.png 或图窗 N.svg。多段录音请加上音频名，便于区分。",
+      "translation": "Default names are 图窗 N.png or 图窗 N.svg. Add the audio name when handling several recordings."
+    },
+    "a354a3dcef30ede1a3f203cf5bae41cf8fd91e53beb7e5a79bcb849f3fdd7504": {
+      "source": "打开文件检查范围、标签和曲线。<s id=\"0\">本页不另存数值表</s>，统计请用原 XLSX/SQLite。",
+      "translation": "Open the file to check range, labels, and curves. <s id=\"0\">This page does not save a separate numeric table</s>; use the original XLSX/SQLite for statistics."
+    },
+    "d0f806144fcc944f77949da5079bbe9adaa268c752c8346bbf4206a206d6afc5": {
+      "source": "PNG 为白底 300 dpi，SVG 保留当前样式。这里仅保存参数图，波形和语谱请用整幅 PNG。",
+      "translation": "PNG uses white at 300 dpi; SVG retains current styling. These save only parameter plots; use full PNG for waveforms and spectrograms."
+    },
+    "a2e173134474235506432a879a74942fd840cd0be305f246f02f8298bdebeba5": {
+      "source": "下图已选择 SVG。点击保存后，到实际保存位置核查文件；页面没有额外成功横幅。",
+      "translation": "The figure selects SVG. After saving, check the actual destination; no additional success banner appears on the page."
+    },
+    "78123157169e3b7369c5dffeeb0206e311c6639c9abcc247029b05727e669d3e": {
+      "source": "选择 SVG 保存当前图。图例优先放在绘图区空白位置，空间不足时移至上方，长名称完整换行。",
+      "translation": "Save current plot with SVG selected. Legends prefer empty space inside the plot, move above when necessary, and wrap long names without truncation."
+    },
+    "05204bb947f8eb967d72f4739df3632acd9f90412dc3e5dfad15c56a6d71076b": {
+      "source": "当前图可选 PNG 或 SVG；整幅 PNG 还包含波形及已开启的语谱图。",
+      "translation": "Current plots offer PNG or SVG; full PNG also includes waveform and any enabled spectrogram."
+    },
+    "053f3dc314b0f683c3bf099a970a190dfbc03d7488993612004727c6dabf7626": {
+      "source": "保存包含波形的整幅 PNG",
+      "translation": "Save a full PNG including waveform"
+    },
+    "1985650eb91fed07786058cd88156e42cd79c5383e3e62f5e497078db94f3074": {
+      "source": "决定显示一条还是两条声道波形。需要语谱时开启并等它完成。",
+      "translation": "Choose one or two waveform channels. Enable the spectrogram if needed and wait for it."
+    },
+    "a24b9a97ef6812027ddb82dc045b270cd4c8ca57ace7f9dc8058f8dcb668ff95": {
+      "source": "选要放进整幅图的参数窗，核对范围；其他参数窗不自动并入。",
+      "translation": "Select the parameter plot to include and check its range; other plots are not merged automatically."
+    },
+    "fa643587568cf5282b98b26e34c5c951434f7a5e6f327aad03e2cfb9d6251e2e": {
+      "source": "等当前时间窗读完，点击该窗的<s id=\"0\">保存整幅 PNG</s>。",
+      "translation": "Wait for the current window to finish reading, then click that plot's <s id=\"0\">Save full PNG</s>."
+    },
+    "0ec6e96a5995fe002dec6b245b4be8f7c5862219946c4a77977a9670681ef41e": {
+      "source": "语谱未就绪时等待或重试；不需要它时关闭后再导出。",
+      "translation": "If the spectrogram is not ready, wait or retry. Disable it before export if unnecessary."
+    },
+    "814f7e323efff2505c3a4d8d802b14413f9a90113c93cee48172456e6aa2d8d6": {
+      "source": "检查各图横轴对齐。默认名为音频名-图窗 N.png。",
+      "translation": "Check horizontal alignment across plots. Default name: 音频名-图窗 N.png."
+    },
+    "4f831c3323708d57a5b5adffadb0319f09dc91169e07ef5f95d7626f787fabca": {
+      "source": "整幅图固定白底 300 dpi，保留选区高亮，省去播放光标和操作控件。原录音和表都不会被覆盖。",
+      "translation": "Full images use a fixed white background at 300 dpi, retain selection highlighting, and omit the playback cursor and controls. Original audio and tables are not overwritten."
+    },
+    "c42e4b9fd1e169ea822ff7dfd81b9a21b9975d6a090f984034472dc0c9fb7dce": {
+      "source": "当前应用实际导出的白底 300 dpi 整幅 PNG，包含合成示例的波形、Praat 语谱及双轴参数图，紧凑图例随图保存。",
+      "translation": "A white-background 300 dpi full PNG actually exported by the app, containing the synthesized waveform, Praat spectrogram, and dual-axis parameter plot, with the compact legend."
+    },
+    "458217da3871ee81e6999295a58bfe87df35fc73a42ae160f45ec8c6dca0eed6": {
+      "source": "尺寸、字体和分享",
+      "translation": "Dimensions, fonts, and sharing"
+    },
+    "5e62796a5490e9a6a99afae13e1c6e74bc7a2d9aba591abc11bbeb5a77750bf1": {
+      "source": "PNG 按显示尺寸生成 300 dpi 图片。上限为单边 16384 像素、总计 3200 万像素，超过时缩小面板或分图保存。",
+      "translation": "PNG generates a 300 dpi image from display dimensions. Limits are 16384 pixels per side and 32 million total pixels; reduce panel size or save separate plots if exceeded."
+    },
+    "1e298e3ad32956fdab6a8b4001173ba41a7826e93d01ff108e309b9c1724442b": {
+      "source": "先调图窗宽度，导出后在论文中等比例缩放。刻度和图例用公共图表字体，IPA 固定 Doulos SIL。提高 dpi 不会增加原表的时间细节。",
+      "translation": "Set plot width first, then scale proportionally in your paper after export. Ticks and legends use shared chart fonts; IPA uses Doulos SIL. Higher dpi does not add temporal detail to source data."
+    },
+    "0fe0e7d1eed29c4877174e8ee2e3be420c554b3d4b25654da783199b8a4b4b07": {
+      "source": "PNG 默认使用打印配色。波形可沿用设置中的主题/自定义线色，曲线由图例辨认。",
+      "translation": "PNG uses print colours by default. Waveforms may retain theme/custom colours from settings; identify curves by their legends."
+    },
+    "f25e6fc42c9c5f9bd19634593ec34d5efbafe654e69c39a618fef1ef37480627": {
+      "source": "SVG 保留矢量曲线和可编辑文字，内嵌 Doulos SIL 及 OFL；其他字体需对方设备支持。图例紧凑排列，优先放在绘图区空白位置，空间不足时移到图上方。长参数名称完整换行，双轴标明所属纵轴。分享固定外观可选 PNG。",
+      "translation": "SVG retains vector curves and editable text and embeds Doulos SIL with its OFL; other fonts require support on the receiving device. Legends are compact, prefer blank plot space, move above if needed, and wrap full names. Dual axes identify each curve's axis. Choose PNG for a fixed shared appearance."
+    },
+    "5fd1928938bd499a44f27204f71eba7e04bb57091c9138b93001cf59c3aabe70": {
+      "source": "保存与恢复绘图配置",
+      "translation": "Save and restore plot configuration"
+    },
+    "0b039335061922152e3eb45668cf286579e64eefe82a597e4fdadba0d84455d0": {
+      "source": "保存绘图配置记住图窗、标题和各窗的参数选择。重新载入源文件后，曲线与当前窗勾选一起恢复。文件、目录权限、时间窗、选区、搜索、放大状态和图片格式不随本机绘图配置保存；网页版设置随账号保留。",
+      "translation": "Save plot configuration remembers plots, titles, and each plot's parameters. Reloading source files restores curves together with current-plot checks. Local plot configuration does not save files, folder permissions, time window, selection, search, enlarged state, or image format; web settings follow the account."
+    },
+    "d333a3d55f276214cb10f533ffeb80e390c4f8cb3a1622c7b6fa6803b7ac4c08": {
+      "source": "选好参数后，点击<s id=\"0\">保存绘图配置</s>。失败时保留页面，检查本机存储后重试。",
+      "translation": "After selecting parameters, click <s id=\"0\">Save plot configuration</s>. If it fails, keep the page open, check local storage, and retry."
+    },
+    "a9fe02207b33d7fd3995ca4ec441f04dd2112661db3e447cf86c617621f361b9": {
+      "source": "重新打开同一工作区，再选择源目录、音频及参数表。",
+      "translation": "Reopen the same workspace and select source folders, audio, and parameter tables again."
+    },
+    "9b99aa0b4713360a8bac2b26790f584ef812124d3d0bb8c3ba8e751a309e709c": {
+      "source": "新表没有的列会移除；保存过的空窗或零图窗照常恢复。",
+      "translation": "Columns absent from the new table are removed; saved empty plots or no-plot configurations restore normally."
+    },
+    "4da845bd8e756a422276d298459822bb467ff7a5581fc22aaefc844733b9df43": {
+      "source": "重新设时间窗、选区和其他显示选项，核对图例。",
+      "translation": "Reset the time window, playback selection, and other display options, then check the legend."
+    },
+    "1577779aab6637588b14ef1bc68c8e6451156eff901d1f6b3fc9d89bac37510e": {
+      "source": "保留原 WAV、参数表、生成设置和版本，并记录导出范围、图窗选择、字体及文件名。",
+      "translation": "Keep original WAV, parameter table, generation settings, and versions. Record export range, plot selection, fonts, and file names."
+    },
+    "e2555e1897e3b3e6485eed4a3c0b9c726dc3b28eddc177c0a809f309b7c3d329": {
+      "source": "下图恢复了 F1、SHR，图窗曲线与右侧勾选一致。视野和选区回到全长，其他未保存显示选项需重新核对。",
+      "translation": "The figure restores F1 and SHR, with curves matching right-hand checks. View and selection return to full duration; check other unsaved display options again."
+    },
+    "ca0655977b2d95d0c2ec76fd8ce96cff491493a72568327fc352b409fe08a1b3": {
+      "source": "刷新并恢复已保存配置后，F1、SHR 曲线与右侧勾选一致，查看时间窗回到全长。",
+      "translation": "After refreshing and restoring saved configuration, F1/SHR curves match right-hand checks and the viewing window returns to full duration."
+    },
+    "68b97f34dcae347e7231cc86e35177bc2612050c909a913d29016e5f4e8af6c2": {
+      "source": "切换已开标签通常保留当前页面。关闭后需重新载入源文件；重新计算或查询任务历史请到参数估计。",
+      "translation": "Switching between open tabs usually retains the current page. After closing, reload source files. Recalculate or query task history in Parameter estimation."
+    },
+    "8e88b40b07c06d344713647c3f117356879e46b8569e30eb4fdebc7650957069": {
+      "source": "按提示排查与恢复",
+      "translation": "Troubleshoot and recover from messages"
+    },
+    "1f104e3484d866d814925b57230a9cdc79583e0b498aadc32b897ef155e1c30c": {
+      "source": "没有文件、没有候选或没有曲线",
+      "translation": "No files, candidates, or curves"
+    },
+    "d171101781eea7db0294964b0bcc347d3e0207842b1896a1817ff99fc78692fb": {
+      "source": "列表为空：清空音频搜索，检查目录和 WAV。子目录需勾选<s id=\"0\">包含子文件夹</s>，再刷新；扫描超限时选较小目录。",
+      "translation": "Empty list: clear audio search and check folder/WAV. For subfolders, enable <s id=\"0\">Include subfolders</s> and refresh. Select a smaller folder if scan limits are exceeded."
+    },
+    "ce8d2e54a31119519dab1bcf75680d5f7b2580e4da4768375a4261e3896c3bf5": {
+      "source": "没有同名结果：检查参数目录、相对路径和名称，再手动关联。没有表可先试听，需要参数时到 参数估计 计算。",
+      "translation": "No same-name result: check parameter folder, relative path, and names, then link manually. Without a table you can listen first; compute parameters in Parameter estimation when needed."
+    },
+    "b82bbe22ee2faa670e494692f4ce0421d1252464222163640f4295a9050004bd": {
+      "source": "无匹配参数：清除搜索和筛选；仍缺少时查原表是否输出该列。",
+      "translation": "No matching parameters: clear search and filters. If still missing, check whether the original table contains that column."
+    },
+    "366250e5cd150f692e62bb052ef739db535e87eb8e4072c37e1f089ee96e2b7f": {
+      "source": "勾选后无曲线：确认当前图窗正确、表已读完，当前时间窗有有效数值。文字列只显示标签。",
+      "translation": "Checked but no curve: confirm the correct current plot, completed reading, and valid values in the current window. Text columns display labels only."
+    },
+    "171be0da52fe2ada02c6e82e42204fdd001f8faf29b5c65d567d3ccf6ae251c1": {
+      "source": "暂无图窗：<s id=\"0\">新建图窗</s>，再直接勾选参数。已存零图窗配置也会恢复为空。",
+      "translation": "No plots: click <s id=\"0\">New plot</s>, then check parameters directly. Saved no-plot configurations also restore as empty."
+    },
+    "dd67e67891cb0fdc0599b658dd1ee0d1684702256d2f27e88cb4e02b5822d13d": {
+      "source": "换表后缺曲线：新表可能没有该列。重选正确结果，再检查选择。",
+      "translation": "Curve missing after table change: the new table may lack its column. Select the correct result and check selections again."
+    },
+    "cef3e5582269c481b84ed7afe97712390efebaa8f7eb48349fa2fc9cce9d016e": {
+      "source": "清除筛选会清空搜索，并勾选 reaper、correction，曲线和原勾选保留。点击新建图窗会直接切换到空选择，无需先清空上一窗。",
+      "translation": "Clear filters clears search and enables reaper/correction, retaining curves and previous checks. New plot switches directly to an empty selection without clearing the previous plot first."
+    },
+    "1201845e2d6f98013da0923d54566225b8f7e169f9f97f8ad53989dee614d9c1": {
+      "source": "搜索无匹配时图窗曲线和已选参数保留；清空勾选仍会移除当前窗全部参数。",
+      "translation": "No search matches still retains curves and selected parameters. Clear selection still removes every parameter from the current plot."
+    },
+    "d01323b27f4c483de55f79fadf463f6ace51f2b380e9b5eaa9994eb505d36909": {
+      "source": "读取失败、超时与视野等待",
+      "translation": "Reading failures, timeouts, and view loading"
+    },
+    "958f5fd1557722f3bb738b2c569d83de10fcef8a727c7fac6c4e15d5a815b260": {
+      "source": "结构不受支持或包含公式：保留原表，重选正确导出。按提示核查文件结构、公式及损坏情况。",
+      "translation": "Unsupported structure or formulas: keep the original table and reselect a correct export. Check structure, formulas, and corruption as instructed."
+    },
+    "c2dbbd4d7acf825864030f86dc022e1df19144cc7cca80605e79533c55e8a3a9": {
+      "source": "超限或首次索引超时：若同源结果有 SQLite，改选它；否则在参数估计生成较小结果。缩短视野不能跳过首次 XLSX 索引。",
+      "translation": "Limit exceeded or initial-index timeout: select same-source SQLite if available; otherwise generate a smaller result in Parameter estimation. A shorter view cannot bypass initial XLSX indexing."
+    },
+    "b110767ff197774aab4e2f1e8a0ca6a783b13074397b1d975386e7521e77f49a": {
+      "source": "一直读取：暂停连续缩放，等当前读取结束；仍失败则重选结果或刷新后重试。",
+      "translation": "Reading does not finish: pause continuous zooming and wait for the current read. If it still fails, reselect results or refresh and retry."
+    },
+    "1289e838fb647b5e0377a3a1e844f6d9f8bb8907d68edaae3aedbd1abed03c95": {
+      "source": "已选列超过 128：切到对应图窗取消不需要的勾选，或清空该窗。<s id=\"0\">清空勾选</s>会清空当前图窗，隐藏候选则保留曲线。",
+      "translation": "More than 128 selected columns: switch to the relevant plot and uncheck unnecessary items, or clear it. <s id=\"0\">Clear selection</s> empties the plot; hiding candidates retains curves."
+    },
+    "b53bcfb4e50b9c22a83e6bcef66fcc67806061fb3a81d93cb159231335867fe7": {
+      "source": "文件变化或不可访问：刷新或重新选目录。网页检查账号、项目及文件是否仍有效。",
+      "translation": "File changed or inaccessible: refresh or choose folders again. On the web, check account, project, and file validity."
+    },
+    "2dc46f7608b4ee6431984269f8cf90c4ce4e3650f49d5685d886a56fd84a06a0": {
+      "source": "长 WAV 预览超限：打开较短片段。使用轻量预览时，精细测量仍需原音。",
+      "translation": "Long WAV exceeds preview limits: open a shorter segment. With lightweight preview, retain original audio for precise measurements."
+    },
+    "71b6af542708c827bb22ccc1a76bc42b14e299d4d2a152103882a54dd00dfcc5": {
+      "source": "下图关联了损坏的示例 XLSX，波形保留。重新选择有效 SQLite 后可恢复，无需改原 WAV。",
+      "translation": "The figure links a corrupted example XLSX while retaining the waveform. Selecting valid SQLite restores operation without modifying original WAV."
+    },
+    "fbf10edc906d7c6f75b6ffb954c04db92db6999a2ab7a61873d2fcfb39f65401": {
+      "source": "损坏的合成 XLSX 无法读取，顶部显示错误，原音波形仍保留。重新选择有效结果可恢复。",
+      "translation": "Corrupted synthetic XLSX cannot be read; the top shows an error while original waveform remains. Select a valid result to recover."
+    },
+    "172a3eebe2ac42d399ba827947a9006e7f96452a0355a04e0b6669c47687c151": {
+      "source": "新视野读取失败时，图上可能暂留旧轨迹。等新视野完成后再解释和导图。重选表后保留新表中存在的参数，右栏与当前图窗一致；刷新或换音频回到全长。",
+      "translation": "If the new view fails to load, old trajectories may remain temporarily. Wait for the new view before interpretation/export. Reselecting a table retains parameters present in it, aligning right-hand selection with the current plot. Refreshing or changing audio restores full duration."
+    },
+    "2dd6a5ee9065d3e74d790f98a02e24b8ffde6839ccd3172fb24a971c55193803": {
+      "source": "文件较大时的限制",
+      "translation": "Large-file limits"
+    },
+    "1a0f42dceb6740b15a62a66e5baeeb61c136643e4c4807d7e2d44000fef26211": {
+      "source": "旧单表上限为 16 MB、20 万单元格、256 列。新本机多表上限为 4 GB、每表 200 万行、总计 1.8 亿单元格、30 分钟；每次读取最多 128 个不同的已选择列。大小在限额内仍需满足文件结构和读取预算。",
+      "translation": "Legacy single tables are limited to 16 MB, 200 thousand cells, and 256 columns. New local multitables support 4 GB, 2 million rows per table, 180 million cells in total, and 30 minutes. Each read allows up to 128 distinct selected columns. Files within size limits must still meet structural and reading budgets."
+    },
+    "6167235a3d34244ebeb5cfc99d5ee3bf53ab8dc19e4b7f52e51fdeec2b45fa27": {
+      "source": "大 XLSX 首次打开会建立本机索引，稍等一下，后续缩放会复用。原表不变。读取受 300 秒、1 GiB 限制，损坏结构、公式或外链会被拒绝。",
+      "translation": "Opening a large XLSX first builds a local index. Wait briefly; later zooms reuse it without changing the source. Reading is limited to 300 seconds and 1 GiB; corrupted structures, formulas, and external links are rejected."
+    },
+    "db125a93ac141517112813d046f3e0dc0fa4ee6a7ae49af9a3472fa90444d176": {
+      "source": "桌面 WAV 支持非空、8–96 kHz、最多 8 声道、2 GB。较大录音会生成全长轻量预览，界面注明原格式和预览格式；试听、语谱使用预览。若仍超限，请分段打开。精细测量保留原录音。",
+      "translation": "Desktop WAV supports nonempty audio at 8–96 kHz, up to 8 channels and 2 GB. Larger recordings produce full-duration lightweight previews; the interface identifies source and preview formats. Playback and spectrograms use the preview. If limits remain exceeded, open segments. Keep the original for precise measurements."
+    },
+    "c59621a3954c4a73fd84aa8edb422b0ce0ac146d762cf05fe64bfb80c9cd11ef": {
+      "source": "语谱图、图像与配置保存失败",
+      "translation": "Spectrogram, image, and configuration-saving failures"
+    },
+    "0bed3bcf007b951c19e2d3311737a7a1765e5b03c76ba7dd02f53837b861da25": {
+      "source": "语谱失败：点击语谱区重试。只需波形和曲线时，关闭语谱再导出；保存当前参数图不依赖语谱。",
+      "translation": "Spectrogram failure: click its area to retry. If only waveform/curves are needed, disable it before export. Saving the current parameter plot does not depend on it."
+    },
+    "4c1326278464c0a653b4b6696d33b5a0924b615826dca7c995beb218a52d7c3d": {
+      "source": "保存按钮灰色：检查是否已勾选参数，是否正在读表或生成图片，完成后重试。",
+      "translation": "Save button disabled: check parameter selection and whether tables or images are still processing. Retry when finished."
+    },
+    "35a6462851959eed80b8bad5398a32391d3710e4d6747a25ba309f2f550f5cb1": {
+      "source": "图片超尺寸：还原<s id=\"0\">放大图窗</s>、缩小面板，或减少参数/文字层后分图。仅缩短时间窗不一定减小像素尺寸。",
+      "translation": "Image too large: restore <s id=\"0\">Enlarge plot</s>, reduce panel size, or reduce parameters/text tiers and save separately. Shortening time alone may not reduce pixel dimensions."
+    },
+    "7fad2baf4b46bfb32dec5abb626176ce83fe20da112ce5eb6adae8585f3bb748": {
+      "source": "字体或编码失败：保留当前图，选择可用字体，等资源加载后重试。",
+      "translation": "Font or encoding failure: retain the plot, select an available font, and retry after resources load."
+    },
+    "2fe5e8d361d1bb53dec7576ae06db3150ca573876575de0dd7afa56764efc387": {
+      "source": "取消保存框或下载受阻：检查目标文件及下载记录，再保存一次。",
+      "translation": "Save dialog cancelled or download blocked: check destination files and download records, then save again."
+    },
+    "d2fcc92dd09747254f04928ea782f7239b5464909d92af5f817e217b187a5efd": {
+      "source": "配置保存失败：保留页面，检查本机存储后重试，<s id=\"0\">未成功前不要关闭</s>。",
+      "translation": "Configuration save failure: keep the page open, check local storage, and retry. <s id=\"0\">Do not close before saving succeeds.</s>"
+    },
+    "b4de62da9f31c1cd8457402f3fb18ff0dda86b90c69919d7719cbe25dd738742": {
+      "source": "关闭有改动的标签时，按提示保存或放弃，取消可回到页面。图窗操作没有独立撤销；清空或删除图窗不会删除源文件。",
+      "translation": "When closing a changed tab, choose save or discard as prompted; Cancel returns to the page. Plot operations have no separate undo. Clearing/deleting plots does not delete source files."
+    },
+    "149f22cfff6307374af87e93b740b659e9c885621c8171bebc1f80abe731edb0": {
+      "source": "查看方法与引用",
+      "translation": "View methods and references"
+    },
+    "a9554a71935925b3e4ab76493ed169608079a3ba8fd4984f480581b81449c79a": {
+      "source": "保留结果的来源记录",
+      "translation": "Retain result provenance"
+    },
+    "4d5a11efdb74142d953cc9858bf046e1cd64e0584d5b7b19027e18382ba2389f": {
+      "source": "参数方法随原结果来源。参数显示 负责读取和显示，语谱预览另由 Praat/Parselmouth 生成。",
+      "translation": "Parameter methods follow the source results. Parameter display reads and displays them; Praat/Parselmouth separately generates spectrogram previews."
+    },
+    "73c1da6488d470d9f4502d058001a19eba6c5f5f9e13285b4b952d645baf4d79": {
+      "source": "参数估计 新多表含生成设置、音频身份、版本等记录；旧表可能只有列名和数值。请随结果保留这些记录。",
+      "translation": "New Parameter estimation multitables include generation settings, audio identity, and versions; old tables may contain only names and values. Keep available records with results."
+    },
+    "c74a2d1d7dc80082a83220a0cf6b1a027678640c8ad570cb67c915dadf2d7e1d": {
+      "source": "引用时填写实际生成工具和设置，缺失信息如实记录。",
+      "translation": "Cite the actual generating tool and settings, reporting missing information honestly."
+    },
+    "d7716747ade34955da5ca47d410168336c7743652fd7e98a5ae3c1684b6fb37f": {
+      "source": "比较参数时的核对要点",
+      "translation": "Checks when comparing parameters"
+    },
+    "5239847f0f024d334731eddd61fce586e1d0ad0862a994b3dbb9f91c86ac70ab": {
+      "source": "不同参数时间相同，分析窗和时间误差仍可能不同。",
+      "translation": "Equal timestamps do not imply equal analysis windows or timing error."
+    },
+    "e6f849fcb20fffb21e8beb6f6124c590c6db3bb6c1fee09b3ce5a310662c951c": {
+      "source": "断线表示缺少有效值，请结合原始信号判断该处状态。",
+      "translation": "Broken lines indicate absent valid values; check the original signal to interpret those locations."
+    },
+    "1d332b6402264eafdd8895e7ea13d924d04502e683ed6aef25b7fc770d5828ef": {
+      "source": "* 的含义查原参数说明，筛选开关不做校正。",
+      "translation": "Check the source parameter documentation for *; filter switches do not apply correction."
+    },
+    "103864f5c235bbc4043137ddee1a55f8a6e8bc72a188d8298e240adc6cf2bcfa": {
+      "source": "双轴比较先看各自刻度，相关性和幅度比较需用原表。",
+      "translation": "Read each dual-axis scale first; use the original table for correlation and amplitude comparisons."
+    },
+    "08ac0af05f6b1f9191ab64b80689c545d1d3e30175ceb9a386473c45c8022892": {
+      "source": "短事件需放大并核查完整数据。",
+      "translation": "Zoom and check complete data for short events."
+    },
+    "613be922cb370625b19eebcdd5421dca94209b26f41d19cee8c615bfbe5d68e7": {
+      "source": "轻量预览服务于浏览，精细声学测量用原记录。",
+      "translation": "Lightweight previews serve browsing; use original records for precise acoustic measurement."
+    },
+    "ec12f6b727ffc52ee39abe8726ec33f17df90226bfa45c962edf211d35efac6f": {
+      "source": "CQ、SQ 等 EGG 指标按生成模块定义解释。",
+      "translation": "Interpret CQ, SQ, and other EGG measures according to their generating tool's definitions."
+    },
+    "be45e64c0a4012e753f9436b2f7fe7f320dddaae67d93b4151821e0ea96722c3": {
+      "source": "新多表目前限本机，网页使用旧单表。",
+      "translation": "New multitables are currently local-only; the web uses legacy single tables."
+    },
+    "b44d103bee5796a0f54cb4bf2573810d39d6890594433a5246de58e693dd4060": {
+      "source": "方法资料入口",
+      "translation": "Method resources"
+    },
+    "cc24f44e8e12fab3fb0984866af1582e12649fa311fa00f327c7431a4518ab3c": {
+      "source": "点击顶部<s id=\"0\">方法与引用</s>查看完整作者、版本和许可。以下链接便于查阅。",
+      "translation": "Click <s id=\"0\">Methods and references</s> at the top for full authorship, versions, and licenses. The following links aid consultation."
+    },
+    "c528ba981ffd6ef1afa33071291007facc19040466f631b32a89899a8dadda84": {
+      "source": "Praat / Parselmouth：<s id=\"0\">接口论文</s>",
+      "translation": "Praat / Parselmouth: <s id=\"0\">interface paper</s>"
+    },
+    "97dda0f88f291db097a0c8a0bb256da94d15b12dc2ec596ff178a4e9a9f73f50": {
+      "source": "语谱图设置：<s id=\"0\">Praat 官方手册</s>",
+      "translation": "Spectrogram settings: <s id=\"0\">official Praat manual</s>"
+    },
+    "a7f9bedd575571c9a4ff475bfe1bd52c8d76c73cc24b85b92bea2bd7969ff01d": {
+      "source": "REAPER：<s id=\"0\">官方仓库</s>",
+      "translation": "REAPER: <s id=\"0\">official repository</s>"
+    },
+    "30101bb2b86e65f920c9c1bb376855bc94e74f5c940de30b1a0d4da3113c2bc3": {
+      "source": "VoiceSauce：<s id=\"0\">Shue 等（2011）论文</s>",
+      "translation": "VoiceSauce: <s id=\"0\">Shue et al. (2011)</s>"
+    },
+    "aaa34f8e3cdd50dcf5295cc416b616dc020d90cc2ccf7a8c237593d301d615a8": {
+      "source": "XLSX 读取：<s id=\"0\">openpyxl 3.1.5</s>",
+      "translation": "XLSX reading: <s id=\"0\">openpyxl 3.1.5</s>"
+    },
+    "8742d8acbb9f67a8d9405f2e4870d3b6c19a7c8d2b5fddd5ffbf67fea99d555d": {
+      "source": "SQLite 格式：<s id=\"0\">官方资料</s>",
+      "translation": "SQLite format: <s id=\"0\">official documentation</s>"
+    },
+    "c06eee64540b718774e0478ba1e086263d9b23b4d1f09b6d67a412169c9248bc": {
+      "source": "PNG 格式：<s id=\"0\">W3C 规范</s>",
+      "translation": "PNG format: <s id=\"0\">W3C specification</s>"
+    },
+    "824378995f369c4d2001b98c930fc511e3b286cb7ca8837f65e843f8150f9eba": {
+      "source": "IPA 字体：<s id=\"0\">Doulos SIL 与许可</s>",
+      "translation": "IPA font: <s id=\"0\">Doulos SIL and license</s>"
+    },
+    "89b11309772f9800e080a1841b300f36cdf8da5d47f92e944242262b0dd82905": {
+      "source": "参考资料",
+      "translation": "References"
+    },
+    "66abdc3e986b31bdcc11136ff93582a378e67d8a5c048b70d95eddbb108e0b63": {
+      "source": "引用时结合实际生成设置和版本。",
+      "translation": "Cite with actual generation settings and versions."
+    }
+  }
+}

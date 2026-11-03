@@ -106,8 +106,7 @@ if __name__ == '__main__':
         path.write_text(traceback.format_exc(), 'utf8')
         if not log:
             import ctypes
-            message=str(error)
-            if not any('\u4e00'<=character<='\u9fff' for character in message):
-                message='文件完整性或目录访问检查未通过，请检查磁盘空间、文件权限或重新下载应用。'
-            ctypes.windll.user32.MessageBoxW(None, '运行文件未能准备完成。\n' + message + '\n\n请关闭其他窗口后重试。已有研究资料保留。', 'PhoneticToolbox 启动未完成', 0x10)
+            from ptb_desktop.native_i18n import NativeLocale
+            title,message=NativeLocale(user_data_root()/'language.json').startup_failure(error)
+            ctypes.windll.user32.MessageBoxW(None,message,title,0x10)
         raise SystemExit(1)

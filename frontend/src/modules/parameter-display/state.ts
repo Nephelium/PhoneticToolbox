@@ -1,6 +1,9 @@
 import type { ParameterTable, ResearchFile } from '../../platform/research.ts';
+import {tr} from '../../i18n/index.ts';
 
 export interface PlotGroup { id:number; title:string; parameters:string[] }
+/** Project default captions without changing saved or user-authored titles. */
+export function plotGroupTitle(group:PlotGroup):string{return group.title===`图窗 ${group.id}`?tr('modules.parameter-display.default_plot_title',{number:group.id}):group.title;}
 // Each window owns its selection. Editing one must not remove another's curves.
 export function setGroupParameters(groups:PlotGroup[],id:number,parameters:string[]):PlotGroup[]{
   return groups.map(group=>group.id===id?{...group,parameters:[...new Set(parameters)]}:group);

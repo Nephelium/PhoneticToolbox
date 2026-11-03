@@ -19,6 +19,7 @@ def main():
     parser=argparse.ArgumentParser()
     parser.add_argument('output',type=Path)
     parser.add_argument('--icon',type=Path)
+    parser.add_argument('--locale',choices=('zh-CN','en','ja'),default='zh-CN')
     args=parser.parse_args()
     out=args.output.absolute();out.mkdir(parents=True,exist_ok=False)
     if not getattr(sys,'frozen',False) and not args.icon:
@@ -77,7 +78,7 @@ def main():
     cold_counts=counts();cases=[]
     try:
         for dpi in (96,120,144,192,240):
-            progress=PreparationWindow(offscreen=True,dpi=dpi,icon_path=args.icon)
+            progress=PreparationWindow(offscreen=True,dpi=dpi,icon_path=args.icon,locale=args.locale)
             try:
                 progress.update('science',0,100)
                 assert progress.visible.wait(10) and progress.hwnd,repr(progress.failure)
@@ -89,11 +90,12 @@ def main():
                     dimensions=capture(progress,out/f'{dpi}-{stage}-{done}.png')
                     assert dimensions==(round(620*dpi/96),round(312*dpi/96)),dimensions
                     assert not progress.failure,repr(progress.failure)
-                    assert progress.resolved_fonts=={'KaiTi':'楷体','Times New Roman':'Times New Roman'},progress.resolved_fonts
+                    expected={'zh-CN':{'KaiTi':'楷体','Times New Roman':'Times New Roman'},'en':{'Times New Roman':'Times New Roman'},'ja':{'Yu Gothic UI':'Yu Gothic UI','Times New Roman':'Times New Roman'}}
+                    assert progress.resolved_fonts==expected[args.locale],progress.resolved_fonts
                     cases.append({'dpi':dpi,'stage':stage,'percent':done,'dimensions':dimensions,'fonts':progress.resolved_fonts})
             finally:progress.close()
         # Exercise the production DPI-change path and the new rounded region.
-        progress=PreparationWindow(offscreen=True,icon_path=args.icon)
+        progress=PreparationWindow(offscreen=True,icon_path=args.icon,locale=args.locale)
         try:
             progress.update('apps',75,100)
             assert progress.visible.wait(10) and progress.hwnd,repr(progress.failure)
@@ -109,13 +111,13 @@ def main():
         # steady-state cycles after warming and waiting for deferred destruction,
         # rather than treating that first-use allocation as a per-window leak.
         for _ in range(3):
-            progress=PreparationWindow(offscreen=True,dpi=96,icon_path=args.icon)
+            progress=PreparationWindow(offscreen=True,dpi=96,icon_path=args.icon,locale=args.locale)
             progress.update('science',50,100)
             assert progress.visible.wait(10) and progress.hwnd,repr(progress.failure)
             progress.close();time.sleep(.6)
         before=counts()
         for _ in range(15):
-            progress=PreparationWindow(offscreen=True,dpi=96,icon_path=args.icon)
+            progress=PreparationWindow(offscreen=True,dpi=96,icon_path=args.icon,locale=args.locale)
             try:
                 progress.update('science',50,100)
                 assert progress.visible.wait(10) and progress.hwnd,repr(progress.failure)
@@ -128,7 +130,7 @@ def main():
         assert all(end<=start for start,end in zip(before,after)),{'before':before,'after':after}
     finally:
         if prior_dpi:user.SetThreadDpiAwarenessContext(prior_dpi)
-    (out/'report.json').write_text(json.dumps({'success':True,'scope':'actual Win32 window positioned offscreen; PrintWindow capture',
+    (out/'report.json').write_text(json.dumps({'success':True,'locale':args.locale,'scope':'actual Win32 window positioned offscreen; PrintWindow capture',
         'frozen':bool(getattr(sys,'frozen',False)),'cases':cases,'simulated_dpi_changes':[144,192,96],
         'gdi_user_objects_cold':cold_counts,'gdi_user_objects_before':before,'gdi_user_objects_after':after,
         'repeated_window_cycles':15},ensure_ascii=False,indent=2),'utf8')

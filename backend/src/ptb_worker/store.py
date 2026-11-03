@@ -7,14 +7,13 @@ import sqlite3
 import time
 from uuid import uuid4
 
-import psycopg
-from psycopg.rows import dict_row
 from phonetic_core import __version__ as core_version
 from ptb_api import __version__ as adapter_version
 from ptb_api.job_models import JobInput, JobManifest, FileJobInput
 from .policy import ACTIVE, cancel_state, fenced
 
 LOCAL_PROJECT = '00000000-0000-4000-8000-000000000001'
+QUEUE_WAIT_SECONDS = 86400
 
 
 class JobError(Exception):
@@ -63,7 +62,7 @@ class JobStore:
         self.batches = None
 
     def capacity_used(self,tx,owner):
-        used=tx.execute('SELECT count(*) AS n FROM {jobs} WHERE owner_id=?',(owner,)).fetchone()['n']
+        used=tx.execute("SELECT count(*) AS n FROM {jobs} WHERE owner_id=? AND state IN ('queued','running','cancel_requested')",(owner,)).fetchone()['n']
         exists=(tx.execute("SELECT to_regclass('ptb_jobs.acoustic_batches') AS n").fetchone()['n'] if self.postgres else
                 tx.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='acoustic_batches'").fetchone())
         if exists:
@@ -113,11 +112,11 @@ class JobStore:
         return dict(result) if result else None
 
     def _recover(self, tx, now):
-        rows=tx.execute("SELECT * FROM {jobs} WHERE (state IN ('running','cancel_requested') AND (lease_until<=? OR deadline<=?)) OR (state='queued' AND deadline<=?)",(now,now,now)).fetchall()
+        rows=tx.execute("SELECT * FROM {jobs} WHERE (state IN ('running','cancel_requested') AND (lease_until<=? OR deadline<=?)) OR (state='queued' AND created_at<=?)",(now,now,now-QUEUE_WAIT_SECONDS)).fetchall()
         for value in rows:
             row=dict(value)
             state='failed' if row['state']=='queued' else 'interrupted'
-            code='deadline_exceeded' if row['deadline']<=now else 'worker_interrupted'
+            code='deadline_exceeded' if row['state']=='queued' or row['deadline']<=now else 'worker_interrupted'
             tx.execute('UPDATE {jobs} SET state=?,error_code=?,worker_id=NULL,lease_until=NULL WHERE id=?',(state,code,row['id']))
             row['state']=state
             self._event(tx,row,code,now)
@@ -153,21 +152,33 @@ class JobStore:
             return public(row)
 
     def list(self, owner, project_id):
-        with self.transaction() as tx:
-            self._recover(tx,tx.now())
+        with self.read_transaction() as tx:
             return [public(dict(r)) for r in tx.execute('SELECT * FROM {jobs} WHERE owner_id=? AND project_id=? ORDER BY created_at DESC,id DESC LIMIT 100',(owner,project_id)).fetchall()]
 
     def get(self, owner, job_id):
-        with self.transaction() as tx:
-            self._recover(tx,tx.now());row=self._row(tx,job_id,owner)
+        with self.read_transaction() as tx:
+            row=self._row(tx,job_id,owner)
             if not row:raise JobError('job_not_found',404)
             return public(row)
 
     def events(self, owner, job_id, after):
-        with self.transaction() as tx:
-            self._recover(tx,tx.now())
+        with self.read_transaction() as tx:
             if not self._row(tx,job_id,owner):raise JobError('job_not_found',404)
             return [dict(r) for r in tx.execute('SELECT sequence,state,progress,code,created_at FROM {events} WHERE job_id=? AND sequence>? ORDER BY sequence LIMIT 100',(job_id,after)).fetchall()]
+
+    @contextmanager
+    def read_transaction(self):
+        # Ordinary polling does not acquire the scheduler's global writer lock.
+        # Retain immediate recovery semantics only when an expired row exists.
+        with self.transaction(write=False) as tx:
+            now=tx.now()
+            expired=tx.execute("SELECT 1 FROM {jobs} WHERE (state IN ('running','cancel_requested') AND (lease_until<=? OR deadline<=?)) OR (state='queued' AND created_at<=?) LIMIT 1",(now,now,now-QUEUE_WAIT_SECONDS)).fetchone()
+            if not expired:
+                yield tx
+                return
+        with self.transaction() as tx:
+            self._recover(tx,tx.now())
+            yield tx
 
     def cancel(self, owner, job_id):
         with self.transaction() as tx:
@@ -234,6 +245,12 @@ class JobStore:
         return self.submit(owner,body,retry_of=job_id)
 
     def claim(self, worker_id):
+        with self.transaction(write=False) as tx:
+            pending=tx.execute("SELECT 1 FROM {jobs} WHERE state IN ('queued','running','cancel_requested') LIMIT 1").fetchone()
+            if pending is None and self.batches is not None:
+                prefix='ptb_jobs.' if self.postgres else ''
+                pending=tx.execute(f'SELECT 1 FROM {prefix}acoustic_batches WHERE closed_at IS NULL LIMIT 1').fetchone()
+            if pending is None:return None
         if self.files is not None:
             return self.files.claim(worker_id)
         with self.transaction() as tx:
@@ -254,7 +271,10 @@ class JobStore:
         found=tx.execute(query,params).fetchone()
         if not found:return None
         row=dict(found);generation=row['generation']+1
-        tx.execute("UPDATE {jobs} SET state='running',worker_id=?,generation=?,lease_until=? WHERE id=?",(worker_id,generation,now+self.lease_seconds,row['id']))
+        # While queued, deadline-created_at stores the original execution budget.
+        # Only a queued -> running transition shifts it; running leases never do.
+        deadline=now+max(0,row['deadline']-row['created_at'])
+        tx.execute("UPDATE {jobs} SET state='running',worker_id=?,generation=?,lease_until=?,deadline=? WHERE id=?",(worker_id,generation,now+self.lease_seconds,deadline,row['id']))
         row=self._row(tx,row['id']);self._event(tx,row,'running',now)
         return row
 
@@ -298,8 +318,8 @@ class PostgresJobStore(JobStore):
 
     @contextmanager
     def transaction(self, write=True):
-        with psycopg.connect(self._dsn,row_factory=dict_row,connect_timeout=5,
-                             options='-c statement_timeout=10000 -c lock_timeout=5000') as conn:
+        from ptb_api.postgres_pool import connection
+        with connection(self._dsn) as conn, conn.transaction():
             if write:conn.execute('SELECT pg_advisory_xact_lock(577606)')
             yield Transaction(conn,True)
 

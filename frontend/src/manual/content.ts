@@ -23,10 +23,15 @@ export function assetUrl(base:string,path:string):string|null {
   else if(!/^(?:\/|\.\/|\.\.\/)?[^:]*$/.test(base))return null;
   return base.replace(/\/?$/,'/')+path.split('/').map(part=>encodeURIComponent(decodeURIComponent(part))).join('/');
 }
+/** Shared media follows the Chinese host's packaged path, while translated metadata stays intact. */
+export function sharedAssetUrl(base:string,asset:ManualAsset,hostAssets:ReadonlyMap<string,ManualAsset>):string|null{
+  return assetUrl(base,hostAssets.get(asset.id)?.path??asset.path);
+}
 /** Host-provided preview resolvers may use a session URL, never an active scheme. */
 export function safeMediaSource(value:unknown):string|null {
   if(typeof value!=='string'||!value||/[\x00-\x20\\]/.test(value)||value.startsWith('//'))return null;
-  if(/^[a-z][a-z0-9+.-]*:/i.test(value)&&!/^https?:\/\//i.test(value)&&!/^blob:https?:\/\//i.test(value))return null;
+  const desktopBlob=/^blob:ptbapp:\/\/app\/[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i.test(value);
+  if(/^[a-z][a-z0-9+.-]*:/i.test(value)&&!/^https?:\/\//i.test(value)&&!/^blob:https?:\/\//i.test(value)&&!desktopBlob)return null;
   if(/^https?:\/\//i.test(value)){try{const url=new URL(value);if(url.username||url.password)return null;}catch{return null;}}
   return value;
 }
@@ -108,7 +113,7 @@ export function chapterDisplayNumbers(chapter:ManualChapter,chapterNumber:number
   return numbers;
 }
 export function unnumberedCaption(value:string):string {
-  return value.replace(/^\s*(?:图|表|例音|音频|视频)\s*\d+(?:\s*[-.－—]\s*\d+)*\s*[:：.]\s*/u,'').trim();
+  return value.replace(/^\s*(?:图|図|表|例音|音频|音声例|视频|動画|Figure|Table|Audio|Video)\s*\d+(?:\s*[-.－—]\s*\d+)*\s*[:：.]\s*/iu,'').trim();
 }
 export function chapterSearchEntries(chapter:ManualChapter):ManualSearchEntry[] {
   let targetId:string|undefined;

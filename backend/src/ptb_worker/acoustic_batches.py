@@ -61,6 +61,8 @@ class AcousticBatches:
             for item in inputs:
                 resolved=self.resources.validate_batch_input(tx,owner,body.project_id,item,now)
                 common['audio_names'].append(next(a['name'] for a in resolved if a['role']=='audio'))
+            if len(canonical(common).encode('utf-8'))>16384:
+                raise JobError('snapshot_too_large',413)
             batch_id=str(uuid4())
             tx.execute(f'''INSERT INTO {self.table('batches')}(id,owner_id,project_id,idempotency_key,request_hash,
                 operation,config_snapshot,total,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?)''',
@@ -94,7 +96,13 @@ class AcousticBatches:
         bounded=bool((common.get('config') or {}).get('extended')) or any(a['role']=='parent_table' for a in resolved)
         if bounded:snapshot['config'].update(bounded_bundle=True,max_output_bytes=6_000_000_000)
         encoded=canonical(snapshot)
-        if len(encoded.encode())>16384:raise JobError('snapshot_too_large',413)
+        if len(encoded.encode())>16384:
+            # A bad deferred item must not roll back every scheduler claim.
+            # The original request remains in the batch/item records for review.
+            source_error='snapshot_too_large';resolved=[]
+            snapshot.update(input_refs={},input_assets=[],layer=None)
+            snapshot['config']={'inputs':[],'analysis':{},'max_output_bytes':192_000_000}
+            encoded=canonical(snapshot)
         job_id=str(uuid4());state='failed' if source_error else 'queued'
         tx.execute('''INSERT INTO {jobs}(id,owner_id,project_id,idempotency_key,request_hash,snapshot,state,
             deadline,created_at,updated_at,error_code) VALUES(?,?,?,?,?,?,?,?,?,?,?)''',

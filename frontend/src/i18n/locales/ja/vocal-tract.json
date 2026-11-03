@@ -1,0 +1,12 @@
+{
+  "modules.vocal-tract.acoustic_analysis": "音響解析",
+  "modules.vocal-tract.controls": "操作パネル",
+  "modules.vocal-tract.vocal_tract_request_failed": "声道リクエストに失敗しました",
+  "modules.vocal-tract.physiological_parameter_synthesis": "調音合成",
+  "modules.vocal-tract.the_server_vtl_engine_and_session_interface_are_still": "サーバーのVTLエンジンとセッションインターフェースは調整中で、Web版はまだ接続されていません。",
+  "modules.vocal-tract.vocal_tract_workspace": "声道ワークスペース",
+  "modules.vocal-tract.physiological_parameter_synthesis_web": "調音合成 · Web版",
+  "modules.vocal-tract.due_to_server_performance_limits_adjust_and_fix_the": "サーバーの性能制限により、先に調音姿勢を調整・固定し、「発声テスト」で0.5秒を試聴してください。",
+  "modules.vocal-tract.the_web_version_does_not_yet_support_real_time": "Web版では姿勢を調整しながらのリアルタイム音声合成にまだ対応していません。リアルタイム合成にはデスクトップ版を使用してください。",
+  "modules.vocal-tract.got_it": "確認しました"
+}

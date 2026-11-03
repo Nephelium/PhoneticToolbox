@@ -341,3 +341,21 @@ def test_preferences_strict_and_release_id_never_url(tmp_path):
         with pytest.raises(UpdateError):service.set_preferences(args)
     with pytest.raises(UpdateError):service.download('https://evil.test',confirmed=True)
     assert not transport.calls
+
+
+def test_partial_http_failure_keeps_raw_status_and_translatable_display():
+    error = HTTPError(SERVER_MANIFEST, 503, 'fixture', {}, None)
+    result = UpdateService._failure(error)
+    assert result['status'] == 'error' and result['code'] == 'HTTP_ERROR'
+    assert result['message'] == '发布来源返回 HTTP 503。'
+    assert result['display'] == {'key': 'native.errors.updates.sourceHttp', 'values': {'status': 503}}
+
+
+def test_update_context_keys_do_not_depend_on_ambiguous_legacy_text():
+    result = UpdateService._failure(TimeoutError('original transport diagnosis'))
+    assert result == {'status': 'error', 'code': 'NETWORK_ERROR',
+                      'message': '连接失败或超时，请稍后重试。',
+                      'display': {'key': 'native.errors.updates.networkFailure'}}
+    result = UpdateService._failure(UpdateError('CONFIRM_REQUIRED', '请确认后再下载更新。'))
+    assert result['message'] == '请确认后再下载更新。'
+    assert result['display'] == {'key': 'native.errors.updates.confirmDownload'}

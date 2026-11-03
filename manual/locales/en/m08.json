@@ -1,0 +1,842 @@
+{
+  "schemaVersion": "ptb-manual-localization/1",
+  "locale": "en",
+  "entries": {
+    "e70a338107a418b6490687ce1d86a054d66945ab2bb8a61a368b6f09fc716bc3": {
+      "source": "变速变调",
+      "translation": "Time and pitch manipulation"
+    },
+    "d7181d06d256a59087a73250536550ad8ff1a25318c9d5e9159bc3ec9ac5c96a": {
+      "source": "视频教程：<s id=\"0\">观看本章视频</s>。",
+      "translation": "Video tutorial: <s id=\"0\">watch this chapter's video</s>."
+    },
+    "d9183088c0933f22933131926f682ca5fa18ff4a0ff7517c1f05213513ae7192": {
+      "source": "先选一种处理方式",
+      "translation": "Choose a processing method first"
+    },
+    "325a95f16653f80247bd615fe41963a0e42fed2151a5f4086933180d20b36006": {
+      "source": "变速变调可以从已有录音制作不同语速、音高或调形的版本。先选适合的入口，生成后试听，再把满意的音频保存为 WAV。",
+      "translation": "Create versions of existing recordings with different speaking rates, pitches, or pitch contours. Choose the appropriate workflow, listen after generation, and save satisfactory audio as WAV."
+    },
+    "0c8270869cacb30a1d3f231ad8ae8f8486dfcd682319c1f1f0e3464ef690f7f6": {
+      "source": "单文件和文件夹处理都支持多个语速与多个音高值，用逗号、分号或空格分隔。音高倍率与 Hz 偏移二选一，语速和所选音高按所有组合生成。重复值只生成一次，每批最多 256 个版本。多版本完成后会打开保存选择，取消后结果仍保留，可通过保存最近批次再次保存。",
+      "translation": "Single-file and folder processing both accept multiple rates and pitch values, separated by commas, semicolons, or spaces. Choose either pitch multiplier or Hz offset; every rate/pitch combination is generated. Duplicate values generate once, with at most 256 versions per batch. Multiple-version completion opens save selection; cancellation retains results for Save latest batch."
+    },
+    "f97f6f9c29225017103d04beecee5e2f3b75fd782dabdef56e6feef1b2293122": {
+      "source": "<s id=\"0\">手绘或导入基频：</s>在单文件页修改一条 F0 曲线，再合成当前视野或整段。",
+      "translation": "<s id=\"0\">Draw or import fundamental frequency:</s> edit one F0 curve on the single-file page, then synthesize the current view or entire recording."
+    },
+    "1b7a17e54204f58c54c34427fa81e9a83c924c82d5c66d42e083572108993c42": {
+      "source": "<s id=\"0\">拐点组合：</s>给起点、终点和中间点填写频率列表，一次生成多种调形。",
+      "translation": "<s id=\"0\">Turning-point combinations:</s> enter frequency lists at start, end, and intermediate points to generate multiple pitch contours."
+    },
+    "4452c52d138fdbb58dd1dc8070ad816da0935210e95fe644fbb913e2460b8f1f": {
+      "source": "<s id=\"0\">文件夹批量：</s>为勾选的音频设置多个语速和多个音高值，按所有组合生成不同版本。音高选择倍率或 Hz 偏移。",
+      "translation": "<s id=\"0\">Folder batch:</s> set multiple rates and pitch values for selected files, generating all combinations. Choose pitch multiplier or Hz offset."
+    },
+    "7cb36ac4b8c998023a4abcd6a1de1c3088a292f12747c917f6c24b8fae126fa7": {
+      "source": "打开音频，等待 F0 就绪",
+      "translation": "Open audio and wait for F0"
+    },
+    "67a1afce0c681f7c16bc0c49c881f050bc095d8cb90dda9df160e427bbb41af1": {
+      "source": "准备 WAV、MP3 或 FLAC。初次使用可选一份短音节，保留原音作对照。",
+      "translation": "Prepare WAV, MP3, or FLAC. Begin with a short syllable and retain the original for comparison."
+    },
+    "d53b3d84274c20e8e1710917591ae96bfca4b88082cd016e09c47a4c378d0698": {
+      "source": "点击顶部 <s id=\"0\">打开音频目录</s>，再从左栏音频下拉框选文件。网页按其入口使用 <s id=\"1\">导入音频</s> 或 <s id=\"2\">导入文件夹</s>。目录内容有变化时点 <s id=\"3\">刷新文件</s>。",
+      "translation": "Click <s id=\"0\">Open audio directory</s>, then select a file from the left audio dropdown. On the web, use <s id=\"1\">Import audio</s> or <s id=\"2\">Import folder</s> as available. Click <s id=\"3\">Refresh files</s> after directory changes."
+    },
+    "a532d76c297a04d11641eb0904ba73a19e0a061715cc068e19e47eff7ecd384a": {
+      "source": "原始波形可能先出现，右栏随后提示正在提取 F0。等基频曲线出现，再编辑或合成。点击 <s id=\"0\">播放当前视野原音</s> 检查材料。",
+      "translation": "The original waveform may appear first, followed by Extracting F0 on the right. Wait for the fundamental-frequency curve before editing or synthesizing. Click <s id=\"0\">Play original in current view</s> to check the material."
+    },
+    "140178ac992b12c19b81cc1c76f6df717b6e4763d540ef29ababc82b3939aef4": {
+      "source": "短音节完成加载，原始波形与 F0 已出现，合成波形和历史图还为空。",
+      "translation": "Short syllable loaded with original waveform and F0, while synthesis waveform and history remain empty."
+    },
+    "7fd5722a16f5fec5508446cb7cb4ed625b259a5bb30eb1998288a57b27bb71ae": {
+      "source": "V3 单文件页已加载短音节，语速为 1，尚未生成音频。",
+      "translation": "V3 single-file page with a short syllable loaded, rate 1, and no generated audio yet."
+    },
+    "2a3209241930e467a18c8b233ad2b965fde219c9c95c41355267ea3b2b81aaa0": {
+      "source": "如果 F0 明显跳高、跳低或断开，先检查原音。噪声、气声、嘎裂声和清浊交界可能影响估计，调宽显示轴只会改变画面。",
+      "translation": "If F0 clearly jumps high, low, or breaks, inspect the original first. Noise, breathiness, creakiness, and voicing boundaries can affect estimation. Widening display axes changes only the view."
+    },
+    "bb734ab57bcaf98fa6b2b67d5ba2e9757745dcd17a8534282c1e6528c73dd6b4": {
+      "source": "输入最多 64 MB、800 万采样帧、8 声道，单份预计输出最多 3200 万帧。帧上限随采样率换算成不同的时长；超限时先拆分材料。",
+      "translation": "Input limits are 64 MB, 8 million frames, and 8 channels; predicted output is at most 32 million frames per file. Frame limits imply different durations by sample rate; split over-limit material first."
+    },
+    "5e2136ddd8b339cef7117cc857c4b4b5507a702e5d4d689c8dfc89faa901b87a": {
+      "source": "四张图分别看什么",
+      "translation": "What the four plots show"
+    },
+    "abb5d67e0899d03aad94896bd79c5ad46130eb84a2e1c17d0742067dc09447e8": {
+      "source": "<s id=\"0\">左上原始波形：</s>查看录音，确定计算视野和原音试听选区。",
+      "translation": "<s id=\"0\">Upper-left original waveform:</s> inspect the recording, define the processing view and original-audio listening selection."
+    },
+    "a75759c92417ab66a6a591cec9ccf6e8fff7eac08a15ad429288f8ddd506325b": {
+      "source": "<s id=\"0\">右上基频编辑：</s>虚线是原音 F0 的估计，红色实线是准备合成的目标。",
+      "translation": "<s id=\"0\">Upper-right fundamental-frequency editor:</s> dashed line estimates original F0; solid red is the synthesis target."
+    },
+    "4bc2c2ce2ef7612dde22cfe64951bc22bedef423f1d4f3e4ee75351e8847495b": {
+      "source": "<s id=\"0\">左下合成波形：</s>查看当前选中的实际输出，时间从零开始。",
+      "translation": "<s id=\"0\">Lower-left synthesis waveform:</s> inspect the selected actual output, with time starting at zero."
+    },
+    "f59cd9d22ee36bb34e16becd1adc1438b8cce570bbad3352a92edc825e9598e9": {
+      "source": "<s id=\"0\">右下历史 F0 对比：</s>查看同一原音各版本的输出 F0，均由实际 WAV 重新估计。",
+      "translation": "<s id=\"0\">Lower-right historical F0 comparison:</s> inspect output F0 of different versions from the same original, reestimated from actual WAVs."
+    },
+    "5bcdc48faf0b2c71929de65c3b21059035247baa7b2fd9f7d20e971a37892adb": {
+      "source": "左栏放参数和拐点工具，右栏放合成、试听、保存与任务。顶部 <s id=\"0\">单文件与基频</s> / <s id=\"1\">批量变速变调</s> 切换处理页；<s id=\"2\">帮助</s> 打开操作说明，<s id=\"3\">方法与引用</s> 查看来源。",
+      "translation": "The left holds parameters and turning points; the right synthesis, listening, saving, and tasks. Top tabs <s id=\"0\">Single file and fundamental frequency</s> / <s id=\"1\">Batch time/pitch manipulation</s> switch pages. <s id=\"2\">Help</s> opens instructions and <s id=\"3\">Methods and references</s> lists sources."
+    },
+    "16161aca13b9ce4cc5c5a60503b39a5ddf14d61b423be5ae84e640826be4f176": {
+      "source": "常用参数",
+      "translation": "Common parameters"
+    },
+    "4a1fe8e3575b46305daec87497b4232cbe4be74437264558038a5dd9c80c0347": {
+      "source": "首次使用的参数与作用",
+      "translation": "Initial parameters and purposes"
+    },
+    "cf2b9939631b8f51a0b276a591b2fe6feeb5324f486c9b88aeafeff21cc615dd": {
+      "source": "参数",
+      "translation": "Parameter"
+    },
+    "1777b1f61d4238ccadbd95122cdf86eca7a1c0ada1092f3ed808687c7862f105": {
+      "source": "初始值",
+      "translation": "Initial value"
+    },
+    "ce5323ac9291fbba135c99bac1630331b9f14b35c58fc9f0f613618b2e7edde2": {
+      "source": "怎样填写",
+      "translation": "How to enter"
+    },
+    "ffe7d3c8671b42ec8985a57dde671f7e13db0ee451b2a473dc0f6036b4ba83e8": {
+      "source": "语速倍率",
+      "translation": "Rate multiplier"
+    },
+    "d1c889c6710a2bd9f24a14ad2e4ad9f16b4ad921c2f937ba1557261d26fb57fa": {
+      "source": "小于 1 减速，大于 1 加速，必须大于零。可用逗号或空格输入多个值，如 0.8, 1, 1.2。单文件与文件夹处理都使用这些值，拐点生成不使用。",
+      "translation": "Below 1 slows, above 1 speeds up; must be positive. Enter multiple values with commas or spaces, such as 0.8, 1, 1.2. Both single-file and folder processing use them; turning-point generation does not."
+    },
+    "dcc9489cbc30a771d532f32cc13a83e034dd1f683d43d9e28854e36d854c5721": {
+      "source": "F0 下限 Hz / 上限 Hz",
+      "translation": "F0 minimum Hz / maximum Hz"
+    },
+    "10eff39c4134c48e29e934d59781665db4221f9201eaf68d9c6093f25fd40e7d": {
+      "source": "点应用范围生效，上限须大于下限。只调整编辑图和历史图的显示轴。",
+      "translation": "Click Apply range; maximum must exceed minimum. Changes display axes in edit/history plots only."
+    },
+    "9ef142429025ee6f1dc599b441bbf91271516c9846616fa24c1f14979d405f48": {
+      "source": "参考线方向与数值",
+      "translation": "Reference-line direction and value"
+    },
+    "8ce708e1ee99f33bf83a07e5558f466565a3a9eb8d28f6fcab8ac863e5913ed0": {
+      "source": "默认横向 200 Hz，纵向输入框为 0.5 秒，图中初始无线",
+      "translation": "Default horizontal 200 Hz; vertical input 0.5 seconds; initially no line"
+    },
+    "4d06d392cc4890e9104ba67a5b34dbbaa0ebda52a69a190577a458831bbf9b13": {
+      "source": "选择横向 · Hz 或纵向 · 秒，填写频率或原始音频的时间，再点添加参考线。两类参考线可以同时显示，随视野缩放和平移；清除参考线同时移除两类线。参考线不参与合成。",
+      "translation": "Choose Horizontal · Hz or Vertical · seconds, enter frequency or original-audio time, then Add reference line. Both types can coexist and follow zoom/pan. Clear reference lines removes both. They do not affect synthesis."
+    },
+    "126ff9f943fad51ec6cff70ca1f731955b0b5e34cea023b29c812a15124508f1": {
+      "source": "升降偏移 (Hz)",
+      "translation": "Pitch offset (Hz)"
+    },
+    "4f90971621aee2a5e446ac530b16fa7099c2e6378293f7f0c572968f1df7cdfc": {
+      "source": "关闭",
+      "translation": "Off"
+    },
+    "9cb7b73a87144af5d905ad24643380140bd3cdc5cb99dc0741d3352f29f592fe": {
+      "source": "关闭时拐点列表为绝对频率，开启时为相对原始 F0 的增量。",
+      "translation": "Off: turning-point lists contain absolute frequencies. On: increments relative to original F0."
+    },
+    "81fbdfb632477ca47fc163481bfa0e390706c8f8e19cb0de28c9d7190419321c": {
+      "source": "音高倍率",
+      "translation": "Pitch multiplier"
+    },
+    "20a1178703571c050ec3aacd97705ab994e9219f06eab8f46e0e17f4267b432e": {
+      "source": "音高调整选择倍率后填写。1.2 表示乘 1.2，可输入多个值，如 1, 1.2。此时 Hz 偏移不参与处理。",
+      "translation": "Enter after selecting multiplier. 1.2 means multiply by 1.2; multiple values such as 1, 1.2 are allowed. Hz offset is inactive."
+    },
+    "f5ec9556f62fbdab9b4f66aaf8670aa7728594bd7799949935cd334eba983d25": {
+      "source": "音高偏移 Hz",
+      "translation": "Pitch offset Hz"
+    },
+    "31d3e13f39f7cc044801a2dedaa66603c27527021e05e462b6081fc211bc1e8e": {
+      "source": "音高调整选择偏移 Hz 后填写，可输入 -20, 0, 20。正值升高，负值降低，此时音高倍率固定为 1。",
+      "translation": "Select Hz offset and enter values such as -20, 0, 20. Positive raises and negative lowers; pitch multiplier is fixed at 1."
+    },
+    "a912af316f9daa723c4f7a8ca09f42ed0fc81cfb52a79a7d5855b5ee580a5847": {
+      "source": "数值框可先输入 <s id=\"0\">0.</s>，再补成 <s id=\"1\">0.3</s>。<s id=\"2\">完成数字后再应用、保存或提交。</s>切回旧草稿时，字段会恢复此前保存的数值。",
+      "translation": "You may start a numerical entry with <s id=\"0\">0.</s> and complete it as <s id=\"1\">0.3</s>. <s id=\"2\">Finish numbers before applying, saving, or submitting.</s> Returning to an old draft restores its saved field values."
+    },
+    "f3fa8f67c0592331695285e326863d414875ad705b578da11040b59e27b99d3d": {
+      "source": "先完成一次单文件合成",
+      "translation": "Complete a first single-file synthesis"
+    },
+    "cdf285f3ae8d623a2560f1502ed65472c1d1e7c4457adccc4021347e79fad507": {
+      "source": "载入音频后，在基频编辑图画目标曲线，或按下一节的办法导入基频序列。",
+      "translation": "After loading, draw the target in the fundamental-frequency editor or import a sequence as described next."
+    },
+    "0f1138b46c0f3fae818f3a758528efff15ccd12c6f671e459a6a1cb4fb17681d": {
+      "source": "填写一个或多个语速倍率，再选择音高倍率或 Hz 偏移，填写对应的一个或多个值。点 <s id=\"0\">合成当前视野</s> 只处理原音图可见区间；点 <s id=\"1\">合成整段</s> 处理完整文件。",
+      "translation": "Enter one or more rate multipliers, select pitch multiplier or Hz offset, and enter corresponding values. <s id=\"0\">Synthesize current view</s> processes only the original plot's visible range; <s id=\"1\">Synthesize entire recording</s> processes the full file."
+    },
+    "9cd1114ad82a0e85ca3bfaecbf265cd621cb1e468fbc65dd24abcb04bb924c4d": {
+      "source": "等任务完成、合成波形和历史曲线出现后，点 <s id=\"0\">播放合成音</s>。满意后点 <s id=\"1\">保存合成音</s> 并选择输出目录。",
+      "translation": "Wait for completion, synthesis waveform, and history curves, then click <s id=\"0\">Play synthesized audio</s>. Click <s id=\"1\">Save synthesized audio</s> and select a directory when satisfied."
+    },
+    "7bc9f1d43842a78162721a3f9aeade0a4d900ee36cb134c233d39168a3e7d764": {
+      "source": "<s id=\"0\">曲线编辑完成后点击合成，生成成功后再保存音频。</s>",
+      "translation": "<s id=\"0\">After editing curves, click Synthesize; save audio only after generation succeeds.</s>"
+    },
+    "f96357f221cbbace0a14d26378163a7bbd0444a23a959bd2c21b3d05a2d392c3": {
+      "source": "放大图面与试听局部",
+      "translation": "Zoom and listen locally"
+    },
+    "4704f835709d84710c5c37778909dfc7a8e9ed93df77fd2e1654bc14298b9a91": {
+      "source": "<s id=\"0\">放大或缩小：</s>在波形上用 Ctrl＋滚轮，或点 − / +。放大后拖动时间窗起点滑条平移，双击波形或点 <s id=\"1\">适合窗口</s> 回到全长。多声道材料可勾选 <s id=\"2\">显示两个声道</s>，图中会标出试听声道。",
+      "translation": "<s id=\"0\">Zoom:</s> Ctrl + wheel over the waveform or − / +. Pan using Time-window start; double-click or <s id=\"1\">Fit window</s> restores full length. For multichannel material, <s id=\"2\">Show two channels</s> labels the playback channel in the plot."
+    },
+    "d5e4e5e1c699c34bbd31338a6f365d5ddcef9ce31f0a05f483653356d8a1a2a0": {
+      "source": "<s id=\"0\">基频图平移：</s>普通左键拖动，或聚焦后按左右方向键。Ctrl＋滚轮在指针附近缩放；普通滚轮滚动页面。",
+      "translation": "<s id=\"0\">Pan the fundamental-frequency plot:</s> ordinary left-drag or left/right arrows when focused. Ctrl + wheel zooms near the pointer; normal wheel scrolls the page."
+    },
+    "20c6cee9e94599f35008589bd1ac23294de051ccf0a517619f5b4f5327d4b634": {
+      "source": "<s id=\"0\">试听局部：</s>在原音或合成波形上拖出选区，再点右栏 <s id=\"1\">播放选区</s>。最后拖选的那份音频成为试听对象，另一份的旧选区会清除。",
+      "translation": "<s id=\"0\">Listen to a portion:</s> drag on original or synthesized waveform, then click <s id=\"1\">Play selection</s>. The last selected audio becomes active; the other audio's old selection clears."
+    },
+    "ea4a29916568fa649782917af76f98b2a306bb8bd5fdb9e7f96d643112e03def": {
+      "source": "合成波形中选好局部后，右栏显示合成音选区，原音计算视野仍保持整段。",
+      "translation": "After selecting a portion of the synthesis waveform, the right shows Synthesized selection; original processing view remains full length."
+    },
+    "dca03205f6ff3f7d2b32efcee8ab55897d2e510f2d3c5007824e155a2e4836e9": {
+      "source": "合成波形有浅蓝试听选区，右栏显示合成音选区与独立的原音当前视野。",
+      "translation": "Light-blue listening selection in the synthesis waveform, with separate synthesized selection and original current-view ranges on the right."
+    },
+    "4a5e6b9e22525241156e57eab610d9f16ffa3e994cecea66865679a5906f21e1": {
+      "source": "局部：浅蓝色区域表示合成音的试听选区，计算视野仍看右栏的当前视野。",
+      "translation": "Detail: light blue is synthesized-audio listening selection; use Current view on the right for computation range."
+    },
+    "829e9be3dd6f01ec391711e3fe65e8818f6f8488845f9c8a9616935c0aa4c222": {
+      "source": "<s id=\"0\">试听选区不决定合成范围。</s>合成当前视野看原音的缩放范围；播放当前视野原音播放这个范围，播放合成音播放完整输出，两个直接播放按钮不改写鼠标选区。",
+      "translation": "<s id=\"0\">Listening selection does not determine synthesis range.</s> Current-view synthesis uses original-audio zoom bounds. Play original in current view plays those bounds; Play synthesized audio plays complete output. Neither direct-play button rewrites mouse selections."
+    },
+    "8ab4270a95fcb758707dcf54653de9cc960396e33da3e0f42255421ec513eca6": {
+      "source": "点 <s id=\"0\">停止</s> 结束试听，播放选区过程中可点 <s id=\"1\">暂停</s>。有有效选区且焦点在图面时，空格可播放或停止；输入框、按钮和弹窗中的空格仍用于控件操作。改变原音视野、切换音频或离开模块会停止播放。",
+      "translation": "Click <s id=\"0\">Stop</s> to end playback or <s id=\"1\">Pause</s> during selected-range playback. With a valid selection and plot focus, Space plays/stops; inputs, buttons, and dialogs retain their own Space actions. Changing original view, switching audio, or leaving the module stops playback."
+    },
+    "a396a7c093e92e5d354098c61f7a37a9b59239a0e9f4602762bccc77a6214f34": {
+      "source": "合成波形按输出时长显示，可独立缩放。波形振幅轴随可见内容调整，比较振幅时请看刻度。本页紧凑播放条不显示音量和进度滑条。",
+      "translation": "The synthesis waveform uses output duration and zooms independently. Its amplitude axis fits visible content; read scales when comparing amplitude. Compact playback bars here omit volume and progress sliders."
+    },
+    "3944d2e43e35bb7341a3dca5d0bbb02544703123f8a2d417fa69a6c0b7d1f193": {
+      "source": "按住 Shift 画曲线，按 Ctrl 恢复",
+      "translation": "Draw with Shift and restore with Ctrl"
+    },
+    "a3a6cdcd823439a63dbb829ae2b5ce0d36e13231123053b0021d0d85dc8c31de": {
+      "source": "需要时先调整 F0 显示上下限，点 <s id=\"0\">应用范围</s>；选择参考线方向，填写频率（Hz）或时间（秒）后点 <s id=\"1\">添加参考线</s>。",
+      "translation": "If needed, edit F0 display bounds and <s id=\"0\">Apply range</s>. Choose reference-line direction, enter Hz or seconds, then <s id=\"1\">Add reference line</s>."
+    },
+    "7a0bc7f07e671cad224a5bdf68f57feddada83c9ede7224cf62d324df03a8d9f": {
+      "source": "在基频编辑图按住 <s id=\"0\">Shift＋鼠标左键</s> 拖动。红色实线随手势改变，原始 F0 没有正值的帧保持断开。",
+      "translation": "Hold <s id=\"0\">Shift + left mouse button</s> and drag in the editor. The solid red line follows; frames without positive original F0 remain disconnected."
+    },
+    "52d2209a0d0dfdca144f48f1cfa21669446a121101f36c1ddac3f9b178cd3fe9": {
+      "source": "画错了就按住 <s id=\"0\">Ctrl＋鼠标左键</s> 拖过该区间，恢复原始曲线。它不恢复到上一次手绘状态。",
+      "translation": "For errors, <s id=\"0\">Ctrl + left-drag</s> over the region restores the original curve, not the previous drawn state."
+    },
+    "b455cd9a165132b4420cf3c8de7a4c2e5feca81f523da43036baaf5faa070298": {
+      "source": "红色手绘目标与原始虚线分开，200 Hz 参考线辅助定位，此时还未合成。",
+      "translation": "Red drawn target separate from original dashed curve, with a 200 Hz reference; not yet synthesized."
+    },
+    "437117ee74f2d17aa7acfd59d025a7213dcf39c6e698dde9a7280804cbda0644": {
+      "source": "原始蓝色虚线、先升后降的红色手绘曲线和 200 Hz 参考线同屏。",
+      "translation": "Original blue dashed curve, rising/falling red target, and 200 Hz reference displayed together."
+    },
+    "a860de46b8484d2e2ffa88ebe1d59d0db4dc9afdc64cbe9484b3a880303687c8": {
+      "source": "局部：红色实线是手绘目标，蓝色虚线保留原始 F0，灰色虚线为 200 Hz 参考线。",
+      "translation": "Detail: solid red is the drawn target, dashed blue retains original F0, and dashed gray is the 200 Hz reference."
+    },
+    "438db232c20146153001465f713bca48555425392f71c1be72461f60fb5da0d7": {
+      "source": "确认语速、音高与范围后点合成。2 个语速和 3 个音高值会生成 6 个版本。音高调整作用于当前编辑 F0 的有声帧，每个组合保留独立结果。",
+      "translation": "Confirm rate, pitch, and range, then synthesize. 2 rates and 3 pitch values produce 6 versions. Pitch adjustment affects voiced frames of current edited F0; each combination has its own result."
+    },
+    "02f81159c4b8b0e9c4d9aa4551162c8e52650560987b7f50b5765a509efcd3a5": {
+      "source": "整段合成后，输出波形与实际音频重新估计的历史 F0 出现。",
+      "translation": "Full-recording synthesis produces the output waveform and historical F0 reestimated from actual audio."
+    },
+    "fc3d4622b44a2f7bf0b97b94a090bfc09447d2bc64af1d68aeab64156af24e10": {
+      "source": "手绘目标整段合成完成，左下为输出波形，右下为实际输出 F0。",
+      "translation": "Full-recording hand-drawn synthesis complete, with output waveform lower left and actual-output F0 lower right."
+    },
+    "aed3ccb4c351f1ec146c796b5ec9fd14e235b7d0aa5b42abe8e4e0763880d8ff": {
+      "source": "先听原声，再听手绘版，留意音高的升降、连接处和结尾音质。下例语速为 1，目标先升后降；200 Hz 线提供绘图参考。",
+      "translation": "Listen to the original, then the drawn version for pitch movement, joins, and ending quality. This example uses rate 1 and a rising/falling target; the 200 Hz line guides drawing."
+    },
+    "172e58c8fbf54f2a3a1566c13db79d3211ca36efce796ada4a8bdf1264c147ea": {
+      "source": "原声：同一自然单音节，约 0.672 s",
+      "translation": "Original: same natural monosyllable, about 0.672 s"
+    },
+    "be863c6644c60598ce122cd99f8ef7e8c0e7b27e174507f0f0141d374192c98a": {
+      "source": "手绘版：目标先升后降，语速 1，整段处理",
+      "translation": "Drawn version: rising/falling target, rate 1, full-recording processing"
+    },
+    "9548ee10d32121ccb6ec26c80d2ee50cd1a7c5cb12056fd45dae6ea13b3fa820": {
+      "source": "右上是目标曲线，右下是输出的 F0 估计，两者数值可能有差异。",
+      "translation": "Upper right shows the target; lower right estimates output F0. Their values may differ."
+    },
+    "45b9f795b6f635cf162f05c037df276b4bc8324e227fd35d81e830a427a7c260": {
+      "source": "粘贴基频序列",
+      "translation": "Paste a fundamental-frequency sequence"
+    },
+    "d393d4c348b40da5dfd88f0a639b62adb1275db170cc8526b40f5ed047e1ae28": {
+      "source": "先把原音视野缩放到 <s id=\"0\">一段连续、有效的 F0 曲线</s>。视野内没有有效值，或跨过 F0 中断时，导入会提示调整范围。",
+      "translation": "First zoom the original view to <s id=\"0\">one continuous valid F0 segment</s>. Without valid values or across an F0 break, import requests a range adjustment."
+    },
+    "5c71d4cb28675eef77f4696491968d091d295596127190945de9c13e459b926b": {
+      "source": "点 <s id=\"0\">导入基频序列</s>，每行填写一个 Hz 值，例如下列五行，再点 <s id=\"1\">导入序列</s>。",
+      "translation": "Click <s id=\"0\">Import fundamental-frequency sequence</s>, enter one Hz value per line, such as the five lines below, then <s id=\"1\">Import sequence</s>."
+    },
+    "97b8000853add776916c56ed57e895740bd14c686a76ec99e44ad3341d6c4020": {
+      "source": "弹窗中每行填写一个频率，点击导入序列后应用到当前连续有声段。",
+      "translation": "One frequency per line in the dialog; Import sequence applies them to the current continuous voiced segment."
+    },
+    "d077d5b689263220d6fcda18b0c84b4f85d68ff64c366bac4341325344732e20": {
+      "source": "导入基频序列弹窗中分五行输入 140、180、220、180、140。",
+      "translation": "Sequence-import dialog with five lines: 140, 180, 220, 180, 140."
+    },
+    "eaad140036b33cb3104ce76779dc02f083fcff5d9244b4b145afeac646bed212": {
+      "source": "每行填写一个 F0 数值即可。红框中的五个值将均匀放入当前连续有声段。",
+      "translation": "Enter one F0 value per line. The five values in the red box are placed uniformly across the current continuous voiced segment."
+    },
+    "680dcc6d674967eadad5c06067ce00ad4e408f3a8b0a0bc003734bee735f04e3": {
+      "source": "导入值按行序均匀排到这段曲线上，点间直线连接，视野外不变。单值形成恒定目标。检查红色实线后，再合成、试听和保存。点取消则不导入本次文本。",
+      "translation": "Values follow line order uniformly across the segment with linear connections; outside the view remains unchanged. One value gives a constant target. Inspect the red line, then synthesize, listen, and save. Cancel skips importing this text."
+    },
+    "b53407c7f2f71c2eea9c93b741bbb67ec786af1839c4debc6628f178ac808fe3": {
+      "source": "<s id=\"0\">两列文本只取第二列，第一列时间会被忽略。</s>逗号、分号和空白可分隔列，一行多个数不会成为多个连续帧。请保留源文本作记录。误导入零或负值造成中断时，可 Ctrl 拖动恢复原曲线再导入。",
+      "translation": "<s id=\"0\">Two-column text uses only the second column; first-column times are ignored.</s> Commas, semicolons, and whitespace separate columns. Multiple numbers on one line do not become consecutive frames. Keep source text. If accidental zero/negative input creates breaks, Ctrl-drag to restore and reimport."
+    },
+    "0431561772cb8520fba9f2e0e40a305e54c64c9e26851cca350f7592f380d39c": {
+      "source": "从历史里试听与比较",
+      "translation": "Listen and compare from history"
+    },
+    "e7e04d2849187c6c79dd04a5b2fc76612924acb75365bd3b0c24a25fb8f50bee": {
+      "source": "每次成功合成都进入同源历史。点 <s id=\"0\">试听此版本</s>，合成波形切到该结果并直接播放完整音频。",
+      "translation": "Every successful synthesis enters same-source history. <s id=\"0\">Listen to this version</s> loads its waveform and immediately plays the complete audio."
+    },
+    "8e47b0aaff5f1ebe716e831f40ac60dc67d6bc3668b4c7de842e6c104e6a9500": {
+      "source": "展开 <s id=\"0\">生成参数</s> 查看这次提交的条件。当前编辑不会改写旧版本；任务区的 <s id=\"1\">查看此版本</s> 按钮可载入对应结果，任务内的每个版本都可分别选择。跨原音时自动切换到对应文件，未保存编辑先选择保存或放弃。",
+      "translation": "Expand <s id=\"0\">Generation parameters</s> for submitted conditions. Current edits do not rewrite older versions. <s id=\"1\">View this version</s> in tasks loads the corresponding result, with each task version individually selectable. Across sources, the corresponding original loads automatically; first save or discard unsaved edits."
+    },
+    "88ab33ee720b209e2448507ad212ae30e62e1290e5c3fe2e43d49c687686e053": {
+      "source": "点 <s id=\"0\">保存对比图</s> 导出 <s id=\"1\">comparison_plot.png</s>，包含当前显示纵轴、实际曲线和完整文件名图例。",
+      "translation": "Click <s id=\"0\">Save comparison plot</s> to export <s id=\"1\">comparison_plot.png</s>, including current vertical axis, actual curves, and full-filename legend."
+    },
+    "3ff01a8328a08ed1e4d68c9e36145b0f6c009b2036fa0c9f4aaa31df1fc590e1": {
+      "source": "所选版本的生成参数展开，合成波形显示这份实际输出。",
+      "translation": "Selected version's generation parameters expanded; synthesis waveform shows its actual output."
+    },
+    "aa237583a87bf4392edb478520030e305a63e2e56282bdc644bfb900ce0fd4bf": {
+      "source": "历史版本的试听按钮与展开的生成参数可见。",
+      "translation": "Historical-version listening controls and expanded generation parameters."
+    },
+    "a8c297e00fbb4d212dedfe8d658698519b1cf75867b3f614dee2c1e385458f16": {
+      "source": "历史卡片的试听此版本会切换合成波形。生成参数可展开核对。",
+      "translation": "Listen to this version on a history card switches the synthesis waveform. Expand generation parameters to verify."
+    },
+    "b7f1fd0d83ea482abb81740ee374bd4711df6a34178c6a97e89f8e386f143d76": {
+      "source": "历史图把同源输出移到零起点，最长结果决定横轴范围。<s id=\"0\">同源历史总数与当前视野批次数可能不同。</s>批次只包含源区间起止与当前视野按两位小数匹配的结果；保存或管理时以弹窗名称为准。",
+      "translation": "History shifts same-source output to time zero; the longest result sets horizontal range. <s id=\"0\">Same-source history count may differ from current-view batch count.</s> A batch includes only results whose source start/end match the current view at two decimal places. Use dialog names when saving or managing."
+    },
+    "45fba34bdd38bd09fe6952a60dc6db289bd69ae0bd60a60111c49c78446c055f": {
+      "source": "保存音频与继续编辑",
+      "translation": "Save audio and continue editing"
+    },
+    "35a94f6e948521943f948dfb6d3cbbb75740a6d341e7f358f48d9f455ba6e017": {
+      "source": "把一个或多个结果保存为 WAV",
+      "translation": "Save one or more results as WAV"
+    },
+    "afebdcc2fcca74f8e2c0be2d5de8bbe0d3e590076a02595142e00e59d9eb0730": {
+      "source": "只存一份：先 <s id=\"0\">试听此版本</s> 选中它，再点 <s id=\"1\">保存合成音</s>。保存已有 WAV，不会按新曲线重算。",
+      "translation": "One result: select it with <s id=\"0\">Listen to this version</s>, then <s id=\"1\">Save synthesized audio</s>. This saves the existing WAV without recomputing from new curves."
+    },
+    "cd5d264380910cf92974846bf51c9da239fe408aa3dc8105605dbef6595fd21a": {
+      "source": "存多份：点 <s id=\"0\">批量保存</s>，核对列表，取消不需要的结果勾选。需要文件名序号时，勾选在文件名前添加序号，按所选结果的列表顺序添加 1_、2_、3_ 等前缀。该选项每次打开默认不选，历史名称不变。再点 <s id=\"1\">保存所选音频</s>。",
+      "translation": "Multiple results: click <s id=\"0\">Batch save</s>, inspect the list, and deselect unwanted results. For numbered filenames, select Add sequence numbers to filenames; prefixes 1_, 2_, 3_, etc. follow selected-list order. This defaults off whenever opened and does not change history names. Click <s id=\"1\">Save selected audio</s>."
+    },
+    "df132f7af23e2769a4b3011085d658f1482d3eb0d1feb6bd1b7fa0d052cfd920": {
+      "source": "批量保存列出当前视野的已生成 WAV，勾选后再选择输出目录。",
+      "translation": "Batch save lists generated WAVs for the current view. Select them, then choose an output directory."
+    },
+    "1463ceb19434ffb8ab7a853d2abe8b0ba5dd55d4329cfb4e66425cf892302f58": {
+      "source": "批量保存弹窗列出四份已生成结果和勾选框。",
+      "translation": "Batch-save dialog showing four generated results and checkboxes."
+    },
+    "5ec5272055c80fdde5a89e8cd75e1100d3301a94b9de35c8219e398505ef315f": {
+      "source": "桌面选择一次输出目录。完成后看右栏 <s id=\"0\">最近保存</s>，核对数量和完整目录，并展开 <s id=\"1\">查看保存文件名</s>。",
+      "translation": "On desktop, choose an output directory once. Check <s id=\"0\">Last save</s> on the right for count and full directory, and expand <s id=\"1\">View saved filenames</s>."
+    },
+    "7e743225219ffb83297ec728078052f1ba83d316c81341aed226240de9d70a91": {
+      "source": "取消后结果仍在历史中。部分失败时成功文件保留，失败项继续勾选；检查目录权限、空间与错误后重试。",
+      "translation": "Cancelling retains history. With partial failure, successful files remain and failed items stay selected. Check permissions, space, and errors, then retry."
+    },
+    "c27e9391c2dbb10dca517ca63053ba37a73532aa5db5deaffeca226cd1dffb27": {
+      "source": "保存完成后，最近保存显示实际目录，展开可查看最终文件名。",
+      "translation": "After saving, Last save shows the actual directory and expandable final filenames."
+    },
+    "db013837662ca13026237e4d6902cddce6bffc445f8c6da59702e2a76fe7b721": {
+      "source": "右栏显示最近保存数量、完整输出目录和最终文件名列表。",
+      "translation": "Right panel showing last-save count, full output directory, and final filenames."
+    },
+    "25cfe45fc091fcf4616d9359b027e64c4fede3011be88a01f2db333636f9f86a": {
+      "source": "<s id=\"0\">请确认指定目录已有文件，再把它作为实验材料使用。</s>保存不新增历史。取消或全部失败不会替换上一次成功记录，要结合本次状态核对。",
+      "translation": "<s id=\"0\">Confirm files exist in the specified directory before using them as experimental material.</s> Saving adds no history. Cancellation or total failure leaves the previous successful record; check this attempt's status."
+    },
+    "354011bcf94b951b9bf7f557d5aa2dbd0e83d27f79d5d7f33d04a294660009b7": {
+      "source": "网页单份保存 WAV，多份保存 <s id=\"0\">变速变调_批量音频.zip</s>，最多 256 项、音频总量 64 MB。支持时弹出保存窗口选择位置，保存后显示所选文件名。其他浏览器提示已发起下载，位置可在下载设置和下载列表查看。",
+      "translation": "Web saves one result as WAV and multiple as <s id=\"0\">变速变调_批量音频.zip</s>, limited to 256 items and 64 MB total audio. Supported browsers open a save dialog, then show the chosen filename. Others report Download initiated; inspect download settings/list for location."
+    },
+    "4e4878df93894d0b629d961fc9522e81107e7717ad24bf8f5dc1e1b455f11f11": {
+      "source": "把曲线和参数留到下次",
+      "translation": "Retain curves and parameters for next time"
+    },
+    "118c095996cba05f43d82a319254dae1c41432b64bcf73883c254b70e61de157": {
+      "source": "点顶部 <s id=\"0\">保存编辑草稿</s>，保存成功会显示编辑已保存。草稿记录完整修改曲线、配置、参考线和已应用纵轴；同一来源的文件校验与帧数相符时才恢复。",
+      "translation": "Click <s id=\"0\">Save editing draft</s> at the top; success shows Edits saved. Drafts store complete modified curves, configuration, reference lines, and applied vertical axis. Restoration requires matching source-file checksum and frame count."
+    },
+    "7ca04948a67ff33d0bd262d80844054dfe8f0d32e1cb58c354e70d8e4d1bc6c9": {
+      "source": "切换有未保存编辑的音频时，窗口提供 <s id=\"0\">保存并切换</s>、<s id=\"1\">放弃并切换</s> 和 <s id=\"2\">取消</s>。音频请另存为 WAV。",
+      "translation": "Switching audio with unsaved edits offers <s id=\"0\">Save and switch</s>, <s id=\"1\">Discard and switch</s>, and <s id=\"2\">Cancel</s>. Save audio separately as WAV."
+    },
+    "67822bcf21aa29a2102537ef76f7d11b1d2f5d293169d105ecd1149d920db9cc": {
+      "source": "当前没有独立参数文件或 F0 数值表导出按钮。需要复核时，请保留原音、导入文本、历史生成参数和实际 WAV；对比图另存为 PNG。",
+      "translation": "There is no independent parameter-file or numerical F0-table export currently. Retain original audio, import text, historical generation parameters, and actual WAVs for review; save comparisons as PNG."
+    },
+    "51c390ccb568c3ff316aea222ed977404c80c2109df290b8d369b7a86ba39d37": {
+      "source": "用拐点一次生成多种调形",
+      "translation": "Generate pitch contours from turning-point combinations"
+    },
+    "c6293fdef36ff09f4dbcd3740b9d06772a4e793fe45f1997bdc74553f2eeabdb": {
+      "source": "当前视野决定输出片段，表格首末时间决定其中改写 F0 的区间。首末点外仍以原始 F0 为基础。<s id=\"0\">先定视野，再填拐点表。</s>",
+      "translation": "Current view determines the output segment; first/last table times define where F0 is rewritten inside it. Beyond them, original F0 remains the basis. <s id=\"0\">Set the view before filling the table.</s>"
+    },
+    "5ccfc17f665059ad133b929d623ddee49362f8d6c6b736637ec1b2717a2a797e": {
+      "source": "填写起点、终点和中间点",
+      "translation": "Enter start, end, and intermediate points"
+    },
+    "10ffb376bc4d2ce7ade9b5a9d480c6a734d220e8ec7f783bbc129bca6d7c82ed": {
+      "source": "点 <s id=\"0\">编辑拐点表</s>。初始首末时间取原始有效 F0 首末帧的两位小数，频率列表为空，需要核对并填写。",
+      "translation": "Click <s id=\"0\">Edit turning-point table</s>. Initial start/end times use the first/last valid original F0 frames rounded to two decimals. Frequency lists are empty and need checking and filling."
+    },
+    "62335184188fc3be0991b8fa864052883cd6d5d97d31be80eaf78355ae1b8165": {
+      "source": "填写首末行频率。想加转折就点 <s id=\"0\">添加行</s>，填写中间时间、频率列表和连接方式。频率可用逗号分隔。",
+      "translation": "Fill first/last-row frequencies. For a turn, <s id=\"0\">Add row</s> with an intermediate time, frequency list, and connection type. Commas can separate frequencies."
+    },
+    "3413108341d21f516a4b667258c4bf0be3318017a26ad45cb88ac1a4bd5fa885": {
+      "source": "勾选中间行后可点 <s id=\"0\">删除选中拐点</s>。首末行可编辑，不能删除。",
+      "translation": "Select intermediate rows and <s id=\"0\">Delete selected turning points</s>. First/last rows are editable but cannot be deleted."
+    },
+    "6820c8646bd02e8d7bf7f3d8de46f07cd2a85e4d4b7c1f19104d4554877db0f4": {
+      "source": "起终点固定，中间点填三个顺序值，一次生成三个不同峰值的版本。",
+      "translation": "Fix endpoints and enter three ordered middle values to generate three peak variants."
+    },
+    "68285cf150cceeee97135f2ffb013fc9b45499f676f54aa0107a948a54ebd7ce": {
+      "source": "三行分别为 0.10 秒 140 Hz 常量、0.32 秒 180/220/260 Hz 顺序、0.57 秒 150 Hz 常量。",
+      "translation": "Three rows: 0.10 seconds 140 Hz constant; 0.32 seconds 180/220/260 Hz ascending; 0.57 seconds 150 Hz constant."
+    },
+    "a4d43eb3becdd0ede4279378d9bd71d533c0ccae2c31e63b9ab2ebc89bedafd3": {
+      "source": "红框这一行填写 180、220、260，并选顺序；起点和终点保持常量。",
+      "translation": "Enter 180, 220, 260 in the red-box row and select Ascending; endpoints remain Constant."
+    },
+    "3b1d44b23fa78eb3b1ef6d6119004b17d851e455a207446e1aa8273a209a44e7": {
+      "source": "点 <s id=\"0\">保存更改</s>。中间行会按时间排序；全部时间须在当前视野内，严格递增且不重复。点取消则不应用本次表格编辑。",
+      "translation": "Click <s id=\"0\">Save changes</s>. Intermediate rows sort by time; all times must lie in the current view and strictly increase without duplicates. Cancel leaves these edits unapplied."
+    },
+    "737af841b587a9bd3c82f0e4c45a3f9c384790baa12a61b96e35c350906eeb2b": {
+      "source": "本例不勾选升降偏移，在原音全长视野点 <s id=\"0\">批量生成</s>。完成后逐版试听，再批量保存需要的版本。",
+      "translation": "With Pitch offset off, click <s id=\"0\">Batch generate</s> in the full-length original view. Listen to each version, then batch-save desired results."
+    },
+    "9cdb9cd55cf5e5aa6babb74902c568ea6290371b036c74d8a9f4952e6085c270": {
+      "source": "三个拐点版本进入历史，先前手绘版也保留在图中。",
+      "translation": "Three turning-point versions enter history; the earlier drawn version remains in the plot."
+    },
+    "3887fecdced40036fb40b9a2c14b4a708b28acab7405b61c06c41d2600806677": {
+      "source": "历史图显示先前手绘输出和三个实际拐点输出。",
+      "translation": "History showing earlier hand-drawn output and three actual turning-point outputs."
+    },
+    "93e43df0c690106111fe73002bf2ce57087fcf999164d80cd3186b6d82fd9d94": {
+      "source": "<s id=\"0\">拐点生成使用原始 F0 与表内设置。</s>它不采用右上手绘或导入的实线，也不使用语速倍率及文件夹页音高设置。只存三个拐点版时，在保存列表取消手绘版勾选。",
+      "translation": "<s id=\"0\">Turning-point generation uses original F0 and table settings.</s> It ignores the upper-right drawn/imported curve, rate multiplier, and folder-page pitch settings. Deselect the drawn version to save only the three turning-point versions."
+    },
+    "a7f323183c4a7e7905890f074503c54928fa31544e38d110656e0ecb13636095": {
+      "source": "听听峰值变化",
+      "translation": "Listen to peak differences"
+    },
+    "c302f2728600f0dcbe10acf3ae093a2609a94c2d23a63847b2c8307384424f4e": {
+      "source": "这组三点设置为：0.10 s / 140 Hz，0.32 s / 180、220、260 Hz，0.57 s / 150 Hz。起终点用常量，中间点用顺序，偏移关闭。先听原声，再比较三个峰部高度。",
+      "translation": "These three points are 0.10 s / 140 Hz, 0.32 s / 180, 220, 260 Hz, and 0.57 s / 150 Hz. Endpoints are Constant, midpoint Ascending, and offset off. Listen to the original, then compare three peaks."
+    },
+    "6edff61adb6c1b9397d8fda3768e0e22fa879d6e78e7adb352b0e41e900d2384": {
+      "source": "版本 A：中间点设为 180 Hz",
+      "translation": "Version A: midpoint 180 Hz"
+    },
+    "d33994c696412dd856463a888ba2283085ac823e8946fca528a0c3f423795046": {
+      "source": "版本 B：中间点设为 220 Hz",
+      "translation": "Version B: midpoint 220 Hz"
+    },
+    "1470d11d2279d28240437639431f07693530f77137e7042432b07fbc241bf8eb": {
+      "source": "版本 C：中间点设为 260 Hz",
+      "translation": "Version C: midpoint 260 Hz"
+    },
+    "7741b163bf99570aeebed76f242cf39c598e84749fd364508994c93fb9ced88d": {
+      "source": "三个版本均包含原音整段。180、220、260 Hz 是设定值，实际输出最高 F0 请看历史估计，也留意区间边界的音质。",
+      "translation": "All three contain the whole original. 180, 220, 260 Hz are settings; inspect historical estimates for actual maximum F0 and listen for boundary artifacts."
+    },
+    "f0324bad4742722c917ee239d8c8805d6c0d22182c59b0eb2d535bd65db071ec": {
+      "source": "四种连接方式",
+      "translation": "Four connection types"
+    },
+    "456343c12bd734f4e1030bd84f6449c1f4a0203f42a2debe969f7c05ff21e4c9": {
+      "source": "列表怎样组合成路径",
+      "translation": "How lists form paths"
+    },
+    "27a5faaf1cc949c66ab7006e79c6ba94572a135db96240f38ed3e05991da8dfc": {
+      "source": "方式",
+      "translation": "Type"
+    },
+    "0c30d41935cf54ad759d85fb04757e18e64a8be8f216dc049c78c2b93ee1482d": {
+      "source": "取值顺序",
+      "translation": "Value order"
+    },
+    "840dc7e276dfb2ed59301aa6778b54f743010e7f396e2fe8e309970e9f8a9e0d": {
+      "source": "组合办法",
+      "translation": "Combination rule"
+    },
+    "12a2a316a331f70aaed356ae54df16fc9e68f57637f8ec50ee8d8ce020abe410": {
+      "source": "全连接",
+      "translation": "All combinations"
+    },
+    "9074ef6670dfa9d5818e8d630da7df85e79792c45a18ec3554810f935da82f52": {
+      "source": "保留输入顺序",
+      "translation": "Input order retained"
+    },
+    "b6403623cd463bd56b43ba3755a8f2500734b81136f94f895023935a0f8bbebe": {
+      "source": "每个值都与其他行组合。",
+      "translation": "Every value combines with other rows."
+    },
+    "44af941b7a3cdfa4114f00fa55c7f8243311baa7ba08d4044ce754cd21cef430": {
+      "source": "顺序",
+      "translation": "Ascending"
+    },
+    "8f2e28e69f9ae464d4c2ce202e567cc0ef1218c559d29ccf88f73f35d4845805": {
+      "source": "由小到大排序",
+      "translation": "Sort low to high"
+    },
+    "37205334bc5c2904b99bd1867a86b0d78409908b2c5b01b0105f66e9b4a1047a": {
+      "source": "按同序号配对。所有顺序/逆序行必须等长。",
+      "translation": "Pair equal indices. All ascending/descending rows must have equal lengths."
+    },
+    "3ff045b5f0605216bc61a38ff57e439017d1a62450550fc6e6046d312e2e93a7": {
+      "source": "逆序",
+      "translation": "Descending"
+    },
+    "620fbed68e8482d4b7c10ec92b67a849555ab733e6d62a312fc774b59f82250b": {
+      "source": "由大到小排序",
+      "translation": "Sort high to low"
+    },
+    "93b0b807f4b93c9c4213cf6982a31caa474ee1bdc27ad1412bbb6515d97e08d4": {
+      "source": "按同序号配对，常用于反向音高变化。",
+      "translation": "Pair equal indices, often for opposing pitch movement."
+    },
+    "6811a95039ef55ae2c648a78bbdefdde0ffef590e693fc4d8ef130a708e4b48e": {
+      "source": "常量",
+      "translation": "Constant"
+    },
+    "6a512a6b4014855d10b4e29d134304800c4a563cbdae0559e4b62625b7ac8b21": {
+      "source": "只取列表第一个值",
+      "translation": "First value only"
+    },
+    "9d1104ba5d370e0591123134c4ee3c9db97b4211d57b7c9b5378f64eb6681543": {
+      "source": "固定该点，多填的值不参与。",
+      "translation": "Fix the point; additional values are unused."
+    },
+    "9efb1391ab6a15d78c7d59791bdec7fdc4e31b7ea0f4ddb9a48fd66e2e859ac5": {
+      "source": "总数＝各全连接行长度的乘积×顺序/逆序的共同长度。没有顺序或逆序行时，后一个因子为 1；常量不增加数量。每次最多 64 个控制点、256 个组合，超过时拆分列表。",
+      "translation": "Total = product of all-combinations row lengths × shared ascending/descending length. Without ascending/descending rows, the second factor is 1; constants add no count. Limits are 64 controls and 256 combinations per generation. Split lists if exceeded."
+    },
+    "299ea19edf46a8863f48966257cdfbd746cb6034693606e596d198ec3d036436": {
+      "source": "用小列表看懂组合",
+      "translation": "Understand combinations with small lists"
+    },
+    "e3a2bb1e0a2ae77ffb08ecb2cfeca3b6039a30b7cdec47cc7c99cab8e0e553e0": {
+      "source": "<s id=\"0\">全连接＋全连接＋全连接：</s>三行各 6 值，得到 216 条。先检查数量，避免一次生成过多。",
+      "translation": "<s id=\"0\">All + All + All:</s> three rows of 6 values produce 216 paths. Check counts first to avoid excessive generation."
+    },
+    "bde9854f51d708e80f6faeadae5e3b89dc7580e6214fbbe1c0e24838c5b19dba": {
+      "source": "<s id=\"0\">常量＋顺序＋常量：</s>就是上面的三峰值示例，起终点固定，中间三个值得到三条。",
+      "translation": "<s id=\"0\">Constant + Ascending + Constant:</s> the three-peak example above, with fixed endpoints and three middle values producing three paths."
+    },
+    "8287d219ef33433f7c710b27296be68cdd37bdbce8d400b918ad992e06c128de": {
+      "source": "<s id=\"0\">顺序＋顺序＋全连接：</s>前两行同序号配对，再分别连到末行每个值。",
+      "translation": "<s id=\"0\">Ascending + Ascending + All:</s> pair equal indices in the first two rows, then connect each pair to every final-row value."
+    },
+    "d43b2cf4d70ede493bb01cdc13921985c4abf41d6fecec79f4af957f0af9f1f0": {
+      "source": "<s id=\"0\">逆序＋顺序＋全连接：</s>首行降序、第二行升序配对，再连到末行每个值。",
+      "translation": "<s id=\"0\">Descending + Ascending + All:</s> pair descending first-row and ascending second-row values, then connect to every final-row value."
+    },
+    "00f7df54ea44f5f7c7953e01b10c1913039e36e03f7893919c247abcb8500484": {
+      "source": "<s id=\"0\">顺序＋逆序＋顺序，或逆序＋顺序＋逆序：</s>三行同序号配对，互换顺逆改变形状，数量仍是共同列表长度。",
+      "translation": "<s id=\"0\">Ascending + Descending + Ascending, or Descending + Ascending + Descending:</s> pair all three by index. Reversing orders changes shape; count remains the common list length."
+    },
+    "50d916d8eac324d7ea1a89475867d8adabd91b2ebbe4feb18c5af14b55acd81a": {
+      "source": "只有起终点时，起点 <s id=\"0\">100,200</s> 选顺序，终点 <s id=\"1\">150,250</s> 选逆序，会得到 100→250 与 200→150；两行改全连接则得到四条。",
+      "translation": "With endpoints only, start <s id=\"0\">100,200</s> Ascending and end <s id=\"1\">150,250</s> Descending produce 100→250 and 200→150. Setting both to All gives four paths."
+    },
+    "2fef3c4b120880c094014d6687ed826126533e8b79668a0891e6037d6ee9edd4": {
+      "source": "绝对频率与升降偏移",
+      "translation": "Absolute frequency versus pitch offsets"
+    },
+    "dc62b84f9735da4e3b02f2f7c96c3edbf80318413a4da2cc82737ef5f1cc4d47": {
+      "source": "不勾选 <s id=\"0\">升降偏移 (Hz)</s> 时，填 160 表示该点目标为 160 Hz。勾选后，填 20 表示在原始 F0 上加 20 Hz，填 −20 表示减 20 Hz；增量在点间直线变化，拐点以最近的原始帧为基准。",
+      "translation": "With <s id=\"0\">Pitch offset (Hz)</s> off, 160 sets the point target to 160 Hz. On, 20 adds 20 Hz to original F0, and −20 subtracts 20 Hz. Increments change linearly between points; turning points reference the nearest original frame."
+    },
+    "d60e5072f922ce561877d8a4c27ac60211f6cb4c855d5ebaafbe0b2c89a17bd4": {
+      "source": "<s id=\"0\">负偏移不能把目标降到不可处理的频率。</s>原始曲线低或断开时，大负偏移容易失败或失真，先用连续有声材料和较小偏移。解释粗糙听感时，请结合声学指标；涉及生理发声类型时需相应测量。",
+      "translation": "<s id=\"0\">Negative offsets must not lower targets to unprocessable frequencies.</s> Large negative offsets near low/broken originals may fail or distort. Start with continuous voicing and small offsets. Interpret roughness using acoustic metrics; physiological phonation types require appropriate measurements."
+    },
+    "0d612839816b7a573a4134b32e81b334a9eb42e70c20388fde07e81e82a8673b": {
+      "source": "给多份音频统一变速变调",
+      "translation": "Apply time/pitch settings to multiple files"
+    },
+    "adfc1ea6abeb1891a8327b51e31eaa230db132f4eecb9030d4586c12723e5fa2": {
+      "source": "打开目录后点 <s id=\"0\">批量变速变调</s>。逐份勾选，或点 <s id=\"1\">全选音频</s> 后取消不需要的文件。<s id=\"2\">清除选择</s> 只清空勾选，不清除历史。",
+      "translation": "Open a directory and select <s id=\"0\">Batch time/pitch manipulation</s>. Select individually or <s id=\"1\">Select all audio</s> and deselect unwanted files. <s id=\"2\">Clear selection</s> clears checks only, retaining history."
+    },
+    "e6c48853b2a636f5d9f4066689ec542375b4b6cfafcfb7226e5398b5cb25ca3a": {
+      "source": "批量页直接填写多个语速倍率，选择音高调整方式，再填写多个音高倍率或 Hz 偏移。所有勾选文件都按这些参数的所有组合处理各自整段。提交前核对页面显示的每份版本数和总版本数。",
+      "translation": "Enter multiple rate multipliers, choose pitch mode, and enter multiple multipliers or Hz offsets. Every selected file's full duration is processed for all combinations. Check per-file and total version counts before submission."
+    },
+    "bcdeefb885ab8950c7750d3bbbc7226e4afe3a880518f05adf1779522e8d5121": {
+      "source": "两份合成演示音频，语速 0.8、1.2，音高选择 Hz 偏移 -20、20。每份生成四个版本，本批共八个。",
+      "translation": "Two synthesized demonstration files, rates 0.8 and 1.2, Hz offsets -20 and 20. Four versions each, eight total."
+    },
+    "e6ec6f162f2490639ecab5ae7758489c8cbd908681b88b2738d5049d83d02db4": {
+      "source": "批量处理页显示多个语速、音高方式二选一、Hz 偏移列表、每份与总版本数，以及两份已勾选音频。",
+      "translation": "Batch page showing multiple rates, exclusive pitch-mode choice, Hz-offset list, per-file/total version counts, and two selected files."
+    },
+    "f8f9906c8e6bcb22bf76099b3636cf1dc6bdba09f10d0f0a8ba0b96734df17c2": {
+      "source": "点 <s id=\"0\">开始批量处理</s>。右栏逐项显示任务状态。全部任务结束后自动打开批量保存，列出本批所有原音的成功版本，勾选后点保存所选音频。桌面只选择一次输出目录，网页支持时弹出 WAV 或 ZIP 保存窗口选择位置，其他浏览器使用下载设置。",
+      "translation": "Click <s id=\"0\">Start batch processing</s>. The right shows each task. When all tasks finish, batch saving opens with successful versions from all originals. Select and save audio. Desktop chooses one directory; supported web browsers show WAV/ZIP save dialogs, while others use download settings."
+    },
+    "e9b8ee5e11fad1f0baba8597d90a0ac96d436a36c350fb79612c38a2fb81dedf": {
+      "source": "需要停止后续提交时点 <s id=\"0\">停止提交剩余文件</s>。已提交任务要在任务区逐项取消；已完成结果仍可查看。",
+      "translation": "Click <s id=\"0\">Stop submitting remaining files</s> to stop later submissions. Cancel already-submitted tasks individually in Tasks; completed results remain viewable."
+    },
+    "2676b4587e88c08f8bd0801aef46f0b8862fac21333eb61c9baa05c09066b6b4": {
+      "source": "完成后回 <s id=\"0\">单文件与基频</s>，选择对应原音，用 <s id=\"1\">适合窗口</s> 恢复全长后试听。也可直接点击任务中的具体版本，自动载入对应原音与输出。取消保存后，点保存最近批次可再次跨原音选择和保存。",
+      "translation": "Return to <s id=\"0\">Single file and fundamental frequency</s>, select the corresponding original, and <s id=\"1\">Fit window</s> before listening. You can also click a task version to load matching original/output automatically. After cancelling save, Save latest batch again selects results across originals."
+    },
+    "3bb029a2553c79c51e252460d1fbb1fc3f5e6f04d5dd5bf419e1ff72f8b9621d": {
+      "source": "例如语速 0.8 约把时长拉长到原来的 1.25 倍。原 F0 约 150 Hz 时，音高倍率 1.2 对应约 180 Hz；选择偏移 +20 Hz 对应约 170 Hz。两种方式二选一。实际时长和 F0 请核对输出。",
+      "translation": "For example, rate 0.8 lengthens duration to about 1.25 times. With original F0 about 150 Hz, multiplier 1.2 gives about 180 Hz; offset +20 Hz gives about 170 Hz. Choose one pitch mode. Check actual output duration and F0."
+    },
+    "a1378293426828eb936caa3d0069296cc2e6ced608fa203c080bd03482e45e28": {
+      "source": "倍率与 1 的差、Hz 偏移的绝对值均需大于约 0.01 才触发对应变换。<s id=\"0\">极小改动可能没有实际变化。</s>精密操纵时请检查导出的 WAV。",
+      "translation": "The multiplier's difference from 1 or absolute Hz offset must exceed about 0.01 to trigger its transform. <s id=\"0\">Very small edits may produce no actual change.</s> Inspect exported WAVs for precise manipulation."
+    },
+    "f6cd05f17bfe74465dd2aa53c13e1ce4d42b863ad24373d80b0430aabf759b71": {
+      "source": "分别听减速和升调",
+      "translation": "Listen separately to slowing and pitch raising"
+    },
+    "f94aaa3ddcab17135897d3e3ba1b50887a7fd99655a18d0d8c57c6c10833524f": {
+      "source": "下面分别只改变语速或音高，便于听清差别。多参数生成时，可先比较同一语速下的不同音高，再比较同一音高下的不同语速。",
+      "translation": "The following change only rate or pitch to make differences clear. With multiple parameters, first compare pitches at one rate, then rates at one pitch."
+    },
+    "702c3975c7fa220459fff4c8cd87f6125dcb49e16a33f348e29bc334f28079ef": {
+      "source": "原声：约 0.672 s",
+      "translation": "Original: about 0.672 s"
+    },
+    "9066cf6497e1f6ae12abbeb86f2704613a445234f91fe486bd241f6f561e42ef": {
+      "source": "减速：语速 0.8，音高倍率 1，偏移 0 Hz；约 0.840 s",
+      "translation": "Slowed: rate 0.8, pitch multiplier 1, offset 0 Hz; about 0.840 s"
+    },
+    "48f8f63c6e33d0da502a5844a10b616c9819b31b84377f4732aa8173d15a623f": {
+      "source": "升调：语速 1，音高倍率 1.2，偏移 0 Hz；约 0.672 s",
+      "translation": "Raised: rate 1, pitch multiplier 1.2, offset 0 Hz; about 0.672 s"
+    },
+    "79b48dcc4fd1191ab9790662d5312085b69275750100c6fa159f3f7610c6ebf8": {
+      "source": "留意减速后的持续时间、升调后的整体高度和音质。例音演示这份材料的实际效果，其他材料需另行检查。",
+      "translation": "Notice longer duration after slowing, higher overall pitch, and quality. These examples show actual effects for this material; check other materials independently."
+    },
+    "935b7d26128a499ba3c36626ab65b9aaf674c88bdce225661187e37967700521": {
+      "source": "核对名称、重命名与删除",
+      "translation": "Check names, rename, and delete"
+    },
+    "ca200c0e8991a390d808be0dff61e7221c76d8f9fe5f5249f4268211a54bcccf": {
+      "source": "手绘建议名含原音名称、源区间、<s id=\"0\">modified</s> 和编号；拐点名还含 <s id=\"1\">seg</s>、<s id=\"2\">kn</s>、<s id=\"3\">lin</s>、<s id=\"4\">Fpath</s> 和组合编号，偏移版有 <s id=\"5\">offset</s>。文件名时间通常只有两位小数，精确条件看生成参数。",
+      "translation": "Suggested drawn names contain original name, source interval, <s id=\"0\">modified</s>, and a number. Turning-point names also contain <s id=\"1\">seg</s>, <s id=\"2\">kn</s>, <s id=\"3\">lin</s>, <s id=\"4\">Fpath</s>, and combination number; offsets contain <s id=\"5\">offset</s>. Filename times usually have two decimals; use Generation parameters for exact conditions."
+    },
+    "ea139438c361f4afda8dfa5ad55c56c2862a360a1aeba75fb9fd334cd35f92ad": {
+      "source": "桌面已有同名文件会保留，新副本加 <s id=\"0\">(2)</s>、<s id=\"1\">(3)</s> 等后缀。同一会话将未变化的结果再次保存到同一目录，可复用已有副本，最终名称看最近保存。",
+      "translation": "Desktop preserves existing same-named files and adds suffixes <s id=\"0\">(2)</s>, <s id=\"1\">(3)</s>, etc. Resaving unchanged results to the same directory in the same session can reuse copies. See Last save for final names."
+    },
+    "cb37a673ee625d922babd5f04c803d361bad26aa630f3c66d95cd4f2bbf551f3": {
+      "source": "<s id=\"0\">批量重命名：</s>核对勾选项，填写新的共同前缀，点 <s id=\"1\">确认重命名</s>。共同前缀后的内容与 .wav 保留。名称冲突、非法路径字符或超过 180 字符时会拒绝。",
+      "translation": "<s id=\"0\">Batch rename:</s> check selections, enter a common prefix, and <s id=\"1\">Confirm rename</s>. Content after the shared prefix and .wav remain. Conflicts, invalid path characters, and names over 180 characters are rejected."
+    },
+    "d897e9a12a2c426e64d2e0a3539590aa73b456aa454fd85cecd80734a9ff6bd1": {
+      "source": "<s id=\"0\">删除本批次音频：</s>核对弹窗名称和数量，取消要保留项，再点 <s id=\"1\">确认删除所选音频</s>。列表只含生成结果，原始输入不在其中。",
+      "translation": "<s id=\"0\">Delete this batch's audio:</s> check dialog names and count, deselect items to retain, and <s id=\"1\">Confirm deleting selected audio</s>. The list contains generated results only, excluding original inputs."
+    },
+    "29aa6bd534387b452eed591dd80ecc7f4833aea3c5977234d352a5834abf2754": {
+      "source": "管理窗口内可逐项勾选，不继续时点取消关闭。",
+      "translation": "Select individual items in the management window; Cancel closes without continuing."
+    },
+    "8619ccf0c63ab70561f00d64c087d1ac4f7c6038b8c461090d986d2bf30d1714": {
+      "source": "<s id=\"0\">改名或删除也会处理当前会话登记的外部副本，包括多个目录的关联副本。</s>副本被其他程序改动时会停止管理并提示，请核对磁盘文件。重启后不会扫描外部目录重新建立关联，导出文件需自行管理。",
+      "translation": "<s id=\"0\">Renaming/deleting also affects external copies registered in this session, including linked copies across directories.</s> If another program changed a copy, management stops with a message; inspect disk files. Restarting does not scan external directories to rebuild links; manage exported files yourself."
+    },
+    "ad862f273dc02d1d958a5fb6b3eb048cc11c69ae13efd9c24f5ffdc4dce84a31": {
+      "source": "遇到提示时怎样继续",
+      "translation": "Continue after messages"
+    },
+    "c42ddadfb4bac5159c0936c889cf37b91df0ef147f6ce21e1a9d46b90c3dd19c": {
+      "source": "常见提示与恢复",
+      "translation": "Common messages and recovery"
+    },
+    "cf411dae1fd66b1a74fbbc8d46da2ccc828b97379c4abc6f3f8f176f318df64a": {
+      "source": "现象",
+      "translation": "Symptom"
+    },
+    "17218caf060301b1242a0883310c00bb4c310dd039560c6c576887d8229af452": {
+      "source": "检查与恢复",
+      "translation": "Checks and recovery"
+    },
+    "8f587f07e847d410a477455997471b569da525e9455d50191e0a3acca10f6806": {
+      "source": "正在读取音频或提取 F0",
+      "translation": "Loading audio or extracting F0"
+    },
+    "d46429f708a8176541be1081bef1e3bf7473c9ecea89edd698ca5edb1495a1b2": {
+      "source": "等 F0 就绪再编辑、合成、保存草稿。F0 的读取状态查看页面提示。",
+      "translation": "Wait for F0 before editing, synthesis, or draft saving. Check F0 loading status in page messages."
+    },
+    "6ce2be1472b6957c0a587112336f3b493cd53aa71773444b6c784369266e0f29": {
+      "source": "解码失败、源已变化或 F0 帧数不符",
+      "translation": "Decode failure, source changed, or F0 frame mismatch"
+    },
+    "8fc8f546fface4ffd2caddfc107754bd7a422401dc8828f19b3d6f326c9cbda3": {
+      "source": "核对格式与原文件，刷新后重新选择。新校验或帧数不符时不恢复旧曲线。",
+      "translation": "Check format/original, refresh, and reselect. A changed checksum or mismatched frame count prevents old-curve restoration."
+    },
+    "5c51a9dade92585c07f14ea40cedf1952966f4bdd2696390a2c73d00cc5c8290": {
+      "source": "数值无效",
+      "translation": "Invalid number"
+    },
+    "6c61c6b356595e53e1ad1e1a314aa237ab6a55a34daa9fcec7a8e8e890d74ded": {
+      "source": "补完整的小数，清除非法字符；语速和音高倍率必须大于零。",
+      "translation": "Complete decimals and remove invalid characters. Rate and pitch multipliers must be positive."
+    },
+    "82815ceb2528a780f8e13a3a60e0d6fea3c03c0e0a419394d568afe12d569281": {
+      "source": "F0 图外、断开、无有效值",
+      "translation": "F0 off-screen, disconnected, or no valid values"
+    },
+    "68747be3fe34ecb90afd3e00f727e366227f81dfbec7c783010f83189d06c24c": {
+      "source": "先检查显示轴和原音；需要修改估计曲线时编辑 F0，或用 Ctrl 拖动恢复。",
+      "translation": "Check display axes and original audio first. Edit F0 estimates or restore with Ctrl-drag as needed."
+    },
+    "03448cbf8fca4893bf54c7116d843cb81f48c806cb090a82208ffd9fbb1df9ff": {
+      "source": "导入提示中断的基频",
+      "translation": "Import reports interrupted fundamental frequency"
+    },
+    "220b39fad8367e35e98b60a069476caed0004f9d9754ce86a051fa3752face42": {
+      "source": "缩放到一段连续正 F0 曲线，核对每行格式，再导入。",
+      "translation": "Zoom to one continuous positive F0 track, check line formatting, and reimport."
+    },
+    "e12a6f6ec5cf40ffa8907cfbf014b343192ff65c7a5ef07a3e310720da99efe1": {
+      "source": "拐点越界、时间重复、空列表或不等长",
+      "translation": "Out-of-view turning points, repeated times, empty/unequal lists"
+    },
+    "27bac80d30f2df110eae4e0e63ce532defcf0ca22393076f8cbc8ce2dda15764": {
+      "source": "把时间改为视野内严格递增值，填完整列表，确保所有顺序/逆序行等长。",
+      "translation": "Use strictly increasing in-view times, fill lists, and match all ascending/descending row lengths."
+    },
+    "629b236b01cf2cde699bfab5ffd7aa2e47f5a508b46e7644937b588faabf7c0f": {
+      "source": "Praat 无法处理或超预算",
+      "translation": "Praat cannot process or budget exceeded"
+    },
+    "99119de69eeb593a245b73f9e1216d47627c093a6b0eb56cf23f5439c174de44": {
+      "source": "减小偏移、调整倍率，选连续有声段；过长输入或过多组合拆分后重试。",
+      "translation": "Reduce offsets, adjust multipliers, and choose continuous voicing. Split long input or excessive combinations and retry."
+    },
+    "ab9d2475c8bffd8008140b6652eb23f5f1572369e3780df2f8b7684c817a6d52": {
+      "source": "任务失败或中断",
+      "translation": "Task failure or interruption"
+    },
+    "4e0bb940ae5460ee78c4c634a813f2f541523954d1978d1c3cf18c725d8e42ab": {
+      "source": "查看该文件的错误，修正后重新提交。停止后续提交不会取消已有任务。",
+      "translation": "Inspect that file's error, correct, and resubmit. Stopping submissions does not cancel existing tasks."
+    },
+    "a3dbd1edae9b2eafd03d72c7769c99dd7e24f656e1244d69c6d811680f26f905": {
+      "source": "批量保存禁用或数量不符",
+      "translation": "Batch save disabled or count differs"
+    },
+    "12a6e3bd23a31900d2a319f0b5c182c47f88fa0980b86ec7f443cf6f206e3947": {
+      "source": "选择正确原音和计算视野；整段结果先适合窗口，再核对弹窗名称。",
+      "translation": "Choose the correct original and processing view. For full-recording results, Fit window first, then check dialog names."
+    },
+    "8021e4bd85ceed3980ff4362ee28a647a23f0a179facc8e6a1e7f9736be97a5b": {
+      "source": "保存取消、部分失败或副本管理失败",
+      "translation": "Save cancelled, partial failure, or copy-management failure"
+    },
+    "96f16c1df5904337bb2df1c6fdea890952ba33bb82539af7274755c8792d270b": {
+      "source": "核对本次状态、目录权限、空间和副本变化。成功项保留，失败项重试；保存结果以本次状态和实际文件为准。",
+      "translation": "Check this attempt's status, permissions, space, and copy changes. Successful items remain; retry failures. Use current status and actual files to establish saving."
+    },
+    "02d8e903acced6a58d292656148d449a5d686be4574b0f27e014e0970d826a6f": {
+      "source": "出错后先保留原音和有效版本，修正提示对应的条件再提交。",
+      "translation": "After errors, retain originals and valid versions, correct the indicated conditions, then resubmit."
+    },
+    "84358dcbeddfc61e7c79b8280a4fff417373f085bc657b04da778f1569042a69": {
+      "source": "方法与结果解释",
+      "translation": "Methods and interpreting results"
+    },
+    "1687732fba39190312119979df2216236301eaa84fb965163d59cd855519513e": {
+      "source": "Praat 与 Parselmouth",
+      "translation": "Praat and Parselmouth"
+    },
+    "c2c37163708d9284138f6b873915970a1cdc49fc21c1c9dbabfc4208a1feb29a": {
+      "source": "本模块通过 Parselmouth 调用 Praat 的音高、时长操纵与 overlap-add 方法。Praat 由 Paul Boersma、David Weenink 开发。",
+      "translation": "Through Parselmouth, this module calls Praat pitch/duration manipulation and overlap-add. Praat is developed by Paul Boersma and David Weenink."
+    },
+    "bc85c4b202e6299fddbd349b07fa348ad004551b4c3d6b420821c192a27afd28": {
+      "source": "原音和历史 F0 沿用 Praat 默认提取；Manipulation 使用 0.01 s、75–600 Hz。显示轴调整图中 F0 的可见范围。",
+      "translation": "Original and historical F0 use Praat default extraction; Manipulation uses 0.01 s and 75–600 Hz. Display axes adjust visible F0 range."
+    },
+    "b5f9d60e8fd2b8bb60c0b725acf4f24cfe8e5c13940627f9bae82f1fcc50f09c": {
+      "source": "<s id=\"0\">Praat overlap-add 官方说明</s> · <s id=\"1\">Parselmouth Sound.to_pitch API</s>",
+      "translation": "<s id=\"0\">Official Praat overlap-add documentation</s> · <s id=\"1\">Parselmouth Sound.to_pitch API</s>"
+    },
+    "b657646642ebaa5bc51779dca5bbf85a2cb92953ef45a7cb9ada5237eab827d1": {
+      "source": "使用实验材料前再核对一次",
+      "translation": "Recheck before using experimental material"
+    },
+    "df363fad4515b35d8fb21460c35f3ed5e56fc18987ed5e940ba525b0d1710cf8": {
+      "source": "历史 F0 是估计，缺失处请回看原音。目标线、输出估计和听感应结合判断。处理可能改变音质与幅值，实验使用前请核对时长、响度、边界和研究需要的其他声学条件，声压比较需另行标定。",
+      "translation": "Historical F0 is estimated; inspect originals at gaps. Judge target line, output estimates, and listening together. Processing can change quality and amplitude. Check duration, loudness, boundaries, and other required acoustic conditions before experimentation; sound-pressure comparisons need separate calibration."
+    },
+    "f58b3e969b76b84cd28e35a301ddee05428204de3eae56b1759703193e5a3eca": {
+      "source": "本章按 Windows 工作台说明操作。正式实验前，请对目标材料做音质检查和感知预测试；其他平台与实际声卡效果需在使用时核对。",
+      "translation": "This chapter describes the Windows workbench. Check quality and conduct perceptual pilots with target materials before formal experiments. Verify other platforms and physical sound-card output when using them."
+    },
+    "89b11309772f9800e080a1841b300f36cdf8da5d47f92e944242262b0dd82905": {
+      "source": "参考资料",
+      "translation": "References"
+    },
+    "a6dcaf45e22165470dadc3a8e4ddea83fe730471bbcd72a6265c2d086f86d235": {
+      "source": "Parselmouth 方法介绍如下。论文引用与代码分发许可分别适用。",
+      "translation": "Parselmouth methods are introduced below. Paper citations and code-distribution licenses have separate scopes."
+    }
+  }
+}

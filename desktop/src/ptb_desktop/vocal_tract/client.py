@@ -9,6 +9,7 @@ import sys
 import threading
 import uuid
 from .process_guard import OwnedJob
+from ..native_i18n import native_error,native_error_payload
 
 
 class VocalTractClient:
@@ -44,10 +45,13 @@ class VocalTractClient:
                         with self.pending_lock:
                             for key,(owner,q) in list(self.pending.items()):
                                 if owner is p:
-                                    q.put({'ok':False,'error':'声道引擎已退出，请重新打开模块。'});self.pending.pop(key)
+                                    q.put(native_error_payload(native_error(RuntimeError('声道引擎已退出，请重新打开模块。'),'errors.vocalTract.engineExited')));self.pending.pop(key)
                 threading.Thread(target=read,daemon=True).start()
                 p.stdin.write(json.dumps(self.config)+'\n');p.stdin.flush()
-                if ready.get(timeout=30).get('ready')!='m10/1':raise RuntimeError('声道引擎启动失败，请检查 native-worker.log。')
+                try:started=ready.get(timeout=30)
+                except queue.Empty:
+                    raise native_error(RuntimeError('声道引擎启动超时，请检查 native-worker.log。'),'errors.vocalTract.engineStartupFailed') from None
+                if started.get('ready')!='m10/1':raise native_error(RuntimeError('声道引擎启动失败，请检查 native-worker.log。'),'errors.vocalTract.engineStartupFailed')
             except Exception:self.close();raise
 
     def invoke(self,op,body=None):
@@ -60,8 +64,14 @@ class VocalTractClient:
                 self.start();p=self.process
                 with self.pending_lock:self.pending[request_id]=(p,q)
                 with self.write_lock:p.stdin.write(data+'\n');p.stdin.flush()
-            result=q.get(timeout=630 if op in ('animation/prepare','preview') else 150)
-            if not result.get('ok'):raise RuntimeError(result.get('error','声道请求失败'))
+            try:result=q.get(timeout=630 if op in ('animation/prepare','preview') else 150)
+            except queue.Empty:
+                raise native_error(RuntimeError('声道请求超时，请稍后重试。'),'errors.vocalTract.requestFailed') from None
+            if not result.get('ok'):
+                error=RuntimeError(result.get('error','声道请求失败'))
+                if not result.get('error'):native_error(error,'errors.vocalTract.requestFailed')
+                elif isinstance(result.get('display'),dict):error.display=result['display']
+                raise error
             return result['value']
         finally:
             with self.pending_lock:self.pending.pop(request_id,None)

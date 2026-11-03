@@ -1,35 +1,38 @@
 <script setup lang="ts">
+import {localized} from '../module-localization.ts';
+import {tr} from '../../i18n/index.ts';
 import {computed,ref} from 'vue';
-import {catalog,entries,searchEntries} from './catalog.ts';
+import {catalog,entries,searchEntries,localizedSymbol} from './catalog.ts';
+import {localizedChartSections} from './chart-localization.ts';
 import SymbolButton from './SymbolButton.vue';
 import type {ChartSystem,SymbolEntry} from './types.ts';
 import type {HoverTarget} from './hover-position.ts';
 const props=defineProps<{system:ChartSystem;query:string;selected?:string;playOnClick?:boolean}>();
 const emit=defineEmits<{insert:[entry:SymbolEntry];inspect:[entry:SymbolEntry];hover:[value:HoverTarget|null]}>();
-const sections=computed(()=>catalog.charts[props.system]);const results=computed(()=>searchEntries(props.system,props.query));
-const entry=(id:string)=>entries.get(id)!;
-const partitions={
- ipa:[{id:'base',label:'基础图表',groups:[['extended'],['vowels','extras']]},{id:'marks',label:'附加符号与韵律',groups:[['diacritics'],['tones'],['suprasegmentals']]}],
- extipa:[{id:'base',label:'辅音图表',groups:[['consonants']]},{id:'marks',label:'附加符号与发声',groups:[['diacritics'],['voicing'],['articulatory']]},{id:'context',label:'节奏与其他',groups:[['rhythm'],['uncertainty'],['other']]},{id:'combinations',label:'补充与旧版',groups:[['combinations'],['historical']]}],
+const sections=computed(()=>localizedChartSections(props.system,catalog.charts[props.system]));const results=computed(()=>searchEntries(props.system,props.query));
+const entry=(id:string)=>localizedSymbol(entries.get(id)!);
+const partitions=localized(()=>({
+ ipa:[{id:'base',label:tr('modules.ipa-plus.text.4867416191e5'),groups:[['extended'],['vowels','extras']]},{id:'marks',label:tr('modules.ipa-plus.text.182cb206ca6f'),groups:[['diacritics'],['tones'],['suprasegmentals']]}],
+ extipa:[{id:'base',label:tr('modules.ipa-plus.text.8c1cf1117ff2'),groups:[['consonants']]},{id:'marks',label:tr('modules.ipa-plus.text.838f6dcc30ef'),groups:[['diacritics'],['voicing'],['articulatory']]},{id:'context',label:tr('modules.ipa-plus.text.735b0adfab9e'),groups:[['rhythm'],['uncertainty'],['other']]},{id:'combinations',label:tr('modules.ipa-plus.text.b537272da165'),groups:[['combinations'],['historical']]}],
  voqs:[{id:'base',label:'VoQS',groups:[['phonation'],['lingual'],['labial','velum','jaw'],['airstream','larynx','scope']]}],
-};
-const views={
- ipa:[{id:'all',label:'显示全部',groups:partitions.ipa.flatMap(view=>view.groups)},...partitions.ipa],
- extipa:[{id:'all',label:'显示全部',groups:partitions.extipa.flatMap(view=>view.groups)},...partitions.extipa],
+}));
+const views=localized(()=>({
+ ipa:[{id:'all',label:tr('modules.ipa-plus.text.84941ac6e844'),groups:partitions.ipa.flatMap(view=>view.groups)},...partitions.ipa],
+ extipa:[{id:'all',label:tr('modules.ipa-plus.text.84941ac6e844'),groups:partitions.extipa.flatMap(view=>view.groups)},...partitions.extipa],
  voqs:partitions.voqs,
-};
+}));
 const activeView=ref<Record<ChartSystem,string>>({ipa:'all',extipa:'all',voqs:'base'});
 const currentView=computed(()=>views[props.system].find(v=>v.id===activeView.value[props.system])!);
 const groups=computed(()=>currentView.value.groups.map(ids=>ids.map(id=>sections.value.find(s=>s.id===id)!)));
 </script>
 <template>
- <nav v-if="system!=='voqs'&&!query.trim()" class="m17-section-tabs" :aria-label="system.toUpperCase()+' 分区'"><button v-for="view in views[system]" :key="view.id" type="button" :data-chart-view="view.id" :aria-pressed="activeView[system]===view.id" :class="{primary:activeView[system]===view.id}" @click="activeView[system]=view.id">{{view.label}}</button><span>上下滚动查看更多 · 悬停名称或符号查看说明</span></nav>
- <div v-if="query.trim()" class="m17-search-results"><p class="hint">找到 {{results.length}} 项 · 当前 {{system.toUpperCase()}} 表</p><div class="m17-search-grid"><SymbolButton :play-on-click="playOnClick" v-for="item in results" :key="item.id" :entry="item" :selected="selected===item.id" named @insert="emit('insert',$event)" @inspect="emit('inspect',$event)" @hover="emit('hover',$event)"/></div><p v-if="!results.length">没有匹配项目。可按符号、中英文名称、U+ 码位或 CIN 编码检索。</p></div>
+ <nav v-if="system!=='voqs'&&!query.trim()" class="m17-section-tabs" :aria-label="system.toUpperCase()+tr('modules.ipa-plus.text.398d9548103c')"><button v-for="view in views[system]" :key="view.id" type="button" :data-chart-view="view.id" :aria-pressed="activeView[system]===view.id" :class="{primary:activeView[system]===view.id}" @click="activeView[system]=view.id">{{view.label}}</button><span>{{tr('modules.ipa-plus.text.6f2b94ad167f')}}</span></nav>
+ <div v-if="query.trim()" class="m17-search-results"><p class="hint">{{tr('modules.ipa-plus.text.0ccc285138ce')}} {{results.length}} {{tr('modules.ipa-plus.text.413707e1f80d')}} {{system.toUpperCase()}} {{tr('modules.ipa-plus.text.c35f80840b4b')}}</p><div class="m17-search-grid"><SymbolButton :play-on-click="playOnClick" v-for="item in results" :key="item.id" :entry="item" :selected="selected===item.id" named @insert="emit('insert',$event)" @inspect="emit('inspect',$event)" @hover="emit('hover',$event)"/></div><p v-if="!results.length">{{tr('modules.ipa-plus.text.317648a583b6')}}</p></div>
  <div v-else class="m17-chart-grid" :class="['m17-chart-'+system,'m17-view-'+currentView.id]" :data-chart="system" :data-chart-view-active="currentView.id">
   <div v-for="(group,gi) in groups" :key="gi" class="m17-chart-column" :class="'m17-group-'+gi"><section v-for="section in group" :key="section.id" class="m17-chart-section" :class="'m17-section-'+section.id" :aria-label="section.title">
    <h3 :title="system!=='voqs'?section.subtitle:undefined">{{section.title}}</h3>
-   <table v-if="section.kind==='matrix'" class="m17-matrix"><thead><tr><th scope="col"></th><th v-for="column in section.columns" :key="column" scope="col">{{column}}</th></tr></thead><tbody><tr v-for="(row,ri) in section.rows" :key="ri"><th scope="row">{{row.label}}</th><td v-for="(cell,ci) in row.cells" :key="ci" :colspan="cell.span??1" :class="{'m17-impossible':cell.shaded,'m17-half-impossible':cell.rightHalfShaded}" :aria-label="cell.shaded?'原表阴影：判定不可能的构音':cell.rightHalfShaded?'原表右半阴影：浊音判定不可能':undefined"><SymbolButton :play-on-click="playOnClick" v-for="id in cell.ids" :key="id" :entry="entry(id)" :selected="selected===id" @insert="emit('insert',$event)" @inspect="emit('inspect',$event)" @hover="emit('hover',$event)"/></td></tr></tbody></table>
-   <div v-else-if="section.kind==='vowels'" class="m17-vowels"><svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path d="M20 9 L83 9 L83 91 L42 91 Z M27 37 L83 37 M34 65 L83 65 M50 9 L66 91"/></svg><span class="m17-vowel-label m17-vowel-front">前</span><span class="m17-vowel-label m17-vowel-central">央</span><span class="m17-vowel-label m17-vowel-back">后</span><div v-for="(point,i) in section.points" :key="i" class="m17-vowel-point" :style="{left:point.x+'%',top:point.y+'%'}"><SymbolButton :play-on-click="playOnClick" v-for="id in point.ids" :key="id" :entry="entry(id)" :selected="selected===id" @insert="emit('insert',$event)" @inspect="emit('inspect',$event)" @hover="emit('hover',$event)"/></div></div>
+   <table v-if="section.kind==='matrix'" class="m17-matrix"><thead><tr><th scope="col"></th><th v-for="column in section.columns" :key="column" scope="col">{{column}}</th></tr></thead><tbody><tr v-for="(row,ri) in section.rows" :key="ri"><th scope="row">{{row.label}}</th><td v-for="(cell,ci) in row.cells" :key="ci" :colspan="cell.span??1" :class="{'m17-impossible':cell.shaded,'m17-half-impossible':cell.rightHalfShaded}" :aria-label="cell.shaded?tr('modules.ipa-plus.text.441123c4e5bf'):cell.rightHalfShaded?tr('modules.ipa-plus.text.89cbe6af9cf7'):undefined"><SymbolButton :play-on-click="playOnClick" v-for="id in cell.ids" :key="id" :entry="entry(id)" :selected="selected===id" @insert="emit('insert',$event)" @inspect="emit('inspect',$event)" @hover="emit('hover',$event)"/></td></tr></tbody></table>
+   <div v-else-if="section.kind==='vowels'" class="m17-vowels"><svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path d="M20 9 L83 9 L83 91 L42 91 Z M27 37 L83 37 M34 65 L83 65 M50 9 L66 91"/></svg><span class="m17-vowel-label m17-vowel-front">{{tr('modules.ipa-plus.text.6044e9f095e0')}}</span><span class="m17-vowel-label m17-vowel-central">{{tr('modules.ipa-plus.text.65a7341f8fe3')}}</span><span class="m17-vowel-label m17-vowel-back">{{tr('modules.ipa-plus.text.60be66d61586')}}</span><div v-for="(point,i) in section.points" :key="i" class="m17-vowel-point" :style="{left:point.x+'%',top:point.y+'%'}"><SymbolButton :play-on-click="playOnClick" v-for="id in point.ids" :key="id" :entry="entry(id)" :selected="selected===id" @insert="emit('insert',$event)" @inspect="emit('inspect',$event)" @hover="emit('hover',$event)"/></div></div>
    <div v-else-if="system!=='voqs'&&section.groups" class="m17-explained-groups" :class="{'m17-combination-groups':section.id==='combinations'}"><div v-for="(row,ri) in section.groups" :key="ri" class="m17-explained-row"><div class="m17-row-caption" :title="row.hint"><b>{{row.label}}</b></div><div class="m17-row-symbols"><SymbolButton :play-on-click="playOnClick" v-for="id in row.ids" :key="id" :entry="entry(id)" :selected="selected===id" @insert="emit('insert',$event)" @inspect="emit('inspect',$event)" @hover="emit('hover',$event)"/></div></div></div>
    <div v-else class="m17-symbol-flow"><SymbolButton :play-on-click="playOnClick" v-for="id in section.ids" :key="id" :entry="entry(id)" :named="system==='voqs'&&section.id!=='scope'" :selected="selected===id" @insert="emit('insert',$event)" @inspect="emit('inspect',$event)" @hover="emit('hover',$event)"/></div>
   </section></div>

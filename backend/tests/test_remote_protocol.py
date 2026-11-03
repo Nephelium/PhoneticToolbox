@@ -107,6 +107,21 @@ def claim(e, token):
     return e.c.claim(token, str(uuid4()), RUNTIME)
 
 
+def test_first_remote_claim_excludes_queue_wait_but_retry_keeps_deadline(env):
+    jid=env.job(deadline=30)
+    env.clock[0]+=60
+    first=env.c.claim_server()
+    assert first['job_id']==jid
+    assert first['deadline_remaining_seconds']==30
+    with env.store.transaction() as tx:
+        tx.execute("UPDATE jobs SET state='queued',worker_id=NULL,lease_until=NULL WHERE id=?",(jid,))
+        tx.execute('UPDATE remote_attempts SET ended_at=? WHERE job_id=?',(env.clock[0],jid))
+    env.clock[0]+=10
+    second=env.c.claim_server()
+    assert second['deadline']==first['deadline']
+    assert second['deadline_remaining_seconds']==20
+
+
 def downloaded(e, token, a):
     for i in a['inputs']:
         assert e.c.read(token, a['attempt_id'], a['generation'], i['id'], 0, 100) == PAYLOAD
@@ -260,6 +275,9 @@ def test_retry_count_and_total_deadline(env):
     e.clock[0] += 11; e.c.recover()
     assert row(e, 'jobs')['state'] == 'failed' and e.c.claim_server() is None
     e.job('next', deadline=1); e.clock[0] += 2; e.c.recover()
+    assert row(e, 'jobs', 'WHERE owner_id=?', ('next',))['state']=='queued'
+    assert e.c.claim_server()['deadline_remaining_seconds']==1
+    e.clock[0]+=2; e.c.recover()
     assert row(e, 'jobs', 'WHERE owner_id=?', ('next',))['error_code'] == 'deadline_exceeded'
 
 

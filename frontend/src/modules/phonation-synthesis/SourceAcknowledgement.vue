@@ -1,41 +1,44 @@
 <script setup lang="ts">
+import {uiMessage,joinMessages} from '../module-localization.ts';
+import {tr,messageRef} from '../../i18n/index.ts';
 import AppIcon from '../../components/AppIcon.vue';
 import {nextTick,ref} from 'vue';
 import ModalDialog from '../../components/ModalDialog.vue';
 import sources from '../../generated/sources.json';
+import {sourceText} from '../../components/source-display.ts';
 import {copyText} from '../../platform/clipboard.ts';
 const emit=defineEmits<{references:[]}>();
 const upstream=sources.find(source=>source.id==='SRC-ZAIWA')!;
 const paper=sources.find(source=>source.id==='REF-ZAIWA')!;
-const message=ref('');
+const message=messageRef('');
 const details=ref(false);
 async function references(){details.value=false;await nextTick();emit('references');}
 async function copy(){
- try{await copyText(paper.citation!);message.value='引用已复制';}
- catch{message.value='无法访问剪贴板，请选中论文引用复制。';}
+ try{await copyText(paper.citation!);message.value=uiMessage('modules.phonation-synthesis.citation_copied');}
+ catch{message.value=uiMessage('modules.phonation-synthesis.clipboard_unavailable_select_and_copy_the_paper_citation');}
 }
 </script>
 <template>
- <footer class="m07-attribution" aria-label="发声类型合成来源与致谢">
-  <p class="attribution-line">{{upstream.attribution}}<span class="permission-date">（{{upstream.permission_date}} 作者邮件许可）</span></p>
+ <footer class="m07-attribution" :aria-label="tr('modules.phonation-synthesis.phonation_type_synthesis_sources_and_acknowledgements')">
+  <p class="attribution-line">{{tr('modules.phonation-synthesis.attributionWithPermission',{attribution:sourceText(upstream,'attribution'),date:upstream.permission_date??''})}}</p>
   <div class="citation-line">
    <p class="paper-citation">{{paper.citation}}</p>
    <div class="attribution-actions">
-    <a :href="paper.urls.doi" target="_blank" rel="noopener noreferrer">论文</a>
-    <a :href="upstream.urls.repository" target="_blank" rel="noopener noreferrer">原始仓库</a>
-    <button type="button" @click="copy">复制引用</button>
-    <button type="button" @click="details=true">改写说明</button>
+    <a :href="paper.urls.doi" target="_blank" rel="noopener noreferrer">{{tr('modules.phonation-synthesis.paper')}}</a>
+    <a :href="upstream.urls.repository" target="_blank" rel="noopener noreferrer">{{tr('modules.phonation-synthesis.original_repository')}}</a>
+    <button type="button" @click="copy">{{tr('modules.phonation-synthesis.copy_citation')}}</button>
+    <button type="button" @click="details=true">{{tr('modules.phonation-synthesis.adaptation_notes')}}</button>
     <span v-if="message" role="status">{{message}}</span>
    </div>
   </div>
  </footer>
- <ModalDialog v-if="details" title="发声类型合成改写说明" @close="details=false">
-  <p>{{upstream.adaptation_note}}</p>
-  <p>{{upstream.license}}</p>
-  <p>{{upstream.adaptation_caution}} <a :href="upstream.urls.repository" target="_blank" rel="noopener noreferrer">尝试作者团队的官方开源代码</a></p>
-  <p>本模块通过 LPC 残差操纵制作实验刺激。用于感知实验前，请检验刺激的发声类别和步长知觉差异。论文、代码、录音及统计数据的许可，以及 Parselmouth、REAPER 等组件的来源，见方法与引用。</p>
+ <ModalDialog v-if="details" :title="tr('modules.phonation-synthesis.phonation_type_synthesis_adaptation_notes')" @close="details=false">
+  <p>{{sourceText(upstream,'adaptation_note')}}</p>
+  <p>{{sourceText(upstream,'license')}}</p>
+  <p>{{sourceText(upstream,'adaptation_caution')}} <a :href="upstream.urls.repository" target="_blank" rel="noopener noreferrer">{{tr('modules.phonation-synthesis.try_the_authors_official_open_source_code')}}</a></p>
+  <p>{{tr('modules.phonation-synthesis.this_module_creates_experimental_stimuli_by_manipulating_lpc_residuals')}}</p>
   <p class="paper-citation">{{paper.citation}}</p>
-  <button type="button" @click="references"><AppIcon name="book"/>方法与引用</button>
+  <button type="button" @click="references"><AppIcon name="book"/>{{tr('modules.phonation-synthesis.methods_and_references')}}</button>
  </ModalDialog>
 </template>
 <style scoped>

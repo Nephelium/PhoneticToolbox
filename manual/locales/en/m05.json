@@ -1,0 +1,1058 @@
+{
+  "schemaVersion": "ptb-manual-localization/1",
+  "locale": "en",
+  "entries": {
+    "d4c30b31eae345cead77148f490e533e2399312c66e81d0906469a1ebf08a1de": {
+      "source": "唇形提取",
+      "translation": "Lip tracking"
+    },
+    "16ef1bc661626a84ac67cab7ddf78f9990cbd7f4b5d764224349dd9924c61861": {
+      "source": "视频教程：<s id=\"0\">观看本章视频</s>。",
+      "translation": "Video tutorial: <s id=\"0\">watch this chapter's video</s>."
+    },
+    "8452910f77069aaa73ad87c3106db80697dd8e4a12d6f7979c24446b290d52cd": {
+      "source": "从视频中提取唇形",
+      "translation": "Extract lip shape from video"
+    },
+    "00d5843c9a2658453733806d74e91905a8c6b86b77678bca7ed4c5c2cfe6a45b": {
+      "source": "先检查设备和画面，再录制或导入已有视频。本模块显示面部网格、唇形曲线和逐帧参数，可同步回放，并把音视频与数据保存到本机。",
+      "translation": "Check devices and framing first, then record or import an existing video. This module displays a facial mesh, lip-shape curves, and framewise parameters, supports synchronized playback, and saves audio, video, and data locally."
+    },
+    "fc1560fc8835bbd3fafd76bb00c2946b907e20c6a9769faeddf0aa086a364181": {
+      "source": "四个模式依次为预览、实时计算、视频录制和离线分析。实时计算边录制边计算候选唇形，视频录制仅保存音视频后再离线计算。",
+      "translation": "The four modes are Preview, Live computation, Video recording, and Offline analysis. Live computation records while computing candidate lip shapes; Video recording saves only audio/video for later offline computation."
+    },
+    "2e0576823571b8cfc286547194e63ad091496c9d2622119ad855001cfb476469": {
+      "source": "<s id=\"0\">预览和实时计算的唇形标记为候选（candidate）。视频文件分析使用 Face Mesh 模型，两类结果请分别使用。</s>",
+      "translation": "<s id=\"0\">Lip shapes from Preview and Live computation are marked candidate. Video-file analysis uses the Face Mesh model; use these two types of results separately.</s>"
+    },
+    "ca951de66ce886954d8d8a5dba5ceef3cf85e8b66c516b238cfa4bb539c3768e": {
+      "source": "先认清工作区",
+      "translation": "Get to know the workspace"
+    },
+    "b1cb5852a7f3ee8bdc8b4420b034932b37a7bbd9db3652f4bb9aee1fd720761e": {
+      "source": "预览模式的准备界面。左侧设置设备与参数，音频列表尚未开放时可点击授权并刷新设备。中央显示网格和曲线，右侧查看画面与历史。图中尚未开始采集。",
+      "translation": "Preparation screen in Preview mode. Set devices and parameters on the left. If the audio list is unavailable, click Grant access and refresh devices. Mesh and curves appear in the center, with video and history on the right. Capture has not started."
+    },
+    "1306a68ac9c88295188807238fc4d4aa0b1290f947e0e7feb07ebc91c84ad708": {
+      "source": "位置",
+      "translation": "Location"
+    },
+    "811ec24de2526c41ea8b49bd682a66f154541cd9fa230edf7882cf3cd2e96d46": {
+      "source": "可以做什么",
+      "translation": "Available actions"
+    },
+    "c2eba757ba293bd33043176d186e37bf13d33bc2b109ec8bab8aa68010f28528": {
+      "source": "顶部",
+      "translation": "Top"
+    },
+    "171106f09cb612a3695727c25cc95c24bebf03d88c1ea53f113e1b4a4b0af6ab": {
+      "source": "选择实时采集或离线分析，选择文件并开始分析，另存录制、放弃未保存内容、检查偏移量。",
+      "translation": "Choose live capture or offline analysis, select files and start analysis, save recordings as, discard unsaved content, and inspect offsets."
+    },
+    "be00bddf60dc547370771f3ee107e04879089d43392aea43f24ccac64ddc6065": {
+      "source": "左栏",
+      "translation": "Left panel"
+    },
+    "407aef29fe2c9fe65b1cb86362f663dc2a588ed444aebf0e2ec18c6055d1db4a": {
+      "source": "选摄像头和麦克风，设置帧率与防抖，查看电平、阶段和帧数。",
+      "translation": "Select camera and microphone, set frame rate and stabilization, and inspect levels, stage, and frame count."
+    },
+    "6f85ef0900f68e199f4223fbd129c0b3d2e2953dcb7bda56e7169b528b40bdf6": {
+      "source": "中央",
+      "translation": "Center"
+    },
+    "f864cb505f3013d17ea1975ab39d5eaf58ee1c96deff029d4ec56931ab69a670": {
+      "source": "查看面部网格、九项数值及四条唇形曲线。空白或 — 表示没有有效测量。",
+      "translation": "Inspect the facial mesh, nine values, and four lip-shape curves. Blank or — means no valid measurement."
+    },
+    "5ce7a231ddc7de91fc123159a661873a9cfa1ecdee6c51ecd07382e4e20e9968": {
+      "source": "右栏",
+      "translation": "Right panel"
+    },
+    "90016509ef9265c5512290f6a9a6882ab3ae94fa45633a4631f7550d700b0261": {
+      "source": "保存结果、播放视频、恢复历史，或单独导出动画。离线分析入口位于顶部模式菜单。",
+      "translation": "Save results, play video, restore history, or export animation separately. Offline analysis is in the top mode menu."
+    },
+    "01070dad4e6f6765a31983b8e9dd86405bbb004e7c559aef5e578f873c7c2c0b": {
+      "source": "右栏收起后仍会继续采集。<s id=\"0\">录制时保持页面可见</s>，后台或切换标签可能影响处理。顶部提示会显示进度、错误或保存结果。",
+      "translation": "Capture continues when the right panel is collapsed. <s id=\"0\">Keep the page visible while recording</s>; backgrounding or switching tabs may affect processing. Top messages show progress, errors, or save results."
+    },
+    "b65aff6ea2aafb0995ec25199749b0230330f6775d3f023e66983c667b2c67fb": {
+      "source": "准备设备或已有视频",
+      "translation": "Prepare devices or existing video"
+    },
+    "7ec3dfcd2b9cdbeba21ad5e619476f4478df73671aef0e026204da5e89f97968": {
+      "source": "采集前检查",
+      "translation": "Checks before capture"
+    },
+    "254ab19101408afe13adb2e3ebf5f1bbdeba750cc37f2fab7549e14774af0ffe": {
+      "source": "固定机位，保持面部正对摄像头、嘴唇清楚可见，使用均匀照明。先检查网格是否稳定，避免遮挡和大幅转头。",
+      "translation": "Fix the camera position, face it directly, keep lips clearly visible, and use even lighting. Check mesh stability first; avoid obstructions and large head turns."
+    },
+    "b305b15aa11c20c752e9823e205416a12fc0ba4414dab9dd26a600a84df76235": {
+      "source": "在左栏选择摄像头。若麦克风只有自动选择，点击授权并刷新设备并允许麦克风访问。读取时短暂启用音频输入，列出设备后立即释放，不录音，也不打开摄像头。随后可选择麦克风、外接声卡或线路输入。预览仅使用摄像头，切到实时计算或视频录制时沿用所选麦克风；采集和设备读取期间锁定选择。Windows、macOS和网页操作相同，网页需通过HTTPS或localhost打开。",
+      "translation": "Select the camera on the left. If the microphone offers only Automatic, click Grant access and refresh devices and allow microphone access. Device enumeration briefly enables audio input, then releases it immediately after listing devices; it neither records nor opens the camera. You can then select a microphone, external audio interface, or line input. Preview uses only the camera; Live computation and Video recording use the selected microphone. Selection is locked during capture or device enumeration. Windows, macOS, and web operations are the same; the web page must use HTTPS or localhost."
+    },
+    "7d8615fceb00832281cca22032624a4c336e4a989304e2f22d2d139739230780": {
+      "source": "先预览，再录一小段：检查<s id=\"0\">实际输入</s>名称、电平和画面，结束后试听。电平变化只表示有信号，仍需确认录到了目标人声。",
+      "translation": "Preview first, then record a short segment: check the <s id=\"0\">Actual input</s> name, level, and image, and listen after stopping. Changing levels show a signal is present, but you must still confirm that the target voice was recorded."
+    },
+    "8d0ed12fdc942cb56119ad2d881e91c4246b269d02968b1917043e1245057190": {
+      "source": "接入新设备后，停止采集再点<s id=\"0\">刷新设备</s>。普通刷新保留选择，不重新打开麦克风。未授权时按钮显示授权并刷新设备，拒绝后可再次点击并选择允许；仍被拒绝时检查系统与浏览器麦克风权限。所选设备消失时需重新选择。避免与录音模块同时占用设备。",
+      "translation": "After connecting a new device, stop capture and click <s id=\"0\">Refresh devices</s>. Normal refresh retains selection without reopening the microphone. Without permission, the button reads Grant access and refresh devices. If denied, click again and allow access; if still denied, check system and browser microphone permissions. Reselect when the chosen device disappears. Avoid using the device simultaneously with the recording module."
+    },
+    "df36c1d7d27ed1671ac65584314a7d7813c0e26eac9578d1942b392fb5a5c41a": {
+      "source": "已有视频的要求",
+      "translation": "Requirements for existing video"
+    },
+    "cf7a15f6274bb707c8997f5f6a6b1cbdbf0d5a894617e2d52b5fa453581463cf": {
+      "source": "可多选 <s id=\"0\">.mp4</s>、<s id=\"1\">.mov</s>、<s id=\"2\">.avi</s>、<s id=\"3\">.mkv</s>、<s id=\"4\">.wmv</s>、<s id=\"5\">.m4v</s>、<s id=\"6\">.webm</s>。<s id=\"7\">每文件不超过 128 MB，每批最多 100 个，本页最多保留 100 项结果</s>。画面像素总数上限为 1920×1080。较大材料先分段，并记录各段起点。",
+      "translation": "Multiple <s id=\"0\">.mp4</s>, <s id=\"1\">.mov</s>, <s id=\"2\">.avi</s>, <s id=\"3\">.mkv</s>, <s id=\"4\">.wmv</s>, <s id=\"5\">.m4v</s>, and <s id=\"6\">.webm</s> files can be selected. <s id=\"7\">Each file is limited to 128 MB, each batch to 100 files, and this page to 100 retained results</s>. The maximum image size is 1920×1080 pixels. Split larger material first and record each segment's start."
+    },
+    "bae46014ce4d3d6df1518bdb9942da9def06b9c300b0d098676ed098624c92f0": {
+      "source": "无音轨的视频也能分析唇形，但无法导出原音频或用声音校对偏移。编码和逐帧时间戳须可解码；时间戳缺失或倒退时会拒绝正式结果。正式分析与完整目录保存请使用桌面工作台。",
+      "translation": "Videos without an audio track can still undergo lip-shape analysis, but cannot export original audio or use sound to check offsets. Encoding and framewise timestamps must be decodable; missing or backward timestamps prevent formal results. Use the desktop workbench for formal analysis and complete-directory saving."
+    },
+    "ebaeb1715e83c21b9d4f4cc60ea2cedf2105d3df632a98c8628311a48843b36e": {
+      "source": "使用摄像头采集",
+      "translation": "Capture with a camera"
+    },
+    "9631bb130c396c332dee717e37eaaac485e0e395b515f7fdfa5cbb5dcf8d01a7": {
+      "source": "选择模式",
+      "translation": "Choose a mode"
+    },
+    "6f249bb7dcdd1cdcaefd5b1006ae315f9d35bd038c37a88b8b88de1f0dc4158c": {
+      "source": "模式",
+      "translation": "Mode"
+    },
+    "a19d2c27004ca0b227e1a5f58ca4a0fffeaf16333ae65344c7fd106de9f18175": {
+      "source": "采集内容",
+      "translation": "Captured content"
+    },
+    "abd10bd6b69cfdb2399b83b5551469dd23a13a89819353f0cfbd3de49453d423": {
+      "source": "接下来做什么",
+      "translation": "Next action"
+    },
+    "fa34a3c42dea356817e9b0a856660f267c48a3b43eef106eec62ee7c67f4cbbb": {
+      "source": "离线分析",
+      "translation": "Offline analysis"
+    },
+    "698f59ba86ed98690cc10e41e98248f4bd355a8a00e89146e78a82660756717d": {
+      "source": "按完整视频帧计算唇形，可一次选择多个文件。",
+      "translation": "Compute lip shape from all video frames; multiple files can be selected together."
+    },
+    "c5cb30f73a8393910fa1f0f0e2e71013d88076406ac93b5115290cd3f0102907": {
+      "source": "选择文件，再点分析所选文件，完成后检查并保存结果。",
+      "translation": "Select files, click Analyze selected files, then inspect and save completed results."
+    },
+    "a4e026ba56218205e8a10f68306aa55a84a7280584b750fd6c4501c4d3d08c3b": {
+      "source": "预览",
+      "translation": "Preview"
+    },
+    "7da032e939e902cbcf3da0a33a39c88b43ae968a81a2a92159b6ed49b255d055": {
+      "source": "摄像头画面与候选网格，不录音视频。",
+      "translation": "Camera image and candidate mesh, without audio/video recording."
+    },
+    "5a90620d0392b36c2f7f28cfe191353c13a7b3dab2c581c0e139f1bc9b1e4edd": {
+      "source": "检查构图后结束，换录制模式。",
+      "translation": "Check framing, stop, and switch to a recording mode."
+    },
+    "7df661b06de86c7be144300ab2e3ea3038a0b4a870e50c5d95f2e56e50b24f5b": {
+      "source": "实时计算",
+      "translation": "Live computation"
+    },
+    "c717d22e6c30b2a1a9233fac7f295db2b4437f5d9de9574c55ea8c1f1ae61a63": {
+      "source": "视频、音频和实时候选唇形。",
+      "translation": "Video, audio, and live candidate lip shapes."
+    },
+    "59af64e5e5495c8a7c659f7acfd8587fe26993faba563b80f08ea1787fe566ba": {
+      "source": "结束、回放、按需校对，再另存。",
+      "translation": "Stop, play back, check timing if needed, and save as."
+    },
+    "09c8782416c82f29bd6b2c2faa88dfe876d3826793fa24995050c2a23ddf7ef7": {
+      "source": "视频录制",
+      "translation": "Video recording"
+    },
+    "7c6a50627a4cf3ca556e19b932b62bb5304f592a59d7ccf6d7c32f6ac0cc82b9": {
+      "source": "只录视频与音频，不运行唇形模型。",
+      "translation": "Record video and audio only, without running the lip-shape model."
+    },
+    "e60f412a2688017f0be82297752a87983fe5967bc9cd890736396267df62efe8": {
+      "source": "另存后，在顶部选择离线分析，再选择所存视频计算唇形。",
+      "translation": "Save as, select Offline analysis at the top, and select the saved video to compute lip shape."
+    },
+    "f30f20fc77edd18bf8c742e81fb83f7759416f92e2dbd4dc6e16b87533424ffc": {
+      "source": "设置设备与参数",
+      "translation": "Set devices and parameters"
+    },
+    "2e8ddbf2320ed3328995a64828e8651b7081a01810f085ca95777dfa9888c393": {
+      "source": "设置",
+      "translation": "Setting"
+    },
+    "4d29d1cf020382470f67e2b2c3a423afed1e93b6073eb997419b592b690a89aa": {
+      "source": "新页面默认值",
+      "translation": "Default on a new page"
+    },
+    "270ec4eb3d4412ff6ad7acec3fd5a75857e41b49b040cccb1d69b6a02cd25a9d": {
+      "source": "怎样使用",
+      "translation": "Usage"
+    },
+    "648b2d4f6d1efc8b1cb4fe2d2b9abc73cba07102edf3ed63c909261c4b515e1f": {
+      "source": "摄像头／麦克风",
+      "translation": "Camera / microphone"
+    },
+    "7464b47d3c9065eb109c29baf5bf853bffc9c284009a09d3da4893451e72679a": {
+      "source": "系统默认／自动选择麦克风",
+      "translation": "System default / automatic microphone selection"
+    },
+    "d84705f50946717cf90c1a13a01498d654b59597dc75bba1e796bfdc0085a02a": {
+      "source": "列表未开放时先点击授权并刷新设备，允许麦克风访问后显示音频输入名称。预览前可预选麦克风或声卡，切换录制模式时沿用。预览只用摄像头，采集中锁定设备。录人声时选择对应麦克风或线路输入，勿误选系统回放。",
+      "translation": "If the list is unavailable, click Grant access and refresh devices and permit microphone access to show audio-input names. You can preselect a microphone or audio interface before preview, then retain it when switching recording modes. Preview uses only the camera; devices are locked during capture. Choose the intended microphone or line input for voice recording, avoiding system-loopback input."
+    },
+    "f24c2d518ddee713447dfe456a760da27d5d494b81e152e9d2f936c58783274f": {
+      "source": "请求帧率",
+      "translation": "Requested frame rate"
+    },
+    "20f26c754d8d1b5f9071820600613c7dd1c530a58b5d3c00cec0dc703e489805": {
+      "source": "范围 1–240 fps。请求值、设备协商值和实际文件帧率分别查看。",
+      "translation": "Range 1–240 fps. Check requested, device-negotiated, and actual file frame rates separately."
+    },
+    "98684d87b35d984ea259fcd243e453231be408d0b700129e1db192f067f9f107": {
+      "source": "特征点防抖／截止频率",
+      "translation": "Landmark stabilization / cutoff frequency"
+    },
+    "eed3178c5ca8c2d8bf72e259ea3ac50159fc73dbf7a41992716275b2c05adc93": {
+      "source": "开启／15 Hz",
+      "translation": "Enabled / 15 Hz"
+    },
+    "82916e2103e2c368186b34f5d5c58e4af1e835ceab8634eed443acb91259413a": {
+      "source": "截止频率范围 1–240 Hz。关闭防抖后输入禁用；较低值更平滑，也可能削弱快速动作。",
+      "translation": "Cutoff range 1–240 Hz. Input is disabled when stabilization is off. Lower values are smoother but may suppress rapid motion."
+    },
+    "0b9081c6f3999ee39b9110944aa4fae22d29468820d3e4949a61cc24b803b304": {
+      "source": "推理设备",
+      "translation": "Inference device"
+    },
+    "de9f9628fd458c270bc188b1c91c6d597ca5d0d5ddcee81e68e158c22e16e568": {
+      "source": "可选 GPU，只用于实时模型。已有视频正式分析不由此切换 CPU/GPU。",
+      "translation": "GPU is optional and applies only to the live model. This does not switch CPU/GPU for formal existing-video analysis."
+    },
+    "3a6813062a309498eefa4f22529a096f795ad63bd54008ee9a336a2ce713a0d5": {
+      "source": "镜像预览",
+      "translation": "Mirror preview"
+    },
+    "08f8e7374cb1dd446e98d817d9cacf05aeeec3586942c9d00cd2afa0f0783cde": {
+      "source": "开启",
+      "translation": "Enabled"
+    },
+    "5176e6c5d76947f7a1bcc9ea682e9f425c9b099a050fbafacf320d96b1372918": {
+      "source": "只改变预览方向，原媒体和测量坐标不镜像。",
+      "translation": "Changes preview direction only; original media and measurement coordinates are not mirrored."
+    },
+    "19a6a77bdde011acf21cc9e90b46fb18821718fb9c16cc8ad2ea49020f97b6db": {
+      "source": "采集或分析运行时，大部分设置会锁定。先结束并等待收尾，再改设备、模式或参数。",
+      "translation": "Most settings are locked during capture or analysis. Stop and wait for finalization before changing devices, mode, or parameters."
+    },
+    "de4ec8bad4f53b22574e852a9312ad71c90213c9b4a7cbdbb0a58b3bdd028bff": {
+      "source": "预览后开始实时计算",
+      "translation": "Preview, then start live computation"
+    },
+    "ec2190afc1593b53501a25e5b76e0dcfa5c44bf3cf491930eb0417db912a98e8": {
+      "source": "顶部模式选<s id=\"0\">预览</s>，左栏选摄像头，点<s id=\"1\">打开预览</s>并允许权限。",
+      "translation": "Choose <s id=\"0\">Preview</s> in the top mode menu, select a camera on the left, click <s id=\"1\">Open preview</s>, and grant permission."
+    },
+    "64f41e19b187b36791ce98438c1aafd65f12217d62242e080431fad4e2c65f71": {
+      "source": "阶段变为预览中后，右栏显示摄像头画面，中央显示候选网格、九项数值和下方四条曲线。保持正对摄像头，缓慢张口、闭口，检查网格与参数是否随动作变化。未检出面部时网格留空、数值显示 —，先改善光线、机位或遮挡。",
+      "translation": "When the stage changes to Previewing, the right panel shows the camera image; the center shows the candidate mesh, nine values, and four curves below. Face the camera and slowly open and close your mouth to check that the mesh and parameters follow movement. When no face is detected, the mesh is blank and values show —; improve lighting, camera position, or visibility first."
+    },
+    "7424357336300e5691340e5273d6ae68a084e3df07ca99f84e910db11afafdda": {
+      "source": "点<s id=\"0\">结束录制</s>退出预览。临时帧会清除，预览没有可保存的录音、视频或唇形记录。",
+      "translation": "Click <s id=\"0\">Stop recording</s> to leave preview. Temporary frames are cleared; preview has no audio, video, or lip-shape records to save."
+    },
+    "b2337faca094b1feef6e86e8b1b5e2dcdd653519e55a0d61b9cfe96819605178": {
+      "source": "实时计算模式的准备界面。开始录制后同时采集音视频并计算候选唇形，另存时可选择视频与动画。",
+      "translation": "Live-computation preparation screen. Recording captures audio/video while computing candidate lip shapes. Video and animation can be selected when saving as."
+    },
+    "99dc6f499029203ca470552155a7a2dcb35f2d8381240c9a0ed953643f54c34d": {
+      "source": "模式改为<s id=\"0\">实时计算</s>，选好摄像头与麦克风，点<s id=\"1\">开始录制</s>。先核对实际输入、电平和网格，再读正式材料。",
+      "translation": "Switch to <s id=\"0\">Live computation</s>, choose camera and microphone, and click <s id=\"1\">Start recording</s>. Check actual input, level, and mesh before reading the experimental material."
+    },
+    "f3ee670a70688cff64f2490677f9f157868b54e9e10d649aaa24dfcc9211f5ed": {
+      "source": "点<s id=\"0\">结束录制</s>，等到编码和音频时间轴检查收尾。",
+      "translation": "Click <s id=\"0\">Stop recording</s> and wait for encoding and audio-timeline checks to finish."
+    },
+    "b5ebd7ae93f2f3e0185e285db49f3dbb66164d76117cba587b2ca96b67fbb70f": {
+      "source": "在右栏播放视频或点<s id=\"0\">同步回放</s>。需要检查声音与唇形时间时，使用顶部<s id=\"1\">检查偏移量</s>。",
+      "translation": "Play the video on the right or click <s id=\"0\">Synchronized playback</s>. To inspect audio/lip-shape timing, use <s id=\"1\">Check offset</s> at the top."
+    },
+    "dc6bd22f7891e15ea09ebe1245e585133f21be90d8144bdf56f3bf19a46c109e": {
+      "source": "点<s id=\"0\">另存录制</s>，选择所需视频、动画，再选目录保存。具体组合见下一节。",
+      "translation": "Click <s id=\"0\">Save recording as</s>, choose video and animation as needed, then select a directory. Combinations are described next."
+    },
+    "5de62360fab81cc2f7ba415c7582b7d6c1d6040502c91a89662fdbd7d5eb4f37": {
+      "source": "<s id=\"0\">结束录制只停止采集。请完成另存并看到保存成功提示，再开始下一次或关闭页面。</s>",
+      "translation": "<s id=\"0\">Stop recording only stops capture. Complete Save as and confirm the success message before starting another recording or closing the page.</s>"
+    },
+    "4dab1fc4c69fe1902f6c36074f8eea515544c913e115b9efcfb98140b55bf37e": {
+      "source": "视频录制模式的准备界面。示例请求120 fps，录制只保存音视频，唇形稍后通过离线分析计算。请求值与实际设备帧率分别核对。",
+      "translation": "Video-recording preparation screen. The example requests 120 fps and records audio/video only, with lip shape computed later offline. Check requested and actual device frame rates separately."
+    },
+    "b1092aae37b40c960d0fa5cc9e0262b3aa089f7f6096527b77d1a20fabc74fea": {
+      "source": "模式选<s id=\"0\">视频录制</s>，选设备和请求帧率，点<s id=\"1\">开始录制</s>。检查右栏画面、输入名称与电平。中央提示唇形稍后计算。",
+      "translation": "Select <s id=\"0\">Video recording</s>, choose devices and requested frame rate, and click <s id=\"1\">Start recording</s>. Check the right-panel image, input name, and level. The center indicates that lip shape will be computed later."
+    },
+    "f26a8a408c00e3f09892815103bf7b8b38af1438a7274fb29b5e49d4f619a42d": {
+      "source": "点<s id=\"0\">结束录制</s>并等待收尾，再点<s id=\"1\">另存录制</s>选择目录。此模式保存视频、WAV和回执，不生成唇形或动画。",
+      "translation": "Click <s id=\"0\">Stop recording</s>, wait for finalization, then click <s id=\"1\">Save recording as</s> and choose a directory. This mode saves video, WAV, and a receipt; it generates no lip shapes or animation."
+    },
+    "1e419cf71560b0e0a6ee414af19b1ec68dd89891a8dfd642ceaa4c33ad16338f": {
+      "source": "在顶部模式菜单选择<s id=\"0\">离线分析</s>重新选择保存的视频，点<s id=\"1\">分析所选文件</s>。按正式分析流程检查并保存结果。",
+      "translation": "Select <s id=\"0\">Offline analysis</s> in the top mode menu, reselect the saved video, and click <s id=\"1\">Analyze selected files</s>. Inspect and save results following the formal-analysis workflow."
+    },
+    "02b31199a0c35105ef279a746c0b8727d65532ba43282500257d354355327838": {
+      "source": "<s id=\"0\">设备会协商实际帧率，保存后请核对文件的实际帧率。示例请求值为 120 fps。</s>",
+      "translation": "<s id=\"0\">The device negotiates its actual frame rate; check the saved file's actual frame rate. The example requests 120 fps.</s>"
+    },
+    "11773f31746dd64ad65d03e28069792b6a42443fb8fb1d2ba6e3fe12c156208e": {
+      "source": "选择防抖条件",
+      "translation": "Choose stabilization conditions"
+    },
+    "b19de447e5406124a10849572c9de847021565bc204ac40de7daa8c7ebda725f": {
+      "source": "在左栏勾选或取消<s id=\"0\">特征点防抖</s>。开启时可编辑截止频率，关闭后保留数值但禁用输入。同一实验尽量保持设置一致，关注快速运动时请同时保留原视频。",
+      "translation": "Select or clear <s id=\"0\">Landmark stabilization</s> on the left. When enabled, cutoff is editable; when disabled, its value is retained but input is locked. Keep settings consistent within an experiment where possible; retain original video when rapid movement matters."
+    },
+    "8a208e40ba5cb56740bfecc880781f91a5978b665ed3c65548b32e8154db1209": {
+      "source": "预览模式关闭特征点防抖。截止频率保留15 Hz并禁用，麦克风可在预览前授权并预选。",
+      "translation": "Preview mode with landmark stabilization off. Cutoff remains 15 Hz and is disabled; microphone access and preselection are available before preview."
+    },
+    "9dbb7f79cc1e8bacd19bab6b56d88717bf81f8f712f4040b2493a31a129a5901": {
+      "source": "关闭特征点防抖后，截止频率输入禁用。重新勾选防抖后可修改截止频率。",
+      "translation": "Disabling landmark stabilization locks cutoff input. Re-enable stabilization to edit cutoff."
+    },
+    "d3aa8d4498c3835fd64266a8dfc1942e1696604db0a169e780c44cec58f9d98e": {
+      "source": "这里关闭的是额外关键点防抖，实时模型仍可能有内部平滑。已有结果回放使用当时保存的设置，不按页面新值重新滤波。",
+      "translation": "This disables additional landmark stabilization only; the live model may still smooth internally. Existing-result playback uses saved settings and does not refilter using new page values."
+    },
+    "27837722c4f908b11d55af3d45e8a75f132187ddd228fb962d366743f3180f32": {
+      "source": "结束后保存录制",
+      "translation": "Save recordings after stopping"
+    },
+    "b1757cd4ffcac84d146d1ce715376ea0ffdda185d36e94d278b3299c067e2211": {
+      "source": "选择要保存的画面",
+      "translation": "Choose which images to save"
+    },
+    "2f2ddc88f8530b68dc3ec2766fdcd3d8d6b430c7970362e67a8023050edcaef3": {
+      "source": "实时计算另存时，<s id=\"0\">音频、完整已测唇形和时间信息始终保存</s>，视频与动画可自由组合。动画是面部网格画面。",
+      "translation": "When saving live computation, <s id=\"0\">audio, all measured lip shapes, and timing information are always saved</s>. Video and animation can be combined freely. Animation depicts the facial mesh."
+    },
+    "ada05a1ac2c72656eba1019c133ef4c068e6808fd26efbda4dec864d3432ed08": {
+      "source": "视频",
+      "translation": "Video"
+    },
+    "a3de8ef949c67ab37baa32ecbe7fb9f321efa88d28cf60aeeed621a032a36c2d": {
+      "source": "动画",
+      "translation": "Animation"
+    },
+    "dad2a524d32558be40e7b0f3e751ba8dcacef2e48ed607c49837f02c91f31bd0": {
+      "source": "同时保存的画面",
+      "translation": "Images saved together"
+    },
+    "ea8b837edd202e0dac5363d8fa880906542231fc009bfa7a7da45860a821ffef": {
+      "source": "勾选",
+      "translation": "Selected"
+    },
+    "8be2873b73f4f2642afcfc4ca75e6b1b9dbac15c54e671ec2c38550ed2de98e6": {
+      "source": "原视频＋面部动画，默认组合。",
+      "translation": "Original video + facial animation, the default combination."
+    },
+    "e70ac133a71fc6f29c517af4cebc019c00b563931db07f56858ffa4cba4e82ba": {
+      "source": "取消",
+      "translation": "Cleared"
+    },
+    "e56b67c0f4dfd3fd4f5b14c85139ac7bb85a143250def01a5b9a8b0a91f81f96": {
+      "source": "只保留原视频。",
+      "translation": "Original video only."
+    },
+    "5b0962de60635c49117c0669f52f9f1d32c4a490c9d3c1f60425070fbc499735": {
+      "source": "只保留面部动画。",
+      "translation": "Facial animation only."
+    },
+    "de773eeb6050150ae6cc67b28c827d407ae432a7d3a4b6626ea1188fa2bea849": {
+      "source": "不保存画面，仍保存音频与唇形。",
+      "translation": "No images; audio and lip shapes are still saved."
+    },
+    "33afc82a431e179d3c4fb28bcfea03342635d40c0e1a189347abd5be923f950e": {
+      "source": "视频录制直接保存视频、音频和回执，不出现这组勾选项。实时计算没有有效面部点时，取消动画后可尝试保留音频及已有记录。",
+      "translation": "Video recording saves video, audio, and a receipt directly, without these checkboxes. If live computation has no valid face landmarks, try clearing animation to retain audio and existing records."
+    },
+    "8b697716837e1f8dbe65dd452bcbbf690adc111a1a70a143035bec5b6cfeef81": {
+      "source": "选目录并确认保存",
+      "translation": "Choose a directory and confirm saving"
+    },
+    "b566915e396ae300df1b41a5e99d2095b7733a2cd709fe9b3b57cd3a4aca4d68": {
+      "source": "点<s id=\"0\">另存录制</s>。实时计算先确认视频、动画选项，点<s id=\"1\">选择目录并保存</s>；高帧率模式直接进入目录选择。",
+      "translation": "Click <s id=\"0\">Save recording as</s>. For live computation, confirm video/animation options, then click <s id=\"1\">Choose directory and save</s>. High-frame-rate mode goes directly to directory selection."
+    },
+    "60a206785e42627d943486b312e5d7e2122ed3708919e50e5826a0ca9575c14c": {
+      "source": "选择输出目录，等待成功提示。程序会新建 录制结果 子目录，检查其中的 <s id=\"0\">recording-export.json</s> 和实际文件。",
+      "translation": "Choose an output directory and wait for success. The app creates a 录制结果 subdirectory. Inspect <s id=\"0\">recording-export.json</s> and the actual files inside."
+    },
+    "5f6de7a8105b13ae0050fc5d3ff5efa799ab38024732bedec9c7ac380c3b1205": {
+      "source": "取消目录选择或保存失败时，当前录制仍保留，可调整选项、空间或目录后重试。开始下一次时，如有未保存内容，会先要求保存。",
+      "translation": "Cancelling directory selection or a save failure retains the recording. Adjust options, space, or directory and retry. Starting another capture with unsaved content first requires saving."
+    },
+    "de85bbf3ac0d98687ecad4ebca76c51d8864c31a240afa6d899afce349584cd8": {
+      "source": "操作",
+      "translation": "Action"
+    },
+    "17ba5116b1d8180b078a97f0afdce4ccbac96f2fbea2e4ff7e2515d3b5e0991d": {
+      "source": "结果",
+      "translation": "Result"
+    },
+    "4f92d5f4e6ceeb6f90b98a175ad950f38c5e8ce2e4629f9515d7229e2fd152a6": {
+      "source": "取消／关闭保存弹窗",
+      "translation": "Cancel / close save dialog"
+    },
+    "c94b04c614d860eebd3c3c2e013ab7a19d5040758c5ed8a379d2f5047923f781": {
+      "source": "退出本次保存，当前录制保留。保存中请等待完成。",
+      "translation": "Leave this save operation and retain the recording. Wait for completion if saving is underway."
+    },
+    "830e06bce7e8e59bb6eef45f1cb21b06e355855c0c32e8fbd9882012f16cd9a9": {
+      "source": "放弃未保存内容 → 取消",
+      "translation": "Discard unsaved content → Cancel"
+    },
+    "324e0823cb70f13d23bc428eccc30cefd0cb83f281503128640760a71304b985": {
+      "source": "返回当前内容。",
+      "translation": "Return to current content."
+    },
+    "89eeddd8d5d9426d0a0b26502420d68db7ac52eba2792baa2fb4f25372d35dd1": {
+      "source": "放弃未保存内容 → 放弃",
+      "translation": "Discard unsaved content → Discard"
+    },
+    "e130acfc131e8b840fa4063bd4658a56561fdfb7df16b10e2091d2f3231fd807": {
+      "source": "清除本页尚未保存的录制和结果，磁盘原文件不变。",
+      "translation": "Clear this page's unsaved recordings and results; original files on disk remain unchanged."
+    },
+    "ada3404dde8a2634404bc908ce36f2e76a6d40ef27c58c85b645eb5eea0a544a": {
+      "source": "录制目录里有什么",
+      "translation": "Contents of a recording directory"
+    },
+    "85489369f74138cf328c542ab54ce932d26487b8d8f4aee54e4cf7c7f02d2539": {
+      "source": "文件",
+      "translation": "File"
+    },
+    "f63ca0b1640527f2df206afd82f3380bc84e873b5113f7b7379a2d4946ab2c43": {
+      "source": "内容与条件",
+      "translation": "Contents and conditions"
+    },
+    "2a0310f37367c4fade00db932838d6e610e4848c50e07e877ecd75ffaa1fb021": {
+      "source": "勾选视频时保存原画面的派生MP4。异常时间戳时可能保留原编码容器并提示，文件名以回执为准。",
+      "translation": "When video is selected, save an MP4 derived from the original image. Abnormal timestamps may cause the original encoded container to be retained with a message; use the receipt for filenames."
+    },
+    "46d975db4012e2c487a8fc32720154b1acf23b17510da8a9b25f5614f7ef03b4": {
+      "source": "实时计算勾选动画且有有效点时保存，使用已有测量，未重新识别。",
+      "translation": "Saved when animation is selected in live computation and valid landmarks exist; uses existing measurements without redetection."
+    },
+    "405117dc85edc5d80f59d4a66b74592fbc1feb1c4296a6ac231d5945f178f8a8": {
+      "source": "解码PCM16音频，采样率和声道数以实际文件为准。",
+      "translation": "Decoded PCM16 audio; use the actual file for sample rate and channel count."
+    },
+    "5ad571e6078b8c50aab8c5dc2b64fe8db8acea704eb8ecd3232b528f27dd8a64": {
+      "source": "实时计算的全部已测候选帧、关键点、参数和设置，含缺失或截断说明。",
+      "translation": "All measured live candidate frames, landmarks, parameters, and settings, including missing-data or truncation notes."
+    },
+    "d463d3b0e2059db8f2a43b27a2be408c0cd837b1d280fdc965b1140052389afe": {
+      "source": "预算内的四轨交换文件。自动同名关联还需音轨和至少两帧有效open，条件不足时不生成。",
+      "translation": "Four-track interchange file within the budget. Automatic same-name association also requires an audio track and at least two valid open frames; no file is generated if conditions are unmet."
+    },
+    "5a9b0a9e581038af49c04bbdf9350b90f4e6217d714c26d4c94a4c8da6b9fbcc": {
+      "source": "本次文件名、大小、哈希、音轨、帧率、选项与时间来源的保存回执。",
+      "translation": "Save receipt with filenames, sizes, hashes, audio tracks, frame rates, options, and timing sources."
+    },
+    "c8e75bdcc4add111121505479b82c778992c5e63cc2dea78749c4323419a989a": {
+      "source": "预览演示",
+      "translation": "Preview demonstration"
+    },
+    "260d41e6bbf9cd78f49fddff342feaf0c907c7858684554bb8871adfa2aa0f84": {
+      "source": "以下屏幕录制完整展示权限确认和真人预览，可点击播放或拖动进度条查看。预览模式不录制音视频，也不保存唇形数据；本例视频通过屏幕录制取得。录屏中的实时预览对应当前的预览模式。",
+      "translation": "The following screen recording shows permission confirmation and a complete real-person preview; play it or scrub the progress bar. Preview mode records neither audio/video nor lip-shape data. This example was captured with screen recording. The live preview shown corresponds to the current Preview mode."
+    },
+    "815b4ed3c0b2f98b28b3305d05582452dec887b66d2d401af84aac200ffb0e76": {
+      "source": "真人实时预览：右栏显示摄像头画面，中央候选网格、参数和下方曲线随唇部动作变化。",
+      "translation": "Real-person live preview: camera image on the right, with candidate mesh, parameters, and lower curves following lip movement in the center."
+    },
+    "e2caa45be84b95e9b6a04c143fbb96afa6f7eb30f076d3736836a8e8fff41e6e": {
+      "source": "分析已有视频",
+      "translation": "Analyze existing videos"
+    },
+    "9081a8161ea5c015ad7a60e172f55c4155bed51eae0972aaa7bb6f9a374a0a18": {
+      "source": "顶部模式菜单选择<s id=\"0\">离线分析</s>选择一个或多个视频，核对文件名和大小。左栏防抖及截止频率用于本次正式分析，请先设置好。",
+      "translation": "Select <s id=\"0\">Offline analysis</s> in the top mode menu, choose one or more videos, and check filenames and sizes. Set left-panel stabilization and cutoff first; they apply to this formal analysis."
+    },
+    "c986a4cce74e3291488310c2cc5820887499aac4640614237cb42bb410d45942": {
+      "source": "点<s id=\"0\">分析所选文件</s>，观察顶部进度。文件逐项处理，单项失败时继续分析其余文件；取消时停止后续处理，已完成结果保留并加入历史。",
+      "translation": "Click <s id=\"0\">Analyze selected files</s> and watch progress at the top. Files run sequentially; a failure does not stop the remaining files. Cancellation stops subsequent processing; completed results remain and enter history."
+    },
+    "a4b2e114613c7d23359ede36ea49436d042597ce777dfe07dc8d520443f86e3e": {
+      "source": "完成后在右栏最上方的<s id=\"0\">结果保存</s>选择对应文件，检查完整帧数、缺失、曲线与回放。有音轨时可用<s id=\"1\">检查偏移量</s>校对。",
+      "translation": "After completion, select the file under <s id=\"0\">Save results</s> at the top of the right panel. Check full frame count, missing data, curves, and playback. If an audio track exists, use <s id=\"1\">Check offset</s>."
+    },
+    "a8de1396f5d05994c94c19a503470c0c0e5a373cef5d483607a92e9364c98a57": {
+      "source": "点<s id=\"0\">保存（应用偏移）</s>使用当前偏移，或点<s id=\"1\">保存（不应用偏移）</s>以零人工偏移导出。默认保存本批全部已完成结果，且勾选视频和动画。选择一次目录，逐个保存完整数据及所选媒体；取消批量勾选可只保存当前结果。",
+      "translation": "Click <s id=\"0\">Save (apply offset)</s> to use the current offset, or <s id=\"1\">Save (without offset)</s> to export with zero manual offset. By default, all completed results in this batch are saved, with video and animation selected. Choose a directory once to save complete data and selected media for each result. Clear batch saving to save only the current result."
+    },
+    "1fd733a0142b401244e0843151815cb4f9bd4d98f5949f99ef27df74ef0d408b": {
+      "source": "离线分析入口位于顶部模式菜单。点击选择文件后，再点击分析所选文件。左侧显示输入文件，右侧保留回放与历史入口。",
+      "translation": "Offline analysis is in the top mode menu. Select files, then click Analyze selected files. Input files appear on the left; playback and history remain on the right."
+    },
+    "95a6702f9016c3654adeec79feb2c2a7177393f77ed3d65fc60e6c56975fae14": {
+      "source": "运行中取消与导出动画",
+      "translation": "Cancel running tasks and export animation"
+    },
+    "222b22ac29c1d4eb91a1bc3ab931617a9f567a0daa34c6c753e0913a726c4d32": {
+      "source": "用法",
+      "translation": "Usage"
+    },
+    "39d3e96977ad43fe6bd1886659ef7e87d42354938178b505fbc0940eba633a09": {
+      "source": "取消本次任务",
+      "translation": "Cancel this task"
+    },
+    "452a461b66b48007097fdec0bc147cac87aa2f2566720c6012a05c7a7c841d5e": {
+      "source": "仅运行时显示，停止当前分析或动画任务；已完成结果保留。",
+      "translation": "Shown only while running; stops the current analysis or animation task and retains completed results."
+    },
+    "3cc6aa710b0198a493f34c33c55f942ae3dbfc3a8decf4d2037a590f929c9ad3": {
+      "source": "选择唇形结果",
+      "translation": "Select lip-shape result"
+    },
+    "366f52e0667a6c2443f0d1204450d170bc037bfaa335217f97e042cea31c3624": {
+      "source": "切换文件、完整帧和该结果的偏移，逐项检查。本批多文件默认一起保存，各结果使用各自的偏移。",
+      "translation": "Switch files, complete frames, and each result's offset for individual inspection. Multiple files in the current batch save together by default, each using its own offset."
+    },
+    "6739b3a07432f4d2b870a07c7950132873b19ba75468a92977eff2aad8c74956": {
+      "source": "动画导出质量",
+      "translation": "Animation export quality"
+    },
+    "8019ee268e57fbd257e351c98cc7bfc0795c3d5816779a3e3ce7dd8304cdedb6": {
+      "source": "默认高清1080，也可选标准720、小体积540。只影响导出画面。",
+      "translation": "Default HD 1080; Standard 720 and Compact 540 are also available. Affects exported images only."
+    },
+    "a7d26bfbacc31176d8b1706a97882ed3c93182ecf3ed9541ff2d48fb9b266718": {
+      "source": "导出动画MP4／导出GIF",
+      "translation": "Export animation MP4 / Export GIF"
+    },
+    "fa0555cccbcffcd32cca5bf2313ff4f964038a5a8b7ed49c14c54ff2d405473c": {
+      "source": "选好质量后点击并选择保存目录，使用已有完整测量绘制动画。每个按钮只保存所选格式的动画，MP4可有音轨，GIF保留相同网格和时间范围且无声音。",
+      "translation": "Select quality, click, and choose a save directory. Existing complete measurements are used to render animation. Each button saves only its selected animation format. MP4 may include audio; GIF retains the same mesh and time range but is silent."
+    },
+    "223127b168b90e394ba66daa744097de48a49ccb6178f81c1f78fc861ceda196": {
+      "source": "保存完整数据",
+      "translation": "Save complete data"
+    },
+    "8fbb6e5f4f72fb79bba27759f6eceec29ee09608f31e5d651394b2ea46105d34": {
+      "source": "正式结果另存到新的 分析结果 子目录，不覆盖原视频。查看 <s id=\"0\">saved-manifest.json</s> 确认本次实际写入的文件。",
+      "translation": "Formal results are saved in a new 分析结果 subdirectory without overwriting the original video. Check <s id=\"0\">saved-manifest.json</s> for the files actually written."
+    },
+    "4ff5687ab0593d4a0cf5be0f4cc5ca4358139769cff6b550545a00b919a469aa": {
+      "source": "用途与注意",
+      "translation": "Purpose and notes"
+    },
+    "16d067512e4e375d5acaef2ca9550acf47969eb31420f1bb6af882f02540b3dc": {
+      "source": "完整逐帧参数及detected标记，检测缺失保留为空。统计分析优先从此表开始。",
+      "translation": "Complete framewise parameters and detected flags; missing detections stay empty. Start statistical analysis from this table."
+    },
+    "3234742f4be583f8d40b280b81315bacd3eb26b60e61d6baf5be5a8272942618": {
+      "source": "旧兼容表，缺失可能由首值或前值补齐，imputed标记补值；不算新检测。",
+      "translation": "Legacy compatibility table. Missing data may be filled by the first or previous value; imputed marks filled values, which are not new detections."
+    },
+    "0bb7d98b3e83ceb42f9ead2e61e5904e946fa57b277d3e6ebf577be171ee57a6": {
+      "source": "完整逐帧时间、关键点和指标，用于复核与回放。",
+      "translation": "Complete framewise times, landmarks, and metrics for review and playback."
+    },
+    "acc442bb97db7933efd10463b765dead61a2b0a6929f6dbcb32dfa53a632f482": {
+      "source": "处理设置与来源／曲线显示预览。预览点不能替代完整数据。",
+      "translation": "Processing settings and provenance / curve-display preview. Preview points do not replace complete data."
+    },
+    "2c8fd0f2e1349a247aa77bbd013e16b1f5564d5b712d2d325a64ede9123144da": {
+      "source": "有可处理音轨时输出音频与音频时间记录。",
+      "translation": "Audio and audio-time records are output when a processable audio track exists."
+    },
+    "e0f82d9a874e9431e9fecbb6c38e1221bb5a82c37f1215743d6c224bf4f45d54": {
+      "source": "同名四轨交换文件，正式结果不超过6000帧且文件不超过2 MB时生成。长结果仍保留完整表和帧。",
+      "translation": "Same-named four-track interchange file, generated for formal results up to 6000 frames and files up to 2 MB. Longer results still retain complete tables and frames."
+    },
+    "86bfd23c27f0fae1259e6932988aca9e445e273e680fd6f1b773fb25fcc16ebb": {
+      "source": "存在交换文件时，另留未调整和所选偏移版本，并记录偏移。原始逐帧数据不改。",
+      "translation": "When an interchange file exists, retain both unadjusted and selected-offset versions and record the offset. Original framewise data remain unchanged."
+    },
+    "7f63b8c1b241ae20161bca6c6b12c4932a4058f97449f089d238cb6353016166": {
+      "source": "另存清单与哈希。部分文件存在不能替代整组保存成功。",
+      "translation": "Save manifest and hashes. The presence of some files does not establish that the whole group saved successfully."
+    },
+    "e4dab90cc428940e594a245cda9d09e5b8bab88303932658b02d62e47ed0b954": {
+      "source": "默认随完整结果保存原画面视频和完整面部网格动画，均为MP4。可分别取消视频或动画选项。",
+      "translation": "Complete results include the original-image video and complete facial-mesh animation by default, both MP4. Video and animation can each be deselected."
+    },
+    "61bb4391ee0ae87e385ac7fa5c9fe0f9e76a31e4e7a3542de0b9f1ebd92f1bd6": {
+      "source": "单独导出的可视化动画，重采样不增加测量帧。",
+      "translation": "Separately exported visualization animation; resampling does not add measurement frames."
+    },
+    "14f58d8c317639038410881b6082074ba4d53db59dc4bde62c815f82ecd3e9f2": {
+      "source": "恢复历史并用于标注",
+      "translation": "Restore history and use results for annotation"
+    },
+    "50b1a4b106a57585afea34f085c121dbe870d6da1ddd568da45140a7be5ac1ca": {
+      "source": "完成的视频自动加入右栏历史结果，显示各自文件名。重开工作台后选择任务，点击读取历史结果即可恢复测量，新结果还可恢复原视频。刷新本地历史任务可重新读取列表。",
+      "translation": "Completed videos automatically enter right-panel history under their filenames. After reopening the workbench, select a task and click Load historical result to restore measurements. Newer results can also restore the original video. Refresh local history tasks reloads the list."
+    },
+    "ccd9beac1f0751671bde8ea1644911b097ffaf1df3d6030e405e35a91ac8b040": {
+      "source": "尚未另存的录制存在页面内存中，不能从分析历史恢复。仅采集的视频需重新选择所存文件，再提交分析。",
+      "translation": "Unsaved recordings reside in page memory and cannot be restored from analysis history. Videos recorded without analysis must be reselected from the saved file and submitted for analysis."
+    },
+    "1313171be7183475c8128daf9a2f83399d08cc1d760efff7677f4116b54b9a41": {
+      "source": "在参数估计、参数显示或TextGrid标注中选择对应WAV，按该模块的唇形关联流程读取同目录、同名的 <s id=\"0\">audio_recording.lip.json</s>。请保持每次录制的音频和唇形文件成组存放。",
+      "translation": "Select the corresponding WAV in Parameter estimation, Parameter display, or TextGrid annotation, and follow that module's lip-shape association workflow to load <s id=\"0\">audio_recording.lip.json</s> with the same basename in the same directory. Keep each recording's audio and lip-shape files together."
+    },
+    "8b67fe7e7a733fdab124d9d79ef51dfdddf3d9e67540d2fa544f32a2ba21a953": {
+      "source": "下游操作参见 <x id=\"0\"/>、<x id=\"1\"/>和 <x id=\"2\"/>。旧PKL仅使用已有桌面受控读取或转换入口，网页不直接读取。请保留旧原文件。",
+      "translation": "For downstream actions, see <x id=\"0\"/>, <x id=\"1\"/>, and <x id=\"2\"/>. Legacy PKL uses existing controlled desktop loading or conversion only; the web does not read it directly. Retain the original legacy files."
+    },
+    "376ebb64c755106f5b1f979eac931991fadca4dd557f432138c3f39672d8c0ed": {
+      "source": "查看结果与同步回放",
+      "translation": "Inspect results and synchronized playback"
+    },
+    "7abe7b2457af1c2ebf49c4c6bc1a7c231a5155bc5b38f05f21432f20083f1100": {
+      "source": "离线分析支持 MP4、AVI、MKV、MOV、WMV、M4V 和 WebM。保存视频使用 MP4。原编码无法在桌面播放器中解码时，会自动在本机准备兼容回放，保留音视频相对起点并同步唇形；临时回放文件不进入保存结果。转换失败可点击重试音视频回放。",
+      "translation": "Offline analysis supports MP4, AVI, MKV, MOV, WMV, M4V, and WebM. Saved video uses MP4. If the desktop player cannot decode the original encoding, compatible playback is prepared locally, retaining relative audio/video starts and synchronizing lip shape. Temporary playback files are excluded from saved results. If conversion fails, click Retry audio/video playback."
+    },
+    "bff4fb03a381fdbeaf1f080f8611ce227a1de4c94f6fda5289bb51374c017f67": {
+      "source": "看懂采集状态",
+      "translation": "Understand capture status"
+    },
+    "d588058717f3b9fa759d63978ea2a224ef3d3305d1bb422efd5ea3ca3c47f1c8": {
+      "source": "显示项",
+      "translation": "Display item"
+    },
+    "0ff259770b3015e49f5483eb618e576ab37f48236d80e178a5b2058616e6013a": {
+      "source": "含义",
+      "translation": "Meaning"
+    },
+    "cbf5fd9a30a94da1671de2c23f9435cabf541f893b489b98fff8db55419df7d6": {
+      "source": "阶段",
+      "translation": "Stage"
+    },
+    "21c3efdadf7ac6fc8896402f651a508914b1b5e194a4d51e5b10dd531172309a": {
+      "source": "准备中、预览中、录制中、正在结束、正在收尾、已结束或采集失败。未开始时没有有效采集。预览中仅使用摄像头，编码大小为0.0 MB属于正常状态。",
+      "translation": "Preparing, Previewing, Recording, Stopping, Finalizing, Finished, or Capture failed. No valid capture exists before starting. Preview uses only the camera, so an encoded size of 0.0 MB is normal."
+    },
+    "715f7bfa63722533cb437b10bfca352cccc287e0901b5948839e08f52b6f2aab": {
+      "source": "呈现／已推理／检出",
+      "translation": "Presented / inferred / detected"
+    },
+    "ed8de03a7440b555bbe48dce715c60e80e26957511f8c295a1ed4277079e6468": {
+      "source": "呈现为页面通过视频帧回调观察到的新画面数；已推理为完成模型计算的画面数，包含未检出面部的画面；检出为其中成功找到面部特征点的数量。",
+      "translation": "Presented counts new images observed by the page through video-frame callbacks. Inferred counts images processed by the model, including those without a detected face. Detected counts those with successfully identified facial landmarks."
+    },
+    "356a37a0b7f3b6809b9f2a1905783424ee09687baae12ff506961c0166303cb7": {
+      "source": "跳过推理／呈现缺口",
+      "translation": "Skipped inference / presentation gaps"
+    },
+    "608ceadf9c882e296b96afd0314838770e63b62a6667a260ba5ac65068d4b4ee": {
+      "source": "跳过推理为前一帧仍在计算、当前画面未送入模型的次数；呈现缺口为浏览器呈现帧编号的跳号累计值。录制文件是否缺帧需另行解码核对。",
+      "translation": "Skipped inference counts images not sent to the model because the preceding frame was still processing. Presentation gaps sum skipped browser presentation-frame numbers. Decode the recording separately to determine whether its file lacks frames."
+    },
+    "7f9ce7ab27f5d8bb0521c76dce2c8f42bb953f1c8e278aabf330bfb5dce6b779": {
+      "source": "编码／设备／文件／实时",
+      "translation": "Encoding / device / file / live"
+    },
+    "df5add230169ee0a7651b8329820f7741fef0944d53e5edce452543f3dea6c69": {
+      "source": "媒体暂存大小／设备协商参数／保存文件统计／实时处理统计。请分别核对。",
+      "translation": "Temporary media size / device-negotiated parameters / saved-file statistics / live-processing statistics. Check each separately."
+    },
+    "4e96c53ce7c9fd91bd85b689831a7f255f3a80823c768259a927c1c56580e4cd": {
+      "source": "已保存",
+      "translation": "Saved"
+    },
+    "9df235413c1c7aff7ec3af672519d4591dfb12ca398b324a5e5d9bf53244de6b": {
+      "source": "本次实际写入的文件列表，须结合成功提示和回执查看。",
+      "translation": "Files actually written this time; inspect alongside the success message and receipt."
+    },
+    "a7cdfc97270248a3094c831cf540c2c7cda4195b64a5e74e8498735528718652": {
+      "source": "切换到离线分析后，本页上次采集的统计继续保留在左下角。当前离线结果另列解码、已推理、检出和未检出帧数；正式分析逐帧计算，跳过推理为0。文件本身不能还原采集时的呈现次数或呈现缺口。",
+      "translation": "After switching to offline analysis, the page's last capture statistics remain at the lower left. Current offline results separately list decoded, inferred, detected, and undetected frame counts. Formal analysis processes every frame, with skipped inference 0. The file alone cannot recover capture-time presentation counts or gaps."
+    },
+    "bb7771e6fbfef22a03455543ea9408eef36dbbd94452dede0ccd8bd0d2ae6f6d": {
+      "source": "视频录制结束后切到离线分析，左下角继续保留本页采集统计。展开统计含义可查看五个计数的口径。本例只录制媒体，已推理和检出均为0。",
+      "translation": "After video recording ends and the mode switches to offline analysis, capture statistics remain at the lower left. Expand Statistics explained for definitions of the five counts. This example recorded media only, so inferred and detected are both 0."
+    },
+    "07c4d33d5fba0fc9590dc5be570c411637b13c92bed968247428d0a28ce5f23c": {
+      "source": "按帧检查画面与缺失",
+      "translation": "Inspect images and missing data frame by frame"
+    },
+    "067ec8f4f7430950adb98c05fb937ac8e5234ac2113d1370a3a1b66e91a46eb5": {
+      "source": "实时计算结束后可直接回放本次录制。离线分析完成后，先选定对应结果，再比较<s id=\"0\">完整帧数</s>与<s id=\"1\">曲线预览点数</s>。正式曲线最多约241个展示点，按帧回放读取完整数据。",
+      "translation": "After live computation stops, play back the current recording directly. After offline analysis, select the corresponding result and compare <s id=\"0\">Complete frame count</s> with <s id=\"1\">Curve preview points</s>. Formal curves display at most about 241 points; framewise playback reads complete data."
+    },
+    "9665c13821727ba4c78b604096bee46964bb36d1b814dfc65f959d9441cdacee": {
+      "source": "播放右栏视频，查看中央网格与数值。缺失帧会留空，回看原画面确认遮挡、转头或其他原因。",
+      "translation": "Play the video on the right and inspect the central mesh and values. Missing frames remain blank; inspect the original image for obstruction, head turns, or other causes."
+    },
+    "6411a555a60b8df7074318838c32539e6869901b02e73aee0e8d498d82a3767b": {
+      "source": "读取历史后若没有可播放源视频，仍可按测量时间回放网格。核对声音或原画面时，使用已另存的媒体。",
+      "translation": "After restoring history without a playable source video, the mesh can still play using measurement times. Use separately saved media to check sound or original images."
+    },
+    "fc0ae16eddb6d4858c7a357bd27c59c8ac0f94cea9d110a10857513db564d607": {
+      "source": "合成示例视频完成逐帧分析后的回放界面。左侧显示解码、推理与检出帧数，中央显示唇形网格，右侧显示原画面与同步回放控件。",
+      "translation": "Playback screen after framewise analysis of a synthetic example video. The left shows decoded, inferred, and detected frame counts; the center shows the lip mesh; the right shows the original image and synchronized-playback controls."
+    },
+    "994d46241473771300571dee15dd84702452d1867fa5784eeafaa679c52ae74e": {
+      "source": "视频录制结束时可回放刚录下的媒体，唇形网格须另存视频并完成离线分析后查看。预览结束会清除临时测量，没有录制回放或另存结果。",
+      "translation": "When video recording ends, the new media can be played back. To view a lip mesh, save the video and complete offline analysis. Ending preview clears temporary measurements; no recording playback or saved result is available."
+    },
+    "9aa63f70b1e8caf291767d2f441a4ef74eaf92208e1721fa1d21d3f44f8b05bc": {
+      "source": "控件",
+      "translation": "Control"
+    },
+    "f096b2f642b276c9ca09df7b0861abcbca816474388f54ae55ca5fade25b8712": {
+      "source": "源视频播放器",
+      "translation": "Source video player"
+    },
+    "7ae9ffb934ea4bc4b1d55441d44b2bce554f152a63ff6a23b35d0b4ebcab3e57": {
+      "source": "播放、暂停或拖动进度，同步查看中央面部。",
+      "translation": "Play, pause, or seek while viewing the central face in sync."
+    },
+    "2a2e26f948bb12bbf06896830c51b96af4292ca00577f265ee00b6c3fdc1bc87": {
+      "source": "同步回放／暂停回放",
+      "translation": "Synchronized playback / Pause playback"
+    },
+    "370b1225047d6d4eaa9181e63f55f067d77fe4cbe7d2383c2d5219f6f8d9bf42": {
+      "source": "有视频时随视频播放，无视频时按测量时间播放网格。",
+      "translation": "Follows the video when available; otherwise plays the mesh by measurement time."
+    },
+    "deb209a11db20f2c92e97a9cefff7914947f6fbf61916adff8e9a8cd0cb51689": {
+      "source": "回放帧滑条",
+      "translation": "Playback frame slider"
+    },
+    "3d90931b4f83420b3dfbf0535c40757a1ead9f0508fe115fc7f3ae48e5c6d182": {
+      "source": "拖动后停止连续播放并查看所选帧。实时计算查看已测候选帧，正式结果读取完整解码帧，覆盖范围须分别核对。",
+      "translation": "Dragging stops continuous playback and displays the selected frame. Live computation shows measured candidate frames; formal results read complete decoded frames. Check their respective coverage."
+    },
+    "bd9e8540d6e7502793413a3862b42565b29e6befd09fc6f3f81d496daebafb02": {
+      "source": "四条曲线",
+      "translation": "Four curves"
+    },
+    "ab7c4ca5f96d19bb04ef811bc3ec49c6ecefae10f302934cb0459117dc0a58f7": {
+      "source": "area、outer_width、open、circularity。横轴为实际时间，各轨独立纵轴，勿直接比较画面高度。",
+      "translation": "area, outer_width, open, circularity. The horizontal axis is actual time; tracks have independent vertical axes, so do not compare their displayed heights directly."
+    },
+    "f43b88d72ed6ffdd09e9fd2146434519c9e03bb81dfdeba53bcb3e6904100449": {
+      "source": "实时推理忙碌时会跳帧，实时完整记录指本次全部已测帧。需要逐帧补算时使用原视频做正式离线分析。",
+      "translation": "Busy live inference skips frames; a complete live record means all frames measured in this capture. Use the original video for formal offline analysis when every frame must be computed."
+    },
+    "f07a95c6b8070cc09464807bc41031cabafd74cf2c2971727a81da52191b5403": {
+      "source": "这些参数表示什么",
+      "translation": "What the parameters mean"
+    },
+    "abeec89ac27cc813997d4b207e54b6aa99e617e00b12d083822b905e9048066e": {
+      "source": "参数来自二维关键点。面宽、面高等量以像素表示，以下指标多为归一化比值。<s id=\"0\">换算毫米或实际面积需另行标定</s>。",
+      "translation": "Parameters derive from two-dimensional landmarks. Face width and height are in pixels; most metrics below are normalized ratios. <s id=\"0\">Conversion to millimeters or physical area requires separate calibration</s>."
+    },
+    "3776d8e57eefa48d3c6551f1156202d793eb3ab80d8970c279a770d268744c19": {
+      "source": "键名",
+      "translation": "Key"
+    },
+    "e2f487c558fbaf5ff8042ee5c71eec9ce0afb4c6a3828e0b79e655a9fce79edf": {
+      "source": "外唇与内唇轮廓的面积差除以面轮廓面积。",
+      "translation": "Area difference between outer and inner lip contours divided by face-contour area."
+    },
+    "4a53fc2a7a2f4e4f0b9396390a3818c13d0d84637eff1a172f89c3a58835c87d": {
+      "source": "外唇纵向跨度除以面高，与内唇开口度open分开看。",
+      "translation": "Outer-lip vertical span divided by face height; consider separately from inner-lip opening open."
+    },
+    "95777ac40467ac1513729ceb9081258c3b9af7e05a7e437bf94d174b3d27a1bd": {
+      "source": "外唇水平跨度除以面宽。",
+      "translation": "Outer-lip horizontal span divided by face width."
+    },
+    "d5e628742a02ea62087039e39c9b95aff3b0e72c019d9e7c26973082b1a17306": {
+      "source": "内唇水平跨度除以面宽。数值为零时请结合原视频核对唇部状态。",
+      "translation": "Inner-lip horizontal span divided by face width. When zero, check lip state against the original video."
+    },
+    "6067b2798733b28ec460618e341c77e7a48d1ae70dfc34e660d2dcf8acb293f7": {
+      "source": "外唇与内唇水平跨度之和除以面宽。",
+      "translation": "Sum of outer- and inner-lip horizontal spans divided by face width."
+    },
+    "e1e4a819f23f64a47cfe82a0937cb401bfa3f90a38e67b703d0f12bf4d9b20d5": {
+      "source": "关键点14与13的纵向差除以面高。微小负值先核对画面，缺失不记为零。",
+      "translation": "Vertical difference between landmarks 14 and 13 divided by face height. Check small negative values against the image first; missing data are not zero."
+    },
+    "ba0e47001aca6cd6deeddd8c91556a8ce2c539b68ddd34b5fe427ada06725ae3": {
+      "source": "以轮廓面积差和外唇周长计算的形状指标，解释圆唇程度时需结合原画面。",
+      "translation": "Shape metric based on contour-area difference and outer-lip perimeter. Interpret rounding together with the original image."
+    },
+    "7f053067b0e32768de9d8b8ecebfaf4f4cd80c825cc9c5bac61ed92af14ece3a": {
+      "source": "面部左右x、上下y投影差，单位像素，是归一化基准。",
+      "translation": "Left–right x and top–bottom y projected differences of the face, in pixels, used as normalization references."
+    },
+    "5ac2e97d87a3a9bd1cff5391eaa5f763948247e03067874e7759c6b5032c1a2b": {
+      "source": "正式表中的像素跨度、开口或外唇周长。",
+      "translation": "Pixel spans, opening, or outer-lip perimeter in the formal table."
+    },
+    "c760c0d87bce65895535e3d93ba7a065e2979a364513c55b1eebea820ecdeeb1": {
+      "source": "指标关系：<s id=\"0\">area=(外唇面积−内唇面积)/面面积；open=(y14−y13)/面高；circularity=4π×(外唇面积−内唇面积)/外唇周长²</s>",
+      "translation": "Metric relationships: <s id=\"0\">area=(外唇面积−内唇面积)/面面积；open=(y14−y13)/面高；circularity=4π×(外唇面积−内唇面积)/外唇周长²</s>"
+    },
+    "935983d3b13dac079d8b710cbcd3703921014a56ce544af93d2cee4336ba9ac1": {
+      "source": "检查唇形与声音的时间对齐",
+      "translation": "Check lip-shape/audio time alignment"
+    },
+    "14cbf9af8c09d18a0b7b0f5e921ff53f28a802e1436c2d7fed2e3211655b2e03": {
+      "source": "使用检查偏移量",
+      "translation": "Use Check offset"
+    },
+    "1ded0a5627be5d86b5f5e7873007f4b027614db9a87ef07681b3ba0cf8be0acf": {
+      "source": "结束录制或选定有音轨的结果，点<s id=\"0\">检查偏移量</s>，等音频波形读取完成。",
+      "translation": "Stop recording or select a result with audio, click <s id=\"0\">Check offset</s>, and wait for the audio waveform to load."
+    },
+    "c224e481665b4fc420a9011bddee57e0c8db0f13696453d75b91e44a6d1bd1e2": {
+      "source": "先看默认勾选的open，需要时勾选其他参数。放大多个清楚事件，结合原画面和声音判断。",
+      "translation": "Start with open, selected by default, and enable other parameters as needed. Zoom into several clear events and judge using the original image and sound."
+    },
+    "346bcc8c92872b8d9ba66ca35744c3d894903919cf382d32e4c1026fda950ffd": {
+      "source": "编辑偏移并观察效果。<s id=\"0\">正值向右移唇形，负值向左移</s>。上图拖动平移视窗，下图拖动修改偏移。",
+      "translation": "Edit the offset and observe the effect. <s id=\"0\">Positive values shift lip shape right; negative values shift it left</s>. Drag the upper plot to pan the view and the lower plot to change the offset."
+    },
+    "6031e52c3bd821ae0dc57d449f773a352dce45d177d414d57664096000d039ff": {
+      "source": "点<s id=\"0\">应用偏移量</s>更新回放，再另存录制或保存结果才写入文件。点<s id=\"1\">取消</s>恢复打开弹窗前的偏移。",
+      "translation": "Click <s id=\"0\">Apply offset</s> to update playback; the file is written only when saving the recording or results afterward. <s id=\"1\">Cancel</s> restores the offset from before opening the dialog."
+    },
+    "14a9cb883f1176666afecc0a21bfae39249338646c85e33d1c657b946593a9c5": {
+      "source": "<s id=\"0\">默认0 ms只表示未加人工偏移。声音振幅与唇开度反映不同事件，请在多个清楚片段中核对时间关系。</s>",
+      "translation": "<s id=\"0\">The default 0 ms means only that no manual offset was added. Sound amplitude and lip opening reflect different events; check their timing in several clear segments.</s>"
+    },
+    "e0320f61e0b16855a411a0cdd6b162857ab97dfbfc91480c1f740788e911e161": {
+      "source": "<s id=\"0\">唇形时间 = audio_relative_time_s + lip_manual_offset</s>。界面编辑毫秒，文件保存秒，只应用一次，原视频和WAV不平移。",
+      "translation": "<s id=\"0\">唇形时间 = audio_relative_time_s + lip_manual_offset</s>. The interface edits milliseconds; files save seconds. Applied once only; original video and WAV are not shifted."
+    },
+    "ddb0fefaccc829fa8f4479c9e524894953924b1f09965a70a695781a7e32f70d": {
+      "source": "偏移弹窗的操作",
+      "translation": "Offset-dialog actions"
+    },
+    "04874515cc479b82c7028d6af15fcf32ab0187fafcb98a21869b64e5d0c45eca": {
+      "source": "唇形偏移量",
+      "translation": "Lip-shape offset"
+    },
+    "bfb3c304f41a1b59c27f3aa668b33bde002c5e86bed4b2c3accfdff5532c4819": {
+      "source": "范围−2000至2000 ms；直接输入整数毫秒。",
+      "translation": "Range −2000 to 2000 ms; enter integer milliseconds directly."
+    },
+    "21fd9b614e1425d84ac30baa3e4277d040282cd885d6d832def60460e7d006b9": {
+      "source": "单击微调，也可按左右键，长按连续调整。",
+      "translation": "Click for fine adjustment, use left/right arrow keys, or hold to adjust continuously."
+    },
+    "70a0cca8fba90fee90ef6779fff77d264806c6de6658a990bca89d629e2175ca": {
+      "source": "归零",
+      "translation": "Reset to zero"
+    },
+    "cc85f29dc9d26b84df8b0bf6aeaf0e13eaafebaf89f8a2ca521c6dc8b5261881": {
+      "source": "将当前预览改为0，仍需应用并保存。",
+      "translation": "Set the current preview to 0; applying and saving are still required."
+    },
+    "e07732f73a52f013ee4a0737060c25bcdb8aecf61deb739509d53c4ebf78aeaa": {
+      "source": "放大时间轴／缩小时间轴／全段",
+      "translation": "Zoom time axis in / out / full range"
+    },
+    "362c4a0e50a7c02665f27f6b61307b6e55b6c64eae4f9dba472e7b943f379c1f": {
+      "source": "上下图共用视窗，全段恢复全部范围；滚轮也可缩放。",
+      "translation": "Both plots share the view. Full range restores the entire range; the mouse wheel also zooms."
+    },
+    "f1b4f94887a00aa2e1e481c5f2251053330a61011bfd67f4b303d8a9e8dc928a": {
+      "source": "音频波形",
+      "translation": "Audio waveform"
+    },
+    "3a9a86e6d8a99ea8de79ba8c4004855ef8e94e9315e8d1cf832f37e06ed179d5": {
+      "source": "拖动平移视窗。多声道只显示声道1，需要时另行检查其他声道。",
+      "translation": "Drag to pan. Multichannel audio displays only channel 1; inspect other channels separately if needed."
+    },
+    "751c3bc45a22d7a1debab565c2d4be2aabc8df03620fb00ba4b732c279519bc2": {
+      "source": "参数勾选／唇形参数对齐",
+      "translation": "Parameter selection / Lip-parameter alignment"
+    },
+    "92421ac153287b5863c5b7d541ce020563eac27de072fb857d740c06ab0ba251": {
+      "source": "可选九项参数，默认open。各轨仅在此归一化显示，原始数值不变；拖动下图改偏移。",
+      "translation": "Nine parameters are available; open is the default. Tracks are normalized only for this display; original values remain unchanged. Drag the lower plot to change offset."
+    },
+    "0cf530f4af9152effe5f0bc27d59753f3ecc1dfb4d472135bcdf8945889ab852": {
+      "source": "应用偏移量／取消",
+      "translation": "Apply offset / Cancel"
+    },
+    "72bf27aad88fd1251e8c790827f617f2b8d288e7e5c6cd39e44b170538f44048": {
+      "source": "应用保留编辑，取消撤销本次编辑。音频读取失败或未结束时不能应用。",
+      "translation": "Apply retains edits; Cancel discards this edit. Applying is unavailable while audio loading is unfinished or failed."
+    },
+    "6c57cd6fe93d05c7d065e8555691c4e0a671334a576f4358f51e7a5bc3ce1b95": {
+      "source": "当前录制和各个离线结果分别保留偏移。<s id=\"0\">保存（不应用偏移）</s>以0导出，本页回放的编辑值不会被强制归零。历史自动建议不会在此自动应用。",
+      "translation": "The current recording and each offline result retain separate offsets. <s id=\"0\">Save (without offset)</s> exports at 0 without forcing the playback edit on this page to zero. Historical automatic suggestions are not applied automatically here."
+    },
+    "aa1152a204ba604b52c9f591d8e3a2f3d552127044c14342b50d52b001bbc1a9": {
+      "source": "正式实验前做同步检查",
+      "translation": "Check synchronization before formal experiments"
+    },
+    "25911b53cc67371e9699ee278703ad053ad98d9e5d48163b17376e28c5a972a2": {
+      "source": "1 ms是编辑步长，设备时间精度需另行验证。用相同设备、分辨率和帧率录制可同时看见与听见的校准事件，在开头、中段、结尾检查固定偏差与漂移。模型、防抖响应和构音起声差异也需分别考虑。",
+      "translation": "1 ms is the editing step; device timing precision requires separate validation. With the same devices, resolution, and frame rate, record calibration events that are both visible and audible. Inspect fixed offset and drift at the beginning, middle, and end. Consider model and stabilization responses and articulatory/voice-onset differences separately."
+    },
+    "dbe0b8ba64fb2005cdd34aa6d464408930b4e05f6f5642264d971328bb58472b": {
+      "source": "遇到问题时",
+      "translation": "Troubleshooting"
+    },
+    "cf411dae1fd66b1a74fbbc8d46da2ccc828b97379c4abc6f3f8f176f318df64a": {
+      "source": "现象",
+      "translation": "Symptom"
+    },
+    "29d9ee57a978c557de948715da07dbf05a10a680a15e9e3584a475a895eb78ab": {
+      "source": "处理办法",
+      "translation": "Action"
+    },
+    "799fa8e11f7911a80368a9f05c804b192a8df25a520bbe68d89c5c6b8722ebad": {
+      "source": "无法打开设备或权限被拒绝",
+      "translation": "Cannot open device or permission denied"
+    },
+    "a24a55ff2f376d48d8cabc319e97af590c9a7f5aaf5c54745f4a1ccc683eb911": {
+      "source": "检查应用与系统媒体权限，再次开始。设备被占用时先结束占用它的采集。",
+      "translation": "Check app and system media permissions, then start again. If occupied, first stop the capture using the device."
+    },
+    "6727f0b65e0aadb1c64a231128aa4e5d6519bdc93cbf27a323cd5a7141f6629f": {
+      "source": "设备消失、静音、低信号或录到电脑声音",
+      "translation": "Device disappears, silence, low signal, or computer sound recorded"
+    },
+    "9f0aa27a0ec0afd225cf7f6d84d75d300875b9abc04115cb8ec12af3b3427cb1": {
+      "source": "先结束，刷新并明确重选设备。录一小段，核对输入名称、电平和试听。",
+      "translation": "Stop, refresh, and explicitly reselect the device. Record a short segment and check input name, levels, and playback."
+    },
+    "150707c69dc1dbb5a2194f3f4d98c07d117df20ebcae58d2b4a21c2dd6659816": {
+      "source": "网格空白、参数—或动画保存失败",
+      "translation": "Blank mesh, parameter —, or animation-save failure"
+    },
+    "8505e93b2e0021b1d6f0614099b742e7f49b6722af3d314a8b575613676936f6": {
+      "source": "检查光线、遮挡和构图。实时另存可取消动画，保留音频与已有记录。",
+      "translation": "Check lighting, obstruction, and framing. For live Save as, clear animation to retain audio and existing records."
+    },
+    "ea5618d01f2ba7b61099a92820e61050382352986c4e3b65596d7da2a9c4b499": {
+      "source": "音频波形读取失败",
+      "translation": "Audio-waveform loading fails"
+    },
+    "dc7a888c2867cfa48d57c1626a146c827ef96f84d6653506048b666f9c0a6605": {
+      "source": "保留录制，核对音轨和编码，再开检查偏移量重试；可先保存原始内容。",
+      "translation": "Retain the recording, check audio track and encoding, then reopen Check offset to retry. You can save original content first."
+    },
+    "0b146de985fcca1741b7fd6747a56080d83d9534a2b76a832b4dfbb79369c8e2": {
+      "source": "无有效媒体片段或收尾失败",
+      "translation": "No valid media segment or finalization fails"
+    },
+    "6b9de25b599395d6bdf8c79a50cd173c137301d6d0b8f61f058f9ed689c0cd1b": {
+      "source": "等待收尾。有片段先尝试另存，重新录制时确认编码大小增加。错误片段需单独核对完整性。",
+      "translation": "Wait for finalization. If segments exist, try saving them first; when rerecording, confirm that encoded size grows. Inspect erroneous segments separately for completeness."
+    },
+    "94963308e91d15d7f3d1d308507e060eea71d9689459c37f97226357a0b35ce3": {
+      "source": "取消目录选择、空间不足或保存失败",
+      "translation": "Directory selection cancelled, insufficient space, or save failure"
+    },
+    "a1f0cd0666c7a6bb3f63da8fe4b0b271742cf3e3260d27e39a20cd5da91126b5": {
+      "source": "当前录制保留。换目录、释放空间或调整选项后重试，成功提示与回执齐全才算整组保存。",
+      "translation": "The current recording remains. Change directory, free space, or adjust options and retry. The whole group is saved only when both success message and receipt are complete."
+    },
+    "44a7ca33f4391a65505178b38e583ec701bd7018cc4b0e76bdca1902199f1070": {
+      "source": "媒体达到128 MB或30分钟",
+      "translation": "Media reaches 128 MB or 30 minutes"
+    },
+    "a5399154213c9ad99404026534c3443f0033dbb8c7f9f77fad26d0c2834ddba8": {
+      "source": "自动结束并收尾，尽早保存和检查完整性；下一次分段录制并记起点。",
+      "translation": "Capture stops automatically and finalizes. Save promptly and check completeness; record the next session in segments and note their starts."
+    },
+    "3e72e1c768dd7793d1038c23b0913ee89697368a1dc8fa4b9373e74c9a07760a": {
+      "source": "候选参数达到32 MB",
+      "translation": "Candidate parameters reach 32 MB"
+    },
+    "aec2a5ae1a1f7319091aea9d0d4c9e677d73aaf75c375656104342edaf6038c0": {
+      "source": "停止测量但媒体继续录制。结束并保存原视频，再做正式离线分析补算。",
+      "translation": "Measurement stops but media recording continues. Stop and save the original video, then run formal offline analysis to complete measurements."
+    },
+    "31b055f9a557101d953176219022f09dc5db1a453dc8b15128a64ce328b58d21": {
+      "source": "离线分析时间戳、编码或资源超限",
+      "translation": "Offline timestamps, encoding, or resources exceed limits"
+    },
+    "f347bd1c3de7feb43c4fcfbcca88279cae90ed6ecf412de2d4748d6ae0f89a57": {
+      "source": "核对源文件，必要时分段或更换可解码材料。已完成结果仍保留，勿用标称帧率替代实际时间戳。",
+      "translation": "Inspect the source, splitting it or choosing decodable material if necessary. Completed results remain. Do not substitute nominal frame rate for actual timestamps."
+    },
+    "c42e62ed42712dec51fa958f96eae03047bf3c17a58716b8837ef92235338ee6": {
+      "source": "录制视频时间戳异常",
+      "translation": "Abnormal recorded-video timestamps"
+    },
+    "445f312f7cbf83b0fcd9adfc0f8a88c3647cceb68b72a62370f69c0f90d8eb56": {
+      "source": "保存可能保留原编码容器，音频和唇形分别保存。该视频后续正式分析仍需通过时间戳检查。",
+      "translation": "Saving may retain the original encoded container, with audio and lip shape saved separately. Subsequent formal analysis must still pass timestamp checks."
+    },
+    "5527f6248fe2123d54545965ad0a8bcc47709dc18208948735a2c9a204e6e23b": {
+      "source": "浏览器无法播放视频",
+      "translation": "Browser cannot play video"
+    },
+    "a37a62f38eafe28edd6fc854236f7077d95ecd73799256ec5864e09035dffbcf": {
+      "source": "保存后用本机播放器检查编码，仍可查看可用测量或WAV。",
+      "translation": "After saving, inspect encoding in a local player. Available measurements or WAV can still be viewed."
+    },
+    "53d0a431baf11aa2d6d043c705736c868add92ae3bb11dc6989928f2a31c5cd8": {
+      "source": "本机目录导出总预算512 MB，单份动画128 MB。采集时出现设备断开、后台节流或截断提示，请停止后查看原媒体和回执。",
+      "translation": "The local-directory export budget is 512 MB total and 128 MB per animation. If capture reports a disconnected device, background throttling, or truncation, stop and inspect original media and the receipt."
+    },
+    "7704cd73b24aed32dd8443c1773f87649888da33b664aad7ec49374b8819d57b": {
+      "source": "<s id=\"0\">未保存录制可能因强制关闭进程而丢失。离开提示中取消可保留当前内容；确认放弃会清除页面内存记录。</s>",
+      "translation": "<s id=\"0\">Unsaved recordings may be lost if the process is forcibly closed. Cancel the leave prompt to retain current content; confirming discard clears page-memory records.</s>"
+    },
+    "98eb27e9a4ae14ac16b5aedc242916073cd92e421bf8a16ebdfbbf76b4376d21": {
+      "source": "方法与引用",
+      "translation": "Methods and references"
+    },
+    "d6b99b0f469044d406504f9d68ebc3884c7e10962e633fa566bd8e04198c4258": {
+      "source": "查看模型与软件来源",
+      "translation": "Inspect model and software sources"
+    },
+    "07547eb039c47334baeb3ee890d2f0c751140253f2198ed66ae1200fea36f4de": {
+      "source": "点工具栏<s id=\"0\">方法与引用</s>，打开来源窗口。在<s id=\"1\">软件与代码来源</s>中查看作者、版本、许可和链接，点<s id=\"2\">复制引用</s>取得对应文字。",
+      "translation": "Click <s id=\"0\">Methods and references</s> on the toolbar to open the sources window. Under <s id=\"1\">Software and code sources</s>, inspect authors, versions, licenses, and links; click <s id=\"2\">Copy citation</s> for corresponding text."
+    },
+    "904cb5e16350b0626ca4f538a958ce71dba7bd5b417c18a6f9da2547b67e409c": {
+      "source": "方法与引用窗口的软件与代码来源页，可查看依赖版本、许可和引用。",
+      "translation": "Software and code sources tab in Methods and references, showing dependency versions, licenses, and citations."
+    },
+    "252600f19936bdd979c76aa80dc7d5e5ce3fb509420adb5e7b3a99431c5a7773": {
+      "source": "正式模型为MediaPipe legacy Face Mesh 0.10.14，实时为Face Landmarker 0.10.14／float16-1。详情见 <s id=\"0\">Face Landmarker说明</s>和 <s id=\"1\">Face Mesh 文档</s>。比较结果时保留模型与滤波条件，具体许可以来源登记为准。",
+      "translation": "The formal model is MediaPipe legacy Face Mesh 0.10.14; live computation uses Face Landmarker 0.10.14 / float16-1. See <s id=\"0\">Face Landmarker documentation</s> and <s id=\"1\">Face Mesh documentation</s>. Retain model and filtering conditions for comparison; use the source registry for specific licensing."
+    },
+    "ae0b20ec02accca65fdd7e3a3965b31eedc39c93f2c1be482f59e62f4d554736": {
+      "source": "时间记录参考",
+      "translation": "Timing references"
+    },
+    "1e616f8cae6c1e640be632570e49d42563b62c8ccd347e7bba34e1f39496f6f0": {
+      "source": "帧呈现与媒体录制的时间记录见 <s id=\"0\">逐帧回调规范</s>和 <s id=\"1\">媒体录制规范</s>。帧呈现时间记录显示事件；相机曝光时间需使用设备记录核对。",
+      "translation": "For frame presentation and media-recording timing, see the <s id=\"0\">video-frame callback specification</s> and <s id=\"1\">Media Recording specification</s>. Frame-presentation timestamps record display events; verify camera exposure times using device records."
+    },
+    "e742fa51cba9e7d05c7dec0f17e2abe3b29bee3247d1158b5331edb2bbd60071": {
+      "source": "使用结果时记住",
+      "translation": "Remember when using results"
+    },
+    "831b1096049c995fbdb966e4a2a7b76db024ee657e394bc2724b1ddb8e869c70": {
+      "source": "归一化仍受头姿、透视、遮挡与关键点误差影响。跨被试或机位比较前先检查可比性。",
+      "translation": "Normalization remains sensitive to head pose, perspective, obstruction, and landmark error. Check comparability before comparing participants or camera positions."
+    },
+    "10633e9b7f2b149d39b74ec6f180ffed6d77a926d32be5d7fc9b19f89db30c1e": {
+      "source": "网格放大、镜像和动画重采样只影响显示。检测缺失与兼容补值分别处理，发音类别请结合音频、画面及多个指标判断。",
+      "translation": "Mesh zoom, mirroring, and animation resampling affect display only. Treat missing detections and compatibility imputations separately. Judge phonetic categories using audio, images, and multiple metrics together."
+    },
+    "dd0c02adc768eeddf8f227579f88c3a23bfb05f2c96d7b9db06057d9d8d13a69": {
+      "source": "正式研究先用目标设备和材料做预测试，保存原始媒体、设置及完整结果。",
+      "translation": "Before formal research, pilot the target devices and materials and save original media, settings, and complete results."
+    }
+  }
+}

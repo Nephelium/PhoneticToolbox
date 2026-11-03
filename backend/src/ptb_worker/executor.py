@@ -1,5 +1,8 @@
 """Execute trusted core operations outside API/worker memory, with bounded shutdown."""
 import json
+import logging
+import sqlite3
+import psycopg
 from ptb_worker.process_entry import command
 import queue
 import subprocess
@@ -10,11 +13,16 @@ from phonetic_core import __version__ as core_version
 
 
 def stop_child(child):
-    if child.poll() is None:
-        child.terminate()
-        child.wait(timeout=5)
-    child.stdin.close()
-    child.stdout.close()
+    try:
+        if child.poll() is None:
+            child.terminate()
+            try:child.wait(timeout=5)
+            except subprocess.TimeoutExpired:
+                child.kill()
+                child.wait(timeout=5)
+    finally:
+        for stream in (child.stdin,child.stdout):
+            if stream is not None:stream.close()
 
 
 def execute_claim(store, claim, worker_id, stop, *, step_delay=0):
@@ -74,8 +82,9 @@ def execute_claim(store, claim, worker_id, stop, *, step_delay=0):
         progress=0.0;result=None;last_beat=0.0;eof=False
         while True:
             if stop.is_set():
-                store.cancel(str(claim['owner_id']),claim['id'])
-            if stop.is_set() or time.monotonic()-last_beat>=min(1,store.lease_seconds/3):
+                # Host shutdown is an interruption, not a user's cancellation.
+                return
+            if time.monotonic()-last_beat>=min(1,store.lease_seconds/3):
                 state=store.heartbeat(*identity,progress)
                 last_beat=time.monotonic()
                 if state!='running':
@@ -100,13 +109,34 @@ def execute_claim(store, claim, worker_id, stop, *, step_delay=0):
 
 def run_worker(store, stop, worker_id, *, step_delay=0):
     from ptb_api.quota import StorageError
+    idle_delay=0.1
     while not stop.is_set():
         try:claim=store.claim(worker_id)
         except StorageError as exc:
-            if exc.code != 'storage_busy':raise
+            if exc.code not in ('storage_busy','local_storage_busy'):raise
             # Upload, cleanup and claim share the same store lock. Contention
             # must leave the worker available for the next queue poll.
             stop.wait(0.1)
             continue
-        if claim is None:stop.wait(0.1);continue
-        execute_claim(store,claim,worker_id,stop,step_delay=step_delay)
+        except (sqlite3.OperationalError,psycopg.OperationalError):
+            logging.getLogger(__name__).warning('worker_store_retry_required')
+            stop.wait(1)
+            continue
+        if claim is None:
+            stop.wait(idle_delay)
+            idle_delay=min(1.0,idle_delay*2)
+            continue
+        idle_delay=0.1
+        try:execute_claim(store,claim,worker_id,stop,step_delay=step_delay)
+        except Exception:
+            # Do not log private snapshots, source paths or exception messages.
+            logging.getLogger(__name__).error('worker_execution_failed job=%s',claim['id'])
+            files=getattr(store,'files',None)
+            if files is not None:
+                try:files.fail((claim['id'],worker_id,claim['generation']),'execution_failed')
+                except Exception:logging.getLogger(__name__).warning('worker_output_cleanup_retry_required')
+            try:store.finish(claim['id'],worker_id,claim['generation'],error='execution_failed')
+            except Exception:
+                # The lease remains the recovery boundary if storage is unavailable.
+                logging.getLogger(__name__).warning('worker_failure_record_retry_required')
+                stop.wait(1)

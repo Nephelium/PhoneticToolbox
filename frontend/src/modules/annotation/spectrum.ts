@@ -1,7 +1,9 @@
+import {uiError as displayError,uiMessage as displayMessage} from '../module-localization.ts';
+import {tr} from '../../i18n/index.ts';
 import {hann,fft} from './fft.mjs';
 // V2 column grid and 3.2 log-amplitude range; omitted ms preserves its 1024-point window.
 export function spectrumWindow(sr:number,ms?:number){
- if(!Number.isFinite(sr)||sr<=0||ms!==undefined&&(!Number.isFinite(ms)||ms<1||ms>100))throw Error('语谱窗长需在 1–100 ms 之间。');
+ if(!Number.isFinite(sr)||sr<=0||ms!==undefined&&(!Number.isFinite(ms)||ms<1||ms>100))throw displayError(displayMessage('modules.annotation.text.9168ab263e6f'));
  const samples=ms===undefined?1024:Math.max(2,Math.round(sr*ms/1000));
  return {samples,size:2**Math.ceil(Math.log2(samples))};
 }

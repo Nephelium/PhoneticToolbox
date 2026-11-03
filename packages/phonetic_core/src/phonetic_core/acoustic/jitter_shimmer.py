@@ -5,6 +5,7 @@ from typing import Any, Dict, Optional, Tuple
 import numpy as np
 from numpy.typing import NDArray
 from .f0_irapt import irapt
+from ..ports.errors import BackendAborted
 
 parselmouth: Any = None
 try:
@@ -35,6 +36,8 @@ def _extract_f0_for_wm(
         if np.count_nonzero(valid_irapt) >= 2:
             if backend_events is not None: backend_events.append({"stage":"wm_f0","actual":"irapt1"})
             return f0_irapt[valid_irapt], marks_irapt[valid_irapt]
+    except (MemoryError, BackendAborted):
+        raise
     except Exception:
         pass
     if parselmouth is None or y.size == 0:

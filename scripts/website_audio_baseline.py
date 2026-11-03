@@ -63,6 +63,13 @@ def protect_pending(pending, site=SITE):
         for case in four_lock['cases'].values():
             for kind in ['predicted','after']:
                 locked[case[kind]['file']]=case[kind]['sha256']
+    five_way=site/'assets/spectrogram-examples/five-way-baseline.json'
+    if five_way.is_file():
+        five_lock=read_json(five_way)
+        locked.update(five_lock['preserved_audio'])
+        for case in five_lock['cases'].values():
+            for kind in ['pulse','after']:
+                locked[case[kind]['file']]=case[kind]['sha256']
     for destination, payload in pending:
         if destination.name in locked:
             assert sha(payload) == locked[destination.name], 'Frozen basic GL control cannot be replaced: '+destination.name

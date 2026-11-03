@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import {tr} from '../i18n/index.ts';
 import {computed,ref,useId,useSlots} from 'vue';
 import {vResizablePanels} from '../layout/resizablePanels.ts';
 import {layoutKey} from '../layout/panelWidths.ts';
@@ -8,7 +9,10 @@ import {projects} from '../platform/browser.ts';
 const props=withDefaults(defineProps<{
  stateKey:string;leftLabel?:string;centerLabel?:string;rightLabel?:string;unified?:boolean;
  leftWidth?:number;rightWidth?:number;leftMin?:number;rightMin?:number;centerMin?:number;leftWidthAlias?:string;legacyStateKey?:string;
-}>(),{leftLabel:'输入与参数',centerLabel:'工作区',rightLabel:'任务与记录',leftWidth:240,rightWidth:300,leftMin:200,rightMin:240,centerMin:360});
+}>(),{leftWidth:240,rightWidth:300,leftMin:200,rightMin:240,centerMin:360});
+const leftLabel=computed(()=>props.leftLabel??tr('components.input_and_parameters'));
+const centerLabel=computed(()=>props.centerLabel??tr('components.workspace'));
+const rightLabel=computed(()=>props.rightLabel??tr('components.tasks_and_records'));
 const key=layoutKey(props.stateKey)+'.workbench-right-collapsed';
 const collapsed=ref(projects.read<boolean>(key,false)===true);
 const rightId='workbench-right-'+useId();
@@ -16,8 +20,8 @@ const slots=useSlots();
 function toggle(){collapsed.value=!collapsed.value;projects.write(key,collapsed.value);}
 const resize=computed(()=>({key:props.stateKey+'.workbench',legacyKey:props.legacyStateKey?props.legacyStateKey+'.workbench':undefined,center:':scope > .workbench-center',centerMin:props.centerMin,
  panels:[
-  ...(slots.left?[{selector:':scope > .workbench-left',side:'left' as const,label:props.leftLabel,initial:props.unified?300:props.leftWidth,min:props.leftMin,max:520,savedVariable:props.leftWidthAlias}]:[]),
-  ...(slots.right?[{selector:':scope > .workbench-right',side:'right' as const,label:props.rightLabel,initial:props.unified?300:props.rightWidth,min:props.rightMin,max:560}]:[]),
+  ...(slots.left?[{selector:':scope > .workbench-left',side:'left' as const,label:leftLabel.value,initial:props.unified?300:props.leftWidth,min:props.leftMin,max:520,savedVariable:props.leftWidthAlias}]:[]),
+  ...(slots.right?[{selector:':scope > .workbench-right',side:'right' as const,label:rightLabel.value,initial:props.unified?300:props.rightWidth,min:props.rightMin,max:560}]:[]),
  ]}));
 </script>
 
@@ -28,7 +32,7 @@ const resize=computed(()=>({key:props.stateKey+'.workbench',legacyKey:props.lega
   <aside v-if="$slots.right" class="workbench-right" :aria-label="rightLabel">
    <div class="workbench-right-heading">
     <strong v-if="!collapsed">{{rightLabel}}</strong>
-    <button type="button" :aria-expanded="!collapsed" :aria-controls="rightId" :aria-label="(collapsed?'展开':'收起')+rightLabel" :title="(collapsed?'展开':'收起')+rightLabel" @click="toggle">{{collapsed?'‹':'›'}}</button>
+    <button type="button" :aria-expanded="!collapsed" :aria-controls="rightId" :aria-label="(collapsed?tr('components.expand'):tr('components.collapse'))+rightLabel" :title="(collapsed?tr('components.expand'):tr('components.collapse'))+rightLabel" @click="toggle">{{collapsed?'‹':'›'}}</button>
    </div>
    <div v-show="!collapsed" :id="rightId" class="workbench-right-body"><slot name="right"/></div>
   </aside>

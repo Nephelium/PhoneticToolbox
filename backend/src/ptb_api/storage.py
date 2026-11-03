@@ -1,10 +1,10 @@
 """P07 private file adapter. Construction never initializes or deletes data.
 
-All disk operations require the same OS lock in addition to the PG lock. A
+Disk operations share an instance gate with scoped account/asset PG locks. A
 committed reservation covers bytes between file fsync and ledger settlement.
 This adapter accepts controlled blocks only, never a native-tool output path.
 """
-from contextlib import contextmanager
+from contextlib import contextmanager, ExitStack, nullcontext
 import hashlib
 import json
 import os
@@ -14,8 +14,6 @@ import stat
 import time
 from uuid import UUID, uuid4
 
-import psycopg
-from psycopg.rows import dict_row
 from .quota import CHUNK_BYTES, QUOTA_BYTES, TEMP_SECONDS, StorageError, reserve, expiry
 from .storage_policy import POLICY_VERSION, LEGACY_POLICY_VERSION, LEGACY_QUOTA_BYTES, retention_seconds
 
@@ -68,45 +66,35 @@ class Storage:
         return path
 
     @contextmanager
-    def _locked(self):
+    def _locked(self, owner=None, asset=None, *, read=False, reservation=False):
+        from .postgres_pool import connection
+        from .storage_concurrency import instance_file_lock, advisory, scoped_key
         no_links(self.root)
-        marker = self.root / '.ptb-storage.json'
-        lock = self.root / '.ptb-storage.lock'
+        marker=self.root/'.ptb-storage.json';lock=self.root/'.ptb-storage.lock'
         if not regular(marker) or not regular(lock):
-            raise StorageError('storage_not_initialized', 503)
-        instance = json.loads(marker.read_text('utf-8'))['instance_id']
-        with lock.open('r+b', buffering=0) as handle:
-            deadline = time.monotonic()+5
-            while True:
-                try:
-                    if os.name == 'nt':
-                        import msvcrt
-                        msvcrt.locking(handle.fileno(), msvcrt.LK_NBLCK, 1)
-                    else:
-                        import fcntl
-                        fcntl.flock(handle.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
-                    break
-                except OSError:
-                    if time.monotonic() >= deadline:
-                        raise StorageError('storage_busy', 503) from None
-                    time.sleep(0.01)
-            try:
-                with psycopg.connect(self._dsn, autocommit=True, row_factory=dict_row,
-                                     connect_timeout=5, options='-c statement_timeout=10000 -c lock_timeout=5000') as conn:
-                    if not conn.execute('SELECT pg_try_advisory_lock(%s) AS acquired', (LOCK_ID,)).fetchone()['acquired']:
-                        raise StorageError('storage_busy', 503)
-                    state = conn.execute('SELECT * FROM ptb_storage.state WHERE singleton').fetchone()
-                    if not state or state['version'] != 1 or str(state['instance_id']) != instance:
-                        raise StorageError('storage_instance_mismatch', 503)
-                    if self.workspaces is not None:
-                        self.workspaces.expire_quota(conn)
-                    yield conn
-            finally:
-                if os.name == 'nt':
-                    handle.seek(0)
-                    msvcrt.locking(handle.fileno(), msvcrt.LK_UNLCK, 1)
-                else:
-                    fcntl.flock(handle.fileno(), fcntl.LOCK_UN)
+            raise StorageError('storage_not_initialized',503)
+        instance=json.loads(marker.read_text('utf-8'))['instance_id']
+        # Legacy/maintenance callers remain exclusive. Normal calls share the
+        # instance gate and serialize only conflicting account/asset operations.
+        with instance_file_lock(lock,shared=owner is not None), connection(self._dsn) as conn, ExitStack() as locks:
+            locks.enter_context(advisory(conn,LOCK_ID,shared=owner is not None))
+            state=conn.execute('SELECT * FROM ptb_storage.state WHERE singleton').fetchone()
+            if not state or state['version']!=1 or str(state['instance_id'])!=instance:
+                raise StorageError('storage_instance_mismatch',503)
+            if owner is not None:
+                owner=str(UUID(str(owner)))
+                locks.enter_context(advisory(conn,scoped_key('owner',owner),shared=read))
+                if asset is not None:
+                    locks.enter_context(advisory(conn,scoped_key('asset',str(UUID(str(asset)))),shared=read))
+            if reservation:locks.enter_context(self._reservation(conn))
+            if self.workspaces is not None and (owner is None or not read):
+                self.workspaces.expire_quota(conn,owner=owner)
+            yield conn
+
+    @contextmanager
+    def _reservation(self,conn):
+        from .storage_concurrency import advisory,scoped_key
+        with advisory(conn,scoped_key('disk','reservation')):yield
 
     @staticmethod
     def _now(conn):
@@ -158,7 +146,7 @@ class Storage:
         return self._row(conn, row['owner_id'], row['id'])
 
     def usage(self, owner):
-        with self._locked() as conn:
+        with self._locked(owner) as conn:
             row = conn.execute('SELECT * FROM ptb_storage.quota_accounts WHERE owner_id=%s', (owner,)).fetchone()
             used, reserved = (row['used_bytes'], row['reserved_bytes']) if row else (0, 0)
             state = conn.execute('SELECT * FROM ptb_storage.state').fetchone()
@@ -175,13 +163,13 @@ class Storage:
 
     def list(self, owner, project_id, order='expires'):
         column = {'expires': 'expires_at,id', 'size': 'size_bytes DESC,id', 'created': 'created_at DESC,id'}[order]
-        with self._locked() as conn:
+        with self._locked(owner,read=True) as conn:
             return [public_asset(r) for r in conn.execute(
                 f"SELECT * FROM ptb_storage.assets WHERE owner_id=%s AND project_id=%s AND state!='deleted' ORDER BY {column} LIMIT 1000",
                 (owner, project_id)).fetchall()]
 
     def create(self, owner, body):
-        with self._locked() as conn:
+        with self._locked(owner,reservation=True) as conn:
             return self._create(conn, owner, body)
 
     def _create(self, conn, owner, body, *, kind="input", deadline=None, on_created=None):
@@ -226,7 +214,7 @@ class Storage:
         return public_asset(self._row(conn, owner, asset_id))
 
     def append(self, owner, asset_id, offset, data):
-        with self._locked() as conn:
+        with self._locked(owner,asset_id) as conn:
             if self._row(conn, owner, asset_id)["kind"] != "input":
                 raise StorageError("worker_owned_asset", 403)
             return self._append(conn, owner, asset_id, offset, data)
@@ -253,14 +241,15 @@ class Storage:
         if row['expected_bytes'] is not None and offset+len(data) > row['expected_bytes']:
             raise StorageError('declared_size_exceeded', 413)
         extra = max(0, len(data)-row['reserved_bytes'])
-        self._disk_budget(conn, extra)
-        with conn.transaction():
-            q = conn.execute('SELECT * FROM ptb_storage.quota_accounts WHERE owner_id=%s FOR UPDATE', (owner,)).fetchone()
-            # Already accepted reservations may settle after an administrator
-            # lowers a limit; additional bytes always require fresh capacity.
-            if extra:reserve(q['used_bytes'], q['reserved_bytes'], extra, q['quota_bytes'])
-            conn.execute('UPDATE ptb_storage.assets SET reserved_bytes=reserved_bytes+%s WHERE id=%s', (extra, asset_id))
-            conn.execute('UPDATE ptb_storage.quota_accounts SET reserved_bytes=reserved_bytes+%s WHERE owner_id=%s', (extra, owner))
+        with self._reservation(conn) if extra else nullcontext():
+            self._disk_budget(conn, extra)
+            with conn.transaction():
+                q = conn.execute('SELECT * FROM ptb_storage.quota_accounts WHERE owner_id=%s FOR UPDATE', (owner,)).fetchone()
+                # Already accepted reservations may settle after an administrator
+                # lowers a limit; additional bytes always require fresh capacity.
+                if extra:reserve(q['used_bytes'], q['reserved_bytes'], extra, q['quota_bytes'])
+                conn.execute('UPDATE ptb_storage.assets SET reserved_bytes=reserved_bytes+%s WHERE id=%s', (extra, asset_id))
+                conn.execute('UPDATE ptb_storage.quota_accounts SET reserved_bytes=reserved_bytes+%s WHERE owner_id=%s', (extra, owner))
         try:
             # No truncate or overwrite; missing empty files can be recovered from
             # a crash between committed reservation and exclusive creation.
@@ -275,7 +264,7 @@ class Storage:
         return public_asset(self._sync(conn, self._row(conn, owner, asset_id)))
 
     def finalize(self, owner, asset_id, expected_hash=None):
-        with self._locked() as conn:
+        with self._locked(owner,asset_id) as conn:
             if self._row(conn, owner, asset_id)["kind"] != "input":
                 raise StorageError("worker_owned_asset", 403)
             self._writable(conn)
@@ -320,13 +309,13 @@ class Storage:
         return row
 
     def metadata(self, owner, asset_id):
-        with self._locked() as conn:
+        with self._locked(owner,asset_id,read=True) as conn:
             return public_asset(self._readable(conn, owner, asset_id))
 
     def read_block(self, owner, asset_id, offset, size):
         if not 0 <= offset or not 0 < size <= CHUNK_BYTES:
             raise StorageError('invalid_chunk', 422)
-        with self._locked() as conn:
+        with self._locked(owner,asset_id,read=True) as conn:
             row = self._readable(conn, owner, asset_id)
             with self._path(asset_id).open('rb') as source:
                 source.seek(offset)
@@ -357,13 +346,13 @@ class Storage:
         return self._row(conn, row['owner_id'], row['id'])
 
     def delete(self, owner, asset_id):
-        with self._locked() as conn:
+        with self._locked(owner,asset_id) as conn:
             return public_asset(self._delete(conn, self._row(conn, owner, asset_id)))
 
     def impact(self, owner, asset_id):
         if self.files is not None:
             return self.files.impact(owner,asset_id)
-        with self._locked() as conn:
+        with self._locked(owner,asset_id,read=True) as conn:
             self._row(conn,owner,asset_id)
             return {'active_jobs':[]}
 

@@ -1,0 +1,5 @@
+[
+  {"code":"zh-CN","nativeName":"简体中文","direction":"ltr","formatLocale":"zh-CN"},
+  {"code":"en","nativeName":"English","direction":"ltr","formatLocale":"en-US"},
+  {"code":"ja","nativeName":"日本語","direction":"ltr","formatLocale":"ja-JP"}
+]

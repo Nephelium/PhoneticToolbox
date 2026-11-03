@@ -21,6 +21,9 @@ def compute_silence_mask(
     if intensity is None or intensity.size == 0:
         return np.array([], dtype=bool)
 
+    if np.isnan(intensity).all():
+        return np.ones_like(intensity,dtype=bool)
+
     max_intensity = np.nanmax(intensity)
     if np.isnan(max_intensity):
         # 全是 NaN
@@ -37,7 +40,7 @@ def compute_silence_mask(
 
     # 静音判定: 小于阈值 或 已经是 NaN
     # 注意: Intensity 即使在静音段也可能有小数值，或者 Praat 设为 NaN?
-    # compute_energy 可能会设为 0.0 或 NaN.
+    # 数字零功率窗口由 compute_energy 标记为 NaN。
 
     mask = (intensity < limit) | np.isnan(intensity)
     return mask

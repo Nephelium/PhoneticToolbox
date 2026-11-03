@@ -1,10 +1,13 @@
+import {messageRef} from '../i18n/index.ts';
+import {uiMessage,uiError,uiErrorMessage,localized} from '../modules/module-localization.ts';
+import {tr} from '../i18n/index.ts';
 import {onBeforeUnmount,ref,watch,type Ref} from 'vue';
 import {automaticAudioGain} from './audition.ts';
 import {bufferPeak,peakGain} from '../platform/playback-gain.ts';
 
 /** Keep native media controls/timing and apply gain only to the output graph. */
 export function useMediaAudition(element:Ref<HTMLMediaElement|undefined|null>){
- const message=ref('');let context:AudioContext|undefined,gain:GainNode|undefined,source:MediaElementAudioSourceNode|undefined,controller:AbortController|undefined,ticket=0,url='',peak=0;
+ const message=messageRef();let context:AudioContext|undefined,gain:GainNode|undefined,source:MediaElementAudioSourceNode|undefined,controller:AbortController|undefined,ticket=0,url='',peak=0;
  const update=()=>{if(gain)gain.gain.value=peakGain(peak,automaticAudioGain.value);};
  function cancel(){ticket++;controller?.abort();controller=undefined;}
  async function start(){
@@ -27,7 +30,7 @@ export function useMediaAudition(element:Ref<HTMLMediaElement|undefined|null>){
    }
    if(!source){source=context.createMediaElementSource(el);gain=context.createGain();source.connect(gain).connect(context.destination);}
    update();message.value='';
-  }catch(error){if(request!==ticket||signal.aborted)return;peak=0;update();message.value='此音频暂时无法应用自动增益，正按原始音量播放。';}
+  }catch(error){if(request!==ticket||signal.aborted)return;peak=0;update();message.value=uiMessage('state.automatic_gain_is_unavailable_for_this_audio_it_is');}
  }
  const unwatch=watch(element,(el,old)=>{cancel();old?.removeEventListener('play',start);source?.disconnect();gain?.disconnect();void context?.close();context=undefined;source=undefined;gain=undefined;url='';peak=0;message.value='';el?.addEventListener('play',start);if(el&&!el.paused)void start();},{flush:'post',immediate:true});
  const unwatchGain=watch(automaticAudioGain,()=>{cancel();update();message.value='';if(automaticAudioGain.value&&!element.value?.paused)void start();},{flush:'sync'});

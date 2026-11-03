@@ -1,3 +1,5 @@
+import {uiError as displayError,uiMessage as displayMessage} from '../module-localization.ts';
+import {tr} from '../../i18n/index.ts';
 import type {Settings,Options,Row} from './port.ts';
 export const clone=<T>(v:T):T=>JSON.parse(JSON.stringify(v));
 export function select(items:string[],selected:string[],anchor:string|undefined,value:string,ctrl:boolean,shift:boolean){
@@ -11,11 +13,11 @@ export function move(items:string[],selected:string[],target:string){
 }
 export function swap(items:string[],source:string,target:string){const out=[...items],a=out.indexOf(source),b=out.indexOf(target);if(a>=0&&b>=0)[out[a],out[b]]=[out[b],out[a]];return out;}
 export function merge(settings:Settings,kind:'initial'|'final',source:string,target:string){
- const values=settings[`${kind}_order`];if(source===target||!values.includes(source)||!values.includes(target))throw Error('请选择不同的有效目标音标。');
+ const values=settings[`${kind}_order`];if(source===target||!values.includes(source)||!values.includes(target))throw displayError(displayMessage('modules.phonology-induction.text.2af35484a267'));
  settings[`${kind}_map`][source]=target;settings[`${kind}_order`]=values.filter(v=>v!==source);
 }
-export function resolve(value:string,map:Record<string,string>){const seen=new Set<string>();while(Object.hasOwn(map,value)){if(seen.has(value))throw Error('归并映射存在循环。');seen.add(value);value=map[value];}return value;}
-export const label=(v:string)=>v===''?'空韵':v;
+export function resolve(value:string,map:Record<string,string>){const seen=new Set<string>();while(Object.hasOwn(map,value)){if(seen.has(value))throw displayError(displayMessage('modules.phonology-induction.text.f253a73b316d'));seen.add(value);value=map[value];}return value;}
+export const label=(v:string)=>v===''?tr('modules.phonology-induction.text.aba6e1cead45'):v;
 export const defaultOptions=():Options=>({skip_first_row:true,consonant_only_as_zero_initial:true,computation_revision:'m14/2',character_column:1,ipa_column:2,note_column:3,start_row:2,table_index:0,encoding:'auto',delimiter:'auto'});
 export function undoMerge(settings:Settings,kind:'initial'|'final',source:string,original:string[]){
  const map=settings[`${kind}_map`];if(!Object.hasOwn(map,source))return;
@@ -50,8 +52,8 @@ export function summaryEntries(rows:Entry[],settings:Settings){
   return lines.slice(0,half).map((line,i)=>[line,lines[i+half]]);
  };
  return [
-  {title:'声母统计',rows:collect(settings.initial_order,r=>r.mapped_initial,v=>label(v)+':')},
-  {title:'韵母统计',rows:collect(settings.final_order,r=>r.mapped_final,v=>label(v)+':')},
-  {title:'声调统计',rows:collect(settings.tone_order,r=>r.tone_value,v=>v+' → '+(settings.tone_map[v]||v||'0')+':')},
+  {title:tr('modules.phonology-induction.text.d381f7c25f35'),rows:collect(settings.initial_order,r=>r.mapped_initial,v=>label(v)+':')},
+  {title:tr('modules.phonology-induction.text.892bbcfcf7d3'),rows:collect(settings.final_order,r=>r.mapped_final,v=>label(v)+':')},
+  {title:tr('modules.phonology-induction.text.baef13d9f3f1'),rows:collect(settings.tone_order,r=>r.tone_value,v=>v+' → '+(settings.tone_map[v]||v||'0')+':')},
  ];
 }

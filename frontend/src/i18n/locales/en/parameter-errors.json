@@ -1,0 +1,14 @@
+{
+  "platform.parameter_table.preview_busy": "Another preview is being read. Try again shortly.",
+  "platform.parameter_table.index_timeout": "Parameter table indexing timed out. Prefer opening the SQLite result with the same base name.",
+  "platform.parameter_table.input_budget": "The parameter file exceeds the read limit. Prefer opening the SQLite result with the same base name.",
+  "platform.parameter_table.invalid_structure": "The parameter file structure is unsupported or contains formulas.",
+  "platform.parameter_table.process_incomplete": "The parameter reader process did not complete. Reopen the result.",
+  "platform.parameter_table.window_failed": "The parameter window could not be read. Check the local task service.",
+  "platform.parameter_table.file_size_limit": "The parameter file exceeds 16 MB.",
+  "platform.parameter_table.read_timeout": "Parameter table reading timed out. Use a smaller table.",
+  "platform.parameter_table.invalid_table": "The parameter table format is unsupported, contains formulas, or exceeds the display limit. The original file has not been modified.",
+  "platform.parameter_table.subprocess_incomplete": "The parameter reader subprocess did not complete. Use the complete repaired research workbench build. The original file has not been modified.",
+  "platform.parameter_table.platform_unverified": "Parameter reading has not yet been verified on this platform.",
+  "platform.parameter_table.service_failed": "The parameter reading service failed. Check the local backend. This failure does not establish that the original parameter file is damaged."
+}

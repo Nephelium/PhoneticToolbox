@@ -31,4 +31,4 @@ export interface Editor {
  pinyinToPhones(label:string):string[];replacementWindows(mode:string,start:number,end:number,duration:number):number[][];
  spliceTier(current:IntervalTier,reference:IntervalTier|null,windows:number[][],duration:number):IntervalTier;
 }
-export function createEditor(options?:{changed?:()=>void;message?:(message:string)=>void}):Editor;
+export function createEditor(options?:{changed?:()=>void;message?:(message:string)=>void;localizedMessage?:(message:import('../../i18n/index.ts').MessageDescriptor)=>void}):Editor;

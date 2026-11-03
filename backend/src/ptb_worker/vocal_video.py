@@ -80,7 +80,10 @@ class VideoSession:
         width=config.get('width');height=config.get('height');duration=config.get('duration');fps=config.get('fps')
         if type(width) is not int or type(height) is not int or not 64<=width<=1920 or not 64<=height<=1080 or fps!=30:
             raise ValueError('不支持的视频尺寸或帧率')
-        if type(duration) not in (int,float) or not math.isfinite(duration) or not .05<=duration<=MAX_SEQUENCE_SECONDS:raise ValueError(f'视频时长应为 0.05–{MAX_SEQUENCE_SECONDS:g} 秒')
+        if type(duration) not in (int,float) or not math.isfinite(duration) or not .05<=duration<=MAX_SEQUENCE_SECONDS:
+            error=ValueError(f'视频时长应为 0.05–{MAX_SEQUENCE_SECONDS:g} 秒')
+            error.display={'key':'native.errors.vocalWeb.videoDurationRange','values':{'maximum':f'{MAX_SEQUENCE_SECONDS:g}'}}
+            raise error
         self.id=uuid.uuid4().hex;self.target=Path(target);self.width=width;self.height=height;self.fps=fps;self.duration=round(duration*48000)/48000
         self.packets=[];self.size=0;self.opus=None;self.closed=False
         self.cancelled=threading.Event()

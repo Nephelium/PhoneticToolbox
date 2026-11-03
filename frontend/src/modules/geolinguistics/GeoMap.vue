@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import {uiError,uiErrorMessage,uiMessage,joinMessages} from '../module-localization.ts';
+import {tr,type MessageDescriptor} from '../../i18n/index.ts';
 import {onMounted,onBeforeUnmount,watch,ref,nextTick,computed,useId} from 'vue';
 import OlMap from 'ol/Map.js';import View from 'ol/View.js';import Feature from 'ol/Feature.js';
 import VectorLayer from 'ol/layer/Vector.js';import VectorSource from 'ol/source/Vector.js';import GeoJSON from 'ol/format/GeoJSON.js';
@@ -12,10 +14,11 @@ import {wrapMapText} from './export.ts';
 import {mapAttributionText,type MapAttribution} from './attribution.ts';
 import {mapPaint,mapPaintPriority,contextBoundaryVisible,contextGeometryVisible} from './map-paint.ts';
 import {projectedBaseFeatures,projectedContextFeatures,projectedOutlineFeatures} from './projected-base.ts';
+import {syncMapPointFeatures} from './point-features.ts';
 import {mapHoverName,type HoverLayer} from './map-hover.ts';
 import {activeBoundary,boundaryLevels,boundaryPaint,type BoundaryLevel,type MapExportOptions} from './map-options.ts';
 const props=defineProps<{port:GeoPort;points:MapPoint[];view:ViewState;active:boolean;level:'auto'|'province'|'city'|'district';extraBoundaries?:BoundaryLevel[];polygonColors?:Record<string,string>;fit?:{extent:number[];nonce:number};drawMode?:'Polygon'|'LineString'|'point'|'';drawings?:unknown;labels?:boolean;attributions?:MapAttribution[]}>();
-const emit=defineEmits<{site:[id:string];region:[id:string];selection:[ids:string[]];view:[state:ViewState];extent:[extent:number[]];addPoint:[lon:number,lat:number];draw:[geojson:object];error:[message:string]}>();
+const emit=defineEmits<{site:[id:string];region:[id:string];selection:[ids:string[]];view:[state:ViewState];extent:[extent:number[]];addPoint:[lon:number,lat:number];draw:[geojson:object];error:[message:string|MessageDescriptor]}>();
 const target=ref<HTMLDivElement>(),loading=ref(false),hover=ref('');const format=new GeoJSON();
 const attributionOpen=ref(false),attributionButton=ref<HTMLButtonElement>(),attributionId='map-sources-'+useId(),attributionStyle=ref<Record<string,string>>({});
 const attributionHost=ref<HTMLElement|string>('body');
@@ -25,7 +28,7 @@ function closeAttribution(){attributionOpen.value=false;attributionButton.value?
 function attributionKeydown(event:KeyboardEvent){if(event.key==='Escape'&&attributionOpen.value){event.stopPropagation();event.preventDefault();closeAttribution();}}
 function positionAttribution(){if(!attributionOpen.value||!attributionButton.value)return;const rect=attributionButton.value.getBoundingClientRect(),width=Math.min(320,innerWidth-16),above=rect.top>innerHeight/2;attributionStyle.value={left:Math.max(8,Math.min(rect.right-width,innerWidth-width-8))+'px',width:width+'px',maxHeight:Math.max(0,Math.min(260,above?rect.top-12:innerHeight-rect.bottom-12))+'px',top:above?'auto':rect.bottom+4+'px',bottom:above?innerHeight-rect.top+4+'px':'auto'};}
 function toggleAttribution(){attributionOpen.value=!attributionOpen.value;positionAttribution();}
-let map:OlMap|undefined,observer:ResizeObserver|undefined,draw:Draw|undefined,disposed=false,baseReady=false,levelEpoch=0,lastMapError='';
+let map:OlMap|undefined,observer:ResizeObserver|undefined,draw:Draw|undefined,disposed=false,baseReady=false,levelEpoch=0;let lastMapError:string|MessageDescriptor='';
 const territory=new VectorSource(),admin=new VectorSource(),boundaries=new VectorSource(),points=new VectorSource(),sketch=new VectorSource();
 const boundaryFeatures=new Map<BoundaryLevel,readonly Feature<Geometry>[]>(),boundaryData=new Map<BoundaryLevel,object>();
 const boundaryStyles=new Map<BoundaryLevel,Style>();
@@ -66,7 +69,7 @@ const pointLayer=new VectorLayer({source:points,style:f=>{
 }});
 const layers=[adminLayer,territoryLayer,boundaryLayer,sketchLayer,pointLayer];
 function read(data:object){return format.readFeatures(data,{dataProjection:'EPSG:4326',featureProjection:'EPSG:3857'});}
-function syncPoints(){clearHover();syncHoverLabels();points.clear();points.addFeatures(props.points.map(p=>{const f=new Feature({geometry:new Point(fromLonLat([p.lon,p.lat])),datum:p});f.setId(p.id);return f;}));}
+function syncPoints(){clearHover();syncHoverLabels();syncMapPointFeatures(points,props.points);pointStyles=new WeakMap();pointLayer.changed();}
 function currentLevel(){return activeBoundary(props.level,map?.getView().getZoom()??4);}
 let lastLevel='',requestedLevel='',requestedBoundaries='';
 async function readBoundary(level:BoundaryLevel){const cached=boundaryFeatures.get(level);if(cached)return cached;const data=await props.port.map(level);if(disposed)return [];const features=projectedBaseFeatures(data);boundaryFeatures.set(level,features);boundaryData.set(level,data);return features;}
@@ -76,11 +79,11 @@ async function syncLevel(){
  try{const loaded=await Promise.all([level,...extra].map(readBoundary));if(disposed||epoch!==levelEpoch)return;
   if(lastLevel!==level){lastLevel=level;admin.clear();admin.addFeatures([...loaded[0]]);adminStyles.clear();adminLayer.changed();}
   boundaries.clear();boundaries.addFeatures(extra.flatMap(level=>[...projectedOutlineFeatures(boundaryData.get(level)!,level)]));boundaryLayer.setVisible(extra.length>0);
- }catch(e){if(!disposed&&epoch===levelEpoch){requestedLevel='';requestedBoundaries='';lastMapError=(e as Error).message;emit('error',lastMapError);}}finally{if(epoch===levelEpoch)loading.value=false;}
+ }catch(e){if(!disposed&&epoch===levelEpoch){requestedLevel='';requestedBoundaries='';lastMapError=uiErrorMessage(e);emit('error',lastMapError);}}finally{if(epoch===levelEpoch)loading.value=false;}
 }
-async function prepareExport(options:MapExportOptions){await Promise.all(options.boundaries.map(readBoundary));if(disposed)throw Error('地图已关闭。');}
+async function prepareExport(options:MapExportOptions){await Promise.all(options.boundaries.map(readBoundary));if(disposed)throw uiError(uiMessage('modules.geolinguistics.map_closed'));}
 async function loadBase(){const border=await props.port.map('territory');if(disposed)return false;territory.clear();territory.addFeatures([...projectedContextFeatures(border)]);baseReady=true;return true;}
-async function reload(){if(disposed||!map)throw Error('地图尚未载入。');if(!baseReady&&!await loadBase())throw Error('地图已关闭。');boundaryFeatures.clear();lastLevel='';requestedLevel='';requestedBoundaries='';await syncLevel();if(!lastLevel||lastLevel!==requestedLevel||lastLevel!==currentLevel())throw Error(lastMapError||'当前地图边界未能载入，请重试。');}
+async function reload(){if(disposed||!map)throw uiError(uiMessage('modules.geolinguistics.map_is_not_loaded'));if(!baseReady&&!await loadBase())throw uiError(uiMessage('modules.geolinguistics.map_closed'));boundaryFeatures.clear();lastLevel='';requestedLevel='';requestedBoundaries='';await syncLevel();if(!lastLevel||lastLevel!==requestedLevel||lastLevel!==currentLevel())throw (lastMapError?uiError(lastMapError):uiError(uiMessage('modules.geolinguistics.map_boundaries_could_not_load_retry')));}
 function syncDraw(){if(!map)return;if(draw)map.removeInteraction(draw);draw=undefined;if(props.drawMode==='Polygon'||props.drawMode==='LineString'){draw=new Draw({source:sketch,type:props.drawMode});draw.on('drawend',event=>{const items=[...sketch.getFeatures(),event.feature];emit('draw',format.writeFeaturesObject(items,{featureProjection:'EPSG:3857',dataProjection:'EPSG:4326'}));});map.addInteraction(draw);}}
 function publishView(){clearHover();if(!map||!props.active)return;const v=map.getView(),center=toLonLat(v.getCenter()!);emit('view',{center:[center[0],center[1]],zoom:v.getZoom()??4});emit('extent',transformExtent(v.calculateExtent(map.getSize()),'EPSG:3857','EPSG:4326'));void syncLevel();}
 onMounted(async()=>{document.addEventListener('fullscreenchange',fullscreenChanged);window.addEventListener('resize',positionAttribution);window.addEventListener('scroll',positionAttribution,true);map=new OlMap({target:target.value,layers,view:new View({center:fromLonLat(props.view.center),zoom:props.view.zoom,minZoom:1,maxZoom:16}),controls:controls({rotate:false,attribution:false}).extend([new ScaleLine({units:'metric'})])});
@@ -89,7 +92,7 @@ onMounted(async()=>{document.addEventListener('fullscreenchange',fullscreenChang
  map.on('singleclick',e=>{if(props.drawMode==='point'){const p=toLonLat(e.coordinate);emit('addPoint',p[0],p[1]);return;}if(props.drawMode)return;let hit=false;map?.forEachFeatureAtPixel(e.pixel,f=>{emit('site',String(f.getId()));hit=true;return true;},{hitTolerance:6,layerFilter:layer=>layer===pointLayer});if(!hit)map?.forEachFeatureAtPixel(e.pixel,f=>{emit('region',String(f.getId()));return true;},{hitTolerance:1,layerFilter:layer=>layer===adminLayer});});
  const box=new DragBox({condition:shiftKeyOnly});box.on('boxend',()=>{const extent=box.getGeometry().getExtent();emit('selection',points.getFeaturesInExtent(extent).map(f=>String(f.getId())));});map.addInteraction(box);
  observer=new ResizeObserver(()=>{if(props.active)map?.updateSize();});observer.observe(target.value!);syncPoints();syncDraw();
- try{if(await loadBase()){await syncLevel();publishView();}}catch(e){if(!disposed)emit('error',(e as Error).message);}
+ try{if(await loadBase()){await syncLevel();publishView();}}catch(e){if(!disposed)emit('error',uiErrorMessage(e));}
 });
 watch(()=>props.points,syncPoints);watch(()=>props.labels,()=>{clearHover();syncHoverLabels();pointStyles=new WeakMap();pointLayer.changed();});watch(()=>props.level,()=>{clearHover();void syncLevel();});watch(()=>props.polygonColors,()=>{adminStyles.clear();adminLayer.changed();});
 watch(()=>props.extraBoundaries,()=>{void syncLevel();},{deep:true});
@@ -108,10 +111,10 @@ onBeforeUnmount(()=>{
 const escape=(s:string)=>s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;');
 function exportSvg(title:string,legend:{label:string;color:string}[],source:string,options?:MapExportOptions){
  if(props.attributions?.length)source+='。'+mapAttributionText(props.attributions);
- if(disposed||!map)throw Error('地图尚未载入。');
- if(!baseReady||loading.value||!lastLevel||requestedLevel!==lastLevel||currentLevel()!==lastLevel)throw Error('当前地图边界尚未完整载入，请等待载入或重新选择边界层级后导出。');
+ if(disposed||!map)throw uiError(uiMessage('modules.geolinguistics.map_is_not_loaded'));
+ if(!baseReady||loading.value||!lastLevel||requestedLevel!==lastLevel||currentLevel()!==lastLevel)throw uiError(uiMessage('modules.geolinguistics.map_boundaries_are_not_fully_loaded_wait_or_reselect'));
  if(options&&!options.legend)legend=[];
- if(options?.boundaries.some(level=>!boundaryFeatures.has(level)))throw Error('导出边界尚未载入，请重试。');
+ if(options?.boundaries.some(level=>!boundaryFeatures.has(level)))throw uiError(uiMessage('modules.geolinguistics.export_boundaries_are_not_loaded_retry'));
  const [viewWidth,viewHeight]=map.getSize()!;
  // Export at a readable page width even when four small panels share a window.
  const w=1200,factor=w/viewWidth,h=Math.round(viewHeight*factor);
@@ -147,11 +150,11 @@ function exportSvg(title:string,legend:{label:string;color:string}[],source:stri
 }
 defineExpose({exportSvg,reload,prepareExport});
 </script>
-<template><div class="geo-map" data-background-surface><div ref="target" class="map-target" tabindex="0" aria-label="语言分布地图，滚轮缩放，Shift 拖动框选"/><span v-if="loading" class="map-loading">载入边界…</span><span v-if="hover" class="map-hover" data-background-surface>{{hover}}</span><span class="map-instructions">滚轮缩放 · Shift 拖动框选</span>
- <div v-if="attributions?.length" class="map-attributions" :class="{open:attributionOpen}" aria-label="底图来源" @keydown="attributionKeydown">
+<template><div class="geo-map" data-background-surface><div ref="target" class="map-target" tabindex="0" :aria-label="tr('modules.geolinguistics.language_distribution_map_wheel_to_zoom_shift_drag_for')"/><span v-if="loading" class="map-loading">{{tr('modules.geolinguistics.loading_boundaries')}}</span><span v-if="hover" class="map-hover" data-background-surface>{{hover}}</span><span class="map-instructions">{{tr('modules.geolinguistics.wheel_to_zoom_shift_drag_for_box_selection')}}</span>
+ <div v-if="attributions?.length" class="map-attributions" :class="{open:attributionOpen}" :aria-label="tr('modules.geolinguistics.basemap_source')" @keydown="attributionKeydown">
   <a v-if="osmAttribution" class="map-osm-credit" :href="osmAttribution.url" target="_blank" rel="noopener noreferrer" :title="mapAttributionText([osmAttribution])">© OpenStreetMap</a>
-  <button ref="attributionButton" type="button" class="map-sources-toggle" aria-label="地图来源" :aria-expanded="attributionOpen" :aria-controls="attributionId" @click="toggleAttribution"><span aria-hidden="true">{{attributionOpen?'▾':'▸'}}</span> 地图来源</button>
-  <Teleport :to="attributionHost"><ul :id="attributionId" class="map-attribution-details" data-background-surface :hidden="!attributionOpen" :style="attributionStyle" aria-label="地图来源与许可" @keydown="attributionKeydown"><li v-for="item in attributions" :key="item.id"><a :href="item.url" target="_blank" rel="noopener noreferrer">{{item.label}}</a><span v-if="item.license" class="map-source-license">{{item.license}}</span><span v-if="item.details" class="map-source-detail">{{item.details}}</span></li></ul></Teleport>
+  <button ref="attributionButton" type="button" class="map-sources-toggle" :aria-label="tr('modules.geolinguistics.map_sources')" :aria-expanded="attributionOpen" :aria-controls="attributionId" @click="toggleAttribution"><span aria-hidden="true">{{attributionOpen?'▾':'▸'}}</span> {{tr('modules.geolinguistics.map_sources')}}</button>
+  <Teleport :to="attributionHost"><ul :id="attributionId" class="map-attribution-details" data-background-surface :hidden="!attributionOpen" :style="attributionStyle" :aria-label="tr('modules.geolinguistics.map_sources_and_licenses')" @keydown="attributionKeydown"><li v-for="item in attributions" :key="item.id"><a :href="item.url" target="_blank" rel="noopener noreferrer">{{item.label}}</a><span v-if="item.license" class="map-source-license">{{item.license}}</span><span v-if="item.details" class="map-source-detail">{{item.details}}</span></li></ul></Teleport>
  </div>
 </div></template>
 <style scoped>

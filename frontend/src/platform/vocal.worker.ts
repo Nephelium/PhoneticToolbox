@@ -1,14 +1,15 @@
 /// <reference lib="webworker" />
 import scienceLock from '../../../resources/manifests/browser-science-runtime.json';
 import vocalLock from '../../../resources/manifests/vocal-wasm-runtime.json';
+import {runtimeError,errorDisplay} from '../i18n/runtime-errors.ts';
 declare const loadPyodide:any;
 const science=new URL('../browser-science/',self.location.href),vocal=new URL('../vocal-wasm/',self.location.href);
 let python:any,ready:Promise<void>|undefined;
 function pinned(base:URL,name:string,sha:string){const url=new URL(name,base);url.searchParams.set('sha256',sha);return url.href;}
 async function checked(base:URL,name:string,sha:string){
- const response=await fetch(pinned(base,name,sha));if(!response.ok)throw Error('浏览器声道运行组件暂不可用。');
+ const response=await fetch(pinned(base,name,sha));if(!response.ok)throw runtimeError('platform.the_browser_vocal_tract_runtime_is_temporarily_unavailable');
  const raw=await response.arrayBuffer(),actual=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',raw)),b=>b.toString(16).padStart(2,'0')).join('');
- if(actual!==sha)throw Error('浏览器声道运行组件校验失败。');return raw;
+ if(actual!==sha)throw runtimeError('platform.browser_vocal_tract_runtime_verification_failed');return raw;
 }
 async function initialize(checkpoint:any){
  if(!ready)ready=(async()=>{
@@ -30,5 +31,5 @@ self.onmessage=async event=>{
   python.globals.set('_op',op);python.globals.set('_body',JSON.stringify(body));
   try{const result=JSON.parse(python.runPython('_vocal_host.dispatch(_op,_body)'));self.postMessage({id,...result});}
   finally{python.runPython('del _op,_body');}
- }catch(error){console.error(error);self.postMessage({id,error:'浏览器声道计算已中断，请重试当前操作。',fatal:!initialized});}
+ }catch(error){console.error(error);const display=errorDisplay(error)??runtimeError('platform.browser_vocal_tract_computation_was_interrupted_retry_the_operation').display;self.postMessage({id,error:display.key,display,fatal:!initialized});}
 };

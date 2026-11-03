@@ -1,3 +1,5 @@
+import {uiError as displayError,uiMessage as displayMessage} from '../module-localization.ts';
+import {tr} from '../../i18n/index.ts';
 import type {Grid,AnnotationTier,EditorState} from './editor.mjs';
 
 export function editableTier(grid:Grid,tier:AnnotationTier):boolean {
@@ -15,9 +17,9 @@ export function editingNames(grid:Grid,preferred:{word?:string;phone?:string;ext
 }
 export function newIntervalTiers(grid:Grid,names:string[]):AnnotationTier[] {
  const clean=names.map(n=>n.trim());
- if(!clean.length||clean.some(n=>!n||n.length>200||/[\r\n\u0000-\u001f]/.test(n)))throw Error('请输入 1–200 字符的层名，不含换行或控制字符。');
- if(new Set(clean).size!==clean.length||clean.some(n=>grid.tiers.some(t=>t.name===n)))throw Error('层名不能重复，请为每层输入不同名称。');
- if(grid.tiers.length+clean.length>64)throw Error('TextGrid 最多支持 64 层。');
+ if(!clean.length||clean.some(n=>!n||n.length>200||/[\r\n\u0000-\u001f]/.test(n)))throw displayError(displayMessage('modules.annotation.text.307e5b597e33'));
+ if(new Set(clean).size!==clean.length||clean.some(n=>grid.tiers.some(t=>t.name===n)))throw displayError(displayMessage('modules.annotation.text.a5c0488c6c89'));
+ if(grid.tiers.length+clean.length>64)throw displayError(displayMessage('modules.annotation.text.fe00d54c9b0a'));
  return clean.map(name=>({name,xmin:grid.xmin,xmax:grid.xmax,intervals:[{xmin:grid.xmin,xmax:grid.xmax,text:''}]}));
 }
 export function editorSelection(state:EditorState):[number,number]|undefined {

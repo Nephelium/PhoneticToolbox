@@ -1,12 +1,15 @@
 <script setup lang="ts">
+import {messageRef} from '../i18n/index.ts';
+import {uiMessage,uiError,uiErrorMessage,localized} from '../modules/module-localization.ts';
+import {tr} from '../i18n/index.ts';
 import type {Palette,ThemeMode} from '../design/themes.ts';
 const props=defineProps<{mode:ThemeMode;palette:Palette}>();
 const emit=defineEmits<{select:[mode:ThemeMode]}>();
-const choices=[{id:'system',label:'跟随系统'},{id:'light',label:'浅色'},{id:'dark',label:'深色'}] as const;
+const choices=localized(()=>([{id:'system',label:tr('components.follow_system')},{id:'light',label:tr('components.light')},{id:'dark',label:tr('components.dark')}] as const));
 function style(mode:'light'|'dark'){const [bg,ink,accent]=props.palette[mode];return {'--mini-bg':bg,'--mini-ink':ink,'--mini-accent':accent,'--mode-card-bg':bg,'--mode-card-text':ink};}
 function keyboard(event:KeyboardEvent,index:number){const delta=event.key==='ArrowLeft'?-1:event.key==='ArrowRight'?1:0;if(!delta&&event.key!=='Home'&&event.key!=='End')return;event.preventDefault();const next=event.key==='Home'?0:event.key==='End'?2:(index+delta+3)%3;emit('select',choices[next]!.id);(event.currentTarget as HTMLElement).parentElement?.querySelectorAll<HTMLButtonElement>('button')[next]?.focus();}
 </script>
-<template><div class="theme-mode-setting"><span id="appearance-mode-label">显示模式</span><div class="theme-mode-cards palette-pair" role="group" aria-labelledby="appearance-mode-label">
+<template><div class="theme-mode-setting"><span id="appearance-mode-label">{{tr('components.display_mode')}}</span><div class="theme-mode-cards palette-pair" role="group" aria-labelledby="appearance-mode-label">
  <button v-for="(choice,index) in choices" :key="choice.id" type="button" class="theme-mode-card palette-preview" :data-preview-mode="choice.id" :aria-pressed="mode===choice.id" :aria-label="choice.label" :style="choice.id==='system'?{}:style(choice.id)" @click="emit('select',choice.id)" @keydown="keyboard($event,index)">
   <span class="mini-screen" :class="{'split-screen':choice.id==='system'}" aria-hidden="true"><span v-for="variant in (choice.id==='system'?['light','dark'] as const:[choice.id] as const)" :key="variant" class="mini-window" :style="style(variant)"><span class="mini-rail"><i class="mini-brand"/></span><span class="mini-content"><span class="mini-toolbar"><i/><i/><i/></span><span class="mini-plot"><svg viewBox="0 0 100 36" preserveAspectRatio="none"><path class="mini-axis" d="M3 2V32H98"/><path class="mini-wave" d="M4 18H10L13 13L16 25L19 8L22 29L25 14L28 20L31 18H38L41 9L44 30L47 4L50 32L53 12L56 23L59 18H66L69 12L72 25L75 7L78 29L81 14L84 20L87 18H98"/></svg></span><span class="mini-status"><i/><i/></span></span></span></span>
   <small>{{choice.label}}</small>

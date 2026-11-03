@@ -1,3 +1,4 @@
+import {messageProperty,setMessageProperty,uiMessage} from '../module-localization.ts';
 /** Device choice is a UI policy, never a change to Windows' default device. */
 export function isLoopback(label:string){return /立体声混音|stereo\s*mix|what\s*u\s*hear|loopback|回环|系统声音/i.test(label);}
 export function preferredMicrophone(devices:Pick<MediaDeviceInfo,'kind'|'deviceId'|'label'>[]){
@@ -11,7 +12,7 @@ export function signalDb(samples:ArrayLike<number>){
  return {peakDb:db(peak),rmsDb:db(Math.sqrt(sum/Math.max(1,samples.length)))};
 }
 export interface InputLevel {label:string;deviceId:string;sampleRate:number|null;channelCount:number|null;muted:boolean;peakDb:number|null;maxPeakDb:number|null;rmsDb:number|null;lowSignal:boolean;monitorError:string;}
-export function emptyInputLevel():InputLevel{return {label:'',deviceId:'',sampleRate:null,channelCount:null,muted:false,peakDb:null,maxPeakDb:null,rmsDb:null,lowSignal:false,monitorError:''};}
+export function emptyInputLevel():InputLevel{return messageProperty<InputLevel,'monitorError'>({label:'',deviceId:'',sampleRate:null,channelCount:null,muted:false,peakDb:null,maxPeakDb:null,rmsDb:null,lowSignal:false,monitorError:''},'monitorError');}
 
 /** No connection to speakers and no stored PCM; the recorder keeps the original track. */
 export class InputMeter {
@@ -27,7 +28,7 @@ export class InputMeter {
   const samples=new Float32Array(analyser.fftSize),started=performance.now();
   this.timer=setInterval(()=>{
    if(this.closed)return;
-   if(context.state!=='running'){level.monitorError='输入电平监测暂停，请停止后试听录制核对声音。';changed();return;}
+   if(context.state!=='running'){setMessageProperty(level,"monitorError",uiMessage("modules.lip-extraction.input_level_monitoring_paused_stop_and_listen_to_the"));changed();return;}
    analyser.getFloatTimeDomainData(samples);const value=signalDb(samples);
    level.peakDb=value.peakDb;level.rmsDb=value.rmsDb;level.maxPeakDb=Math.max(level.maxPeakDb??-120,value.peakDb);level.muted=track.muted;
    level.lowSignal=performance.now()-started>=3000&&level.maxPeakDb<-60;changed();

@@ -5,7 +5,7 @@ import hashlib
 import json
 from pathlib import Path
 
-from .build import reader_chapter
+from .build import reader_chapter, source_fingerprint, download_manifest
 from .core import ManualError, dump, reading_project, relative, validate
 
 
@@ -50,6 +50,7 @@ def expected_reader(source: Path, distribution: str) -> tuple[dict, dict, dict]:
     if result['errors']:
         raise ManualError('invalid author project: ' + '; '.join(result['errors']))
     project = reading_project(result, distribution)
+    project['sourceDigest'] = source_fingerprint(source)
     hashes = {}
     for descriptor, chapter in zip(project['chapters'], result['chapters']):
         hashes[descriptor['path']] = hashlib.sha256(dump(reader_chapter(chapter))).hexdigest()
@@ -64,6 +65,7 @@ def expected_reader(source: Path, distribution: str) -> tuple[dict, dict, dict]:
                   chapters=len(project['chapters']), assets=len(project['assets']),
                   mediaBytes=result['mediaBytes'], skippedAssets=result['skippedAssets'],
                   warnings=result['warnings'], hashes=hashes)
+    report['auxiliaryHashes'] = {'language-packs.json': hashlib.sha256(dump(download_manifest(source))).hexdigest()}
     return project, hashes, report
 
 
@@ -85,13 +87,16 @@ def check_generated_manual(root: Path, declaration: dict) -> tuple[list[str], se
         # This validator owns this exact tree. Extras still fail below, not ignored.
         registered = {label + '/' + name for name in actual}
         project, hashes, expected_report = expected_reader(source, distribution)
-        expected = set(hashes) | {'project.json', 'build-report.json'}
+        expected = set(hashes) | {'project.json', 'build-report.json', 'language-packs.json'}
         extras = sorted(actual - expected)
         if extras:
             errors.append(f'generated manual undeclared files: {label}: {len(extras)}; ' + ', '.join(extras[:8]))
         for name in sorted(expected - actual):
             errors.append('generated manual missing file: ' + label + '/' + name)
         for name, digest in hashes.items():
+            if name in actual and file_hash(safe_path(output, name)) != digest:
+                errors.append('generated manual hash mismatch: ' + label + '/' + name)
+        for name, digest in expected_report['auxiliaryHashes'].items():
             if name in actual and file_hash(safe_path(output, name)) != digest:
                 errors.append('generated manual hash mismatch: ' + label + '/' + name)
         if 'project.json' in actual:

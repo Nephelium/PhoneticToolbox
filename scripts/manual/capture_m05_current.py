@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import base64
+import argparse
 import hashlib
 import json
 import os
@@ -14,6 +15,7 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / 'scripts'))
 from workbench_source import configure
 from verification_artifacts import verification_run
+from manual.capture_locale import CaptureLocale
 
 os.environ['QT_QPA_PLATFORM'] = 'windows'
 os.environ['QTWEBENGINE_CHROMIUM_FLAGS'] = '--disable-gpu --mute-audio --autoplay-policy=no-user-gesture-required'
@@ -21,8 +23,17 @@ for key in ('QT_ENABLE_HIGHDPI_SCALING', 'QT_SCALE_FACTOR', 'QT_SCREEN_SCALE_FAC
     os.environ.pop(key, None)
 
 
-def main():
+def main(args):
     configure()
+    ui = CaptureLocale(args.locale, ('lip-extraction', 'workbench', 'components', 'common'))
+    source_paths = [Path(__file__), ROOT / 'scripts/manual/capture_locale.py', args.frontend_dist / 'index.html',
+                    ROOT / 'desktop/src/ptb_desktop/host.py', ROOT / 'desktop/src/ptb_desktop/presentation.py',
+                    ROOT / 'tests/support/m05_offline_media.py', ROOT / 'tests/support/m05_r2_capture.js',
+                    ROOT / 'frontend/src/components/MethodReferences.vue']
+    source_paths += list((ROOT / 'frontend/src/modules/lip-extraction').glob('*.vue'))
+    source_paths += [ROOT / f'frontend/src/i18n/locales/{language}/lip-extraction.json' for language in ('zh-CN', args.locale)]
+    sources = {str(i): {'path': str(path), 'sha256': hashlib.sha256(path.read_bytes()).hexdigest()} for i, path in enumerate(dict.fromkeys(source_paths))}
+    from PyQt6 import sip
     from PyQt6.QtCore import QEvent, QEventLoop, QTimer, Qt
     from PyQt6.QtGui import QColor, QPainter, QPen
     from PyQt6.QtWidgets import QApplication
@@ -31,20 +42,22 @@ def main():
 
     register_scheme()
     app = QApplication(['PTB-M05-manual-images'])
+    app.setQuitOnLastWindowClosed(False)
     recipe = 'Current Qt, native DPR1.5/maximized/page100/light; 6-frame FFV1 video from public NASA astronaut fixture and 1s sine; media-only synthetic camera for retained counters; no physical camera/microphone'
-    with verification_run('m05-manual', 'screenshots-20261018', recipe) as (out, scratch):
+    with verification_run('m05-manual', args.locale, recipe) as (out, scratch):
         print(out, flush=True)
         db, cache = prepare_workspace(scratch / 'state', ROOT / 'backend/migrations')
         inputs = scratch / 'inputs'
         inputs.mkdir()
         subprocess.run([os.environ['PTB_M05_PYTHON'], '-B', '-X', 'utf8', str(ROOT / 'tests/support/m05_offline_media.py'), 'generate', str(inputs)], check=True, creationflags=subprocess.CREATE_NO_WINDOW)
-        window = Workbench(ROOT / 'frontend/dist', test=True, jobs_path=db, local_files_root=cache, vocal_profile=scratch / 'vocal', start_module='M05')
+        window = Workbench(args.frontend_dist.resolve(), test=True, jobs_path=db, local_files_root=cache, vocal_profile=scratch / 'vocal', start_module='M05')
         window.resize(window.screen().geometry().width(), window.screen().geometry().height())
         window.setAttribute(Qt.WidgetAttribute.WA_DontShowOnScreen)
         window.showMaximized()
         window.view.setZoomFactor(1)
         window.page.setAudioMuted(True)
-        report = dict(success=False, captures=[], checks=[], errors=[], terminations=[], scope=recipe)
+        report = dict(success=False, captures=[], checks=[], errors=[], terminations=[], scope=recipe,
+                      sources=sources, sourceChapter='m05', locale=args.locale)
         window.page.renderProcessTerminated.connect(lambda status, code: report['terminations'].append([status.name, code]))
 
         def pause(ms=100):
@@ -71,6 +84,7 @@ def main():
             raise AssertionError(code + '\n' + str(js('document.body.innerText.slice(-4000)')))
 
         def click(label):
+            label = ui.label(label)
             text = json.dumps(label)
             expr = '[...document.querySelectorAll("button")].find(e=>e.offsetParent&&(e.getAttribute("aria-label")===' + text + '||e.textContent.trim()===' + text + '||e.getAttribute("role")==="tab"&&e.textContent.trim().startsWith(' + text + ')))'
             until('!!(' + expr + ')&&!(' + expr + ').disabled')
@@ -78,14 +92,16 @@ def main():
             pause(150)
 
         def mode(value):
-            js('(()=>{const e=document.querySelector("select[aria-label=采集模式]");e.value=' + json.dumps(value) + ';e.dispatchEvent(new Event("change",{bubbles:true}));})()')
+            js('(()=>{const e=document.querySelector("select[aria-label="+CSS.escape(' + json.dumps(ui.label('采集模式')) + ')+"]");e.value=' + json.dumps(value) + ';e.dispatchEvent(new Event("change",{bubbles:true}));})()')
             pause(200)
 
         def fps(value):
-            js('(()=>{const label=[...document.querySelectorAll(".lip-fields label")].find(e=>e.textContent.trim().startsWith("请求帧率"));const e=label.querySelector("input");e.value=' + json.dumps(str(value)) + ';e.dispatchEvent(new Event("input",{bubbles:true}));})()')
+            js('(()=>{const label=[...document.querySelectorAll(".lip-fields label")].find(e=>e.textContent.trim().startsWith(' + json.dumps(ui.label('请求帧率')) + '));const e=label.querySelector("input");e.value=' + json.dumps(str(value)) + ';e.dispatchEvent(new Event("input",{bubbles:true}));})()')
             pause(100)
 
-        def capture(name):
+        def capture(name, regions=None):
+            if args.scene and name not in args.scene:
+                return
             until('document.fonts.status==="loaded"&&!document.documentElement.hasAttribute("data-theme-switching")')
             pause(400)
             window.view.repaint()
@@ -101,18 +117,26 @@ def main():
                 image = image.copy(0, 0, 2560, 1600)
             path = out / (name + '.png')
             assert image.save(str(path))
-            report['captures'].append(dict(name=name, file=str(path), image=[2560, 1600], raw_image=size, dpr=dpr, pageZoom=1, maximized=True, theme='light', navigationCollapsed=True, sha256=hashlib.sha256(path.read_bytes()).hexdigest()))
+            boxes = {}
+            for key, label in (regions or {}).items():
+                box = js('(()=>{const e=[...document.querySelectorAll(".lip-fields label")].find(e=>e.textContent.trim().startsWith(' + json.dumps(ui.label(label)) + '));if(!e)return null;const r=e.getBoundingClientRect();return [r.x,r.y,r.width,r.height]})()')
+                assert box and box[2] > 0 and box[3] > 0
+                boxes[key] = {'selector': '.lip-fields label: ' + ui.label(label), 'box': box, 'units': 'css-px'}
+            metrics = ui.metrics(js)
+            report['captures'].append(dict(name=name, file=path.name, image=[2560, 1600], raw_image=size, dpr=dpr, pageZoom=1, maximized=window.isMaximized(), theme='light', navigationCollapsed=True, regions=boxes,
+                                          locale=metrics['locale'], fontLocale=metrics['fontLocale'], fontFamily=metrics['fontFamily'], sha256=hashlib.sha256(path.read_bytes()).hexdigest()))
             print('Captured ' + name, flush=True)
             return image
 
         try:
             until('!!document.querySelector(".lip-page")&&document.fonts.status==="loaded"')
+            ui.prepare_qt(js, until)
             click('设置')
             click('浅色')
             click('唇形提取')
             click('收起侧栏')
             until('document.querySelector(".app-shell").classList.contains("collapsed")')
-            assert js('[...document.querySelector("select[aria-label=采集模式]").options].map(e=>e.textContent)') == ['预览', '实时计算', '视频录制', '离线分析']
+            assert js('[...document.querySelector("select[aria-label="+CSS.escape(' + json.dumps(ui.label('采集模式')) + ')+"]").options].map(e=>e.textContent)') == [ui.label(s) for s in ['预览', '实时计算', '视频录制', '离线分析']]
             capture('m05-preview-ready')
             mode('realtime')
             capture('m05-realtime-ready')
@@ -121,27 +145,10 @@ def main():
             capture('m05-video-recording-ready')
             mode('preview')
             fps(30)
-            js('[...document.querySelectorAll(".lip-fields label")].find(e=>e.textContent.includes("特征点防抖")).querySelector("input").click()')
-            full = capture('m05-filter-off-ready')
-            boxes = js('(()=>{const labels=[...document.querySelectorAll(".lip-fields label")];return ["特征点防抖","截止频率"].map(t=>{const r=labels.find(e=>e.textContent.trim().startsWith(t)).getBoundingClientRect();return [r.x,r.y,r.right,r.bottom];});})()')
-            dpr = full.devicePixelRatio()
-            x, y = int(min(b[0] for b in boxes) * dpr) - 18, int(min(b[1] for b in boxes) * dpr) - 18
-            right, bottom = int(max(b[2] for b in boxes) * dpr) + 18, int(max(b[3] for b in boxes) * dpr) + 18
-            detail = full.copy(x, y, right - x, bottom - y)
-            # Pixel coordinates on the crop, without editing UI or result text.
-            detail.setDevicePixelRatio(1)
-            painter = QPainter(detail)
-            painter.setPen(QPen(QColor('#dc2626'), 3))
-            annotations = []
-            for left, top, r, b in boxes:
-                box = [int(left * dpr) - x - 3, int(top * dpr) - y - 3, int(r * dpr) - x + 3, int(b * dpr) - y + 3]
-                painter.drawRoundedRect(box[0], box[1], box[2] - box[0], box[3] - box[1], 7, 7)
-                annotations.append(dict(type='roundedRectangle', box=box))
-            painter.end()
-            detail_path = out / 'm05-filter-detail.png'
-            assert detail.save(str(detail_path))
-            report['captures'].append(dict(name='m05-filter-detail', file=str(detail_path), image=[detail.width(), detail.height()], dpr=dpr, pageZoom=1, maximized=True, theme='light', navigationCollapsed=True, sha256=hashlib.sha256(detail_path.read_bytes()).hexdigest(), original='m05-filter-off-ready', crop=[x, y, right, bottom], annotations=annotations))
-            js('[...document.querySelectorAll(".lip-fields label")].find(e=>e.textContent.includes("特征点防抖")).querySelector("input").click()')
+            filter_label = json.dumps(ui.label('特征点防抖'))
+            js('[...document.querySelectorAll(".lip-fields label")].find(e=>e.textContent.includes(' + filter_label + ')).querySelector("input").click()')
+            capture('m05-filter-off-ready', {'stabilization': '特征点防抖', 'cutoff': '截止频率'})
+            js('[...document.querySelectorAll(".lip-fields label")].find(e=>e.textContent.includes(' + filter_label + ')).querySelector("input").click()')
             click('方法与引用')
             click('软件与代码来源')
             until('!!document.querySelector(".reference-row")')
@@ -155,7 +162,7 @@ def main():
             until('document.querySelector(".lip-page").getAttribute("aria-busy")==="false"')
             until('document.querySelector(".lip-recording-preview")?.videoWidth>0&&document.querySelector(".lip-recording-preview")?.readyState>=2')
             js('document.querySelector(".lip-recording-preview").currentTime=.3')
-            until('Number(document.querySelector("[aria-label=回放帧]").value)>=2')
+            until('Number(document.querySelector("[aria-label="+CSS.escape(' + json.dumps(ui.label('回放帧')) + ')+"]").value)>=2')
             until('document.querySelector(".lip-metrics strong")?.textContent!=="—"')
             capture('m05-offline-replay')
             report['checks'].append('Real legacy analysis of six public fixture frames, original picture and lip replay shown together')
@@ -167,7 +174,7 @@ def main():
             until('window.manualFixtureReady')
             mode('record_then_analyze')
             click('开始录制')
-            until('Number(document.querySelector(".lip-state").textContent.match(/呈现 (\\d+)/)?.[1])>8')
+            until('Number(document.querySelector(".lip-state[data-phase] span:nth-child(2)").textContent.match(/[0-9]+/)?.[0])>8')
             pause(1200)
             click('结束录制')
             until('document.querySelector(".lip-state").dataset.phase==="ready"&&document.querySelector(".lip-page").getAttribute("aria-busy")==="false"')
@@ -175,6 +182,8 @@ def main():
             mode('offline')
             assert js('document.querySelector(".lip-state").textContent') == before
             js('document.querySelector(".lip-stat-help").open=true')
+            expected_level = ui.key('modules.lip-extraction.stoppedInputLevel', {'level': '-20.0 dBFS'})
+            assert js('document.querySelector(".lip-input-level span:last-child")?.textContent') == expected_level
             capture('m05-capture-statistics')
             report['checks'].append('Media-only synthetic recording statistics retained in offline mode; five definitions expanded, no physical capture')
             assert not report['terminations']
@@ -184,18 +193,22 @@ def main():
             window.view.grab().save(str(out / 'failed.png'))
             raise
         finally:
-            report['source'] = {p: hashlib.sha256((ROOT / p).read_bytes()).hexdigest() for p in ['frontend/src/modules/lip-extraction/LipExtractionPage.vue', 'frontend/dist/index.html', 'scripts/manual/capture_m05_current.py']}
+            report['sourceChangesDuringRun'] = [item['path'] for item in sources.values() if hashlib.sha256(Path(item['path']).read_bytes()).hexdigest() != item['sha256']]
             report['page'] = js('document.body.innerText')
             (out / 'report.json').write_text(json.dumps(report, ensure_ascii=False, indent=2) + '\n', 'utf8')
-            window.accept_close()
-            pause(200)
-            window.page.deleteLater()
+            js('window.onbeforeunload=null')
+            window.closing = True
+            window.close()
             app.processEvents()
-            window.profile.deleteLater()
-            app.sendPostedEvents(None, QEvent.Type.DeferredDelete)
+            sip.delete(window)
             app.processEvents()
+            sip.delete(app)
         print(json.dumps(dict(success=True, out=str(out), captures=len(report['captures']))), flush=True)
 
 
 if __name__ == '__main__':
-    main()
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--locale', choices=('zh-CN', 'en', 'ja'), default='zh-CN')
+    parser.add_argument('--frontend-dist', type=Path, default=ROOT / 'frontend/dist')
+    parser.add_argument('--scene', action='append', default=[], choices=('m05-methods-software', 'm05-capture-statistics'), help='Only retain selected correction scenes, using the complete original setup')
+    main(parser.parse_args())

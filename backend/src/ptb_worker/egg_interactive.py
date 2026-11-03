@@ -87,6 +87,7 @@ class InteractivePreview:
         from .native import windows as win
         from .egg_runtime import command
         with self.lock:
+            if self.owner is not None and self.owner!=owner:raise PreviewError('preview_busy',429)
             self.close()
             self.source_scratch = source_scratch
             try:
@@ -172,9 +173,14 @@ class InteractivePreview:
                 win.terminate_job(self.job, 1); win.close(self.job); self.job = None
             if self.process:
                 process, self.process = self.process, None
-                if process.poll() is None: process.terminate()
-                process.wait(timeout=5)
-                process.stdin.close(); process.stdout.close()
+                try:
+                    if process.poll() is None: process.terminate()
+                    try:process.wait(timeout=5)
+                    except subprocess.TimeoutExpired:
+                        process.kill()
+                        process.wait(timeout=5)
+                finally:
+                    process.stdin.close(); process.stdout.close()
             self.owner = self.token = None
             if self.native_scratch:
                 scratch,self.native_scratch=self.native_scratch,None

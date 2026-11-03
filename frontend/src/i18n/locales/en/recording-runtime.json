@@ -1,0 +1,4 @@
+{
+  "platform.recording.recovered_partial": "Recovered after an unexpected interruption. Only the durably written prefix that passed hash verification is included; the end may be missing.",
+  "platform.recording.noise_nonstationary": "The noise segment statistics vary substantially. It may contain speech or nonstationary noise. Listen to check."
+}

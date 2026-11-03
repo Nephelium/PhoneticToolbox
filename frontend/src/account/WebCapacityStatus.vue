@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import {messageRef,message as uiMessage,type MessageDescriptor} from '../i18n/index.ts';
+import {localized} from '../modules/module-localization.ts';
+import {tr} from '../i18n/index.ts';
 import {onMounted,onUnmounted,ref,watch} from 'vue';
 import type {components} from '../../../contracts/generated/api';
 import ModalDialog from '../components/ModalDialog.vue';
@@ -7,9 +10,9 @@ const usage=ref<components['schemas']['StorageUsage']|null>(null);
 const presence=ref<components['schemas']['PresenceView']|null>(null);
 const server=ref<components['schemas']['ServerLoadView']|null>(null);
 const application=ref<components['schemas']['CapacityRequestView']|null>(null);
-const expanded=ref(false),loadExpanded=ref(false),amount=ref(1000),reason=ref(''),notice=ref(''),busy=ref(false);
+const expanded=ref(false),loadExpanded=ref(false),amount=ref(1000),reason=ref(''),notice=messageRef(),busy=ref(false);
 const duration=ref<'today'|'7d'|'30d'>('today');
-const durations={today:'当日', '7d':'7天', '30d':'30天'};
+const durations=localized(()=>({today:tr('account.today'), '7d':tr('account.7_days'), '30d':tr('account.30_days')}));
 let timer:ReturnType<typeof setInterval>|undefined,loadTimer:ReturnType<typeof setInterval>|undefined,loading=false,loadLoading=false,disposed=false;
 const abort=new AbortController();
 const mb=(n:number)=>(n/1_000_000).toLocaleString('zh-CN',{maximumFractionDigits:1})+' MB';
@@ -33,8 +36,8 @@ async function refreshLoad(){
 watch(loadExpanded,()=>void refreshLoad());
 async function submit(){
  if(busy.value)return;busy.value=true;notice.value='';
- try{application.value=await request('workspaces/capacity-request',{requested_bytes:Math.round(amount.value*1_000_000),reason:reason.value.trim(),duration:duration.value});notice.value='申请已提交，等待管理员审核。';}
- catch(e){notice.value=({capacity_not_increase:'申请额度应高于当前额度。',capacity_request_limited:'今天的申请次数已用完，请明天再试。',capacity_reason_required:'请填写扩容用途。'} as Record<string,string>)[e instanceof Error?e.message:'']||'申请未确认，请稍后重试。';}
+ try{application.value=await request('workspaces/capacity-request',{requested_bytes:Math.round(amount.value*1_000_000),reason:reason.value.trim(),duration:duration.value});notice.value=uiMessage('account.your_request_was_submitted_and_is_awaiting_administrator_review');}
+ catch(e){notice.value=({capacity_not_increase:uiMessage('account.the_requested_quota_must_exceed_your_current_quota'),capacity_request_limited:uiMessage('account.you_have_used_all_of_today_s_requests_try'),capacity_reason_required:uiMessage('account.describe_why_you_need_additional_storage')} as Record<string,MessageDescriptor>)[e instanceof Error?e.message:'']||uiMessage('account.your_request_has_not_been_confirmed_retry_shortly');}
  finally{busy.value=false;}
 }
 function visibility(){if(!document.hidden){void refresh();void refreshLoad();}}
@@ -42,35 +45,35 @@ onMounted(()=>{visibility();timer=setInterval(()=>void refresh(),30000);loadTime
 onUnmounted(()=>{disposed=true;abort.abort();clearInterval(timer);clearInterval(loadTimer);document.removeEventListener('visibilitychange',visibility);});
 </script>
 <template>
- <aside class="web-capacity" aria-label="在线人数与个人容量">
-  <span :title="'按最近90秒有心跳的账号去重，每30秒更新'">{{presence?`当前在线 ${presence.online_accounts} 人`:'在线人数暂不可用'}}</span>
-  <span v-if="usage">服务器剩余 {{mb(usage.available_bytes)}} / {{mb(usage.quota_bytes)}} <small>已用 {{mb(usage.used_bytes)}} · 任务预留 {{mb(usage.reserved_bytes)}}</small></span>
-  <button @click="expanded=true">容量与扩容</button>
-  <button @click="loadExpanded=true">{{server?`计算 ${server.running_tasks} / ${server.task_slots} · 等待 ${server.waiting_tasks}`:'服务器状态'}}</button>
-  <span v-if="server && (server.waiting_tasks>0 || loadExpanded && ((server.cpu_percent??0)>=85 || (server.memory_percent??0)>=85))" role="status">服务器繁忙，已提交的任务请等待，无需重复提交。</span>
-  <span v-if="usage && usage.available_bytes<usage.quota_bytes*.2">个人空间即将用满，请及时下载并清理文件。</span>
-  <span v-if="usage?.server_space_low" role="status">服务器可用空间较少，请及时下载结果并清理不再使用的文件。</span>
+ <aside class="web-capacity" :aria-label="tr('account.online_users_and_your_storage')">
+  <span :title="tr('account.unique_accounts_with_a_heartbeat_in_the_last_90')">{{presence?tr('account.value_users_online',{v0:(presence.online_accounts)}):tr('account.online_count_unavailable')}}</span>
+  <span v-if="usage">{{tr('account.server_storage_remaining')}} {{mb(usage.available_bytes)}} / {{mb(usage.quota_bytes)}} <small>{{tr('account.used_223')}} {{mb(usage.used_bytes)}} {{tr('account.task_reservations')}} {{mb(usage.reserved_bytes)}}</small></span>
+  <button @click="expanded=true">{{tr('account.storage_and_quota_requests')}}</button>
+  <button @click="loadExpanded=true">{{server?tr('account.computing_value_value_waiting_value',{v0:(server.running_tasks),v1:(server.task_slots),v2:(server.waiting_tasks)}):tr('account.server_status')}}</button>
+  <span v-if="server && (server.waiting_tasks>0 || loadExpanded && ((server.cpu_percent??0)>=85 || (server.memory_percent??0)>=85))" role="status">{{tr('account.the_server_is_busy_submitted_tasks_are_waiting_there')}}</span>
+  <span v-if="usage && usage.available_bytes<usage.quota_bytes*.2">{{tr('account.your_storage_is_nearly_full_download_needed_files_and')}}</span>
+  <span v-if="usage?.server_space_low" role="status">{{tr('account.server_storage_is_running_low_download_results_and_remove')}}</span>
  </aside>
- <ModalDialog v-if="loadExpanded" class="capacity-dialog" title="服务器状态" @close="loadExpanded=false">
+ <ModalDialog v-if="loadExpanded" class="capacity-dialog" :title="tr('account.server_status')" @close="loadExpanded=false">
   <template v-if="server">
-   <div class="load-grid"><div><strong>{{server.running_tasks}} / {{server.task_slots}}</strong><span>运行任务 / 配置槽位</span></div><div><strong>{{server.waiting_tasks}}</strong><span>等待任务</span></div><div><strong>{{server.cpu_percent===null?'暂不可用':server.cpu_percent+'%'}}</strong><span>服务器 CPU 使用率</span></div><div><strong>{{server.memory_percent===null?'暂不可用':server.memory_percent+'%'}}</strong><span>服务器内存使用率</span></div></div>
-   <p>计算槽位是服务器同时执行后台任务的配置上限。在线人数和计算任务数不同，目前还没有确定可承诺的最高在线人数。</p>
-   <p v-if="server.running_tasks>=server.task_slots || server.waiting_tasks>0">正在计算的任务需要一些时间。已提交的任务会等待调度，请保持网页连接，无需重复提交。</p>
-   <p class="capacity-hint">每秒更新。CPU为两次采样间整机使用率，内存按整机可用内存计算。最近采样：{{new Date(server.measured_at*1000).toLocaleTimeString('zh-CN')}}。</p>
-  </template><p v-else role="status">服务器状态暂不可用，请稍后查看。</p>
+   <div class="load-grid"><div><strong>{{server.running_tasks}} / {{server.task_slots}}</strong><span>{{tr('account.running_tasks_configured_slots')}}</span></div><div><strong>{{server.waiting_tasks}}</strong><span>{{tr('account.waiting_tasks')}}</span></div><div><strong>{{server.cpu_percent===null?tr('account.temporarily_unavailable'):server.cpu_percent+'%'}}</strong><span>{{tr('account.server_cpu_usage')}}</span></div><div><strong>{{server.memory_percent===null?tr('account.temporarily_unavailable'):server.memory_percent+'%'}}</strong><span>{{tr('account.server_memory_usage')}}</span></div></div>
+   <p>{{tr('account.task_slots_are_the_configured_limit_on_simultaneous_background')}}</p>
+   <p v-if="server.running_tasks>=server.task_slots || server.waiting_tasks>0">{{tr('account.computations_take_time_submitted_tasks_wait_for_scheduling_keep')}}</p>
+   <p class="capacity-hint">{{tr('account.updated_every_second_cpu_usage_is_measured_between_samples')}}{{new Date(server.measured_at*1000).toLocaleTimeString('zh-CN')}}。</p>
+  </template><p v-else role="status">{{tr('account.server_status_is_temporarily_unavailable_check_again_later')}}</p>
  </ModalDialog>
- <ModalDialog v-if="expanded" class="capacity-dialog" title="个人容量" @close="expanded=false">
-  <p v-if="usage" class="capacity-total">{{mb(usage.available_bytes)}} <small>可用 / 总额度 {{mb(usage.quota_bytes)}}</small></p>
-  <p>服务器存储空间有限，请及时下载需要保留的结果，清理不再使用的文件。</p>
-  <p>服务器临时文件可在项目文件中清理。退出登录后清理服务器副本，关页或断线保留30分钟。本机文件继续保留。</p>
-  <p class="capacity-hint">额度仅计算服务器上的输入、结果、临时文件和任务预留。本机文件使用浏览器存储。扩容由管理员审核，单文件限制与保留时间保持不变。</p>
-  <p v-if="application">最近申请：{{mb(application.requested_bytes)}} · {{durations[application.duration]}} · {{application.expires_at && Date.parse(application.expires_at)<=Date.now()?'已到期':({pending:'待审核',approved:'已批准',declined:'未批准'})[application.state]}}<span v-if="application.granted_bytes">，批准额度 {{mb(application.granted_bytes)}}</span><span v-if="application.granted_duration">，批准期限 {{durations[application.granted_duration]}}</span><span v-if="application.expires_at">，{{new Date(application.expires_at).toLocaleString('zh-CN')}} 到期</span><span v-if="application.decision_note"> · 管理员回复：{{application.decision_note}}</span></p>
+ <ModalDialog v-if="expanded" class="capacity-dialog" :title="tr('account.your_storage')" @close="expanded=false">
+  <p v-if="usage" class="capacity-total">{{mb(usage.available_bytes)}} <small>{{tr('account.available_total_quota')}} {{mb(usage.quota_bytes)}}</small></p>
+  <p>{{tr('account.server_storage_is_limited_download_results_you_need_and')}}</p>
+  <p>{{tr('account.remove_temporary_server_files_under_project_files_server_copies')}}</p>
+  <p class="capacity-hint">{{tr('account.only_server_inputs_results_temporary_files_and_task_reservations')}}</p>
+  <p v-if="application">{{tr('account.latest_request')}}{{mb(application.requested_bytes)}} · {{durations[application.duration]}} · {{application.expires_at && Date.parse(application.expires_at)<=Date.now()?tr('account.expired'):({pending:tr('account.awaiting_review'),approved:tr('account.approved'),declined:tr('account.not_approved')})[application.state]}}<span v-if="application.granted_bytes">{{tr('account.approved_quota')}} {{mb(application.granted_bytes)}}</span><span v-if="application.granted_duration">{{tr('account.approved_duration')}} {{durations[application.granted_duration]}}</span><span v-if="application.expires_at">，{{new Date(application.expires_at).toLocaleString('zh-CN')}} {{tr('account.expires')}}</span><span v-if="application.decision_note"> {{tr('account.administrator_reply')}}{{application.decision_note}}</span></p>
   <form v-if="application?.state!=='pending'" @submit.prevent="submit">
-   <label>申请总额度（MB）<input v-model.number="amount" type="number" :min="usage?Math.floor(usage.quota_bytes/1_000_000)+1:1" max="10000" required /></label>
-   <label>申请期限<select v-model="duration"><option value="today">当日</option><option value="7d">7天</option><option value="30d">30天</option></select></label>
-   <label class="capacity-reason">扩容用途<textarea v-model="reason" maxlength="500" required /></label>
-   <p class="capacity-hint">当日截至审批当天北京时间24点，7天或30天从批准时起算。到期恢复常规额度，超额时暂停新增写入，已有文件按工作区期限保留。</p>
-   <button :disabled="busy || !reason.trim()">提交扩容申请</button>
+   <label>{{tr('account.requested_total_quota_mb')}}<input v-model.number="amount" type="number" :min="usage?Math.floor(usage.quota_bytes/1_000_000)+1:1" max="10000" required /></label>
+   <label>{{tr('account.requested_duration')}}<select v-model="duration"><option value="today">{{tr('account.today')}}</option><option value="7d">{{tr('account.7_days')}}</option><option value="30d">{{tr('account.30_days')}}</option></select></label>
+   <label class="capacity-reason">{{tr('account.reason_for_additional_storage')}}<textarea v-model="reason" maxlength="500" required /></label>
+   <p class="capacity-hint">{{tr('account.today_ends_at_midnight_beijing_time_on_the_approval')}}</p>
+   <button :disabled="busy || !reason.trim()">{{tr('account.submit_storage_request')}}</button>
   </form>
   <p v-if="notice" role="status">{{notice}}</p>
  </ModalDialog>

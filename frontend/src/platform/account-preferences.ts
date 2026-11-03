@@ -1,3 +1,6 @@
+import {messageRef} from '../i18n/index.ts';
+import {uiMessage,uiError,localized} from '../modules/module-localization.ts';
+import {tr} from '../i18n/index.ts';
 import {ref} from 'vue';
 
 type Values=Record<string,any>;
@@ -10,7 +13,15 @@ export function preferenceChanges(before:Values,after:Values):Values{
  const equivalent=(a:any,b:any)=>JSON.stringify(a)===JSON.stringify(b)||(typeof a==='number'&&typeof b==='string'&&!!b.trim()&&Number(b)===a)||(typeof b==='number'&&typeof a==='string'&&!!a.trim()&&Number(a)===b);
  const patch:Values={};for(const [key,value]of Object.entries(after)){if(equivalent(before[key],value))continue;const next=object(before[key])&&object(value)?preferenceChanges(before[key],value):value;if(!object(next)||Object.keys(next).length)patch[key]=clone(next);}return patch;
 }
-export const accountSettingsError=ref('');
+// Older M03 batches accidentally staged a per-task font snapshot as a preference.
+// Recover that known transient field only; unknown edits still reach validation.
+function restoredEdits(module:string,values:Values):Values{
+ if(module!=='M03'||!object(values.batchConfig)||!Object.hasOwn(values.batchConfig,'font'))return values;
+ const config={...values.batchConfig};delete config.font;
+ const restored={...values};if(Object.keys(config).length)restored.batchConfig=config;else delete restored.batchConfig;
+ return restored;
+}
+export const accountSettingsError=messageRef();
 export class AccountPreferences {
  readonly views=new Map<string,View>();readonly pending=new Map<string,Values>();allowed:Record<string,string[]>={};
  private controller=new AbortController();private timer:ReturnType<typeof setTimeout>|undefined;private flight:Promise<void>|undefined;private closed=false;
@@ -44,7 +55,14 @@ export class AccountPreferences {
     if(module==='APP'){const fonts=JSON.parse(localStorage.getItem('ptb.v3.fonts.v1.owner.'+encodeURIComponent(this.owner))||'null');if(fonts)legacy.fonts=fonts;}
    }catch{legacy={};}
    const filtered=Object.fromEntries(Object.entries(legacy).filter(([key])=>this.allowed[module]!.includes(key)));
-   if(Object.keys(filtered).length)this.write(module,filtered);
+   if(Object.keys(filtered).length)this.write(module,restoredEdits(module,filtered));
+  }
+  if(object(staged.M03)){
+   const restored=restoredEdits('M03',staged.M03);
+   if(restored!==staged.M03){
+    if(Object.keys(restored).length)staged.M03=restored;else delete staged.M03;
+    try{sessionStorage.setItem(this.pendingKey(),JSON.stringify(staged));}catch{/* Keep recovered edits in memory for the normal flush. */}
+   }
   }
   for(const [module,value]of Object.entries(staged))if(this.allowed[module]&&object(value))this.write(module,value);
   accountSettingsError.value='';if(this.pending.size)await this.flush();return this;
@@ -71,7 +89,7 @@ export class AccountPreferences {
     if(Object.keys(remaining).length)this.pending.set(module,remaining);else this.pending.delete(module);
     this.views.set(module,{...saved,values:mergePreferences(saved.values,remaining)});this.record();accountSettingsError.value='';
    }
-  }catch(error){if(!this.closed){accountSettingsError.value='设置尚未保存到服务器，请检查网络并重试。';this.timer=setTimeout(()=>void this.flush().catch(()=>{}),5000);}throw error;}
+  }catch(error){if(!this.closed){accountSettingsError.value=uiMessage('platform.settings_have_not_been_saved_to_the_server_check');this.timer=setTimeout(()=>void this.flush().catch(()=>{}),5000);}throw error;}
   finally{this.flight=undefined;}})();return this.flight;
  }
  close(){this.closed=true;clearTimeout(this.timer);this.controller.abort();this.record();}
@@ -91,6 +109,6 @@ export function accountPreferenceTarget(key:string){
  const layout=/^layout\.panels\.server:([^:]+):([^:]+)$/.exec(key);
  if(layout&&layout[1]===active.owner)return {session:active,module:/^M\d{2}$/.test(layout[2]!)?layout[2]!:'APP',field:'panelWidths'};
  if(key==='fonts.v1.owner.'+encodeURIComponent(active.owner))return {session:active,module:'APP',field:'fonts'};
- if(['theme','palette','collapsed','buttonAppearance','waveformAppearance','pageScale','backgroundAppearance','customPaletteColor','homeIconScale','automaticAudioGain'].includes(key))return {session:active,module:'APP',field:key};
+ if(['theme','palette','collapsed','buttonAppearance','waveformAppearance','pageScale','backgroundAppearance','customPaletteColor','homeIconScale','automaticAudioGain','uiLocale'].includes(key))return {session:active,module:'APP',field:key};
  return null;
 }

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import {tr} from '../i18n/index.ts';
 import {officialWebsite} from '../platform/feedback-profile.ts';
 defineProps<{sealed:boolean;compact?:boolean;title:string;reason:string}>();
 defineEmits<{help:[]}>();
@@ -11,7 +12,7 @@ defineEmits<{help:[]}>();
     <span class="seal-mark" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none"><rect x="6" y="8" width="36" height="26" rx="5"/><path d="M16 41h16M24 34v7M13 21h5l3-7 6 14 3-7h5"/></svg></span>
     <small>DESKTOP</small><h2>{{title}}</h2>
     <p>{{reason}}</p>
-    <div class="seal-actions"><a class="button primary" :href="officialWebsite" target="_blank" rel="noopener noreferrer">下载桌面版</a><button @click="$emit('help')">使用说明</button></div>
+    <div class="seal-actions"><a class="button primary" :href="officialWebsite" target="_blank" rel="noopener noreferrer">{{tr('components.download_desktop_version')}}</a><button @click="$emit('help')">{{tr('components.user_manual')}}</button></div>
    </div>
   </div>
  </section>

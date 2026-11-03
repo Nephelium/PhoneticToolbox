@@ -41,7 +41,33 @@ def add(storage, *, age=31, operation='acoustic_analysis', count=1, legacy=False
     return job,ids
 
 def alive(storage,key):
-    with storage[1].locked() as state:return state['assets'][key]['state']=='ready'
+    with storage[1].locked() as state:return state['assets'].get(key,{}).get('state')=='ready'
+
+
+def test_unused_input_cleanup_is_opt_in_and_protects_references(storage):
+    _,files,retention=storage
+    unused=files.import_input(b'a,b\n1,2','unused.csv','table')['asset_id']
+    needed=files.import_input(b'a,b\n3,4','needed.csv','table')['asset_id']
+    add(storage,age=0,operation='lip_analysis',inputs=[needed])
+    assert retention.status()['clean_unused_inputs'] is False
+    retention.sweep(now=NOW+10*DAY,force=True)
+    assert alive(storage,unused) and alive(storage,needed)
+    retention.configure(enabled=True,days=3,clean_unused_inputs=True)
+    retention.sweep(now=NOW+14*DAY,force=True)
+    assert not alive(storage,unused) and alive(storage,needed)
+
+
+def test_pending_batch_input_survives_explicit_cache_clear(storage):
+    store,files,retention=storage
+    key=files.import_input(b'a,b\n1,2','queued.csv','table')['asset_id'];batch=str(uuid4())
+    with store.transaction() as tx:
+        tx.execute('INSERT INTO acoustic_batches(id,owner_id,project_id,idempotency_key,request_hash,operation,config_snapshot,total,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?)',
+                   (batch,'local',LOCAL_PROJECT,uuid4().hex,'a'*64,'acoustic_analysis','{}',1,NOW,NOW))
+        tx.execute('INSERT INTO acoustic_batch_items(batch_id,ordinal,owner_id,project_id,audio_asset_id,input_snapshot) VALUES(?,?,?,?,?,?)',
+                   (batch,0,'local',LOCAL_PROJECT,key,canonical({'audio':{'asset_id':key}})))
+    retention.configure(enabled=True,days=1,clean_unused_inputs=True)
+    retention.sweep(now=NOW+14*DAY,all_cache=True)
+    assert alive(storage,key)
 
 
 def test_defaults_and_saved_policy_survive_reopening(storage):
@@ -50,6 +76,20 @@ def test_defaults_and_saved_policy_survive_reopening(storage):
     storage[2].configure(enabled=True,days=30,exported_cache_days=7)
     restored=LocalRetention(storage[1]).status()
     assert (restored['days'],restored['exported_cache_days'])==(30,7)
+
+
+def test_pending_parent_result_protects_original_input_chain(storage):
+    store,files,retention=storage
+    key=files.import_input(b'a,b\n1,2','source.csv','table')['asset_id']
+    _,ids=add(storage,inputs=[key]);batch=str(uuid4())
+    with store.transaction() as tx:
+        tx.execute('INSERT INTO acoustic_batches(id,owner_id,project_id,idempotency_key,request_hash,operation,config_snapshot,total,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?)',
+                   (batch,'local',LOCAL_PROJECT,uuid4().hex,'b'*64,'acoustic_analysis','{}',1,NOW,NOW))
+        tx.execute('INSERT INTO acoustic_batch_items(batch_id,ordinal,owner_id,project_id,audio_asset_id,input_snapshot) VALUES(?,?,?,?,?,?)',
+                   (batch,0,'local',LOCAL_PROJECT,key,canonical({'parent_result':{'asset_id':ids[0]}})))
+    retention.configure(enabled=True,days=1,clean_unused_inputs=True)
+    retention.sweep(now=NOW+14*DAY,all_cache=True)
+    assert alive(storage,key) and alive(storage,ids[0])
 
 def test_old_unknown_assets_get_full_grace(storage):
     _,ids=add(storage,age=300,legacy=True)

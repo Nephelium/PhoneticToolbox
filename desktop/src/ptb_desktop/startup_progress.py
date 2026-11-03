@@ -14,18 +14,18 @@ import time
 
 
 LABELS = {
-    'starting': '正在启动 PhoneticToolbox',
-    'checking': '正在检查运行文件',
-    'verify-science': '正在检查科学计算组件',
-    'verify-host': '正在检查界面组件',
-    'verify-apps': '正在检查程序文件',
-    'loading': '正在加载主界面',
-    'slow-loading': '主界面仍在加载，请稍候',
-    'science': '正在准备科学计算组件',
-    'host': '正在准备界面组件',
-    'apps': '正在准备程序文件',
-    'repair': '正在修复不完整的运行文件',
-    'waiting': '正在等待另一个窗口完成准备',
+    'starting': 'startup.starting',
+    'checking': 'startup.checking',
+    'verify-science': 'startup.verify-science',
+    'verify-host': 'startup.verify-host',
+    'verify-apps': 'startup.verify-apps',
+    'loading': 'startup.loading',
+    'slow-loading': 'startup.slow-loading',
+    'science': 'startup.science',
+    'host': 'startup.host',
+    'apps': 'startup.apps',
+    'repair': 'startup.repair',
+    'waiting': 'startup.waiting',
 }
 STEPS = {'science': 1, 'host': 2, 'apps': 3,
          'verify-science': 1, 'verify-host': 2, 'verify-apps': 3}
@@ -123,8 +123,10 @@ class _Gradient(c.Structure):
 
 class _Canvas:
     """DPI-scaled, double-buffered GDI drawing with owned native handles."""
-    def __init__(self, user, dpi, palette=None):
+    def __init__(self, user, dpi, palette=None, language=None):
         self.user, self.dpi, self.fonts, self.resolved_fonts = user, dpi, {}, {}
+        from .native_i18n import NativeLocale
+        self.language=language if language is not None else NativeLocale()
         self.palette = dict(DEFAULT_PALETTE if palette is None else palette)
         self.gdi = c.WinDLL('gdi32', use_last_error=True)
         self.msimg = c.WinDLL('msimg32', use_last_error=True)
@@ -206,7 +208,7 @@ class _Canvas:
         return self.fonts[key]
 
     def text(self, dc, value, box, *, size=17, english=False, color='52657E', weight=400, right=False):
-        face = 'Times New Roman' if english else 'KaiTi'
+        face = 'Times New Roman' if english or self.language.locale=='en' else 'Yu Gothic UI' if self.language.locale=='ja' else 'KaiTi'
         previous = self.gdi.SelectObject(dc, self.font(face, size, weight))
         try:
             actual = c.create_unicode_buffer(128)
@@ -259,13 +261,13 @@ class _Canvas:
             self.rounded(dc, (0, 0, 620, 312), 17, palette['surface'], palette['border'])
             self.user.DrawIconEx(dc, self.px(36), self.px(32), icon, self.px(72), self.px(72), 0, None, 3)
             self.text(dc, 'PhoneticToolbox', (128, 34, 450, 43), english=True, size=34, color='233A59')
-            self.text(dc, '语音分析与实验工具箱', (130, 81, 420, 26), size=18, color='60748F')
+            self.text(dc, self.language.text('startup.subtitle'), (130, 81, 420, 26), size=18, color='60748F')
             self.gradient(dc, (36, 126, 548, 1), palette['line'], palette['surface'])
             stage, label, percent, known = state
             self.text(dc, label, (36, 150, 453, 31), size=22, color='263D5C')
             self.text(dc, f'{percent}%' if known else '…', (486, 145, 98, 39),
                       size=32, english=True, color=palette['accent'], right=True)
-            self.text(dc, '正在检查运行文件并加载界面，请耐心等待。', (36, 189, 548, 25), size=16)
+            self.text(dc, self.language.text('startup.body'), (36, 189, 548, 25), size=16)
             self.rounded(dc, (36, 232, 548, 10), 5, palette['track'])
             if known:
                 start, length = 36, 548 * percent / 100
@@ -280,7 +282,7 @@ class _Canvas:
                     self.gradient(dc, (start, 232, max(length, 1), 10), palette['accentLight'], palette['accent'])
                 finally:
                     self.gdi.SelectClipRgn(dc, None); self.gdi.DeleteObject(region)
-            self.text(dc, '主界面就绪后自动关闭此提示', (36, 264, 450, 25), size=15, color='71829A')
+            self.text(dc, self.language.text('startup.footer'), (36, 264, 450, 25), size=15, color='71829A')
             step = STEPS.get(stage)
             self.text(dc, f'{step} / 3' if step else '', (510, 264, 74, 25),
                       size=17, english=True, color='71829A', right=True)
@@ -295,8 +297,12 @@ class _Canvas:
 
 
 class PreparationWindow:
-    def __init__(self, *, offscreen=False, dpi=None, icon_path=None, preferences_path=None, assets_root=None):
+    def __init__(self, *, offscreen=False, dpi=None, icon_path=None, preferences_path=None, assets_root=None,locale=None):
         self.hwnd = None; self.thread = None; self.failure = None
+        from .native_i18n import NativeLocale
+        from .platform_paths import user_data_root
+        self.language=NativeLocale(None if offscreen or locale is not None else user_data_root()/'language.json')
+        if locale is not None:self.language.select(locale)
         self.message = ''; self.percent = 0
         self.stopped = threading.Event(); self.visible = threading.Event()
         self.quiet = bool(os.environ.get('PTB_OWNED_BOOTSTRAP_LOG'))
@@ -306,11 +312,11 @@ class PreparationWindow:
         self.palette = dict(self.choice.get('palette', DEFAULT_PALETTE))
         if dpi is not None and (not offscreen or dpi not in (96, 120, 144, 192, 240)):
             raise ValueError('Explicit DPI is only for an owned offscreen preview')
-        self.state = ('starting', LABELS['starting'], 0, False)
+        self.state = ('starting', self.language.text(LABELS['starting']), 0, False)
         self.resolved_fonts = {}
 
     def update(self, stage, done, total):
-        self.message = LABELS.get(stage, '正在准备运行文件')
+        self.message = self.language.text(LABELS.get(stage, 'startup.preparing'))
         self.percent = min(100, max(0, int(100 * done / total))) if total else 0
         self.state = (stage, self.message, self.percent, total > 0)
         if self.thread is None and not self.quiet and not self.stopped.is_set():
@@ -329,7 +335,7 @@ class PreparationWindow:
         user.SetThreadDpiAwarenessContext.argtypes = (c.c_void_p,)
         user.SetThreadDpiAwarenessContext.restype = c.c_void_p
         prior_dpi = user.SetThreadDpiAwarenessContext(c.c_void_p(-4))
-        canvas = _Canvas(user, self.test_dpi or user.GetDpiForSystem(), self.palette)
+        canvas = _Canvas(user, self.test_dpi or user.GetDpiForSystem(), self.palette,self.language)
         self.dpi = canvas.dpi
         kernel.GetModuleHandleW.restype = w.HMODULE
         instance = kernel.GetModuleHandleW(None)
@@ -398,7 +404,7 @@ class PreparationWindow:
                     y = c.c_short((lp >> 16) & 0xffff).value - bounds.top
                     return 2 if 0 <= y < canvas.px(126) else 1
                 if msg == 0x2E0 and self.test_dpi is None:
-                    canvas.close(); canvas = _Canvas(user, wp & 0xffff, self.palette); self.dpi = canvas.dpi
+                    canvas.close(); canvas = _Canvas(user, wp & 0xffff, self.palette,self.language); self.dpi = canvas.dpi
                     scaled_icon = load_icon()
                     if scaled_icon:
                         icons.append(scaled_icon); icon = scaled_icon
@@ -431,7 +437,7 @@ class PreparationWindow:
             width, height = canvas.px(620), canvas.px(312)
             x = -10000 if self.offscreen else (user.GetSystemMetrics(0) - width) // 2
             y = (user.GetSystemMetrics(1) - height) // 2
-            self.hwnd = user.CreateWindowExW(0x40000, class_name, 'PhoneticToolbox · 正在启动',
+            self.hwnd = user.CreateWindowExW(0x40000, class_name, self.language.text('startup.title'),
                                              0x90000000, x, y, width, height, None, None, instance, None)
             if not self.hwnd: raise c.WinError(c.get_last_error())
             # Windows owns the successful region; it is released with the HWND.

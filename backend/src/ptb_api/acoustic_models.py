@@ -141,10 +141,10 @@ class AcousticBackendObservation(WireModel):
 
 
 class AcousticMetadata(WireModel):
-    computation_revision: Literal['acoustic/1','acoustic/2'] = 'acoustic/1'
+    computation_revision: Literal['acoustic/1','acoustic/2','acoustic/3'] = 'acoustic/1'
     schema_version: Literal['m01/1'] = SCHEMA_VERSION
     algorithm_id: Literal['m01.parameter_estimation'] = 'm01.parameter_estimation'
-    algorithm_version: Literal['legacy-numeric/1'] = 'legacy-numeric/1'
+    algorithm_version: Literal['legacy-numeric/1','reviewed-numeric/1'] = 'legacy-numeric/1'
     adapter_version: Literal['m01-adapter/1'] = 'm01-adapter/1'
     core_version: str = Field(min_length=1,max_length=80)
     project_id: Identifier
@@ -206,7 +206,9 @@ class AcousticNumericColumn(WireModel):
     @model_validator(mode='after')
     def scientific_column(self):
         if len(self.values)!=len(self.nonfinite) or len(self.values)!=len(self.reason):raise ValueError('Column arrays must have equal lengths')
-        if self.label!=PARAMETER_MAPPING.get(self.key,self.key) or self.unit!=parameter_unit(self.key):raise ValueError('Parameter label or unit mismatch')
+        units={parameter_unit(self.key)}
+        if self.key=='Intensity':units.add('dB_re_20uPa_assuming_samples_in_Pa_not_measured_SPL')
+        if self.label!=PARAMETER_MAPPING.get(self.key,self.key) or self.unit not in units:raise ValueError('Parameter label or unit mismatch')
         expected='catalog' if self.key in PARAMETER_MAPPING else 'legacy_service_extension'
         if self.scope!=expected:raise ValueError('Parameter scope mismatch')
         for value,mask,reason in zip(self.values,self.nonfinite,self.reason):

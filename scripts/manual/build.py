@@ -29,6 +29,20 @@ def reader_chapter(chapter: dict) -> dict:
     return result
 
 
+def source_fingerprint(project_dir: Path) -> str:
+    project = read_json(safe_file(project_dir, 'project.json'))
+    chapters = [read_json(safe_file(project_dir, c['path'])) for c in project['chapters']]
+    return hashlib.sha256(json.dumps({'project': project, 'chapters': chapters}, ensure_ascii=False, sort_keys=True, separators=(',', ':')).encode('utf-8')).hexdigest()
+
+
+def download_manifest(project_dir: Path) -> dict:
+    path = safe_file(project_dir, 'language-packs.json')
+    manifest = read_json(path) if path.exists() else {'schemaVersion': 'ptb-manual-downloads/1', 'published': False, 'packs': []}
+    if manifest.get('schemaVersion') != 'ptb-manual-downloads/1' or not isinstance(manifest.get('published'), bool) or not isinstance(manifest.get('packs'), list) or (not manifest['published'] and manifest['packs']):
+        raise ManualError('说明书语言包下载清单无效')
+    return manifest
+
+
 def referenced_asset_ids(chapters: list[dict]) -> set[str]:
     """Collect schema media references through every nested content container."""
     media_nodes = {kind for kind, attrs in SCHEMA['x-nodeAttrs'].items() if 'assetId' in attrs}
@@ -152,7 +166,11 @@ def build(project_dir: Path, output: Path, distribution: str = 'software', *, re
     if result['errors']:
         raise ManualError('\n'.join(result['errors']))
     project = reading_project(result, distribution)
-    include = {d['path'] for d in project['chapters']} | {a['path'] for a in project['assets']} | {'project.json', 'build-report.json'}
+    # Optional language packs bind to this exact Chinese source, including
+    # scientific values, asset identities and chapter structure.
+    project['sourceDigest'] = source_fingerprint(project_dir)
+    downloads = dump(download_manifest(project_dir))
+    include = {d['path'] for d in project['chapters']} | {a['path'] for a in project['assets']} | {'project.json', 'build-report.json', 'language-packs.json'}
     if distribution == 'public' and output.exists():
         for existing in output.rglob('*'):
             if existing.is_symlink():
@@ -174,7 +192,9 @@ def build(project_dir: Path, output: Path, distribution: str = 'software', *, re
         hashes[asset['path']] = hashlib.sha256(data).hexdigest()
     # Manifest is replaced last. A reader never sees a new manifest before its files exist.
     write_atomic(safe_file(output, 'project.json'), dump(project))
+    write_atomic(safe_file(output, 'language-packs.json'), downloads)
     report = {'schemaVersion': 'ptb-manual-build/1', 'distribution': distribution, 'chapters': len(project['chapters']), 'assets': len(project['assets']), 'mediaBytes': selected_media_bytes if referenced_assets_only else result['mediaBytes'], 'skippedAssets': result['skippedAssets'], 'warnings': result['warnings'], 'hashes': hashes}
+    report['auxiliaryHashes'] = {'language-packs.json': hashlib.sha256(downloads).hexdigest()}
     if referenced_assets_only:
         report.update(referencedAssetsOnly=True, unreferencedAssets=unreferenced)
     write_atomic(safe_file(output, 'build-report.json'), dump(report))

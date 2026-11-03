@@ -18,6 +18,13 @@ def copy_runtime_frontend(source, target, audit, optimize_media=False, media_cac
     shutil.copytree(source, target, ignore=lambda folder, names: [n for n in names if n=='manual' or external_frontend_data(n)] if Path(folder) == source else [])
     manual = source / 'manual'
     project = json.loads((manual / 'project.json').read_text('utf8'))
+    downloads = manual / 'language-packs.json'
+    if not downloads.resolve().is_relative_to(manual.resolve()):
+        raise ValueError('Manual download manifest path escape')
+    download_bytes = downloads.read_bytes()
+    download_manifest = json.loads(download_bytes)
+    if not isinstance(download_manifest, dict) or download_manifest.get('schemaVersion') != 'ptb-manual-downloads/1' or not isinstance(download_manifest.get('packs'), list):
+        raise ValueError('Invalid generated manual download manifest')
     used = set()
     def visit(value):
         if isinstance(value, dict):
@@ -46,12 +53,22 @@ def copy_runtime_frontend(source, target, audit, optimize_media=False, media_cac
     if optimize_media:
         sys.path.insert(0, str(ROOT / 'scripts/manual'))
         from pack_media import package_asset
+    compacted = {}
     for row in assets:
         path = manual / row['path']
         if not path.resolve().is_relative_to(manual.resolve()) or hashlib.sha256(path.read_bytes()).hexdigest() != row['sha256']:
             raise ValueError('Manual asset identity mismatch')
         if optimize_media:
-            _, item = package_asset(row, path, selected, cache_root=media_cache)
+            key = (row['sha256'], row['kind'], path.suffix.lower(), row.get('mime'),
+                   row.get('sampleRate'), row.get('channels'))
+            if key in compacted:
+                fields, prior = compacted[key]
+                row.update(fields)
+                item = {**prior, 'id': row['id'], 'deduplicated': True}
+            else:
+                _, item = package_asset(row, path, selected, cache_root=media_cache)
+                fields = {name: row[name] for name in ('originalSha256', 'path', 'sha256', 'mime', 'sampleRate', 'channels') if name in row}
+                compacted[key] = (fields, item)
             packaging.append(item)
         else:
             destination = selected / row['path']
@@ -59,11 +76,14 @@ def copy_runtime_frontend(source, target, audit, optimize_media=False, media_cac
             shutil.copyfile(path, destination)
     original_count = len(project['assets'])
     project['assets'] = assets
+    (selected / 'language-packs.json').write_bytes(download_bytes)
     (selected / 'project.json').write_text(json.dumps(project, ensure_ascii=False, indent=2) + '\n', 'utf8')
     audit.write_text(json.dumps(dict(policy='Editable source media preserved; package includes referenced media only and optional compact derivatives',
                                    registered=original_count, included=len(assets),
                                    sourceBytes=sum(item['sourceBytes'] for item in packaging) if optimize_media else sum((manual / row['path']).stat().st_size for row in assets),
-                                   includedBytes=sum(item['packageBytes'] for item in packaging) if optimize_media else sum((manual / row['path']).stat().st_size for row in assets),
+                                   includedBytes=sum((selected / relative).stat().st_size for relative in {row['path'] for row in assets}),
+                                   uniqueMediaFiles=len({row['path'] for row in assets}),
+                                   deduplicatedAssets=len(assets)-len({row['path'] for row in assets}),
                                    optimized=optimize_media, media=packaging), indent=2) + '\n', 'utf8')
 
 

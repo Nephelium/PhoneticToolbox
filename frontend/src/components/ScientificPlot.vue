@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import {tr} from '../i18n/index.ts';
 import {computed,ref,onMounted,onUnmounted,useId,watch,nextTick} from 'vue';
 import {fontPayload} from '../state/fonts.ts';
 import {plotTickLabel} from '../platform/plotTicks.ts';
@@ -32,14 +33,14 @@ function cancelDrag(){drag=undefined;dragged=true;}
 function keys(event:KeyboardEvent){if(!props.interactive)return;const delta=(props.x[1]-props.x[0])*.1;if(event.key==='ArrowLeft')emit('pan',delta);else if(event.key==='ArrowRight')emit('pan',-delta);else if(event.key==='+'||event.key==='=')emit('zoom',.9);else if(event.key==='-')emit('zoom',1.1);else return;event.preventDefault();}
 </script>
 <template><div ref="el" class="scientific-plot" data-background-surface :class="{'fill-plot':fill}" :aria-label="title">
-<div v-if="showLegend" class="plot-legend"><span v-for="t in traces" :key="t.label" :style="{color:t.color}"><svg v-if="t.lineWidth||t.dash" class="legend-swatch" viewBox="0 0 28 12" aria-hidden="true"><line x1="1" x2="27" y1="6" y2="6" :stroke="t.color" :stroke-width="t.lineWidth??1.1" :stroke-dasharray="t.dash" stroke-linecap="round"/></svg>{{t.label}}{{t.right?' · 右轴':''}}</span><slot name="legend"/></div>
-<div v-if="empty" class="plot-empty" :style="{height:chartHeight+'px'}">选择双声道 WAV 后自动显示</div>
+<div v-if="showLegend" class="plot-legend"><span v-for="t in traces" :key="t.label" :style="{color:t.color}"><svg v-if="t.lineWidth||t.dash" class="legend-swatch" viewBox="0 0 28 12" aria-hidden="true"><line x1="1" x2="27" y1="6" y2="6" :stroke="t.color" :stroke-width="t.lineWidth??1.1" :stroke-dasharray="t.dash" stroke-linecap="round"/></svg>{{t.label}}{{t.right?tr('components.right_axis'):''}}</span><slot name="legend"/></div>
+<div v-if="empty" class="plot-empty" :style="{height:chartHeight+'px'}">{{tr('components.choose_a_stereo_wav_file_to_display_it_automatically')}}</div>
 <svg v-else :viewBox="`0 0 ${width} ${chartHeight}`" :style="{height:chartHeight+'px'}" role="img" :aria-label="title" @click="seek" @wheel="wheel" @pointerdown="down" @pointermove="move" @pointerup="up" @pointercancel="cancelDrag" @keydown="keys" :tabindex="interactive?0:undefined" :class="{interactive}">
 <defs><clipPath :id="clip"><rect :x="left" :y="top" :width="plotWidth" :height="plotHeight"/></clipPath></defs>
 <g :clip-path="`url(#${clip})`">
 <image v-if="raster" :href="raster.url" :x="X(raster.extent[0])" :y="Y(raster.extent[3])" :width="X(raster.extent[1])-X(raster.extent[0])" :height="Y(raster.extent[2])-Y(raster.extent[3])" preserveAspectRatio="none"/>
 <line v-for="v in ticks(y)" :key="v" :x1="left" :x2="left+plotWidth" :y1="Y(v)" :y2="Y(v)" stroke="var(--border)" stroke-dasharray="2 4"/>
-<rect v-if="highlight" class="plot-highlight" :x="X(highlight[0])" :y="top" :width="Math.max(0,X(highlight[1])-X(highlight[0]))" :height="plotHeight" fill="var(--selection)" pointer-events="none"><title>微观窗口范围 {{highlight[0]}}–{{highlight[1]}} {{xUnit}}</title></rect>
+<rect v-if="highlight" class="plot-highlight" :x="X(highlight[0])" :y="top" :width="Math.max(0,X(highlight[1])-X(highlight[0]))" :height="plotHeight" fill="var(--selection)" pointer-events="none"><title>{{tr('components.micro_view_range')}} {{highlight[0]}}–{{highlight[1]}} {{xUnit}}</title></rect>
 <g v-for="(trace,index) in traces" :key="trace.label" class="scientific-trace" :data-export-color="trace.exportColor" :stroke="trace.color" :fill="trace.color" :opacity="trace.opacity??1"><path v-if="trace.points&&trace.times.length>3000" :d="tracePaths[index]" stroke="none" class="scientific-dots"/><template v-else-if="trace.points"><circle v-for="(t,i) in trace.times" :key="i" v-show="trace.values[i]!=null" :cx="X(t)" :cy="Y(trace.values[i]??0,trace.right)" r="1.6" stroke="none"/></template><path v-else :d="tracePaths[index]" fill="none" :stroke-width="trace.lineWidth??1.1" :stroke-dasharray="trace.dash" stroke-linecap="round"/></g>
 <line v-for="(m,i) in markers" :key="i" :data-marker-label="m.label" :x1="X(m.time)" :x2="X(m.time)" :y1="top" :y2="top+plotHeight"  :stroke="m.color??'var(--success)'" :stroke-dasharray="m.dashed?'4 3':undefined" opacity=".75"><title>{{m.label}} {{m.time}}</title></line>
 </g>

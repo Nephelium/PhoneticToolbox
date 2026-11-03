@@ -5,6 +5,7 @@ import re
 import threading
 from PyQt6.QtCore import QObject, QTimer, pyqtSignal, pyqtSlot
 from .papers import PaperService, PaperError
+from .native_i18n import native_error, native_error_payload
 
 
 class PapersBridge(QObject):
@@ -60,6 +61,7 @@ class PapersBridge(QObject):
         except Exception as exc:
             if not self.closed and not cancel.is_set():
                 result = self.service.status(); result['warning'] = '自动检查未完成：' + str(exc)
+                result['warningError'] = native_error_payload(exc)
                 self.statusChanged.emit(json.dumps(result, ensure_ascii=False))
         finally:
             with self.lock: self.auto_cancel = None
@@ -143,7 +145,9 @@ class PapersBridge(QObject):
                 self.scheduleChanged.emit()
             response = {'ok': True, 'value': result}
         except PaperError as error:
-            response = {'ok': False, 'error': str(error)}
+            if getattr(error, 'code', None) == 'paper_folder_collision' and isinstance(getattr(error, 'filename', None), str):
+                native_error(error, 'errors.papers.folderCollision', filename=error.filename)
+            response = native_error_payload(error)
         except Exception:
             response = {'ok': False, 'error': '论文服务暂时不可用，请检查网络后重试。已下载内容仍可离线阅读。'}
         with self.lock:

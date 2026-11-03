@@ -46,3 +46,35 @@ test('M18 abandoning an annotation read cancels native work and ignores its late
  await assert.rejects(result,/取消/);assert.equal(operation,'annotations');assert.deepEqual(cancelled,[id]);
  ready(id,JSON.stringify({ok:true,value:{revision:0,items:[]}}));installPapersChannel(undefined);
 });
+
+test('paper folder collision keeps the raw diagnostic and literal filename while a single failure relocalizes',async()=>{
+ const {setLocale,messageRef}=await import('../src/i18n/index.ts');
+ const {uiErrorMessage}=await import('../src/modules/module-localization.ts');
+ const filename='说明-{page}-é.txt';
+ const raw='上一级已有同名文件或文件夹：'+filename+'。未移动文件，也未删除收藏夹。';
+ let ready:(id:string,payload:string)=>void=()=>{};
+ installPapersChannel({ready:{connect(fn){ready=fn;}},progress:{connect(){}},request(id){ready(id,JSON.stringify({ok:false,error:raw,display:{key:'native.errors.papers.folderCollision',values:{filename}}}));},cancel(){}});
+ const notice=messageRef('');
+ try{
+  await setLocale('zh-CN');
+  try{await papers.deleteFolder('owned collection');assert.fail('Expected actual refusal envelope');}catch(error){notice.value=uiErrorMessage(error);}
+  assert.equal(notice.value,raw);
+  for(const code of ['en','ja'] as const){await setLocale(code);assert.notEqual(notice.value,raw);assert(notice.value.includes(filename));assert(!notice.value.includes('{filename}'));}
+  await setLocale('zh-CN');assert.equal(notice.value,raw);
+ }finally{installPapersChannel(undefined);await setLocale('zh-CN');}
+});
+
+test('one native background failure translates its product prefix and known reason without rewriting unknown diagnostics',async()=>{
+ const {paperStatusWarning}=await import('../src/platform/papers.ts');
+ const {setLocale,messageRef}=await import('../src/i18n/index.ts');
+ const known={warning:'自动检查未完成：操作已取消。',warningError:{ok:false,error:'操作已取消。'},firstLaunch:'',papers:[]};
+ const raw='未登记诊断-{reason} / private.pdf',unknown={...known,warning:'自动检查未完成：'+raw,warningError:{error:raw}};
+ const before=JSON.stringify([known,unknown]);
+ const notice=messageRef(''),diagnostic=messageRef('');
+ notice.value=paperStatusWarning(known);diagnostic.value=paperStatusWarning(unknown);
+ try{
+  await setLocale('zh-CN');assert.equal(notice.value,known.warning);
+  for(const code of ['en','ja'] as const){await setLocale(code);assert(!notice.value.includes('自动检查'));assert(!notice.value.includes('操作已取消'));assert(diagnostic.value.endsWith(raw));assert(!diagnostic.value.startsWith('自动检查'));}
+  assert.equal(JSON.stringify([known,unknown]),before);
+ }finally{await setLocale('zh-CN');}
+});

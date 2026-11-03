@@ -4,6 +4,8 @@ import {readFileSync} from 'node:fs';
 import {parse,compileScript} from '@vue/compiler-sfc';
 import ts from 'typescript';
 import * as vue from 'vue';
+import * as i18n from '../src/i18n/index.ts';
+import * as localization from '../src/modules/module-localization.ts';
 
 const noop=()=>{};
 const deferred=()=>{let resolve!:(value?:any)=>void;return {promise:new Promise<any>(r=>resolve=r),resolve};};
@@ -18,6 +20,8 @@ function page(relative:string,props:any,overrides:Record<string,any>){
  const require=(name:string)=>{
   if(name==='vue')return {...vue,onMounted:noop,onUnmounted:(fn:()=>void)=>unmount.push(fn),onBeforeUnmount:(fn:()=>void)=>unmount.push(fn)};
   if(Object.hasOwn(overrides,name))return overrides[name];
+  if(name.endsWith('/i18n/index.ts'))return i18n;
+  if(name.endsWith('/module-localization.ts'))return localization;
   if(name.endsWith('.vue'))return {default:{}};
   if(name.endsWith('/web-settings.ts'))return {useWebSettings:noop,settingsFields:()=>({}),applyingWebSettings:vue.ref(false)};
   return new Proxy({},{get:(_target,key)=>key==='__esModule'?true:noop});

@@ -263,8 +263,11 @@
           "type": "string"
         },
         "algorithm_version": {
-          "const": "legacy-numeric/1",
           "default": "legacy-numeric/1",
+          "enum": [
+            "legacy-numeric/1",
+            "reviewed-numeric/1"
+          ],
           "title": "Algorithm Version",
           "type": "string"
         },
@@ -280,7 +283,8 @@
           "default": "acoustic/1",
           "enum": [
             "acoustic/1",
-            "acoustic/2"
+            "acoustic/2",
+            "acoustic/3"
           ],
           "title": "Computation Revision",
           "type": "string"

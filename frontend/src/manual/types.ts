@@ -30,6 +30,7 @@ export interface ManualSearchHit extends ManualSearchEntry {excerpt:string}
 export interface ManualProject {
   schemaVersion:typeof MANUAL_SCHEMA; id:string; title:string; language?:string;
   version?:string; softwareVersion?:string;
+  sourceDigest?:string;
   chapters:ManualChapterDescriptor[]; assets:ManualAsset[];
   references?:ManualReference[]; searchIndex?:ManualSearchEntry[];
 }
@@ -38,4 +39,7 @@ export interface ManualChapter {
   moduleId?:string; summary?:string; body:ManualNode;
 }
 export type ChapterLoader = (chapter:ManualChapterDescriptor, signal:AbortSignal) => Promise<ManualChapter>;
-export type AssetResolver = (asset:ManualAsset) => string|null;
+export interface AssetResolver {
+  (asset:ManualAsset):string|null;
+  isLoading?:(asset:ManualAsset)=>boolean;
+}

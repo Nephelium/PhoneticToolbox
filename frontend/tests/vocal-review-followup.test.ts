@@ -3,6 +3,8 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import vm from 'node:vm';
 import {editStopTiming} from '../public/vocal-tract/stop-editor.js';
+import {msg,join} from '../public/vocal-tract/i18n.mjs';
+const display=(value:unknown):string=>{while(typeof value==='function')value=value();return String(value??'');};
 
 // Exercise the shipped event handlers with only the DOM/host ports replaced.
 const keyframes=readFileSync(new URL('../public/vocal-tract/keyframes.js',import.meta.url),'utf8');
@@ -11,9 +13,9 @@ for(const outcome of ['saved','cancelled','failed'])test(`draft export after fai
  const saveQueue=Promise.reject(Error('storage unavailable'));saveQueue.catch(()=>{});
  const button:any={},calls:any[]=[],messages:string[]=[],locks:boolean[]=[];
  const draft={frames:[{frame_id:'draft',f0:240}],features:[{id:'feature'}],pitch_curve:[[0,240],[1,280]],pressure_curve:[[0,800],[1,900]],perturbation:{jitter:20,shimmer:10,seed:7},global_controls:{lip_width:{mode:'fixed',value:1.2}}};
- const context={$:()=>button,busy:false,editing:-1,saveQueue,frames:draft.frames,
+ const context={$:()=>button,busy:false,editing:-1,saveQueue,frames:draft.frames,msg,join,
   features:{get:()=>draft.features},pitch:{getCurve:()=>draft.pitch_curve,getPressureCurve:()=>draft.pressure_curve},getPerturbation:()=>draft.perturbation,sequenceControls:{get:()=>draft.global_controls},
-  lockFiles:()=>locks.push(true),lock:(v:boolean)=>locks.push(v),text:(v:string)=>messages.push(v),
+  lockFiles:()=>locks.push(true),lock:(v:boolean)=>locks.push(v),text:(v:unknown)=>messages.push(display(v)),
   post:async(op:string,body:any)=>{calls.push({op,body});if(outcome==='failed')throw Error('export device unavailable');return {json:async()=>({saved:outcome==='saved',name:'draft.json'})};}};
  vm.runInNewContext(exportHandler,context);await button.onclick();
  assert.equal(calls.length,1);assert.equal(calls[0].op,'document/save');assert.deepEqual(JSON.parse(JSON.stringify(calls[0].body)),draft);
@@ -33,7 +35,7 @@ test('side-region buttons update section, profiles, viewer and chart without a g
  let draws=0,charts=0,requests=0;
  // Source-only updates create a new snapshot while retaining viewer geometry.
  const viewerState=structuredClone(state);
- const context={$:(id:string)=>elements[id],selectedSide:2,snapshot:state,dirty:false,queuePose:()=>requests++,drawCharts:()=>charts++,document:{querySelectorAll:()=>buttons},viewer:{state:viewerState,draw2D:()=>draws++,handles:()=>[1,2,3].map((n,i)=>({name:'side'+n,p:[7-i,0]}))}};
+ const context={$:(id:string)=>elements[id],bindText:(node:any,value:unknown)=>{node.textContent=display(value);},selectedSide:2,snapshot:state,dirty:false,queuePose:()=>requests++,drawCharts:()=>charts++,document:{querySelectorAll:()=>buttons},viewer:{state:viewerState,draw2D:()=>draws++,handles:()=>[1,2,3].map((n,i)=>({name:'side'+n,p:[7-i,0]}))}};
  vm.runInNewContext(select+'\n'+handler,context);
  for(const [i,b] of buttons.entries()){b.onclick();const section=7-i;assert.equal(state.section,section);assert.equal(viewerState.section,section);assert.equal(+elements.sliceRange.value,section);assert.deepEqual(state.upper,[section+1]);assert.deepEqual(state.lower,[section]);assert.deepEqual(viewerState.upper,state.upper);assert.deepEqual(viewerState.lower,state.lower);assert.equal(elements.slicePosition.textContent,section.toFixed(1)+' cm');}
  assert.equal(draws,3);assert.equal(charts,3);assert.equal(requests,0);

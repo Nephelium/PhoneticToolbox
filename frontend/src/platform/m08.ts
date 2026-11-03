@@ -1,3 +1,5 @@
+import {uiMessage,uiError,localized} from '../modules/module-localization.ts';
+import {tr} from '../i18n/index.ts';
 import {waitForTaskPoll} from './task-poll.ts';
 import type {ResearchFile,JobView} from './research.ts';
 import type {M08Port,Result,Job,Config,ExportReport} from '../modules/pitch-manipulation/port.ts';
@@ -25,57 +27,57 @@ export function m08Port(transport:M08Transport):M08Port {
  async function wait(job:JobView,signal?:AbortSignal){
   const until=Date.now()+150000;
   while(['queued','running','cancel_requested'].includes(job.state)){
-   if(signal?.aborted){await transport.cancel(job.id);throw new DOMException('操作已取消','AbortError');}
-   if(Date.now()>until)throw Error('任务仍在处理，可在任务列表查询或取消。');
+   if(signal?.aborted){await transport.cancel(job.id);throw new DOMException(tr('platform.operation_cancelled'),'AbortError');}
+   if(Date.now()>until)throw uiError(uiMessage('platform.the_task_is_still_running_check_or_cancel_it'));
    await waitForTaskPoll(job.state,signal);if(signal?.aborted)continue;job=await transport.job(job.id);
   }
-  if(job.state!=='succeeded')throw Error(job.error_code??'变速变调任务未完成');return job;
+  if(job.state!=='succeeded')throw uiError(job.error_code??uiMessage('platform.the_time_and_pitch_task_did_not_finish'));return job;
  }
  async function submit(file:ResearchFile,config:Config,key:string){
   const ref=await source(file);const j=await transport.request<JobView>('create',{project_id:transport.project,audio:ref,config,idempotency_key:key});
   return {id:j.id,state:j.state,source_id:file.id,source_name:file.name,source_sha256:ref.sha256,config,results:[],error:j.error_code??undefined} as Job;
  }
  async function scope(ids:string[]){
-  const values=ids.map(id=>results.get(id));if(!values.length||values.some(v=>!v))throw Error('结果已变化，请刷新。');
-  const sourceId=values[0]!.source_id;if(values.some(v=>v!.source_id!==sourceId))throw Error('只能管理同一源音频的明确结果。');
-  const ref=[...refs.values()].find(v=>v.asset_id===sourceId);if(!ref)throw Error('源文件授权已失效，请重新选择。');
+  const values=ids.map(id=>results.get(id));if(!values.length||values.some(v=>!v))throw uiError(uiMessage('platform.results_have_changed_refresh_the_list'));
+  const sourceId=values[0]!.source_id;if(values.some(v=>v!.source_id!==sourceId))throw uiError(uiMessage('platform.only_explicit_results_from_the_same_source_audio_can'));
+  const ref=[...refs.values()].find(v=>v.asset_id===sourceId);if(!ref)throw uiError(uiMessage('platform.source_file_permission_has_expired_select_the_file_again'));
   return {project_id:transport.project,source:ref,ids};
  }
- async function audio(r:Result){const value=results.get(r.id);if(!value)throw Error('结果已失效，请刷新。');const raw=await transport.read(value.job_id,value.id,value.sha256);if(await sha256(raw)!==value.sha256)throw Error('结果校验失败');return raw;}
+ async function audio(r:Result){const value=results.get(r.id);if(!value)throw uiError(uiMessage('platform.results_are_no_longer_available_refresh_the_list'));const raw=await transport.read(value.job_id,value.id,value.sha256);if(await sha256(raw)!==value.sha256)throw uiError(uiMessage('platform.result_verification_failed'));return raw;}
  return {
   async preview(file,signal){
    const ref=await source(file);
    const created=await transport.request<JobView>('create',{project_id:transport.project,audio:ref,config:{action:'preview'},idempotency_key:'m08-preview-'+crypto.randomUUID()});
    const job=await wait(created,signal);const files=job.result_manifest&&'files' in job.result_manifest?job.result_manifest.files:[];
    const metadata=files.find(f=>f.name==='m08.ptb.json'),wav=files.find(f=>f.name==='m08-preview.wav');
-   if(!metadata||!wav)throw Error('变速变调预览文件不完整');
+   if(!metadata||!wav)throw uiError(uiMessage('platform.the_time_and_pitch_preview_file_is_incomplete'));
    const data=JSON.parse(new TextDecoder().decode(await transport.read(job.id,metadata.id,metadata.sha256)));
-   if(data.audio_sha256!==ref.sha256)throw Error('源音频校验不一致');
+   if(data.audio_sha256!==ref.sha256)throw uiError(uiMessage('platform.source_audio_checksums_do_not_match'));
    return {...data,sha256:ref.sha256,wav:await transport.read(job.id,wav.id,wav.sha256)};
   },submit,jobs,cancel:async id=>{await transport.cancel(id);},audio,
   async history(file){const ref=await source(file);return (await transport.request<Managed[]>('history',{project_id:transport.project,source:ref})).map(mapped);},
-  async save(r){const copy=await wait(await transport.request<JobView>('save',await scope([r.id])));const job=(await jobs()).find(j=>j.id===copy.id);if(!job?.results[0])throw Error('保存结果未发布');const saved=job.results[0];const name=await transport.export?.(results.get(saved.id)!);
+  async save(r){const copy=await wait(await transport.request<JobView>('save',await scope([r.id])));const job=(await jobs()).find(j=>j.id===copy.id);if(!job?.results[0])throw uiError(uiMessage('platform.the_saved_result_was_not_published'));const saved=job.results[0];const name=await transport.export?.(results.get(saved.id)!);
    if(name&&name!==saved.name){await transport.request('rename',{...await scope([saved.id]),names:[name]});return mapped({...results.get(saved.id)!,name});}return saved;},
   async saveMany(selected,sequenceNumbers){
-   if(!selected.length||selected.length>256||new Set(selected.map(r=>r.id)).size!==selected.length)throw Error('请选择 1–256 个不同结果');
+   if(!selected.length||selected.length>256||new Set(selected.map(r=>r.id)).size!==selected.length)throw uiError(uiMessage('platform.select_1_256_distinct_results'));
    const values=selected.map(r=>{
-    const value=results.get(r.id);if(!value)throw Error('结果已失效，请刷新');
+    const value=results.get(r.id);if(!value)throw uiError(uiMessage('platform.results_are_no_longer_available_refresh_the_list_296'));
     const number=sequenceNumbers?.[r.id];
-    if(number!==undefined&&(!Number.isInteger(number)||number<1||number>256))throw Error('无效音频序号');
+    if(number!==undefined&&(!Number.isInteger(number)||number<1||number>256))throw uiError(uiMessage('platform.invalid_audio_index'));
     return {...value,name:number===undefined?value.name:`${number}_${value.name}`};
    });
    if(transport.exportMany)return transport.exportMany(values);
    // Ask while the Save click still has a browser user activation, before reads.
    const picker=(globalThis as any).showSaveFilePicker;
    let handle:any;
-   if(picker)try{handle=await picker({suggestedName:values.length===1?values[0].name:'变速变调_批量音频.zip',types:[values.length===1?{description:'WAV 音频',accept:{'audio/wav':['.wav']}}:{description:'ZIP 音频压缩包',accept:{'application/zip':['.zip']}}]});}
+   if(picker)try{handle=await picker({suggestedName:values.length===1?values[0].name:'变速变调_批量音频.zip',types:[values.length===1?{description:tr('platform.wav_audio'),accept:{'audio/wav':['.wav']}}:{description:tr('platform.zip_audio_archive'),accept:{'application/zip':['.zip']}}]});}
    catch(e){if(e instanceof Error&&e.name==='AbortError')return {saved:[],failed:[],cancelled:true};throw e;}
    // One download avoids browser multi-download blocking. Keep owner/expiry/hash checks.
    const files:{name:string;raw:ArrayBuffer}[]=[],used=new Set<string>();let total=0;
    const saved=[];
    for(const r of values){
-    if(!/\.wav$/i.test(r.name)||/[\x00-\x1f/\\:<>"|?*]/.test(r.name))throw Error('无效音频文件名');
-    const raw=await audio(r);total+=raw.byteLength;if(total>64_000_000)throw Error('所选音频超过 64 MB 下载预算，请减少勾选数量');
+    if(!/\.wav$/i.test(r.name)||/[\x00-\x1f/\\:<>"|?*]/.test(r.name))throw uiError(uiMessage('platform.invalid_audio_filename'));
+    const raw=await audio(r);total+=raw.byteLength;if(total>64_000_000)throw uiError(uiMessage('platform.the_selected_audio_exceeds_the_64_mb_download_budget'));
     let name=r.name,n=2;while(used.has(name.toLowerCase()))name=r.name.replace(/\.wav$/i,` (${n++}).wav`);
     used.add(name.toLowerCase());files.push({name,raw});saved.push({id:r.id,name});
    }

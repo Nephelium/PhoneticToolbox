@@ -1,10 +1,11 @@
 <script setup lang="ts">
-withDefaults(defineProps<{label?:string}>(),{label:'模块操作'});
+import {tr} from '../i18n/index.ts';
+const props=defineProps<{label?:string}>();
 </script>
 <template>
-  <div class="module-toolbar" role="group" :aria-label="label">
+  <div class="module-toolbar" role="group" :aria-label="props.label??tr('components.module_actions')">
     <div v-if="$slots.default" class="module-toolbar-primary"><slot/></div>
-    <div v-if="$slots.actions" class="module-toolbar-actions" role="group" aria-label="当前模块工具"><slot name="actions"/></div>
+    <div v-if="$slots.actions" class="module-toolbar-actions" role="group" :aria-label="tr('components.current_module_tools')"><slot name="actions"/></div>
   </div>
 </template>
 <style scoped>

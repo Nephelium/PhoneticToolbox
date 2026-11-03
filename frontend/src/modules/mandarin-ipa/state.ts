@@ -1,3 +1,5 @@
+import {uiError as displayError,uiMessage as displayMessage} from '../module-localization.ts';
+import {tr} from '../../i18n/index.ts';
 import rawData from './ipa-data.json' with {type:'json'};
 import {validFamily} from '../../design/fonts.ts';
 import {isUnt,untReading,untTranscription} from './unt.ts';
@@ -42,7 +44,7 @@ export interface MandarinIpaDraft {
 }
 
 const data=rawData as RawData;
-if(data.schema_version!=='m13-ipa-data/1'||data.row_count!==data.rows.length||data.columns.length!==13)throw Error('汉字转国际音标的映射资源不完整。');
+if(data.schema_version!=='m13-ipa-data/1'||data.row_count!==data.rows.length||data.columns.length!==13)throw displayError(displayMessage('modules.mandarin-ipa.text.eef49d1a8309'));
 const standardColumn=new Map<MappingStandard,number>(mappingStandards.map((name,index)=>[name,index]));
 const index=new Map<string,IpaEntry[]>();
 for(const row of data.rows){
@@ -121,7 +123,7 @@ export function variantsFor(token:MappedToken,standard:IpaStandard,showTone=true
     const erhua=token.erhua?untTranscription(entry.pinyin,entry.tone,standard==='UntPhesoca严',token.baseChar,true):null;
     const value=erhua?(showTone?erhua:erhua.replace(/[˥˦˧˨˩]+$/u,'')):displayEntry(entry,standard,showTone);
     const reading=isUnt(standard)?untReading(entry.pinyin,entry.tone,token.baseChar??token.char):entry;
-    return {index,pinyin:reading.pinyin,tone:reading.tone,toneLabel:reading.tone===0?'轻声':String(reading.tone),value};
+    return {index,pinyin:reading.pinyin,tone:reading.tone,toneLabel:reading.tone===0?tr('modules.mandarin-ipa.text.67436511c305'):String(reading.tone),value};
   });
 }
 export function autoErhuaPairs(text:string,standard:IpaStandard,choices:Readonly<Record<string,number>>={}){
@@ -195,9 +197,9 @@ export function restoreTableDraft(value:unknown,library:TableLibrary,fallback:Ip
       draft.standard=standards.some(s=>s===fallback)||library.tables.some(t=>t.id===fallback)?fallback:createDraft().standard;
       draft.selectedVariants={};draft.erhuaPairs={};delete draft.tableRevision;
       const current=library.tables.find(t=>t.id===draft.standard);if(current)draft.tableRevision=current.revision??1;
-      notice='草稿使用的字表已删除或不可用，文本和排版已恢复，请重新选择字表并核对读音。';
+      notice=tr('modules.mandarin-ipa.text.527599b6b8b8');
     }else{
-      if((draft.tableRevision??1)!==(table.revision??1)){draft.selectedVariants={};draft.erhuaPairs={};notice='字表已替换，草稿文本和排版已恢复，请重新核对多音字读音。';}
+      if((draft.tableRevision??1)!==(table.revision??1)){draft.selectedVariants={};draft.erhuaPairs={};notice=tr('modules.mandarin-ipa.text.25d3150dbcf2');}
       draft.tableRevision=table.revision??1;
     }
   }

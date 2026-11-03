@@ -1,6 +1,6 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {defaults,normalizeFonts,fontKey,figureFonts,quoteFamily} from '../src/design/fonts.ts';
+import {defaults,normalizeFonts,fontKey,figureFonts,quoteFamily,localeCjkCandidates,japaneseCandidates} from '../src/design/fonts.ts';
 test('F01/F02 fixed IPA survives imported preferences and English changes',()=>{
  const p=normalizeFonts({...defaults(),latin:'Times New Roman',ipa:'Arial'});
  assert.equal(p.ipa,'Doulos SIL');assert.equal(p.latin,'Times New Roman');
@@ -19,4 +19,10 @@ test('F05 figure inheritance and independent fonts do not mutate preferences',()
 });
 test('F09 preferences are scoped to owner and not project or shared session',()=>{
  assert.notEqual(fontKey('alice'),fontKey('bob'));assert.notEqual(fontKey(),fontKey('alice'));
+});
+test('Japanese defaults prefer Japanese system faces without replacing custom fonts or stored settings',()=>{
+ const saved=defaults(),before=structuredClone(saved);
+ assert.deepEqual(localeCjkCandidates('ja',saved.zh),japaneseCandidates);
+ assert.deepEqual(localeCjkCandidates('ja','Noto Serif CJK JP'),[]);
+ assert.deepEqual(localeCjkCandidates('en',saved.zh),[]);assert.deepEqual(saved,before);
 });

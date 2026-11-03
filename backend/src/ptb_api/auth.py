@@ -141,6 +141,7 @@ def create_account_router(ctx: AccountContext):
         expires = datetime.now(timezone.utc)+timedelta(seconds=ctx.settings.lifetime_seconds)
         if not ctx.store.issue_session(user,hash_token(raw),csrf,expires,hash_token(request.cookies.get(ctx.settings.cookie,''))):
             raise HTTPException(401,'invalid_credentials')
+        ctx.store.login_succeeded(username,ip)
         response.set_cookie(ctx.settings.cookie,raw,max_age=ctx.settings.lifetime_seconds,secure=ctx.settings.secure,
                             httponly=True,samesite='strict',path='/')
         response.delete_cookie(ctx.settings.challenge_cookie,path='/',secure=ctx.settings.secure,httponly=True,samesite='strict')

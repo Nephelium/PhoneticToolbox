@@ -1,8 +1,15 @@
+import {messageRef} from '../i18n/index.ts';
+import {uiMessage,uiError,uiErrorMessage,localized} from '../modules/module-localization.ts';
+import {tr} from '../i18n/index.ts';
 export interface FontPreferences {version:1;zh:string;latin:string;mono:string;ipa:'Doulos SIL';bodySize:number;figure:{follow:boolean;zh:string;latin:string;size:number}}
 export const candidates={zh:['SimSun','Microsoft YaHei','KaiTi','Source Han Serif SC','Noto Serif CJK SC','PingFang SC','Noto Sans CJK SC','Noto Sans SC','Source Han Sans SC'],latin:['Times New Roman','Segoe UI','Arial','Georgia','DejaVu Sans','Liberation Sans','Noto Sans'],mono:['JetBrains Mono','Consolas','Cascadia Code','Courier New','DejaVu Sans Mono','Liberation Mono','Menlo']};
+export const japaneseCandidates=['Yu Gothic UI','Yu Gothic','Meiryo','Hiragino Sans','Hiragino Kaku Gothic ProN','Noto Sans CJK JP','Noto Sans JP','Source Han Sans JP'];
+export function localeCjkCandidates(language:string,configured:string):string[]{
+ return language==='ja'&&(!configured||configured==='SimSun')?japaneseCandidates:[];
+}
 export const defaults=():FontPreferences=>({version:1,zh:'SimSun',latin:'Times New Roman',mono:'JetBrains Mono',ipa:'Doulos SIL',bodySize:14,figure:{follow:true,zh:'SimSun',latin:'Times New Roman',size:12}});
 export const validFamily=(value:unknown):value is string=>typeof value==='string'&&value.length<=100&&!/[\x00-\x1f"'\\/;{}<>]/.test(value);
-export const quoteFamily=(value:string)=>{if(!validFamily(value))throw Error('无效的字体名称。');return '"'+value+'"';};
+export const quoteFamily=(value:string)=>{if(!validFamily(value))throw uiError(uiMessage('state.invalid_font_name'));return '"'+value+'"';};
 export function normalizeFonts(value:unknown):FontPreferences{
  const d=defaults();if(!value||typeof value!=='object'||Array.isArray(value))return d;
  const p=value as Record<string,any>;if(p.version!==1)return d;

@@ -1,7 +1,6 @@
 # M01-B source_ids: SRC-VOICESAUCE, SRC-OPENSAUCE; migration evidence: docs/modules/evidence/M01-core-migration.json
 import numpy as np
 from typing import Dict, Optional, Tuple, List
-from scipy.signal import get_window
 from .common import segment_for_frame
 
 def parabolic_interpolation(y: np.ndarray, x: np.ndarray, i: int) -> Tuple[float, float]:
@@ -77,16 +76,7 @@ def compute_spectral_features_batch(
         "H5K": np.full(nframes, np.nan),
     }
 
-    # Pre-calculate common constants
-    # Using a window function reduces spectral leakage
-    # Gaussian window is good for harmonic analysis, but Hamming/Hanning is standard.
-    # The original code didn't use a window explicitly in segment_for_frame (it used rectangular),
-    # but for FFT based peak picking, a window is recommended.
-    # However, to match previous behavior closely, we might stick to what segment_for_frame does.
-    # segment_for_frame extracts exactly N_periods. Rectangular window on integer number of periods
-    # of a periodic signal is actually optimal (no leakage).
-    # Since we extract N_periods based on F0, we assume it's close to integer periods.
-    # Let's use a Hanning window to be safe against pitch estimation errors.
+    # Preserve the inherited rectangular window and N-period segment contract.
 
     for k in range(nframes):
         if voiced_mask is not None and k < len(voiced_mask) and not voiced_mask[k]:
@@ -138,11 +128,15 @@ def compute_spectral_features_batch(
 
         # Helper to find peak in range
         def find_peak_in_range(target_freq: float, search_range: float) -> float:
-            if np.isnan(target_freq) or target_freq <= 0:
+            if not np.isfinite(target_freq) or target_freq <= 0:
                 return np.nan
 
             f_min = target_freq - search_range
             f_max = target_freq + search_range
+
+            # A band wholly outside the sampled spectrum has no measurement.
+            if f_min > freqs[-1] or f_max < 0:
+                return np.nan
 
             # Convert to bin indices
             idx_min = int(np.floor(f_min / df))

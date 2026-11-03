@@ -10,7 +10,9 @@
     "customPaletteColor",
     "homeIconScale",
     "fonts",
-    "panelWidths"
+    "panelWidths",
+    "automaticAudioGain",
+    "uiLocale"
   ],
   "M01": [
     "settings",
@@ -129,6 +131,7 @@
     "speed",
     "pitch_ratio",
     "pitch_hz",
+    "pitchMode",
     "offset",
     "minInput",
     "maxInput",
@@ -136,6 +139,9 @@
     "ymax",
     "refInput",
     "refs",
+    "timeRefInput",
+    "timeRefs",
+    "refDirection",
     "directPlayback",
     "panelWidths"
   ],
@@ -183,6 +189,10 @@
     "phoneSplit",
     "durationInput",
     "nudgeStep",
+    "snapEnabled",
+    "linkWordPhone",
+    "linkWordExtra",
+    "linkPhoneExtra",
     "showBoth",
     "showSpectrogram",
     "panelWidths"
@@ -215,6 +225,8 @@
     "title",
     "introText",
     "interTrialText",
+    "responsePrompt",
+    "showResponsePrompt",
     "introLargeText",
     "showInterTrialText",
     "largeText",
@@ -223,6 +235,7 @@
     "showFilename",
     "interTrialInterval",
     "isi",
+    "playbackVolume",
     "useBeep",
     "validKeys",
     "seed",

@@ -1,0 +1,14 @@
+{
+  "platform.parameter_table.preview_busy": "已有预览正在读取，请稍后重试。",
+  "platform.parameter_table.index_timeout": "参数表索引超时，请优先打开同名 SQLite 结果。",
+  "platform.parameter_table.input_budget": "参数文件超过读取预算，请优先打开同名 SQLite 结果。",
+  "platform.parameter_table.invalid_structure": "参数文件结构不受支持或包含公式。",
+  "platform.parameter_table.process_incomplete": "参数读取进程未完成，请重新打开结果。",
+  "platform.parameter_table.window_failed": "参数窗口读取失败，请检查本机任务服务。",
+  "platform.parameter_table.file_size_limit": "参数文件超过 16 MB。",
+  "platform.parameter_table.read_timeout": "参数表读取超时，请使用较小的表。",
+  "platform.parameter_table.invalid_table": "参数表格式不受支持、包含公式或超过显示预算。原文件未修改。",
+  "platform.parameter_table.subprocess_incomplete": "参数读取子进程未能完成。请使用完整研究工作台修复版，原文件未修改。",
+  "platform.parameter_table.platform_unverified": "此平台的参数读取尚未验证。",
+  "platform.parameter_table.service_failed": "参数读取服务失败。请检查本机后台，不能据此判断原参数文件损坏。"
+}

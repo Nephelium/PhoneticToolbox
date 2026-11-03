@@ -1,3 +1,4 @@
+import {msg,tr,join,bindText,appendText,bindAttribute,textNode,setHTML,onLocaleChange,parameterLabel,uiError} from './i18n.mjs';
 import {canvasFont,freezeFonts,svgFontFamily} from './fonts.js';
 import {VocalTractViewer} from './scene.js';
 import {frameIntervals} from './keyframes.js';
@@ -23,37 +24,37 @@ function timeline(c,width,height,time,frames,points,state){
   for(const f of intervals){const x=at(f.start),end=at(f.end);c.fillStyle=f.index===current.index?green+'20':line+'35';c.fillRect(x,top+32,end-x,103);c.strokeStyle=line;c.beginPath();c.moveTo(x,top+32);c.lineTo(x,top+135);c.stroke();c.save();c.beginPath();c.rect(x+2,top+32,Math.max(0,end-x-4),20);c.clip();c.fillStyle=ink;c.font=canvasFont(11,true);c.fillText(f.name,(x+end)/2,top+46);c.restore();}
   c.strokeStyle=green;c.lineWidth=2;c.beginPath();let pen=false;for(const point of points||[]){if(point.f0===null){pen=false;continue;}const x=at(point.time),y=fy(point.f0);pen?c.lineTo(x,y):c.moveTo(x,y);pen=true;}c.stroke();
   c.strokeStyle=dark()?'#ffca8c':'#ac5825';c.beginPath();c.moveTo(at(time),top+31);c.lineTo(at(time),top+135);c.stroke();
-  c.textAlign='left';c.fillStyle=ink;const f0=state?(state.silent||state.aspiration||(state.source?.vibration??1)===0?null:state.f0):timelinePitch(points,time);c.fillText(state?.aspiration?'送气 · 无基频':state?.silent?'静音 · 无基频':f0!==null?`F0 ${Math.round(f0)} Hz`:'无周期基频（耳语 / 清声）',16,top+150);
+  c.textAlign='left';c.fillStyle=ink;const f0=state?(state.silent||state.aspiration||(state.source?.vibration??1)===0?null:state.f0):timelinePitch(points,time);c.fillText(state?.aspiration?msg("modules.vocal-tract-frame.text.aspiration_no_fundamental_frequency_318"):state?.silent?msg("modules.vocal-tract-frame.text.silence_no_fundamental_frequency_319"):f0!==null?`F0 ${Math.round(f0)} Hz`:msg("modules.vocal-tract-frame.text.no_periodic_fundamental_frequency_whisper_unvoiced_320"),16,top+150);
   c.textAlign='center';for(let i=1;i<=4;i++)c.fillText((total*i/4).toFixed(2)+' s',at(total*i/4),top+150);
 }
 
 export function setupVideo({post,viewer,getFrames,getCurve,prepare,lock,ready}){
   const $=id=>document.getElementById(id),dialog=$('videoDialog');let running=false,cancel=false;
-  const status=s=>$('videoStatus').textContent=s;
-  $('exportVideo').onclick=()=>{status('视频包含同步音频、构形动作、姿势名称和基频。');$('videoProgress').value=0;dialog.showModal();};
+  const status=s=>bindText($('videoStatus'),()=>s);
+  $('exportVideo').onclick=()=>{status(()=>msg("modules.vocal-tract-frame.text.video_includes_synchronized_audio_configuration_motion_posture_names_and_fun_321"));$('videoProgress').value=0;dialog.showModal();};
   let activeSession=null;
-  $('videoClose').onclick=()=>{if(running){cancel=true;status('正在取消…');post('animation/stop').catch(()=>{});if(activeSession?.id)post('video/cancel',{id:activeSession.id}).catch(()=>{});}else dialog.close();};
+  $('videoClose').onclick=()=>{if(running){cancel=true;status(()=>msg("modules.vocal-tract-frame.text.cancelling_322"));post('animation/stop').catch(()=>{});if(activeSession?.id)post('video/cancel',{id:activeSession.id}).catch(()=>{});}else dialog.close();};
   dialog.addEventListener('cancel',e=>{if(running){e.preventDefault();$('videoClose').click();}});
   $('videoStart').onclick=async()=>{
     if(running)return;
-    running=true;cancel=false;$('motionHud').hidden=true;$('videoStart').disabled=true;$('videoViews').disabled=true;$('videoClose').textContent='取消导出';
+    running=true;cancel=false;$('motionHud').hidden=true;$('videoStart').disabled=true;$('videoViews').disabled=true;bindText($('videoClose'),()=>msg("modules.vocal-tract-frame.text.cancel_export_323"));
     let session=null,exportViewer=null,encoder=null,audioEncoder=null;let releaseFonts=()=>{};
     try{
       for(let attempt=0;!ready();attempt++){
-        if(cancel)throw Error('已取消导出');
-        if(attempt>=300)throw Error('构形仍在更新，请稍后重试');
-        status('正在等待构形更新…');await new Promise(resolve=>setTimeout(resolve,50));
+        if(cancel)throw uiError(msg("modules.vocal-tract-frame.text.export_cancelled_324"));
+        if(attempt>=300)throw uiError(msg("modules.vocal-tract-frame.text.configuration_still_updating_try_again_shortly_325"));
+        status(()=>msg("modules.vocal-tract-frame.text.waiting_for_configuration_update_326"));await new Promise(resolve=>setTimeout(resolve,50));
       }
-      if(cancel)throw Error('已取消导出');lock(true);
+      if(cancel)throw uiError(msg("modules.vocal-tract-frame.text.export_cancelled_324"));lock(true);
       releaseFonts=await freezeFonts();
       const six=$('videoViews').value==='six',width=six?1920:1280,height=six?1080:720,fps=30;
       const videoConfig={codec:'vp8',width,height,bitrate:six?8000000:4000000,framerate:fps,latencyMode:'quality'};
       const audioConfig={codec:'opus',sampleRate:48000,numberOfChannels:1,bitrate:96000};
-      if(!window.VideoEncoder||!window.AudioEncoder||!(await VideoEncoder.isConfigSupported(videoConfig)).supported||!(await AudioEncoder.isConfigSupported(audioConfig)).supported)throw Error('当前浏览器不支持视频编码，请使用最新版 Chrome 或桌面版');
+      if(!window.VideoEncoder||!window.AudioEncoder||!(await VideoEncoder.isConfigSupported(videoConfig)).supported||!(await AudioEncoder.isConfigSupported(audioConfig)).supported)throw uiError(msg("modules.vocal-tract-frame.text.video_encoding_unsupported_use_the_latest_chrome_or_desktop_app_327"));
       const duration=Math.round(getFrames().reduce((s,f)=>s+f.duration,0)*48000)/48000;
-      if(cancel)throw Error('已取消导出');
+      if(cancel)throw uiError(msg("modules.vocal-tract-frame.text.export_cancelled_324"));
       session=await(await post('video/begin',{width,height,fps,duration})).json();activeSession=session;if(session.cancelled)return;
-      status('正在准备动作与音频…');const prepared=await prepare();if(cancel)throw Error('已取消导出');
+      status(()=>msg("modules.vocal-tract-frame.text.preparing_motion_and_audio_328"));const prepared=await prepare();if(cancel)throw uiError(msg("modules.vocal-tract-frame.text.export_cancelled_324"));
       const audio=await(await post('animation/audio',{id:prepared.id})).json();
       const tileW=six?width/3:width,tileH=six?(height-156)/2:height-156;
       const host=document.createElement('div');host.className='export-viewport';host.style.cssText=`position:fixed;left:-10000px;top:0;width:${tileW}px;height:${tileH}px;overflow:hidden`;document.body.append(host);
@@ -66,7 +67,7 @@ export function setupVideo({post,viewer,getFrames,getCurve,prepare,lock,ready}){
       const output=track=>(chunk,meta)=>{const bytes=new Uint8Array(chunk.byteLength);chunk.copyTo(bytes);pending.push({track,timestamp:chunk.timestamp,duration:chunk.duration||0,key:chunk.type==='key',data:b64(bytes)});if(track===2&&meta.decoderConfig?.description)opus=b64(new Uint8Array(meta.decoderConfig.description));};
       encoder=new VideoEncoder({output:output(1),error:e=>{failed=e;}});encoder.configure(videoConfig);
       audioEncoder=new AudioEncoder({output:output(2),error:e=>{failed=e;}});audioEncoder.configure(audioConfig);
-      async function flush(){while(pending.length){if(cancel)throw Error('已取消导出');const batch=pending.splice(0,20);await post('video/chunks',{id:session.id,packets:batch,...(opus?{opus}:{})});}if(failed)throw failed;}
+      async function flush(){while(pending.length){if(cancel)throw uiError(msg("modules.vocal-tract-frame.text.export_cancelled_324"));const batch=pending.splice(0,20);await post('video/chunks',{id:session.id,packets:batch,...(opus?{opus}:{})});}if(failed)throw failed;}
       const samples=new Float32Array(un64(audio.base64).buffer);
       for(let offset=0;offset<samples.length;offset+=960){
         const data=new AudioData({format:'f32-planar',sampleRate:audio.sample_rate,numberOfChannels:1,numberOfFrames:Math.min(960,samples.length-offset),timestamp:Math.round(offset/audio.sample_rate*1e6),data:samples.subarray(offset,offset+960)});
@@ -75,9 +76,9 @@ export function setupVideo({post,viewer,getFrames,getCurve,prepare,lock,ready}){
       await audioEncoder.flush();await flush();
       const views=six?[['organs',true],['airway',true],['overlay',true],['organs',false],['airway',false],['overlay',false]]:[[viewer.mode,viewer.sagittal]];
       const frameCount=Math.ceil(audio.samples*fps/audio.sample_rate);
-      const modes={organs:'器官观察',airway:'气腔观察',overlay:'叠加观察'};
+      const modes={organs:msg("modules.vocal-tract-frame.text.organs_329"),airway:msg("modules.vocal-tract-frame.text.airway_330"),overlay:msg("modules.vocal-tract-frame.text.overlay_331")};
       for(let i=0;i<frameCount;i++){
-        if(cancel)throw Error('已取消导出');const time=i/fps;
+        if(cancel)throw uiError(msg("modules.vocal-tract-frame.text.export_cancelled_324"));const time=i/fps;
         const picture=await(await post('animation/picture',{id:prepared.id,index:i})).json();
         c.fillStyle=dark()?'#192d39':'#f5f3eb';c.fillRect(0,0,width,height);
         for(let v=0;v<views.length;v++){
@@ -91,22 +92,22 @@ export function setupVideo({post,viewer,getFrames,getCurve,prepare,lock,ready}){
             exportViewer.renderNow();c.drawImage(exportViewer.renderer.domElement,x,y,tileW,tileH);
             if(viewer.labels){c.font=canvasFont(13);c.textAlign='left';c.fillStyle=dark()?'#d7f3eb':'#286657';for(const {label} of exportViewer.controls.values())if(!label.hidden)c.fillText(label.textContent,x+parseFloat(label.style.left),y+parseFloat(label.style.top)+12);}
           }
-          c.fillStyle=dark()?'#d5e8ef':'#274957';c.font=canvasFont(16);c.textAlign='left';c.fillText(`${sagittal?'正中矢状面':'三维'} · ${modes[mode]}`,x+14,y+25);c.strokeStyle=dark()?'#304154':'#dce5f0';c.lineWidth=1;c.strokeRect(x,y,tileW,tileH);
+          c.fillStyle=dark()?'#d5e8ef':'#274957';c.font=canvasFont(16);c.textAlign='left';c.fillText(msg("modules.vocal-tract-frame.text.value_value_111",{v0:()=>sagittal?msg("modules.vocal-tract-frame.text.midsagittal_332"):msg("modules.vocal-tract-frame.text.3d_333"),v1:()=>modes[mode]}),x+14,y+25);c.strokeStyle=dark()?'#304154':'#dce5f0';c.lineWidth=1;c.strokeRect(x,y,tileW,tileH);
         }
         timeline(c,width,height,time,prepared.frames,prepared.timeline,picture.state);
         const frame=new VideoFrame(canvas,{timestamp:Math.round(i*1e6/fps),duration:Math.round(Math.min(1/fps,prepared.duration-time)*1e6)});encoder.encode(frame,{keyFrame:i%fps===0});frame.close();
         if(i%6===0){await encoder.flush();await flush();}
-        $('videoProgress').value=(i+1)/frameCount;status(`正在导出 ${i+1} / ${frameCount} 帧${prepared.cached?' · 复用已有动作与音频':''}`);
+        $('videoProgress').value=(i+1)/frameCount;status(()=>msg("modules.vocal-tract-frame.text.exporting_frame_value_valuevalue_334",{v0:()=>i+1,v1:()=>frameCount,v2:()=>prepared.cached?msg("modules.vocal-tract-frame.text.reusing_motion_and_audio_335"):''}));
       }
-      await encoder.flush();await flush();if(cancel)throw Error('已取消导出');
-      status('正在编码 MP4 并保存…');
-      const saved=await(await post('video/finish',{id:session.id})).json();status(`已保存 ${saved.name} · ${saved.frames} 帧 · ${saved.duration.toFixed(2)} 秒`);session=null;
-    }catch(e){status(cancel?'已取消导出，未替换目标文件。':'导出失败：'+e.message);}
+      await encoder.flush();await flush();if(cancel)throw uiError(msg("modules.vocal-tract-frame.text.export_cancelled_324"));
+      status(()=>msg("modules.vocal-tract-frame.text.encoding_mp4_and_saving_336"));
+      const saved=await(await post('video/finish',{id:session.id})).json();status(()=>msg("modules.vocal-tract-frame.text.saved_value_value_frames_value_s_337",{v0:()=>saved.name,v1:()=>saved.frames,v2:()=>saved.duration.toFixed(2)}));session=null;
+    }catch(e){status(()=>cancel?msg("modules.vocal-tract-frame.text.export_cancelled_target_file_unchanged_338"):join(()=>msg("modules.vocal-tract-frame.text.export_failed_167"),()=>e.message));}
     finally{releaseFonts();
       if(session?.id)await post('video/cancel',{id:session.id}).catch(()=>{});
       activeSession=null;
       if(encoder&&encoder.state!=='closed')encoder.close();if(audioEncoder&&audioEncoder.state!=='closed')audioEncoder.close();exportViewer?.dispose();
-      if(running){running=false;lock(false);}$('videoStart').disabled=false;$('videoViews').disabled=false;$('videoClose').textContent='返回工作台';
+      if(running){running=false;lock(false);}$('videoStart').disabled=false;$('videoViews').disabled=false;bindText($('videoClose'),()=>msg("modules.vocal-tract-frame.text.return_to_workbench_339"));
     }
   };
 }

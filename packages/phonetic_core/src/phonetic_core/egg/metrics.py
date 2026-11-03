@@ -11,7 +11,9 @@ def calculate_cq_sq(
 ) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
     """
     根据每个 GCI 事件、紧随其后的 GOI、下一个 GCI 以及相应的接触阶段峰值，
-    计算接触商 (CQ) 和速度商 (SQ)。不使用窗口化。
+    计算接触商 CQ 和历史键 SQ 的归一化时长不对称量。不使用窗口化。
+    SQ = (decontacting - contacting) / contact_duration；不是正时长比。
+    与 Orlikoff 接触指数的常见符号约定相反，不直接改名为 CI。
 
     Args:
         gci_times_all_s (list): 所有检测到的 GCI 时间列表 (秒)。必须已排序。

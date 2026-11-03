@@ -2,7 +2,9 @@
 import argparse
 import hashlib
 import json
+import os
 from pathlib import Path
+import uuid
 
 ROOT=Path(__file__).resolve().parents[1]
 FOLDERS=('frontend/public/vocal-tract','resources/vocal_tract')
@@ -10,6 +12,15 @@ FOLDERS=('frontend/public/vocal-tract','resources/vocal_tract')
 def digest(path):return hashlib.sha256(path.read_bytes()).hexdigest()
 def encode(value):return json.dumps(value,ensure_ascii=False,indent=2)+'\n'
 def read(path):return json.loads((ROOT/path).read_text('utf-8'))
+
+def write_atomic(path,content):
+    temporary=path.with_name('.'+path.name+'.'+uuid.uuid4().hex+'.tmp')
+    try:
+        with temporary.open('x',encoding='utf-8',newline='\n') as stream:
+            stream.write(content);stream.flush();os.fsync(stream.fileno())
+        os.replace(temporary,path)
+    finally:
+        temporary.unlink(missing_ok=True)
 
 def main(check=False):
     paths=sorted(p for folder in FOLDERS for p in (ROOT/folder).rglob('*')
@@ -38,7 +49,7 @@ def main(check=False):
         p=ROOT/name
         if p.read_text('utf-8')!=content:
             changed.append(name)
-            if not check:p.write_text(content,encoding='utf-8',newline='\n')
+            if not check:write_atomic(p,content)
     if check and changed:raise SystemExit('Stale M10 resources: '+', '.join(changed))
     print(json.dumps({'resources':len(paths),'changed':changed,'check':check}))
 

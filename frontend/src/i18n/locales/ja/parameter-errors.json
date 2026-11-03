@@ -1,0 +1,14 @@
+{
+  "platform.parameter_table.preview_busy": "別のプレビューを読み取り中です。しばらくしてから再試行してください。",
+  "platform.parameter_table.index_timeout": "パラメーター表の索引作成がタイムアウトしました。同じ基本名のSQLite結果を優先して開いてください。",
+  "platform.parameter_table.input_budget": "パラメーターファイルが読み取り上限を超えています。同じ基本名のSQLite結果を優先して開いてください。",
+  "platform.parameter_table.invalid_structure": "パラメーターファイルの構造に対応していないか、数式が含まれています。",
+  "platform.parameter_table.process_incomplete": "パラメーター読み取りプロセスが完了しませんでした。結果を開き直してください。",
+  "platform.parameter_table.window_failed": "パラメーターの表示範囲を読み取れません。ローカルのタスクサービスを確認してください。",
+  "platform.parameter_table.file_size_limit": "パラメーターファイルが16 MBを超えています。",
+  "platform.parameter_table.read_timeout": "パラメーター表の読み取りがタイムアウトしました。より小さな表を使用してください。",
+  "platform.parameter_table.invalid_table": "パラメーター表の形式に対応していないか、数式が含まれているか、表示上限を超えています。元のファイルは変更していません。",
+  "platform.parameter_table.subprocess_incomplete": "パラメーター読み取りの子プロセスが完了しませんでした。修正済みの完全な研究ワークベンチを使用してください。元のファイルは変更していません。",
+  "platform.parameter_table.platform_unverified": "このプラットフォームでのパラメーター読み取りは、まだ検証されていません。",
+  "platform.parameter_table.service_failed": "パラメーター読み取りサービスに失敗しました。ローカルのバックエンドを確認してください。この失敗だけでは元のパラメーターファイルの破損を判断できません。"
+}

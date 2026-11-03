@@ -26,7 +26,13 @@ def main():
     send({'ready':'m10/1'})
     def work(request):
         try:send({'id':request['id'],'ok':True,'value':runtime.invoke(request['op'],request.get('body'),generation=request.get('generation'))})
-        except Exception as exc:send({'id':request.get('id'),'ok':False,'error':str(exc)})
+        except Exception as exc:
+            result={'id':request.get('id'),'ok':False,'error':str(exc)}
+            if getattr(exc,'display',None) is not None:
+                # Successful native playback never needs to load UI catalogs.
+                from ..native_i18n import native_error_payload
+                result={'id':request.get('id'),**native_error_payload(exc)}
+            send(result)
     executor=ThreadPoolExecutor(max_workers=1)
     try:
         while True:

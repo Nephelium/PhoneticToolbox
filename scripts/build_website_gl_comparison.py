@@ -13,7 +13,7 @@ def write(path, obj): path.write_text(json.dumps(obj, ensure_ascii=False, indent
 
 def verify(site=SITE, *, expected_settings=None):
     settings = SETTINGS if expected_settings is None else expected_settings
-    if read(site/'assets/spectrogram-examples/comparison.json').get('comparison_schema') == 'ptb-four-way/1':
+    if read(site/'assets/spectrogram-examples/comparison.json').get('comparison_schema') in ('ptb-four-way/1', 'ptb-five-way/1'):
         assert settings == SETTINGS, 'Four-way comparison must use current frozen settings'
         from build_website_four_comparison import verify as verify_four
         return verify_four(site)

@@ -1,3 +1,6 @@
+import {uiErrorMessage} from '../module-localization.ts';
+import {uiError as displayError,uiMessage as displayMessage} from '../module-localization.ts';
+import {tr} from '../../i18n/index.ts';
 import {LocalAssets,type AssetDatabase} from '../../platform/local-assets.ts';
 import {validateToneSettings,tonePreview,type ToneSettings} from './tones.ts';
 
@@ -14,9 +17,9 @@ export function syllableKey(value:string){
   let marked:number|undefined;
   text=text.normalize('NFD').replace(/[\u0304\u0301\u030c\u0300]/g,mark=>{
     const next=['\u0304','\u0301','\u030c','\u0300'].indexOf(mark)+1;
-    if(marked!==undefined&&marked!==next)throw Error('同一音节含有不同声调。');marked=next;return '';
+    if(marked!==undefined&&marked!==next)throw displayError(displayMessage('modules.mandarin-ipa.text.e37d634a7884'));marked=next;return '';
   }).normalize('NFC');
-  if(!/^[a-züê]+$/.test(text)||tone!==undefined&&marked!==undefined&&tone!==marked)throw Error('请使用普通话拼音，例如 ma、ma1、mā 或 nü3。');
+  if(!/^[a-züê]+$/.test(text)||tone!==undefined&&marked!==undefined&&tone!==marked)throw displayError(displayMessage('modules.mandarin-ipa.text.0b0871172f43'));
   tone??=marked;return text+(tone===undefined?'':tone);
 }
 
@@ -27,14 +30,14 @@ export function parseDelimited(text:string,delimiter= text.split(/\r?\n/,1)[0]!.
     if(ch==='"'){
       if(quoted&&text[i+1]==='"'){cell+='"';i++;}
       else if(quoted){quoted=false;closed=true;}
-      else if(!cell&&!closed)quoted=true;else throw Error('表格引号格式有误，请检查 CSV 文件。');
+      else if(!cell&&!closed)quoted=true;else throw displayError(displayMessage('modules.mandarin-ipa.text.0f336109ebd1'));
     }else if(!quoted&&(ch===delimiter||ch==='\r'||ch==='\n')){
       row.push(cell);cell='';closed=false;
       if(ch!==delimiter){if(ch==='\r'&&text[i+1]==='\n')i++;rows.push(row);row=[];}
-    }else{if(closed&&!/\s/.test(ch))throw Error('CSV 引号后有多余内容。');if(!closed)cell+=ch;}
-    if(rows.length>maxRows+1)throw Error('字表最多支持 50,000 行。');
+    }else{if(closed&&!/\s/.test(ch))throw displayError(displayMessage('modules.mandarin-ipa.text.e64fcc03a291'));if(!closed)cell+=ch;}
+    if(rows.length>maxRows+1)throw displayError(displayMessage('modules.mandarin-ipa.text.e75c2bcbd15d'));
   }
-  if(quoted)throw Error('CSV 引号未闭合。');if(cell||row.length||closed){row.push(cell);rows.push(row);}return rows;
+  if(quoted)throw displayError(displayMessage('modules.mandarin-ipa.text.bde0ba8cf0d4'));if(cell||row.length||closed){row.push(cell);rows.push(row);}return rows;
 }
 
 export interface ImportColumns {keyColumn:number;ipaColumn:number;startRow:number}
@@ -48,23 +51,23 @@ export function suggestColumns(input:readonly (readonly string[])[]):ImportColum
 }
 export function columnLabel(index:number){let label='';for(let n=index+1;n>0;n=Math.floor((n-1)/26))label=String.fromCharCode(65+(n-1)%26)+label;return label;}
 export function tableRows(input:readonly (readonly string[])[],kind:TableKind,columns?:ImportColumns){
-  if(columns&&(!Number.isInteger(columns.keyColumn)||!Number.isInteger(columns.ipaColumn)||columns.keyColumn<0||columns.ipaColumn<0||columns.keyColumn===columns.ipaColumn))throw Error('请选择不同的汉字／音节列和音标列。');
-  if(columns&&(!Number.isInteger(columns.startRow)||columns.startRow<1||columns.startRow>input.length))throw Error('数据起始行须在表格范围内。');
+  if(columns&&(!Number.isInteger(columns.keyColumn)||!Number.isInteger(columns.ipaColumn)||columns.keyColumn<0||columns.ipaColumn<0||columns.keyColumn===columns.ipaColumn))throw displayError(displayMessage('modules.mandarin-ipa.text.6093403ac4a8'));
+  if(columns&&(!Number.isInteger(columns.startRow)||columns.startRow<1||columns.startRow>input.length))throw displayError(displayMessage('modules.mandarin-ipa.text.83103111355e'));
   const rows:[string,string][]=[];const seen=new Set<string>();let first=true;
   for(let i=columns?columns.startRow-1:0;i<input.length;i++){
     const raw=input[i]!,cells=(columns?[raw[columns.keyColumn]??'',raw[columns.ipaColumn]??'']:raw).map(value=>value.trim());if(cells.every(value=>!value))continue;
     if(first&&!columns){first=false;if(keyHeader.test(cells[0]??'')&&ipaHeader.test(cells[1]??''))continue;}
-    if(cells.length<2||cells.slice(2).some(Boolean)||!cells[0]||!cells[1])throw Error(`第 ${i+1} 行需要两列：${kind==='hanzi'?'汉字':'拼音音节'}和国际音标。`);
+    if(cells.length<2||cells.slice(2).some(Boolean)||!cells[0]||!cells[1])throw displayError(displayMessage('modules.mandarin-ipa.text.3ca8022f1e35',{v0:i+1,v1:kind==='hanzi'?tr('modules.mandarin-ipa.text.00e5d5601ce3'):tr('modules.mandarin-ipa.text.68da7a474f1f')}));
     let key=cells[0];
-    if(kind==='hanzi'){if(!/^\p{Script=Han}$/u.test(key))throw Error(`第 ${i+1} 行汉字列须为单个汉字。`);}
-    else try{key=syllableKey(key);}catch(error){throw Error(`第 ${i+1} 行：${(error as Error).message}`);}
-    if(cells[1].length>256||/[\u0000-\u001f\u007f]/.test(cells[1]))throw Error(`第 ${i+1} 行音标过长或含有控制字符。`);
+    if(kind==='hanzi'){if(!/^\p{Script=Han}$/u.test(key))throw displayError(displayMessage('modules.mandarin-ipa.text.7d5a56e6026e',{v0:i+1}));}
+    else try{key=syllableKey(key);}catch(error){throw displayError(displayMessage('modules.mandarin-ipa.text.640f0bc5148e',{v0:i+1,v1:(error as Error).message}));}
+    if(cells[1].length>256||/[\u0000-\u001f\u007f]/.test(cells[1]))throw displayError(displayMessage('modules.mandarin-ipa.text.bdb8f0531b22',{v0:i+1}));
     const pair=JSON.stringify([key,cells[1]]);if(!seen.has(pair)){rows.push([key,cells[1]]);seen.add(pair);}
-    if(rows.length>maxRows)throw Error('字表最多支持 50,000 行。');
+    if(rows.length>maxRows)throw displayError(displayMessage('modules.mandarin-ipa.text.e75c2bcbd15d'));
   }
-  if(!rows.length)throw Error('字表没有可用的对照记录。');return rows;
+  if(!rows.length)throw displayError(displayMessage('modules.mandarin-ipa.text.693d538e1b90'));return rows;
 }
-export function tableName(value:string){const name=value.trim();if(!name||[...name].length>60||/[\u0000-\u001f\u007f]/.test(name))throw Error('请填写 1–60 个字符的字表名称。');return name;}
+export function tableName(value:string){const name=value.trim();if(!name||[...name].length>60||/[\u0000-\u001f\u007f]/.test(name))throw displayError(displayMessage('modules.mandarin-ipa.text.c82067c76154'));return name;}
 export function restoreLibrary(raw:unknown):TableLibrary{
   if(raw==null)return emptyLibrary();
   try{
@@ -78,24 +81,24 @@ export function restoreLibrary(raw:unknown):TableLibrary{
       if(table.tones!==undefined){table.tones=validateToneSettings(table.tones);tonePreview(table.rows,table.tones);}
     }
     if(value.selected!==null&&!ids.has(value.selected))throw Error();return value;
-  }catch{throw Error('已保存的自定义字表无法读取，请保留原文件并重新打开页面重试。');}
+  }catch{throw displayError(displayMessage('modules.mandarin-ipa.text.90856f67d6bb'));}
 }
 export function addTable(library:TableLibrary,table:CustomTable):TableLibrary{
-  const name=tableName(table.name);if(library.tables.some(t=>t.name===name))throw Error('已有同名字表，请换一个名称。');
-  if(library.tables.length>=32)throw Error('当前最多保存 32 套自定义字表。');
+  const name=tableName(table.name);if(library.tables.some(t=>t.name===name))throw displayError(displayMessage('modules.mandarin-ipa.text.ca7013e353e5'));
+  if(library.tables.length>=32)throw displayError(displayMessage('modules.mandarin-ipa.text.de0565c86c7d'));
   const added={...table,name,rows:tableRows(table.rows,table.kind),revision:1};
   if(table.tones!==undefined){added.tones=validateToneSettings(table.tones);tonePreview(added.rows,added.tones);}
   return {...library,tables:[...library.tables,added],selected:table.id};
 }
 export function replaceTable(library:TableLibrary,id:CustomTable['id'],table:Pick<CustomTable,'name'|'kind'|'rows'|'tones'>):TableLibrary{
-  const previous=library.tables.find(t=>t.id===id);if(!previous)throw Error('字表已不存在，请重新载入已存字表。');
-  const name=tableName(table.name);if(library.tables.some(t=>t.id!==id&&t.name===name))throw Error('已有同名字表，请换一个名称。');
+  const previous=library.tables.find(t=>t.id===id);if(!previous)throw displayError(displayMessage('modules.mandarin-ipa.text.ee9da353381b'));
+  const name=tableName(table.name);if(library.tables.some(t=>t.id!==id&&t.name===name))throw displayError(displayMessage('modules.mandarin-ipa.text.ca7013e353e5'));
   const replacement:CustomTable={id,name,kind:table.kind,rows:tableRows(table.rows,table.kind),revision:(previous.revision??1)+1};
   if(table.tones!==undefined){replacement.tones=validateToneSettings(table.tones);tonePreview(replacement.rows,replacement.tones);}
   return {...library,tables:library.tables.map(t=>t.id===id?replacement:t),selected:id};
 }
 export function removeTable(library:TableLibrary,id:CustomTable['id']):TableLibrary{
-  if(!library.tables.some(t=>t.id===id))throw Error('字表已不存在，请重新载入已存字表。');
+  if(!library.tables.some(t=>t.id===id))throw displayError(displayMessage('modules.mandarin-ipa.text.ee9da353381b'));
   return {...library,tables:library.tables.filter(t=>t.id!==id),selected:library.selected===id?null:library.selected};
 }
 export class CustomTableStore {
@@ -103,7 +106,10 @@ export class CustomTableStore {
   constructor(scope:string,database?:AssetDatabase){const owner=/^server:([^:]+):/.exec(scope)?.[1]??'desktop';this.assets=new LocalAssets(owner,'m13-custom-tables',database);}
   async load(){const raw=await this.assets.value<string>('library-v1')??null;const library=restoreLibrary(raw);this.raw=raw;return library;}
   async save(library:TableLibrary){
-    const raw=JSON.stringify(library);if(new TextEncoder().encode(raw).length>maxBytes)throw Error('自定义字表总量超过 8 MB，请缩小字表。');
-    try{await this.assets.compare('library-v1',this.raw,raw);}catch{throw Error('字表保存失败，可能已在另一窗口更新或本机空间不足。请重新载入已存字表后重试。');}this.raw=raw;
+    const raw=JSON.stringify(library);if(new TextEncoder().encode(raw).length>maxBytes)throw displayError(displayMessage('modules.mandarin-ipa.text.411b9436b960'));
+    try{await this.assets.compare('library-v1',this.raw,raw);}catch{throw displayError(displayMessage('modules.mandarin-ipa.text.32f4898dd7c3'));}this.raw=raw;
   }
 }
+
+/** Recovery depends on stable error identity, never a translated sentence. */
+export function tableErrorNeedsReload(cause:unknown):boolean{const value=uiErrorMessage(cause);return typeof value!=='string'&&['modules.mandarin-ipa.text.ee9da353381b','modules.mandarin-ipa.text.32f4898dd7c3'].includes(value.key);}

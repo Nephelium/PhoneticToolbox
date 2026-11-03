@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import {tr} from '../../i18n/index.ts';
 import {useId} from 'vue';
 import ModalDialog from '../../components/ModalDialog.vue';
 import type {PaperAnnotation} from '../../platform/papers.ts';
@@ -7,11 +8,11 @@ const emit=defineEmits<{'update:modelValue':[string];save:[];close:[];reload:[]}
 const inputId=useId();
 </script>
 <template>
- <ModalDialog class="annotation-note-dialog" :class="'note-'+color" :title="`第 ${page} 页 · 便签`" :close-disabled="saving" @close="emit('close')">
-  <label :for="inputId" class="note-input-label">批注内容</label>
-  <textarea :id="inputId" :value="modelValue" aria-label="批注内容" autofocus rows="7" maxlength="5000" placeholder="记下一点想法…" @input="emit('update:modelValue',($event.target as HTMLTextAreaElement).value)"/>
-  <p v-if="error" class="note-error" role="alert">{{error}} <button :disabled="saving" @click="emit('reload')">重新载入批注</button></p>
-  <template #footer><button :disabled="saving" @click="emit('close')">取消</button><button class="primary" :disabled="saving||!modelValue.trim()" @click="emit('save')">{{saving?'正在保存…':'保存批注'}}</button></template>
+ <ModalDialog class="annotation-note-dialog" :class="'note-'+color" :title="tr('modules.paper-reading.text.7400311868d8',{v0:page})" :close-disabled="saving" @close="emit('close')">
+  <label :for="inputId" class="note-input-label">{{tr('modules.paper-reading.text.6d5aba564779')}}</label>
+  <textarea :id="inputId" :value="modelValue" :aria-label="tr('modules.paper-reading.text.6d5aba564779')" autofocus rows="7" maxlength="5000" :placeholder="tr('modules.paper-reading.text.b21ed7581bf1')" @input="emit('update:modelValue',($event.target as HTMLTextAreaElement).value)"/>
+  <p v-if="error" class="note-error" role="alert">{{error}} <button :disabled="saving" @click="emit('reload')">{{tr('modules.paper-reading.text.3872ff36fd6d')}}</button></p>
+  <template #footer><button :disabled="saving" @click="emit('close')">{{tr('modules.paper-reading.text.2cd0f3be8738')}}</button><button class="primary" :disabled="saving||!modelValue.trim()" @click="emit('save')">{{saving?tr('modules.paper-reading.text.6bdb4435095e'):tr('modules.paper-reading.text.49dd2bd35dd7')}}</button></template>
  </ModalDialog>
 </template>
 <style scoped>

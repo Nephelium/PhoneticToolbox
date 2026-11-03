@@ -37,6 +37,14 @@ class Runtime {
 const port=(store:VocalProfileStore,runtime=new Runtime())=>({runtime,port:webVocalPort(async()=>{throw Error('unexpected server');},'project','workspace',()=>runtime,store)});
 const changed=(label:string)=>{const l=fresh();l.sets[0]!.name=label;return l;};
 
+test('malformed and rejected saved profiles offer recovery through a stable flag without overwriting bytes',async()=>{
+ for(const raw of ['{invalid',JSON.stringify({library:{invalid:true}})]){
+  let writes=0;const a=port({read:async()=>raw,write:async()=>{writes++;}});
+  await assert.rejects(a.port.request('meta'),(error:any)=>error instanceof Error&&error.recoveryAvailable===true);
+  assert.equal(writes,0);await a.port.close();
+ }
+});
+
 test('saved libraries survive disposal and a new workspace; account/project scopes stay separate',async()=>{
  const db=new MemoryAssetDatabase(),store=vocalProfileStore(new LocalAssets('owner','project',db));
  const a=port(store);await a.port.request('library/save',changed('甲'));await a.port.close(true);

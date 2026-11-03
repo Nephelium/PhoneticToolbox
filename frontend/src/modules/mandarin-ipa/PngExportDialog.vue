@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import {uiErrorMessage as displayErrorValue} from '../module-localization.ts';
+import {tr,messageRef} from '../../i18n/index.ts';
 import {onBeforeUnmount,reactive,ref,shallowRef,watch} from 'vue';
 import ModalDialog from '../../components/ModalDialog.vue';
 import {backgroundAppearance,backgroundName,backgroundUrl,prepareBackground} from '../../state/background.ts';
@@ -7,7 +9,7 @@ import {pngBackgroundDefaults} from './export-background.ts';
 const props=defineProps<{snapshot:MandarinIpaExportSnapshot}>();
 const emit=defineEmits<{close:[];busy:[value:boolean]}>();
 const current=()=>pngBackgroundDefaults({url:backgroundUrl.value,name:backgroundName.value,color:getComputedStyle(document.documentElement).getPropertyValue('--app'),...backgroundAppearance.value});
-const background=reactive(current()),previewUrl=ref(''),rendering=ref(false),reading=ref(false),previewError=ref(''),fileError=ref('');
+const background=reactive(current()),previewUrl=ref(''),rendering=ref(false),reading=ref(false),previewError=messageRef(),fileError=messageRef();
 const previewBlob=shallowRef<Blob>();
 let customUrl='',revision=0,timer:ReturnType<typeof setTimeout>|undefined;
 function useCurrent(){fileError.value='';Object.assign(background,current());if(customUrl){URL.revokeObjectURL(customUrl);customUrl='';}}
@@ -15,7 +17,7 @@ async function chooseImage(event:Event){
   const input=event.target as HTMLInputElement,file=input.files?.[0];if(!file)return;
   reading.value=true;fileError.value='';
   try{const prepared=await prepareBackground(file),url=URL.createObjectURL(prepared.blob);const previous=customUrl;customUrl=url;background.imageUrl=url;background.imageName=prepared.name;background.mode='image';if(previous)URL.revokeObjectURL(previous);}
-  catch(cause){fileError.value=(cause as Error).message;}
+  catch(cause){fileError.value=displayErrorValue(cause);}
   finally{reading.value=false;input.value='';}
 }
 async function render(ticket:number){
@@ -23,7 +25,7 @@ async function render(ticket:number){
     const blob=await renderMandarinIpaPng({...props.snapshot,background:{...background}});
     if(ticket!==revision)return;
     const old=previewUrl.value;previewBlob.value=blob;previewUrl.value=URL.createObjectURL(blob);if(old)URL.revokeObjectURL(old);
-  }catch(cause){if(ticket===revision){previewError.value=(cause as Error).message;previewBlob.value=undefined;}}
+  }catch(cause){if(ticket===revision){previewError.value=displayErrorValue(cause);previewBlob.value=undefined;}}
   finally{if(ticket===revision){rendering.value=false;emit('busy',false);}}
 }
 function schedule(){const ticket=++revision;clearTimeout(timer);rendering.value=true;previewBlob.value=undefined;previewError.value='';emit('busy',true);timer=setTimeout(()=>void render(ticket),180);}
@@ -33,24 +35,24 @@ function save(){if(!previewBlob.value||rendering.value||reading.value||fileError
 onBeforeUnmount(()=>{++revision;clearTimeout(timer);emit('busy',false);if(previewUrl.value)URL.revokeObjectURL(previewUrl.value);if(customUrl)URL.revokeObjectURL(customUrl);});
 </script>
 <template>
-  <ModalDialog title="PNG 导出设置" wide :close-disabled="reading" @close="emit('close')">
+  <ModalDialog :title="tr('modules.mandarin-ipa.text.20513987b013')" wide :close-disabled="reading" @close="emit('close')">
     <div class="png-export">
-      <div class="background-heading"><p>导出背景可单独调整，工作台外观保持原设置。</p><button :disabled="reading" @click="useCurrent">使用当前背景</button></div>
-      <fieldset :disabled="reading"><legend>导出背景</legend><div class="background-modes"><label><input v-model="background.mode" type="radio" value="image" name="png-background"/>背景图片</label><label><input v-model="background.mode" type="radio" value="color" name="png-background"/>背景颜色</label></div>
+      <div class="background-heading"><p>{{tr('modules.mandarin-ipa.text.7df448cd8559')}}</p><button :disabled="reading" @click="useCurrent">{{tr('modules.mandarin-ipa.text.a2b25bf9c4e4')}}</button></div>
+      <fieldset :disabled="reading"><legend>{{tr('modules.mandarin-ipa.text.6b8025600539')}}</legend><div class="background-modes"><label><input v-model="background.mode" type="radio" value="image" name="png-background"/>{{tr('modules.mandarin-ipa.text.36887d9b2ad3')}}</label><label><input v-model="background.mode" type="radio" value="color" name="png-background"/>{{tr('modules.mandarin-ipa.text.882fe2e84241')}}</label></div>
         <template v-if="background.mode==='image'">
-          <p>{{background.imageName||'请选择背景图片'}}</p>
-          <label>替换背景图<input type="file" aria-label="PNG 背景图片" accept=".png,.jpg,.jpeg,.webp" @change="chooseImage"/></label>
-          <p class="hint">PNG、JPG 或 WebP，不超过 20 MB、4000 万像素。图片居中铺满，超出部分裁切。</p>
-          <label>高斯模糊 <span>{{background.blur}} px</span><input v-model.number="background.blur" aria-label="PNG 高斯模糊" type="range" min="0" max="40" step="1"/></label>
-          <label>图片不透明度 <span>{{background.opacity}}%</span><input v-model.number="background.opacity" aria-label="PNG 图片不透明度" type="range" min="0" max="100" step="1"/></label>
+          <p>{{background.imageName||tr('modules.mandarin-ipa.text.095e09a0a40c')}}</p>
+          <label>{{tr('modules.mandarin-ipa.text.797192e369af')}}<input type="file" :aria-label="tr('modules.mandarin-ipa.text.7a2a6da29f9e')" accept=".png,.jpg,.jpeg,.webp" @change="chooseImage"/></label>
+          <p class="hint">{{tr('modules.mandarin-ipa.text.9122676e4092')}}</p>
+          <label>{{tr('modules.mandarin-ipa.text.0e134f5a85ab')}} <span>{{background.blur}} px</span><input v-model.number="background.blur" :aria-label="tr('modules.mandarin-ipa.text.f5b3e5f3c9b8')" type="range" min="0" max="40" step="1"/></label>
+          <label>{{tr('modules.mandarin-ipa.text.04b30e78ca4d')}} <span>{{background.opacity}}%</span><input v-model.number="background.opacity" :aria-label="tr('modules.mandarin-ipa.text.5b13f85ff266')" type="range" min="0" max="100" step="1"/></label>
         </template>
-        <label v-else class="color-field">背景颜色<input v-model="background.color" type="color" aria-label="PNG 背景颜色"/><span>{{background.color}}</span></label>
+        <label v-else class="color-field">{{tr('modules.mandarin-ipa.text.882fe2e84241')}}<input v-model="background.color" type="color" :aria-label="tr('modules.mandarin-ipa.text.0774dd27b6d9')"/><span>{{background.color}}</span></label>
       </fieldset>
-      <p v-if="reading" role="status">正在读取背景图片…</p><p v-else-if="rendering" role="status">正在生成导出预览…</p>
+      <p v-if="reading" role="status">{{tr('modules.mandarin-ipa.text.4f1415758a10')}}</p><p v-else-if="rendering" role="status">{{tr('modules.mandarin-ipa.text.8123c6be61a3')}}</p>
       <p v-if="fileError||previewError" role="alert">{{fileError||previewError}}</p>
-      <figure v-if="previewUrl&&!previewError" class="png-preview" :aria-busy="rendering"><figcaption>导出预览</figcaption><img :src="previewUrl" alt="国际音标 PNG 导出预览"/></figure>
+      <figure v-if="previewUrl&&!previewError" class="png-preview" :aria-busy="rendering"><figcaption>{{tr('modules.mandarin-ipa.text.7f9b00e62e2c')}}</figcaption><img :src="previewUrl" :alt="tr('modules.mandarin-ipa.text.f9da44e634c7')"/></figure>
     </div>
-    <template #footer><button :disabled="reading" @click="emit('close')">取消</button><button class="primary" :disabled="rendering||reading||!previewBlob||!!fileError" @click="save">导出 PNG</button></template>
+    <template #footer><button :disabled="reading" @click="emit('close')">{{tr('modules.mandarin-ipa.text.2cd0f3be8738')}}</button><button class="primary" :disabled="rendering||reading||!previewBlob||!!fileError" @click="save">{{tr('modules.mandarin-ipa.text.8c52149aae45')}}</button></template>
   </ModalDialog>
 </template>
 <style scoped>

@@ -1,3 +1,4 @@
+import {tr} from '../i18n/index.ts';
 // UI adaptations, not Codex application code. Provenance: docs/references/p19-appearance-sources.md.
 export type ColorMode='light'|'dark';
 export type ThemeMode=ColorMode|'system';
@@ -42,7 +43,7 @@ export function mix(a:string,b:string,amount:number){return '#'+rgb(a).map((x,i)
 const luminance=(hex:string)=>rgb(hex).map(v=>{v/=255;return v<=.04045?v/12.92:((v+.055)/1.055)**2.4;}).reduce((s,x,i)=>s+x*[.2126,.7152,.0722][i],0);
 export function contrast(a:string,b:string){const x=luminance(a),y=luminance(b);return (Math.max(x,y)+.05)/(Math.min(x,y)+.05);}
 export function customPalette(color:string):Palette {
- return {id:'custom',name:'自定义色系',light:[mix(color,'#ffffff',.94),mix(color,'#000000',.82),color],dark:[mix(color,'#000000',.86),mix(color,'#ffffff',.86),mix(color,'#ffffff',.4)]};
+ return {id:'custom',name:tr('state.custom_palette'),light:[mix(color,'#ffffff',.94),mix(color,'#000000',.82),color],dark:[mix(color,'#000000',.86),mix(color,'#ffffff',.86),mix(color,'#ffffff',.4)]};
 }
 palettes.push(customPalette('#657b35'));
 function readable(color:string,backgrounds:string[],minimum=4.5){

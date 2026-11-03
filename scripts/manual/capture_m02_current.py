@@ -2,6 +2,8 @@
 from __future__ import annotations
 
 import hashlib
+import argparse
+import ast
 import json
 import math
 import os
@@ -10,16 +12,20 @@ import sqlite3
 import struct
 import sys
 import time
+import re
 import wave
+import subprocess
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / 'scripts'))
 os.environ['QT_QPA_PLATFORM'] = 'windows'
-os.environ['QT_SCALE_FACTOR'] = '1'
-os.environ['QT_SCREEN_SCALE_FACTORS'] = '1.5'
+for key in ('QT_ENABLE_HIGHDPI_SCALING', 'QT_SCALE_FACTOR', 'QT_SCREEN_SCALE_FACTORS'):
+    os.environ.pop(key, None)
 os.environ.setdefault('QTWEBENGINE_CHROMIUM_FLAGS', '--mute-audio')
 from workbench_source import configure
 from verification_artifacts import verification_run
+from manual.capture_locale import CaptureLocale
+from manual.localization import fingerprint
 
 
 def fixtures(folder):
@@ -54,8 +60,21 @@ def fixtures(folder):
     (folder / '损坏示例.xlsx').write_bytes(b'Explicit invalid test workbook, not user data.')
 
 
-def main():
+def main(args):
     configure()
+    ui = CaptureLocale(args.locale, ('parameter-display', 'workbench', 'components'))
+    source_paths = [Path(__file__), ROOT / 'scripts/manual/capture_locale.py', args.frontend_dist / 'index.html',
+                    ROOT / 'desktop/src/ptb_desktop/host.py', ROOT / 'desktop/src/ptb_desktop/presentation.py']
+    source_paths += list((ROOT / 'frontend/src/modules/parameter-display').glob('*.vue'))
+    source_paths += [ROOT / f'frontend/src/i18n/locales/{language}/parameter-display.json' for language in ('zh-CN', args.locale)]
+    sources = {str(i): {'path': str(path), 'sha256': hashlib.sha256(path.read_bytes()).hexdigest()}
+               for i, path in enumerate(dict.fromkeys(source_paths))}
+    old_recipe = subprocess.run(['git', 'show', 'HEAD:scripts/manual/capture_m02_current.py'], cwd=ROOT,
+                                capture_output=True, text=True, encoding='utf-8', check=True).stdout
+    fixture_ast = lambda source: ast.dump(next(node for node in ast.parse(source).body if isinstance(node, ast.FunctionDef) and node.name == 'fixtures'), include_attributes=False)
+    original_fixture_ast = fixture_ast(old_recipe)
+    assert original_fixture_ast == fixture_ast(Path(__file__).read_text('utf-8')), 'Scientific example generation changed from the original recipe'
+    from PyQt6 import sip
     from PyQt6.QtCore import QEvent, QEventLoop, QTimer, Qt, QRect
     from PyQt6.QtWidgets import QApplication, QFileDialog
     from ptb_desktop.host import Workbench, register_scheme
@@ -63,11 +82,19 @@ def main():
     register_scheme()
     app = QApplication(['M02 owned live-window and manual QA'])
     app.setQuitOnLastWindowClosed(False)
-    export_only = '--export-check-only' in sys.argv
-    with verification_run('m02', 'export-qt' if export_only else 'current-qt', 'Actual Windows Qt/QWebChannel; generated 4s mono PCM at 16kHz, legacy SQLite/XLSX and 401 synthetic parameter frames; no research data or devices') as (out, scratch):
+    export_only = args.export_check_only
+    with verification_run('m02', ('export-' if export_only else 'localized-') + args.locale.lower(), 'Actual Windows Qt/QWebChannel; generated 4s mono PCM at 16kHz, legacy SQLite/XLSX and 401 synthetic parameter frames; no research data or devices') as (out, scratch):
         inputs = scratch / 'inputs'
         inputs.mkdir()
         fixtures(inputs)
+        fixture_connection = sqlite3.connect(inputs / '示例语音.ptb.sqlite')
+        try:
+            cursor = fixture_connection.execute('SELECT * FROM params')
+            scientific_input = {'fixtureAstSha256': hashlib.sha256(original_fixture_ast.encode()).hexdigest(),
+                                'parameterColumns': [item[0] for item in cursor.description], 'parameterRows': cursor.fetchall(),
+                                'audioSha256': hashlib.sha256((inputs / '示例语音.wav').read_bytes()).hexdigest()}
+        finally:
+            fixture_connection.close()
         database = scratch / 'jobs.sqlite3'
         # Copy only the existing test schema into a new owned database.
         template = ROOT / 'output/validation/p06/local-state.sqlite3'
@@ -78,17 +105,20 @@ def main():
             for name in ['schema_version', 'acoustic_batch_version']:
                 for row in source.execute('SELECT * FROM ' + name):
                     destination.execute('INSERT INTO ' + name + ' VALUES (' + ','.join('?' for _ in row) + ')', row)
+        source.close()
+        destination.close()
         from ptb_worker.local_acoustic_files import initialize_local_files
         cache = scratch / 'cache'
         cache.mkdir()
         initialize_local_files(cache)
         QFileDialog.getExistingDirectory = lambda *a, **k: str(inputs)
-        window = Workbench(ROOT / 'frontend/dist', test=True, jobs_path=database, local_files_root=cache, vocal_profile=scratch / 'vocal', start_module='M02')
+        window = Workbench(args.frontend_dist.resolve(), test=True, jobs_path=database, local_files_root=cache, vocal_profile=scratch / 'vocal', start_module='M02')
         window.setAttribute(Qt.WidgetAttribute.WA_DontShowOnScreen)
         window.resize(window.screen().geometry().size())
         window.showMaximized()
+        window.view.setZoomFactor(1)
         window.page.setAudioMuted(True)
-        report = dict(success=False, checks=[], captures=[], downloads=[], errors=[], scope='Windows current source, actual Qt host, synthetic files; hidden maximized/DPR 1.5/page 100%')
+        report = dict(success=False, checks=[], captures=[], downloads=[], errors=[], sources=sources, locale=args.locale, sourceChapter='m02', scope='Windows current source, actual Qt host, synthetic files; hidden maximized/DPR 1.5/page 100%')
         window.profile.downloadRequested.disconnect()
         downloads = []
 
@@ -123,14 +153,25 @@ def main():
             raise AssertionError(code + '\n' + str(js('document.body.innerText.slice(-2500)')))
 
         def click(text, scope='.m02-page'):
-            expression = '[...document.querySelector(' + json.dumps(scope) + ').querySelectorAll("button")].find(b=>b.offsetParent&&b.textContent.trim()===' + json.dumps(text, ensure_ascii=False) + ')'
+            if not text.endswith(('.wav', '.xlsx', '.sqlite')):
+                text = ui.label(text)
+            expression = '[...document.querySelector(' + json.dumps(scope) + ').querySelectorAll("button")].find(b=>b.offsetParent&&(b.textContent.trim()===' + json.dumps(text, ensure_ascii=False) + '||b.getAttribute("aria-label")===' + json.dumps(text, ensure_ascii=False) + '))'
             until('!!(' + expression + ')&&!(' + expression + ').disabled')
             js(expression + '.click()')
             pause(150)
 
         def field(selector, value):
-            js('(()=>{const e=document.querySelector(' + json.dumps(selector) + ');e.value=' + json.dumps(str(value), ensure_ascii=False) + ';e.dispatchEvent(new Event("input",{bubbles:true}));e.dispatchEvent(new Event("change",{bubbles:true}));})()')
+            selector = re.sub(r'\[aria-label="([^"]+)"\]', lambda match: '[aria-label=' + json.dumps(ui.label(match.group(1)), ensure_ascii=False) + ']', selector)
+            js('(()=>{const e=document.querySelector(' + json.dumps(selector, ensure_ascii=False) + ');e.value=' + json.dumps(str(value), ensure_ascii=False) + ';e.dispatchEvent(new Event("input",{bubbles:true}));e.dispatchEvent(new Event("change",{bubbles:true}));})()')
             pause(150)
+
+        def theme(mode):
+            click('设置', 'body')
+            js("document.querySelector('#settings-tab-appearance').click()")
+            click('浅色' if mode == 'light' else '深色', 'body')
+            until('document.documentElement.dataset.theme===' + json.dumps(mode))
+            js("document.querySelector('#tab-M02').click()")
+            until("!!document.querySelector('.m02-page')?.offsetParent")
 
         def ready():
             until('!document.querySelector(".m02-page>p[role=status]")&&[...document.querySelectorAll(".parameter-figure")].every(e=>e.getAttribute("aria-busy")==="false")')
@@ -149,19 +190,31 @@ def main():
             ready()
 
         def capture(name, anchor, caption, selector=None, crop=False):
+            if args.only_export:
+                return
             if selector:
                 js('document.querySelector(' + json.dumps(selector) + ').scrollIntoView({block:"center"})')
             pause(350)
             window.view.grab()
             pause(200)
-            pix = window.view.grab()
+            pix = window.view.grab().toImage()
+            raw = [pix.width(), pix.height()]
+            assert pix.devicePixelRatio() == 1.5 and raw in ([2560, 1600], [2561, 1601]), raw
+            if raw != [2560, 1600]:
+                pix = pix.copy(0, 0, 2560, 1600)
+            regions = {}
             if crop:
                 box = js('(()=>{const r=document.querySelector(' + json.dumps(selector) + ').getBoundingClientRect();return [r.x,r.y,r.width,r.height]})()')
-                dpr = pix.devicePixelRatio()
-                pix = pix.copy(QRect(*[round(n * dpr) for n in box]))
+                regions['detail'] = {'selector': selector, 'box': box, 'units': 'css-px'}
+                name += '-parent'
             path = out / (name + '.png')
             assert pix.save(str(path))
-            report['captures'].append(dict(name=name, anchor=anchor, caption=caption, file=str(path), image=[pix.width(), pix.height()], sha256=hashlib.sha256(path.read_bytes()).hexdigest(), theme=js('document.documentElement.dataset.theme'), dpr=window.devicePixelRatioF(), pageZoom=window.view.zoomFactor(), maximized=window.isMaximized(), cropped=crop))
+            actual_theme = js('document.documentElement.dataset.theme')
+            metrics = ui.metrics(js) if actual_theme == 'light' else {'locale': args.locale, 'fontLocale': args.locale, 'fontFamily': js('getComputedStyle(document.body).fontFamily')}
+            report['captures'].append(dict(name=name, anchor=anchor, caption=caption, file=path.name, image=[pix.width(), pix.height()], raw_image=raw,
+                                          sha256=hashlib.sha256(path.read_bytes()).hexdigest(), theme=actual_theme, dpr=window.devicePixelRatioF(), pageZoom=window.view.zoomFactor(), maximized=window.isMaximized(),
+                                          cropped=False, auxiliary=crop or not anchor, regions=regions,
+                                          **{key: metrics[key] for key in ('locale', 'fontLocale', 'fontFamily')}))
             print('Captured ' + name, flush=True)
 
         def save_current(fmt):
@@ -179,19 +232,29 @@ def main():
 
         try:
             until('!!document.querySelector(".m02-page")')
-            js('document.documentElement.dataset.theme="light";document.documentElement.dataset.palette="absolutely";')
+            ui.prepare_qt(js, until)
+            theme('light')
+            if js("document.querySelector('#tool-sidebar').offsetWidth>100"):
+                click('收起侧栏', 'body')
             click('打开音频目录')
             click('示例语音.wav')
             ready()
             assert js('!!document.querySelector(".parameter-figure")&&!document.querySelector(".m02-page>p[role=alert]")')
+            if args.invalid_only:
+                table('损坏示例.xlsx')
+                until('!!document.querySelector(".m02-page>p[role=alert]")')
+                capture('invalid-table', 'm02-figure-invalid-table-error-light', '损坏的合成 XLSX 无法读取，原音波形保留；可重新选择有效结果。')
+                report['checks'].append('Actual damaged workbook rejection, retained source waveform, localized error')
+                report['success'] = True
+                return
             if export_only:
                 mark(['F1 - Praat', 'SHR (pF0)'])
                 js('window.qaPainted=[];const originalFillText=CanvasRenderingContext2D.prototype.fillText;CanvasRenderingContext2D.prototype.fillText=function(text,...args){window.qaPainted.push(text);return originalFillText.call(this,text,...args);}')
                 for mode, expected in [('light', 'rgb(182, 85, 118)'), ('dark', 'rgb(229, 156, 182)')]:
-                    js('document.documentElement.dataset.theme=' + json.dumps(mode))
+                    theme(mode)
                     assert js('getComputedStyle(document.querySelector(".parameter-curve")).stroke') == expected
                     png = save_current('png')
-                    assert js('window.qaPainted.includes("图窗 1")&&!window.qaPainted.some(t=>t.includes("当前"))')
+                    assert js('window.qaPainted.includes(' + json.dumps(ui.key('modules.parameter-display.plot_1')) + ')&&!window.qaPainted.some(t=>t.includes(' + json.dumps(ui.key('modules.parameter-display.current_plot')) + '))')
                     if mode == 'light':
                         (out / 'parameter-example.png').write_bytes(png.read_bytes())
                     capture('export-' + mode, '', '当前图窗导出及浅深色曲线核对。', '.parameter-figure')
@@ -237,17 +300,17 @@ def main():
             field('.image-format', 'svg')
             capture('svg-export', 'm02-figure-svg-current-export-light', '选择 SVG 保存当前图。图例优先放在绘图区空白位置，空间不足时移至上方，长名称完整换行。', '.parameter-figure')
             capture('export-detail', 'm02-svg-current-export-light-detail-figure', '当前图可选 PNG 或 SVG；整幅 PNG 还包含波形及已开启的语谱图。', '.parameter-figure header', True)
-            for mode in ['light', 'dark']:
-                js('document.documentElement.dataset.theme=' + json.dumps(mode))
+            for mode in (['light', 'dark'] if args.locale == 'zh-CN' else ['light']):
+                theme(mode)
                 svg = save_current('svg')
                 xml = svg.read_text('utf8')
-                assert 'plot-legend' in xml and 'F1 - Praat [右]' in xml and 'SHR (pF0) [左]' in xml
+                assert 'plot-legend' in xml and ('F1 - Praat' + ui.key('modules.parameter-display.right')) in xml and ('SHR (pF0)' + ui.key('modules.parameter-display.left')) in xml
                 png = save_current('png')
                 assert png.read_bytes().startswith(b'\x89PNG\r\n\x1a\n')
                 if mode == 'light':
                     (out / 'parameter-example.png').write_bytes(png.read_bytes())
                 capture('theme-' + mode, '', mode + ' 当前参数图与即时勾选。', '.parameter-figure')
-            js('document.documentElement.dataset.theme="light"')
+            theme('light')
             before = len(downloads)
             click('保存整幅 PNG')
             deadline = time.monotonic() + 25
@@ -261,7 +324,23 @@ def main():
             shutil.copyfile(whole, final)
             from PyQt6.QtGui import QImage
             image = QImage(str(final))
-            report['captures'].append(dict(name='whole-figure', anchor='m02-figure-export-whole-plot', caption='当前应用实际导出的白底 300 dpi 整幅 PNG，包含合成示例的波形、Praat 语谱及双轴参数图，紧凑图例随图保存。', file=str(final), image=[image.width(), image.height()], sha256=hashlib.sha256(final.read_bytes()).hexdigest(), theme='light', dpr=1.5, pageZoom=1, maximized=True, cropped=False))
+            scientific_parameters = {'parameterSelection': ['F1 - Praat', 'SHR (pF0)'], 'viewStartSeconds': .8, 'viewDurationSeconds': 1.8,
+                                     'spectrogramVisible': True, 'exportFormat': 'png', 'exportDpi': 300}
+            assert js('Number(document.querySelector(\'.m02-toolbar input[type=number][min="0"]\').value)===.8&&Number(document.querySelector(\'.m02-toolbar input[type=number][min=".01"]\').value)===1.8')
+            assert set(js('[...document.querySelectorAll(".m02-parameters input:checked")].map(e=>e.value)')) == {'F1 - Praat', 'SHR (pF0)'}
+            assert js('!!document.querySelector(".spectrogram-canvas canvas")')
+            scientific_asset = next(asset for asset in json.loads((ROOT / 'manual/project.json').read_text('utf-8'))['assets'] if asset['id'] == 'm02-current-whole-figure-20261018-a8740db3')
+            proof = {'schemaVersion': 'ptb-manual-scientific-export/1', 'sourceAssetId': scientific_asset['id'],
+                     'sourceImageSha256': hashlib.sha256((ROOT / 'manual' / scientific_asset['path']).read_bytes()).hexdigest(),
+                     'input': scientific_input, 'parameters': scientific_parameters, 'inputSha256': fingerprint(scientific_input),
+                     'parametersSha256': fingerprint(scientific_parameters), 'baseline': {'input': scientific_input, 'parameters': scientific_parameters,
+                     'evidence': 'git HEAD:scripts/manual/capture_m02_current.py fixtures() AST exactly equals current scientific generation; original selected F1/SHR, start0.8/duration1.8, spectrogram and whole PNG300dpi unchanged'},
+                     'action': 'modules.parameter-display.save_full_png'}
+            report['captures'].append(dict(name='whole-figure', anchor='m02-figure-export-whole-plot', caption='当前应用实际导出的白底 300 dpi 整幅 PNG，包含合成示例的波形、Praat 语谱及双轴参数图，紧凑图例随图保存。', file=final.name, image=[image.width(), image.height()], sha256=hashlib.sha256(final.read_bytes()).hexdigest(), theme='light', dpr=1.5, pageZoom=1, maximized=True, cropped=False, captureKind='scientific-export', scientificExport=proof, **{key: ui.metrics(js)[key] for key in ('locale', 'fontLocale', 'fontFamily')}))
+            if args.only_export:
+                report['checks'].append('Same original fixtures() AST, exact scientific frames/source audio, selected F1/SHR/time window and actual whole PNG300dpi export')
+                report['success'] = True
+                return
             click('保存绘图配置')
             click('刷新文件')
             ready()
@@ -281,20 +360,23 @@ def main():
             window.view.grab().save(str(out / 'failure.png'))
             raise
         finally:
+            report['sourceChangesDuringRun'] = [item['path'] for item in sources.values() if hashlib.sha256(Path(item['path']).read_bytes()).hexdigest() != item['sha256']]
             (out / 'report.json').write_text(json.dumps(report, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
             js('window.onbeforeunload=null')
             window.closing = True
             window.close()
-            window.page.deleteLater()
-            pause(150)
-            window.profile.deleteLater()
-            app.sendPostedEvents(None, QEvent.Type.DeferredDelete)
             app.processEvents()
-            window.deleteLater()
-            pause(500)
-            app.quit()
+            sip.delete(window)
+            app.processEvents()
+            sip.delete(app)
             print(out, flush=True)
 
 
 if __name__ == '__main__':
-    main()
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--locale', choices=('zh-CN', 'en', 'ja'), default='zh-CN')
+    parser.add_argument('--frontend-dist', type=Path, default=ROOT / 'frontend/dist')
+    parser.add_argument('--export-check-only', action='store_true')
+    parser.add_argument('--only-export', action='store_true')
+    parser.add_argument('--invalid-only', action='store_true')
+    main(parser.parse_args())

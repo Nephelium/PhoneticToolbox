@@ -2,6 +2,7 @@
 import time
 from PyQt6.QtWidgets import QMessageBox
 from PyQt6.QtWebEngineCore import QWebEnginePermission
+from .native_i18n import native_text
 
 class MediaPermission:
     def __init__(self,window):self.window=window;self.until=0.;self.events=[];self.requests={};self.purpose='capture'
@@ -25,8 +26,8 @@ class MediaPermission:
         if time.monotonic()>self.until:
             event['decision']='denied_gate';request.deny();return
         self.until=0.
-        message='允许短暂使用麦克风以读取完整音频设备列表？读取后立即释放，不录制音频。' if self.purpose=='devices' else '允许本次唇形采集使用所选摄像头和麦克风？实时视频在本机处理。'
-        answer=QMessageBox.question(self.window,'音频设备权限' if self.purpose=='devices' else '唇形采集权限',message,QMessageBox.StandardButton.Yes|QMessageBox.StandardButton.No)
+        message=native_text(self.window,'permission.devicesBody' if self.purpose=='devices' else 'permission.captureBody')
+        answer=QMessageBox.question(self.window,native_text(self.window,'permission.devicesTitle' if self.purpose=='devices' else 'permission.captureTitle'),message,QMessageBox.StandardButton.Yes|QMessageBox.StandardButton.No)
         event['decision']='granted' if answer==QMessageBox.StandardButton.Yes else 'denied_user'
         if answer==QMessageBox.StandardButton.Yes:request.grant()
         else:request.deny()

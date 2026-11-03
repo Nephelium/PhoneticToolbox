@@ -1,23 +1,24 @@
 <script setup lang="ts">
+import {tr} from '../i18n/index.ts';
 import ModalDialog from './ModalDialog.vue';
 import type {Announcement} from '../platform/announcements.ts';
 defineProps<{items:Announcement[];automatic?:boolean;unreadIds:string[];loading?:boolean}>();
 const emit=defineEmits<{close:[];action:[id:string]}>();
 </script>
 <template>
-<ModalDialog title="公告" @close="emit('close')">
+<ModalDialog :title="tr('components.announcements')" @close="emit('close')">
 <div class="announcements-panel">
-<p v-if="loading&&!items.length" class="muted" role="status">正在读取公告…</p>
-<p v-else-if="!items.length" class="muted">暂时没有公告。</p>
+<p v-if="loading&&!items.length" class="muted" role="status">{{tr('components.loading_announcements')}}</p>
+<p v-else-if="!items.length" class="muted">{{tr('components.no_announcements_yet')}}</p>
 <article v-for="item in items" :key="item.id" class="announcement-item">
-<header><h3>{{item.title}}</h3><span v-if="unreadIds.includes(item.id)" class="announcement-unread">新</span></header>
+<header><h3>{{item.title}}</h3><span v-if="unreadIds.includes(item.id)" class="announcement-unread">{{tr('components.new')}}</span></header>
 <time :datetime="item.publishedAt">{{item.publishedAt.slice(0,10)}}</time>
 <p class="announcement-body">{{item.body}}</p>
 <a v-if="item.action&&!automatic" :href="item.action.url" target="_blank" rel="noopener noreferrer" class="announcement-link" @click="emit('action',item.id)">{{item.action.label}} ↗</a>
 </article>
 </div>
 <template #footer>
-<button type="button" @click="emit('close')">知道了</button>
+<button type="button" @click="emit('close')">{{tr('components.got_it')}}</button>
 <a v-if="automatic&&items[0]?.action" :href="items[0].action.url" target="_blank" rel="noopener noreferrer" class="primary announcement-primary" @click="emit('action',items[0].id)">{{items[0].action.label}} ↗</a>
 </template>
 </ModalDialog>

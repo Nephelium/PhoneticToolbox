@@ -11,6 +11,7 @@ class InteractivePreview(Base):
     def open(self,owner,raw,*,source_path=None,source_scratch=None):
         if source_path is None and not 0<len(raw)<=64_000_000:raise PreviewError('egg_input_budget',413)
         with self.lock:
+            if self.owner is not None and self.owner!=owner:raise PreviewError('preview_busy',429)
             self.close();self.source_scratch=source_scratch
             try:
                 env=os.environ.copy();env.update(OPENBLAS_NUM_THREADS='1',OMP_NUM_THREADS='1',PTB_MACOS_CHILD_CPU='1803')

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import {uiError,uiErrorMessage,uiMessage,joinMessages} from '../module-localization.ts';
+import {tr} from '../../i18n/index.ts';
 import {plotTickLabel} from '../../platform/plotTicks.ts';
 import {computed,ref,onMounted,onUnmounted} from 'vue';import type {Result} from './port.ts';
 import {styledSvg,paintSvg} from '../../design/svg-fonts.ts';
@@ -12,7 +14,7 @@ const palette=['var(--accent)','var(--danger)','var(--teal)','var(--violet)'];
 function path(r:Result){let pen=false;return r.times.map((t,i)=>{const f=r.original_f0[i];if(!(f>0)){pen=false;return '';}const c=pen?'L':'M';pen=true;return `${c}${60+t/duration.value*plotWidth.value},${bottom.value-(f-props.min)/(props.max-props.min)*plotHeight.value}`;}).join(' ');}
 const curvePaths=computed(()=>props.results.map(path));
 async function png(){
- if(!svg.value||!props.results.length)throw Error('尚无已生成历史结果');
+ if(!svg.value||!props.results.length)throw uiError(uiMessage('modules.pitch-manipulation.no_generated_results_in_history_yet'));
  const clone=styledSvg(svg.value),ns='http://www.w3.org/2000/svg',style=getComputedStyle(svg.value);
  clone.setAttribute('xmlns',ns);clone.style.background='white';clone.querySelector('.history-count')?.remove();
  const printColors=['#174b82','#a63f10','#007a79','#633d91'];
@@ -25,12 +27,12 @@ async function png(){
   for(let a=0;a<name.length;a+=chars){const text=document.createElementNS(ns,'text');text.setAttribute('x','60');text.setAttribute('y',String(y));text.style.fill='#182332';text.style.fontFamily=style.fontFamily;text.style.fontSize=style.fontSize;text.textContent=name.slice(a,a+chars);clone.append(text);y+=fontSize*1.5;}});
 
  const outputHeight=y+12;clone.setAttribute('viewBox',`0 0 ${outputWidth} ${outputHeight}`);clone.setAttribute('width',String(outputWidth));clone.setAttribute('height',String(outputHeight));
- const titled=withFigureTitle(clone,'F0 历史对比',fontSize);
+ const titled=withFigureTitle(clone,tr('modules.pitch-manipulation.f0_history_comparison'),fontSize);
  const canvas=document.createElement('canvas');canvas.width=Math.round(titled.width*1.5);canvas.height=Math.round(titled.height*1.5);
  await paintSvg(canvas,new XMLSerializer().serializeToString(titled.root),titled.width,titled.height);
- return await new Promise<Blob>((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(Error('PNG 导出失败')),'image/png'));
+ return await new Promise<Blob>((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(Error(tr('modules.pitch-manipulation.png_export_failed'))),'image/png'));
 }
 defineExpose({png});
 </script>
-<template><svg ref="svg" class="history-plot" :viewBox="`0 0 ${width} ${height}`" role="img" aria-label="已生成音频的实际 F0 历史对比，零起点对齐"><path :d="`M60 25V${bottom}H${right}`" class="axis"/><text x="60" y="16">F0 (Hz)</text><text :x="right" :y="height-25" text-anchor="end">Relative time (s)</text><g v-for="n in 5" :key="n"><text x="54" :y="bottom+5-(n-1)*plotHeight/4" text-anchor="end">{{plotTickLabel(min+(n-1)*(max-min)/4)}}</text><text :x="60+(n-1)*plotWidth/4" :y="height-40" text-anchor="middle">{{plotTickLabel((n-1)*duration/4,duration/4)}}</text></g><svg x="60" y="25" :width="plotWidth" :height="plotHeight" :viewBox="`60 25 ${plotWidth} ${plotHeight}`" overflow="hidden"><path v-for="(r,i) in results" :key="r.id" :d="curvePaths[i]" fill="none" :stroke="palette[i%4]" :stroke-dasharray="i<4?'none':i<8?'6 3':'2 3'" stroke-width="1.5"/></svg><text class="history-count" x="60" :y="height-6">{{results.length}} 条已生成音频</text></svg></template>
+<template><svg ref="svg" class="history-plot" :viewBox="`0 0 ${width} ${height}`" role="img" :aria-label="tr('modules.pitch-manipulation.actual_f0_comparison_of_generated_audio_aligned_to_zero')"><path :d="`M60 25V${bottom}H${right}`" class="axis"/><text x="60" y="16">F0 (Hz)</text><text :x="right" :y="height-25" text-anchor="end">Relative time (s)</text><g v-for="n in 5" :key="n"><text x="54" :y="bottom+5-(n-1)*plotHeight/4" text-anchor="end">{{plotTickLabel(min+(n-1)*(max-min)/4)}}</text><text :x="60+(n-1)*plotWidth/4" :y="height-40" text-anchor="middle">{{plotTickLabel((n-1)*duration/4,duration/4)}}</text></g><svg x="60" y="25" :width="plotWidth" :height="plotHeight" :viewBox="`60 25 ${plotWidth} ${plotHeight}`" overflow="hidden"><path v-for="(r,i) in results" :key="r.id" :d="curvePaths[i]" fill="none" :stroke="palette[i%4]" :stroke-dasharray="i<4?'none':i<8?'6 3':'2 3'" stroke-width="1.5"/></svg><text class="history-count" x="60" :y="height-6">{{tr('modules.pitch-manipulation.generatedFilesCount',{count:results.length})}}</text></svg></template>
 <style scoped>.history-plot{display:block;width:100%;height:auto;min-height:180px;background:var(--app);fill:var(--text);font-family:var(--font-figure);font-size:var(--figure-size)}.axis{fill:none;stroke:var(--border)}</style>

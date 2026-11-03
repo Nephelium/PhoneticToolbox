@@ -1,5 +1,7 @@
 <script setup lang="ts">
+import {tr,message as localizedMessage,messageRef} from '../../i18n/index.ts';
 import {computed,ref} from 'vue';
+import {uiErrorMessage as displayErrorValue} from '../module-localization.ts';
 import ModalDialog from '../../components/ModalDialog.vue';
 import {columnLabel,suggestColumns,tableName,tableRows,type ImportColumns,type TableKind,type CustomTable} from './custom-tables.ts';
 import {readTableFile} from './table-file.ts';
@@ -7,7 +9,7 @@ import ToneMapping from './ToneMapping.vue';
 import {defaultToneSettings,tonePreview,transcribeTone,type ToneSettings} from './tones.ts';
 const props=defineProps<{saving:boolean;saveError:string;replaceTarget?:CustomTable}>();
 const emit=defineEmits<{close:[];save:[table:Pick<CustomTable,'name'|'kind'|'rows'|'tones'>]}>();
-const kind=ref<TableKind>(props.replaceTarget?.kind??'hanzi'),name=ref(props.replaceTarget?.name??''),fileName=ref(''),sheet=ref(0),loading=ref(false),error=ref('');
+const kind=ref<TableKind>(props.replaceTarget?.kind??'hanzi'),name=ref(props.replaceTarget?.name??''),fileName=ref(''),sheet=ref(0),loading=ref(false),error=messageRef();
 const source=ref<Awaited<ReturnType<typeof readTableFile>>>(),rows=ref<string[][]>([]);
 const columns=ref<ImportColumns>({keyColumn:0,ipaColumn:1,startRow:1});
 const tones=ref<ToneSettings>(JSON.parse(JSON.stringify(props.replaceTarget?.tones??defaultToneSettings())));
@@ -17,7 +19,7 @@ const selectedRows=computed(()=>{try{return {rows:tableRows(rows.value,kind.valu
 // Mapping controls must remain available even when a later record has an error.
 const toneRows=computed(()=>rows.value.slice(Math.max(0,(Number(columns.value.startRow)||1)-1)).map(row=>[row[columns.value.keyColumn]??'',row[columns.value.ipaColumn]??'']));
 const parsed=computed(()=>{if(selectedRows.value.error)return selectedRows.value;try{tonePreview(selectedRows.value.rows,tones.value);return selectedRows.value;}catch(cause){return {rows:[] as [string,string][],error:(cause as Error).message};}});
-const preview=computed(()=>selectedRows.value.rows.slice(0,8).map(row=>{try{return [row[0],row[1],transcribeTone(row[1],tones.value)];}catch{return [row[0],row[1],'待设置声调'];}}));
+const preview=computed(()=>selectedRows.value.rows.slice(0,8).map(row=>{try{return [row[0],row[1],transcribeTone(row[1],tones.value)];}catch{return [row[0],row[1],tr('modules.mandarin-ipa.text.2e900b97a23f')];}}));
 function useRows(values:string[][]){rows.value=values;columns.value=suggestColumns(values);}
 let request=0;
 async function chooseFile(event:Event){
@@ -25,45 +27,45 @@ async function chooseFile(event:Event){
   const current=++request;loading.value=true;error.value='';rows.value=[];source.value=undefined;fileName.value=file.name;
   if(!name.value)name.value=file.name.replace(/\.[^.]+$/,'');
   try{const book=await readTableFile(file);source.value=current===request?book:source.value;const values=await book.rows(0);if(current!==request)return;sheet.value=0;useRows(values);}
-  catch(cause){if(current===request)error.value=(cause as Error).message;}
+  catch(cause){if(current===request)error.value=displayErrorValue(cause);}
   finally{if(current===request)loading.value=false;(event.target as HTMLInputElement).value='';}
 }
 async function chooseSheet(){
   if(!source.value)return;const current=++request;loading.value=true;error.value='';rows.value=[];
-  try{const values=await source.value.rows(sheet.value);if(current===request)useRows(values);}catch(cause){if(current===request)error.value=(cause as Error).message;}finally{if(current===request)loading.value=false;}
+  try{const values=await source.value.rows(sheet.value);if(current===request)useRows(values);}catch(cause){if(current===request)error.value=displayErrorValue(cause);}finally{if(current===request)loading.value=false;}
 }
-function save(){try{if(parsed.value.error||!parsed.value.rows.length)return;emit('save',{name:tableName(name.value),kind:kind.value,rows:parsed.value.rows,tones:JSON.parse(JSON.stringify(tones.value))});}catch(cause){error.value=(cause as Error).message;}}
+function save(){try{if(parsed.value.error||!parsed.value.rows.length)return;emit('save',{name:tableName(name.value),kind:kind.value,rows:parsed.value.rows,tones:JSON.parse(JSON.stringify(tones.value))});}catch(cause){error.value=displayErrorValue(cause);}}
 </script>
 <template>
-  <ModalDialog :title="replaceTarget?'替换自定义字表':'导入自定义字表'" :close-disabled="saving||loading" @close="emit('close')">
+  <ModalDialog :title="replaceTarget?tr('modules.mandarin-ipa.text.5f0aa25eb727'):tr('modules.mandarin-ipa.text.4208e69684fe')" :close-disabled="saving||loading" @close="emit('close')">
     <div class="m13-import">
-      <p v-if="replaceTarget">选择新文件并预览，保存后更新当前字表。可保留原名称或重新命名，多音字需重新核对。</p>
-      <label>对照类型<select v-model="kind" aria-label="字表对照类型" :disabled="saving||loading"><option value="hanzi">汉字 → 国际音标</option><option value="syllable">拼音音节 → 国际音标</option></select></label>
-      <p>读取文件后选择{{kind==='hanzi'?'汉字':'拼音音节'}}列、音标列及数据起始行，其他列不会导入。</p>
-      <p v-if="kind==='syllable'">支持 ma、ma1、mā，ü 可写作 v 或 u:。带调条目优先，不带调条目用于该音节的各调。</p>
-      <label>选择字表文件<input type="file" aria-label="选择字表文件" accept=".xlsx,.csv,.tsv,.txt" :disabled="saving||loading" @change="chooseFile"/></label>
-      <p class="hint">XLSX、UTF-8 CSV、TSV 或制表符 TXT，最多 8 MB、50,000 行。</p>
-      <label v-if="source&&source.names.length>1">工作表<select v-model.number="sheet" aria-label="字表工作表" :disabled="saving||loading" @change="chooseSheet"><option v-for="(title,i) in source.names" :key="i" :value="i">{{title}}</option></select></label>
+      <p v-if="replaceTarget">{{tr('modules.mandarin-ipa.text.3b3e3235fa1f')}}</p>
+      <label>{{tr('modules.mandarin-ipa.text.cdc8fae86e2f')}}<select v-model="kind" :aria-label="tr('modules.mandarin-ipa.text.56cfd74501db')" :disabled="saving||loading"><option value="hanzi">{{tr('modules.mandarin-ipa.text.1a18dd28c536')}}</option><option value="syllable">{{tr('modules.mandarin-ipa.text.cd81026afa22')}}</option></select></label>
+      <p>{{tr('modules.mandarin-ipa.text.987039f087ad')}}{{kind==='hanzi'?tr('modules.mandarin-ipa.text.00e5d5601ce3'):tr('modules.mandarin-ipa.text.68da7a474f1f')}}{{tr('modules.mandarin-ipa.text.4faff1c71a3e')}}</p>
+      <p v-if="kind==='syllable'">{{tr('modules.mandarin-ipa.text.c36c913e865f')}}</p>
+      <label>{{tr('modules.mandarin-ipa.text.48b29fb59e8b')}}<input type="file" :aria-label="tr('modules.mandarin-ipa.text.48b29fb59e8b')" accept=".xlsx,.csv,.tsv,.txt" :disabled="saving||loading" @change="chooseFile"/></label>
+      <p class="hint">{{tr('modules.mandarin-ipa.text.57f4558c4e60')}}</p>
+      <label v-if="source&&source.names.length>1">{{tr('modules.mandarin-ipa.text.b02781ee06c6')}}<select v-model.number="sheet" :aria-label="tr('modules.mandarin-ipa.text.d3721f15f282')" :disabled="saving||loading" @change="chooseSheet"><option v-for="(title,i) in source.names" :key="i" :value="i">{{title}}</option></select></label>
       <template v-if="rows.length">
         <div class="column-controls">
-          <label>{{kind==='hanzi'?'汉字':'拼音音节'}}列<select v-model.number="columns.keyColumn" aria-label="汉字或音节列" :disabled="saving||loading"><option v-for="i in columnCount" :key="i" :value="i-1">{{columnLabel(i-1)}} 列</option></select></label>
-          <label>音标列<select v-model.number="columns.ipaColumn" aria-label="音标列" :disabled="saving||loading"><option v-for="i in columnCount" :key="i" :value="i-1">{{columnLabel(i-1)}} 列</option></select></label>
-          <label>数据起始行<input v-model.number="columns.startRow" type="number" min="1" :max="rows.length" step="1" aria-label="数据起始行" :disabled="saving||loading"/></label>
+          <label>{{kind==='hanzi'?tr('modules.mandarin-ipa.text.00e5d5601ce3'):tr('modules.mandarin-ipa.text.68da7a474f1f')}}{{tr('modules.mandarin-ipa.text.c06d21404eee')}}<select v-model.number="columns.keyColumn" :aria-label="tr('modules.mandarin-ipa.text.8e307123157d')" :disabled="saving||loading"><option v-for="i in columnCount" :key="i" :value="i-1">{{columnLabel(i-1)}} {{tr('modules.mandarin-ipa.text.c06d21404eee')}}</option></select></label>
+          <label>{{tr('modules.mandarin-ipa.text.166d7e44d167')}}<select v-model.number="columns.ipaColumn" :aria-label="tr('modules.mandarin-ipa.text.166d7e44d167')" :disabled="saving||loading"><option v-for="i in columnCount" :key="i" :value="i-1">{{columnLabel(i-1)}} {{tr('modules.mandarin-ipa.text.c06d21404eee')}}</option></select></label>
+          <label>{{tr('modules.mandarin-ipa.text.6075765b6644')}}<input v-model.number="columns.startRow" type="number" min="1" :max="rows.length" step="1" :aria-label="tr('modules.mandarin-ipa.text.6075765b6644')" :disabled="saving||loading"/></label>
         </div>
-        <p class="hint">{{fileName}} · 共 {{rows.length.toLocaleString()}} 行。下方显示起始行附近的 {{rawPreview.length}} 行，行号与原表一致。</p>
-        <div class="raw-scroll"><table aria-label="原始字表预览"><thead><tr><th>原表行号</th><th v-for="i in columnCount" :key="i" :class="{chosen:i-1===columns.keyColumn||i-1===columns.ipaColumn}">{{columnLabel(i-1)}}{{i-1===columns.keyColumn?' · '+(kind==='hanzi'?'汉字':'音节'):i-1===columns.ipaColumn?' · 音标':''}}</th></tr></thead><tbody><tr v-for="row in rawPreview" :key="row.line" :class="{skipped:row.line<columns.startRow}"><th>{{row.line}}</th><td v-for="i in columnCount" :key="i" :class="{chosen:i-1===columns.keyColumn||i-1===columns.ipaColumn}" :title="row.cells[i-1]">{{(row.cells[i-1]??'').slice(0,160)}}</td></tr></tbody></table></div>
+        <p class="hint">{{fileName}} {{tr('modules.mandarin-ipa.text.c8b281787653')}} {{rows.length.toLocaleString()}} {{tr('modules.mandarin-ipa.text.106e8908d0b3')}} {{rawPreview.length}} {{tr('modules.mandarin-ipa.text.453cc9bd2c20')}}</p>
+        <div class="raw-scroll"><table :aria-label="tr('modules.mandarin-ipa.text.1724d6423632')"><thead><tr><th>{{tr('modules.mandarin-ipa.text.c35a735c7a25')}}</th><th v-for="i in columnCount" :key="i" :class="{chosen:i-1===columns.keyColumn||i-1===columns.ipaColumn}">{{columnLabel(i-1)}}{{i-1===columns.keyColumn?' · '+(kind==='hanzi'?tr('modules.mandarin-ipa.text.00e5d5601ce3'):tr('modules.mandarin-ipa.text.4a5f01dedd3e')):i-1===columns.ipaColumn?tr('modules.mandarin-ipa.text.6b8d5c206c97'):''}}</th></tr></thead><tbody><tr v-for="row in rawPreview" :key="row.line" :class="{skipped:row.line<columns.startRow}"><th>{{row.line}}</th><td v-for="i in columnCount" :key="i" :class="{chosen:i-1===columns.keyColumn||i-1===columns.ipaColumn}" :title="row.cells[i-1]">{{(row.cells[i-1]??'').slice(0,160)}}</td></tr></tbody></table></div>
         <ToneMapping v-model="tones" :rows="toneRows" :disabled="saving||loading"/>
       </template>
-      <label>字表名称<input v-model="name" aria-label="字表名称" maxlength="60" :disabled="saving" placeholder="例如：方言调查字表"/></label>
-      <p v-if="loading" role="status">正在读取字表…</p>
+      <label>{{tr('modules.mandarin-ipa.text.7965c9bd58dc')}}<input v-model="name" :aria-label="tr('modules.mandarin-ipa.text.7965c9bd58dc')" maxlength="60" :disabled="saving" :placeholder="tr('modules.mandarin-ipa.text.0b7cf78ae5a1')"/></label>
+      <p v-if="loading" role="status">{{tr('modules.mandarin-ipa.text.3099d8516112')}}</p>
       <p v-else-if="error||saveError||(source&&parsed.error)" role="alert">{{error||saveError||parsed.error}}</p>
       <template v-if="preview.length">
-        <p>{{selectedRows.rows.length.toLocaleString()}} 条记录，预览前 {{preview.length}} 条转换结果</p>
-        <table aria-label="导入结果预览"><thead><tr><th>{{kind==='hanzi'?'汉字':'拼音音节'}}</th><th>原始音标</th><th>转换结果</th></tr></thead><tbody><tr v-for="(row,i) in preview" :key="i"><td>{{row[0]}}</td><td class="ipa-text">{{row[1]}}</td><td class="ipa-text">{{row[2]}}</td></tr></tbody></table>
+        <p>{{selectedRows.rows.length.toLocaleString()}} {{tr('modules.mandarin-ipa.text.bee51fc6e31f')}} {{preview.length}} {{tr('modules.mandarin-ipa.text.5005798a58af')}}</p>
+        <table :aria-label="tr('modules.mandarin-ipa.text.97f991e1664d')"><thead><tr><th>{{kind==='hanzi'?tr('modules.mandarin-ipa.text.00e5d5601ce3'):tr('modules.mandarin-ipa.text.68da7a474f1f')}}</th><th>{{tr('modules.mandarin-ipa.text.8689de4ed54b')}}</th><th>{{tr('modules.mandarin-ipa.text.54a8366124bb')}}</th></tr></thead><tbody><tr v-for="(row,i) in preview" :key="i"><td>{{row[0]}}</td><td class="ipa-text">{{row[1]}}</td><td class="ipa-text">{{row[2]}}</td></tr></tbody></table>
       </template>
-      <p class="hint">保存后可在转换标准中选择，下次打开自动载入。字表保存在当前设备，建议保留原始文件。</p>
+      <p class="hint">{{tr('modules.mandarin-ipa.text.d03eee856c29')}}</p>
     </div>
-    <template #footer><button :disabled="saving||loading" @click="emit('close')">取消</button><button class="primary" :disabled="saving||loading||!parsed.rows.length||!name.trim()" @click="save">{{saving?'正在保存…':replaceTarget?'替换字表并使用':'保存字表并使用'}}</button></template>
+    <template #footer><button :disabled="saving||loading" @click="emit('close')">{{tr('modules.mandarin-ipa.text.2cd0f3be8738')}}</button><button class="primary" :disabled="saving||loading||!parsed.rows.length||!name.trim()" @click="save">{{saving?tr('modules.mandarin-ipa.text.6bdb4435095e'):replaceTarget?tr('modules.mandarin-ipa.text.000f7ee946b0'):tr('modules.mandarin-ipa.text.d1285773cb3d')}}</button></template>
   </ModalDialog>
 </template>
 <style scoped>

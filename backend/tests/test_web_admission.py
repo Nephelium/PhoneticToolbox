@@ -3,6 +3,23 @@ import httpx
 from ptb_api.web_admission import WebAdmission
 
 
+def test_blocked_download_does_not_occupy_interactive_lane():
+    async def scenario():
+        entered=asyncio.Event();release=asyncio.Event()
+        async def app(scope,receive,send):
+            if scope['path'].endswith('/content'):entered.set();await release.wait()
+            from starlette.responses import JSONResponse
+            await JSONResponse({'ok':True})(scope,receive,send)
+        gate=WebAdmission(app,slots=1,waiting=0,timeout=.01)
+        async with httpx.AsyncClient(transport=httpx.ASGITransport(app=gate),base_url='http://test') as client:
+            download=asyncio.create_task(client.get('/api/v1/assets/a/content'));await entered.wait()
+            assert (await client.get('/api/v1/assets/b/content')).status_code==429
+            assert (await client.get('/api/v1/projects')).status_code==200
+            release.set();assert (await download).status_code==200
+        assert gate.transfers.entered==0
+    asyncio.run(scenario())
+
+
 def test_recovery_lane_survives_full_normal_lane_and_releases_on_failure():
     async def scenario():
         entered=asyncio.Event();release=asyncio.Event()

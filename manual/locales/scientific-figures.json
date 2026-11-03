@@ -1,0 +1,69 @@
+{
+  "schemaVersion": "ptb-manual-scientific-review/1",
+  "figures": {
+    "m02-current-whole-figure-20261018-a8740db3": {
+      "sourceSha256": "a8740db3b6a7d19e34e863565d8d08798fa53fdc1c98dfddb44bde7c853d7174",
+      "reviewed": true,
+      "decision": "localize-generated-labels",
+      "reviewMethod": "Direct visual inspection of the complete source PNG on 2026-10-30",
+      "reason": "Application-generated Chinese labels include figure number, channel, spectrogram, left/right axes, and time. Re-export these labels from the same data.",
+      "preserve": "Preserve source filename, parameter identifiers, all samples, curves, ranges, and tick values."
+    },
+    "m03-inverse-six-export-light": {
+      "sourceSha256": "ecc416e875b3ebb9dc724eee36e4595ceb2f3f017590b542baaa65b2404805f2",
+      "reviewed": true,
+      "decision": "localize-generated-labels",
+      "reviewMethod": "Direct visual inspection of the complete source PNG on 2026-10-30",
+      "reason": "Application-generated Chinese spectrum/waveform titles, amplitude labels and center-window description require localized export.",
+      "preserve": "Preserve audio/EGG/IF signals, the 50 ms center window, all frequencies, amplitudes, and line styles."
+    },
+    "m03-native-cq-sq-light": {
+      "sourceSha256": "a0a094d565d7bcc33fcfa9a8b085a7f7dbc515133bb0f80ca08d6cf5793fc066",
+      "reviewed": true,
+      "decision": "reuse-source",
+      "reviewMethod": "Direct visual inspection of the complete source PNG on 2026-10-30",
+      "reason": "Existing figure uses English scientific labels, standard abbreviations and units. Reuse the original scientific figure in both language manuals.",
+      "preserve": "Preserve the original data, all values, curves, unit notation, ranges, and styling."
+    },
+    "m03-native-spectrum-f0-light": {
+      "sourceSha256": "91c33c26a9cd61c10fa890c01d8337bf75d93138a9ca9757db07a3415e6ba14c",
+      "reviewed": true,
+      "decision": "reuse-source",
+      "reviewMethod": "Direct visual inspection of the complete source PNG on 2026-10-30",
+      "reason": "Existing figure uses English scientific labels, standard abbreviations and units. Reuse the original scientific figure in both language manuals.",
+      "preserve": "Preserve the original data, all values, curves, unit notation, ranges, and styling."
+    },
+    "m03-native-waveforms-light": {
+      "sourceSha256": "292c68cf14a4149b00d1672fe9f93c1c5d03f9123fc316bbf8dc6292e047b3d9",
+      "reviewed": true,
+      "decision": "reuse-source",
+      "reviewMethod": "Direct visual inspection of the complete source PNG on 2026-10-30",
+      "reason": "Existing figure uses English scientific labels, standard abbreviations and units. Reuse the original scientific figure in both language manuals.",
+      "preserve": "Preserve the original data, all values, curves, unit notation, ranges, and styling."
+    },
+    "m04-current-export-plot": {
+      "sourceSha256": "b0a5d8a82a324cd7865a4205e6fe845eab10133f004031783d3ac4545ddd82fb",
+      "reviewed": true,
+      "decision": "reuse-source",
+      "reviewMethod": "Direct visual inspection of the complete source PNG on 2026-10-30",
+      "reason": "Existing figure uses English scientific labels, standard abbreviations and units. Reuse the original scientific figure in both language manuals.",
+      "preserve": "Preserve the original data, all values, curves, unit notation, ranges, and styling."
+    },
+    "m04-expanded-fixed-export-round2": {
+      "sourceSha256": "79b169cf4ee59c078d26542848036e451a892fb8235bd0b6bb41aefbebc74e27",
+      "reviewed": true,
+      "decision": "reuse-source",
+      "reviewMethod": "Direct visual inspection of the complete source PNG on 2026-10-30",
+      "reason": "Existing figure uses English scientific labels, standard abbreviations and units. Reuse the original scientific figure in both language manuals.",
+      "preserve": "Preserve the original data, all values, curves, unit notation, ranges, and styling."
+    },
+    "m13-export-kaiti-independent-colors": {
+      "sourceSha256": "f2dc083316221fbf364d7d9c44e4ca158761e08241c67fa289ef8c7e81dc405b",
+      "reviewed": true,
+      "decision": "localize-generated-labels",
+      "reviewMethod": "Direct visual inspection of the complete source PNG on 2026-10-30",
+      "reason": "The generated heading 国际音标 needs a localized export.",
+      "preserve": "Preserve Standard Chinese (Beijing)严, source Chinese example characters, IPA, independent colors, and font roles."
+    }
+  }
+}

@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import {messageRef,message as uiMessage,type MessageDescriptor} from '../i18n/index.ts';
+import {localized} from '../modules/module-localization.ts';
+import {tr} from '../i18n/index.ts';
 import { computed, onMounted, onUnmounted, ref } from 'vue';
 import type { components } from '../../../contracts/generated/api';
 import TaskPanel from '../components/TaskPanel.vue';
@@ -6,13 +9,13 @@ type Job = components['schemas']['JobView'];
 type Event = components['schemas']['JobEvent'];
 const props=defineProps<{projectId:string;ownerId:string;csrfToken:string}>();
 const emit=defineEmits<{sessionInvalid:[]}>();
-const jobs=ref<Job[]>([]), events=ref<Event[]>([]), message=ref(''), enabled=ref(false), busy=ref(false);
+const jobs=ref<Job[]>([]), events=ref<Event[]>([]), message=messageRef(), enabled=ref(false), busy=ref(false);
 const abort=new AbortController(); let timer:ReturnType<typeof setTimeout>|undefined, disposed=false;
 const pending=new Map<string,string>();
-const titles:Record<string,string>={pipeline_check:'流程检查',storage_check:'存储流程检查',archive_zip:'ZIP 打包',extract_zip:'ZIP 展开',lpc_analysis:'LPC 分析',egg_analysis:'EGG 分析',acoustic_analysis:'参数估计',textgrid_segment:'标注切分'};
-const jobErrors:Record<string,string>={worker_interrupted:'执行中断，可重新运行。',quota_exceeded:'账号空间不足；未完成文件会清理，原文件保留。',output_budget_exceeded:'超出本批输出上限；可调整上限后重新创建任务。',archive_rejected:'ZIP 超出支持范围或内容校验失败，请检查条目、格式和展开大小。',input_unavailable:'输入已到期或不可用，请重新上传。',resource_removed:'相关文件已删除，任务已请求停止。',cancelled:'任务已取消。'};
-const tasks=computed(()=>jobs.value.map(j=>({id:j.id,title:titles[j.operation]||'处理任务',status:j.state,progress:j.progress,
-  error:j.error_code ? (jobErrors[j.error_code] || '任务未完成，可查看记录后重试。'):undefined,
+const titles:Record<string,string>=localized(()=>({pipeline_check:tr('account.workflow_check'),storage_check:tr('account.storage_workflow_check'),archive_zip:tr('account.create_zip_archive'),extract_zip:tr('account.extract_zip_archive'),lpc_analysis:tr('account.lpc_analysis'),egg_analysis:tr('account.egg_analysis'),acoustic_analysis:tr('account.parameter_estimation'),textgrid_segment:tr('account.split_by_annotations')}));
+const jobErrors:Record<string,string>=localized(()=>({worker_interrupted:tr('account.execution_was_interrupted_you_can_run_it_again'),quota_exceeded:tr('account.there_is_not_enough_account_storage_incomplete_outputs_will'),output_budget_exceeded:tr('account.the_output_limit_for_this_batch_was_exceeded_adjust'),archive_rejected:tr('account.the_zip_is_unsupported_or_failed_validation_check_its'),input_unavailable:tr('account.the_input_has_expired_or_is_unavailable_upload_it'),resource_removed:tr('account.related_files_were_deleted_and_a_request_to_stop'),cancelled:tr('account.the_task_was_cancelled')}));
+const tasks=computed(()=>jobs.value.map(j=>({id:j.id,title:titles[j.operation]||tr('account.processing_task'),status:j.state,progress:j.progress,
+  error:j.error_code ? (jobErrors[j.error_code] || tr('account.the_task_did_not_finish_inspect_its_record_before')):undefined,
   canCancel:['queued','running'].includes(j.state),canRetry:['failed','interrupted','cancelled'].includes(j.state)})));
 async function request<T>(path:string,method='GET',body?:unknown):Promise<T> {
   const response=await fetch('/api/v1/'+path,{method,credentials:'same-origin',signal:abort.signal,
@@ -20,7 +23,7 @@ async function request<T>(path:string,method='GET',body?:unknown):Promise<T> {
     body:body===undefined?undefined:JSON.stringify(body)});
   const value=await response.json();
   if(!response.ok) {
-    if(response.status===401 || value.detail==='account_changed') { jobs.value=[];events.value=[];emit('sessionInvalid'); }
+    if(!disposed&&!abort.signal.aborted&&(response.status===401 || value.detail==='account_changed')) { jobs.value=[];events.value=[];emit('sessionInvalid'); }
     throw new Error(value.detail || 'unavailable');
   }
   return value;
@@ -29,7 +32,7 @@ async function refresh() {
   try {
     const result=await request<components['schemas']['JobList']>('jobs?project_id='+props.projectId);
     if(!disposed){jobs.value=result.jobs;message.value='';}
-  } catch {if(!disposed)message.value='任务服务暂时无法连接，正在重新连接。已有任务不会因刷新而重复提交。';}
+  } catch {if(!disposed)message.value=uiMessage('account.the_task_service_is_temporarily_unreachable_reconnecting_refreshing_will');}
   finally {if(!disposed)timer=setTimeout(refresh,1500);}
 }
 async function act(action:'create'|'cancel'|'retry',id='') {
@@ -42,24 +45,24 @@ async function act(action:'create'|'cancel'|'retry',id='') {
       : action==='retry'?{idempotency_key:pending.get(slot)}:undefined;
     const job=await request<Job>(path,'POST',body);
     if(!disposed){jobs.value=[job,...jobs.value.filter(j=>j.id!==job.id)];pending.delete(slot);}
-  } catch {if(!disposed)message.value='操作未确认，请稍后重试。';}
+  } catch {if(!disposed)message.value=uiMessage('account.the_operation_has_not_been_confirmed_retry_shortly');}
   finally {busy.value=false;}
 }
 async function showEvents(id:string) {
   try { const result=await request<components['schemas']['JobEvents']>(`jobs/${id}/events`);if(!disposed)events.value=result.events; }
-  catch {if(!disposed)message.value='暂时无法读取任务记录。';}
+  catch {if(!disposed)message.value=uiMessage('account.task_records_are_temporarily_unavailable');}
 }
-const states:Record<string,string>={queued:'排队',running:'运行',cancel_requested:'请求取消',cancelled:'取消',failed:'失败',interrupted:'中断',succeeded:'完成'};
-onMounted(async()=>{try {const caps=await request<components['schemas']['Capabilities']>('capabilities');if(disposed)return;enabled.value=caps.task_operations.length>0;void refresh();}catch {if(!disposed)message.value='任务服务尚未就绪。';}});
+const states:Record<string,string>=localized(()=>({queued:tr('account.queued'),running:tr('account.running'),cancel_requested:tr('account.cancellation_requested'),cancelled:tr('account.cancelled'),failed:tr('account.failed'),interrupted:tr('account.interrupted'),succeeded:tr('account.completed')}));
+onMounted(async()=>{try {const caps=await request<components['schemas']['Capabilities']>('capabilities');if(disposed)return;enabled.value=caps.task_operations.length>0;void refresh();}catch {if(!disposed)message.value=uiMessage('account.the_task_service_is_not_ready_yet');}});
 onUnmounted(()=>{disposed=true;abort.abort();clearTimeout(timer);pending.clear();});
 </script>
 <template>
-  <section class="project-jobs" aria-label="项目任务">
-    <h3>任务记录</h3><p class="muted">查看本项目的任务进度和处理记录。</p>
-    <p v-if="!enabled" class="hint">任务服务尚未启用。</p><p v-if="message" role="status">{{message}}</p>
-    <TaskPanel :tasks="tasks" empty-title="暂无任务" empty-text="此项目还没有任务。" @cancel="act('cancel',$event)" @retry="act('retry',$event)"/>
-    <div class="job-record-buttons"><button v-for="job in jobs" :key="job.id" @click="showEvents(job.id)">查看 {{job.id.slice(0,8)}} 的记录</button></div>
-    <ol v-if="events.length" aria-label="任务运行记录"><li v-for="event in events" :key="event.sequence">{{states[event.state]}} · {{Math.round(event.progress*100)}}%</li></ol>
+  <section class="project-jobs" :aria-label="tr('account.project_tasks')">
+    <h3>{{tr('account.task_history')}}</h3><p class="muted">{{tr('account.view_task_progress_and_processing_records_for_this_project')}}</p>
+    <p v-if="!enabled" class="hint">{{tr('account.the_task_service_has_not_been_enabled')}}</p><p v-if="message" role="status">{{message}}</p>
+    <TaskPanel :tasks="tasks" :empty-title="tr('account.no_tasks_yet')" :empty-text="tr('account.this_project_has_no_tasks_yet')" @cancel="act('cancel',$event)" @retry="act('retry',$event)"/>
+    <div class="job-record-buttons"><button v-for="job in jobs" :key="job.id" @click="showEvents(job.id)">{{tr('account.view')}} {{job.id.slice(0,8)}} {{tr('account.records')}}</button></div>
+    <ol v-if="events.length" :aria-label="tr('account.task_execution_record')"><li v-for="event in events" :key="event.sequence">{{states[event.state]}} · {{Math.round(event.progress*100)}}%</li></ol>
   </section>
 </template>
 <style scoped>

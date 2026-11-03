@@ -1,6 +1,7 @@
 """Explicitly requested native colour selection. No screen image is persisted."""
 from PyQt6.QtGui import QColor
-from PyQt6.QtWidgets import QColorDialog, QPushButton
+from PyQt6.QtWidgets import QColorDialog, QPushButton,QLabel
+from .native_i18n import native_text
 
 
 def color_dialog(parent, initial):
@@ -9,17 +10,15 @@ def color_dialog(parent, initial):
         color = QColor('#657b35')
     dialog = QColorDialog(color, parent)
     dialog.setOption(QColorDialog.ColorDialogOption.DontUseNativeDialog)
-    dialog.setWindowTitle('吸管取色')
-    for button in dialog.findChildren(QPushButton):
-        text = button.text().replace('&', '')
-        if text == 'Pick Screen Color':
-            button.setText('屏幕取色')
-        elif text == 'Add to Custom Colors':
-            button.setText('保存到自定义颜色')
-        elif text == 'OK':
-            button.setText('使用颜色')
-        elif text == 'Cancel':
-            button.setText('取消')
+    dialog.setWindowTitle(native_text(parent,'color.title'))
+    # Explicit Qt QColorDialog captions, verified against the bundled Qt build.
+    # Numeric inputs, color values and user custom swatches are never translated.
+    keys={'Pick Screen Color':'color.screen','Add to Custom Colors':'color.addCustom','OK':'color.use','Cancel':'color.cancel',
+          'Basic colors':'color.basic','Custom colors':'color.custom','Red:':'color.red','Green:':'color.green','Blue:':'color.blue',
+          'Alpha channel:':'color.alpha','Hue:':'color.hue','Sat:':'color.saturation','Val:':'color.value','HTML:':'color.html'}
+    for item in [*dialog.findChildren(QPushButton),*dialog.findChildren(QLabel)]:
+        key=keys.get(item.text().replace('&',''))
+        if key:item.setText(native_text(parent,key))
     return dialog
 
 

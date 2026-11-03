@@ -191,7 +191,7 @@ def test_installer_failed_exit_does_not_launch_app(tmp_path):
     root,request,token,helper,package,origin=plan_fixture(tmp_path,kind='installer')
     calls=[]
     def launch(args,**kwargs):
-        calls.append(args);return type('Child',(),{'wait':lambda self:5})()
+        calls.append(args);return type('Child',(),{'wait':lambda self,timeout:5})()
     assert apply.run_handoff(request,token,42,root=root,executable=helper,wait=lambda *args:None,launch=launch)==1
     assert len(calls)==1 and '/CURRENTUSER' in calls[0] and '/NORESTART' in calls[0]
     assert '/DIR='+str(origin.parent) in calls[0]
@@ -206,7 +206,7 @@ def test_installer_success_requires_new_manifest_then_launch(tmp_path):
         if len(calls)==1:
             _atomic_json(origin.parent/'application.json',{'schema':'ptb-desktop-release/1','version':VERSION,'entry':'PhoneticToolbox.exe'})
             _atomic_json(origin.parent/'_internal/desktop-bundle.json',bundle())
-        return type('Child',(),{'wait':lambda self:0,'pid':777})()
+        return type('Child',(),{'wait':lambda self,timeout:0,'pid':777})()
     assert apply.run_handoff(request,token,42,root=root,executable=helper,wait=lambda *args:None,launch=launch)==0
     assert calls[1]==[str(origin)]
 
