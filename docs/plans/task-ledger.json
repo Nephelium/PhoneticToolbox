@@ -6,7 +6,7 @@
       "id": "RELEASE-3.1.3-REVIEW",
       "title": "3.1.3发行与最终成品复验",
       "date": "2026-11-03",
-      "status": "in_progress",
+      "status": "verified",
       "scope": "井井于2026-11-03修改完整更新说明后明确批准上线，按批准字节发布Windows、Web、三语官网与独立英日说明书；Mac仅同步源码。",
       "files": [
         "release/notes/3.1.3.md",
@@ -34,16 +34,40 @@
       ],
       "notes_sha256": "01dbffda1067c6ee4a5d3a1194c3d73fb292c86cb4e31f163edfc7006b4a0a10",
       "notes_approval": "approved",
-      "verification": "最终 EXE 的16阶段检查、19模块×3语、英日整本说明书导入及离线重开通过；首次完整说明书重开曾出现一张图片加载超时，保留失败。未改应用字节、未放宽断言，完整复验通过，同一英文M01章节再经三次独立进程重开逐图及媒体解码通过。该首次超时未稳定复现，不能声称根因已修复。 前端876项、真实Web4项、Linux科学9类与只读连接池16次、官网布局及7项维护单测通过。",
+      "verification": "最终 EXE 的16阶段检查、19模块×3语、英日整本说明书导入及离线重开通过；首次完整说明书重开曾出现一张图片加载超时，保留失败。未改应用字节、未放宽断言，完整复验通过，同一英文M01章节再经三次独立进程重开逐图及媒体解码通过。该首次超时未稳定复现，不能声称根因已修复。 前端876项、真实Web4项、Linux科学9类与只读连接池16次、官网布局及7项维护单测通过。 公网12组文件/频道/版本字节核查、三语57布局/九语言选择/音频/无JS通过；网络大图单独校验，UI断言未放宽。GitHub三项检查通过。",
       "remaining": [
-        "执行已获授权的生产切换、GitHub/官网/频道发布与公网复验",
         "Mac成品、实体设备、独立干净系统、持续生产容量未验；签名公钥未启用",
         "首次离线手册图片超时未稳定复现，完整复验和三次定向重开通过，保留诊断"
       ],
       "publication_authorization": "2026-11-03 用户修改文案后明确授权上线",
-      "release_state": "verified",
+      "release_state": "published",
       "installation_authorization": "2026-11-03 用户要求全部工作完成后卸载本机旧版并安装最新版，静默执行且不自动启动",
-      "source_publication_authorization": "2026-11-03 用户再次明确要求代码上传GitHub main"
+      "source_publication_authorization": "2026-11-03 用户再次明确要求代码上传GitHub main",
+      "publication_receipt": {
+        "version": "3.1.3",
+        "source_commit": "a53b121e65637ce0380038672483ad74466d48d2",
+        "web_candidate": "p313",
+        "website": "rc701954c2a60fc6c",
+        "github": "https://github.com/Nephelium/PhoneticToolbox/releases/tag/v3.1.3",
+        "notes_exact": true
+      },
+      "cleanup": {
+        "old_build_directories_removed": 6,
+        "incomplete_historical_directories_retained": 10,
+        "previously_denied_frontend_directories": "not retried"
+      },
+      "local_installation": {
+        "status": "verified",
+        "from": "3.1.1",
+        "to": "3.1.3",
+        "preserved_files": 1503,
+        "preserved_bytes": 823746290,
+        "uninstall_exit": 0,
+        "install_exit": 0,
+        "exe_sha256": "eca5a452c20920958b49f7d034ab43afe99871c31b122f81cd8f5d7ee45b674b",
+        "application_launched": false,
+        "receipt": "output/validation/release-313-20261103/local-install.json"
+      }
     },
     {
       "id": "CODE-REVIEW-20261102",
@@ -70,10 +94,11 @@
       "remaining": [
         "签名公钥及渠道启用按已批准分阶段方案后续确认，本轮不动正式密钥/线上渠道",
         "HNR/CPP科学参考及OneDrive兼容性待验证，不猜测修改",
-        "Mac实机、生产PostgreSQL容量、最终EXE未验；Windows实际worker崩溃、监管重启和后续任务集成已于11月3日通过",
+        "Mac实机、持续生产PostgreSQL容量未验；最终EXE16阶段及Windows实际worker崩溃、监管重启和后续任务集成已于11月3日通过",
         "一处含测试联接scratch清理被工具策略拒绝，已保留回执且不绕过"
       ],
-      "updated_on": "2026-11-03"
+      "updated_on": "2026-11-03",
+      "publication": "2026-11-03 随3.1.3发布Windows/Web及共享源码；边界与最终字节见RELEASE-3.1.3-REVIEW"
     },
     {
       "id": "APP-I18N-20261030",
@@ -276,7 +301,8 @@
         "output/validation/app-i18n-root/obsolete-frontend-cleanup.json",
         "output/validation/app-i18n-root/docs-check-delivery.log",
         "output/validation/app-i18n-root/diff-check-delivery.log"
-      ]
+      ],
+      "publication": "2026-11-03 随3.1.3发布Windows/Web及共享源码；边界与最终字节见RELEASE-3.1.3-REVIEW"
     },
     {
       "id": "WEBSITE-DOWNLOADS-MERGED-20261030",

@@ -2,7 +2,7 @@
 const fs=require('node:fs/promises'),path=require('node:path'),http=require('node:http');
 const assert=require('node:assert/strict'),{spawnSync}=require('node:child_process'),{createHash}=require('node:crypto');
 const root=path.resolve(__dirname,'..'),site=process.env.WEBSITE_DIRECTORY||path.join(root,'temporary-site');
-const publicOrigin=process.env.WEBSITE_ORIGIN,readOnly=Boolean(publicOrigin||process.env.WEBSITE_READONLY);
+const publicOrigin=process.env.WEBSITE_ORIGIN?.replace(/\/?$/,'/'),readOnly=Boolean(publicOrigin||process.env.WEBSITE_READONLY);
 const userAgent='Mozilla/5.0 PTB-Website-Verify';
 const {chromium}=require(path.join(process.env.USERPROFILE,'.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright'));
 async function main(){
@@ -11,7 +11,7 @@ async function main(){
  const write=(name,value)=>fs.writeFile(path.join(out,name),JSON.stringify(value,null,2)+'\n');
  const marker={schema:'ptb-test-run/1',owner_pid:process.pid,state:'active',started_at:new Date().toISOString(),recipe:'Multilingual website: shared media, static text, downloads, language/anchor navigation and owned Chrome; production checks are read-only'};
  await write('run.json',marker);
- let server,browser,page;const report={success:false,checks:[],errors:[],requests:[]};
+ let server,browser,page;const pendingRequests=new Set(),report={success:false,checks:[],errors:[],requests:[]};
  try{
   if(!publicOrigin){server=http.createServer(async(req,res)=>{
    try{
@@ -38,14 +38,22 @@ async function main(){
   const origin=publicOrigin||'http://127.0.0.1:'+server.address().port+'/';report.origin=origin;report.readOnly=readOnly;
   browser=await chromium.launchPersistentContext(path.join(scratch,'profile'),{executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe',headless:true,viewport:{width:1600,height:1000},reducedMotion:'reduce',userAgent});
   report.browser=browser.browser().version();page=await browser.newPage();
+  page.on('request',request=>pendingRequests.add(request.url()));page.on('requestfinished',request=>pendingRequests.delete(request.url()));page.on('requestfailed',request=>pendingRequests.delete(request.url()));
   page.on('pageerror',error=>report.errors.push(error.message));
   if(readOnly)page.on('request',request=>{if(!['GET','HEAD'].includes(request.method()))report.errors.push('Unexpected write request: '+request.method()+' '+request.url());});
   page.on('response',response=>{if(response.status()>=400&&!response.url().includes('/api/v1/feedback/'))report.requests.push({url:response.url(),status:response.status()});});
   const translations=(await fs.readdir(path.join(root,'temporary-site/locales'))).filter(name=>name.endsWith('.json')).map(name=>name.slice(0,-5));
+  // Public assets have a separate transfer phase; UI assertions keep their default deadlines.
+  report.networkLoads=[];
+  async function navigate(target,address){
+   const started=Date.now();await target.goto(address,{waitUntil:'domcontentloaded'});
+   await target.waitForLoadState('load',{timeout:publicOrigin?120000:30000});
+   report.networkLoads.push({address,seconds:(Date.now()-started)/1000,fullLoad:true});
+  }
   async function chooseLanguage(language){await page.locator('.language-switch').click();await page.locator('.language-option[hreflang="'+language+'"]').click();}
   for(const language of ['zh',...translations]){
    const address=origin+(language==='zh'?'':language+'/');
-   await page.goto(address);await page.evaluate(()=>document.fonts.ready);
+   await navigate(page,address);await page.evaluate(()=>document.fonts.ready);
    assert.equal(await page.locator('html').getAttribute('lang'),language==='zh'?'zh-CN':language);
    assert.equal(await page.locator('.language-switch').count(),1);
    assert.equal(await page.locator('.language-option').count(),translations.length+1);
@@ -90,17 +98,17 @@ async function main(){
   }
   if(readOnly){
    for(const from of ['zh-CN',...translations])for(const to of ['zh-CN',...translations]){
-    await page.goto(origin+(from==='zh-CN'?'':from+'/')+'#methods');await chooseLanguage(to);
+    await navigate(page,origin+(from==='zh-CN'?'':from+'/')+'#methods');await chooseLanguage(to);
     await page.waitForFunction(language=>document.documentElement.lang===language&&!location.hash&&scrollY<2,to);
     assert.equal(new URL(page.url()).hash,'');assert((await page.evaluate(()=>scrollY))<2);
    }
    const defaultContext=await browser.browser().newContext({locale:'ja-JP',viewport:{width:1200,height:1000},userAgent});
    await defaultContext.addInitScript(()=>localStorage.setItem('ptb-website-language','en'));
-   const defaultPage=await defaultContext.newPage();await defaultPage.goto(origin);await defaultPage.waitForTimeout(200);
+   const defaultPage=await defaultContext.newPage();await navigate(defaultPage,origin);await defaultPage.waitForTimeout(200);
    assert.equal(await defaultPage.locator('html').getAttribute('lang'),'zh-CN');assert.equal(new URL(defaultPage.url()).pathname,'/');
    await defaultContext.close();
    report.checks.push('Default root remains Simplified Chinese with Japanese browser locale and saved English preference; nine language selections clear the old section and start at the page top');
-   await page.goto(origin+'ja/');await page.evaluate(()=>document.fonts.ready);
+   await navigate(page,origin+'ja/');await page.evaluate(()=>document.fonts.ready);
    const fonts=await page.locator('#next .next-comparison-heading p,#next .next-comparison-heading strong,.author-note p,.author-note strong').evaluateAll(elements=>elements.map(element=>getComputedStyle(element).fontFamily));
    assert(fonts.length>5&&fonts.every(font=>font.includes('Yu Gothic')&&!/Whisper|Playful|KuaiLe/.test(font)));
    await page.locator('#faq details').nth(1).locator('summary').click();assert((await page.locator('#faq').innerText()).includes('公開ベータテスト'));
@@ -109,14 +117,14 @@ async function main(){
    report.checks.push('Japanese font consistency, current public-beta FAQ and real published WAV decoding/playback');
    for(const language of ['zh',...translations]){
     const context=await browser.browser().newContext({javaScriptEnabled:false,viewport:{width:390,height:844},userAgent}),np=await context.newPage();
-    await np.goto(origin+(language==='zh'?'':language+'/'));
+    await navigate(np,origin+(language==='zh'?'':language+'/'));
     assert.equal(await np.locator('html').getAttribute('lang'),language==='zh'?'zh-CN':language);
     await np.locator('.language-switch').click();assert(await np.locator('.language-option').first().isVisible());assert.equal(await np.locator('[data-screen]').count(),34);await context.close();
    }
    report.checks.push('All three published routes remain readable and the language dropdown works without JavaScript; no API writes or external feedback sent');
    assert.deepEqual(report.errors,[]);assert.deepEqual(report.requests,[]);report.success=true;return;
   }
-  await page.setViewportSize({width:1600,height:1000});await page.goto(origin+'en/#methods');
+  await page.setViewportSize({width:1600,height:1000});await navigate(page,origin+'en/#methods');
   await page.waitForFunction(()=>document.querySelector('[data-stat="views"]').textContent==='1,234');
   const slider=page.locator('[data-chart="views"] input[type=range]');await slider.focus();await page.keyboard.press('Home');assert((await page.locator('[data-chart="views"] output').innerText()).length>0);await page.keyboard.press('End');
   report.checks.push('English number formatting and shared history-slider keyboard navigation use consistent local fixtures');
@@ -141,17 +149,17 @@ async function main(){
   const preview=page.locator('[data-screen]').first();await preview.click();assert(await page.locator('#screen-viewer').isVisible());await page.keyboard.press('Escape');
   report.checks.push('Real WAV playback and English audio status; full screenshot viewer opens and closes');
   for(const width of [1600,390]){await page.setViewportSize({width,height:1000});for(const section of ['tutorials','lab','next','feedback']){await page.locator('#'+section).scrollIntoViewIfNeeded();await page.waitForTimeout(80);await page.locator('#'+section).screenshot({path:path.join(out,'en-'+section+'-'+width+'.png'),animations:'disabled'});}}
-  const nojs=await browser.browser().newContext({javaScriptEnabled:false,viewport:{width:390,height:844}}),np=await nojs.newPage();await np.goto(origin+'en/');
+  const nojs=await browser.browser().newContext({javaScriptEnabled:false,viewport:{width:390,height:844}}),np=await nojs.newPage();await navigate(np,origin+'en/');
   assert.equal(await np.locator('html').getAttribute('lang'),'en');assert((await np.locator('#faq').innerText()).includes('Portable or installer?'));assert(await np.locator('.language-switch').isVisible());assert.equal(await np.locator('[data-screen]').count(),34);await nojs.close();
   report.checks.push('Without JavaScript: English content, screenshots and language link remain available');
   if(translations.includes('ja')){
    for(const from of ['zh-CN',...translations])for(const to of ['zh-CN',...translations]){
     if(from===to)continue;
-    await page.goto(origin+(from==='zh-CN'?'':from+'/')+'#methods');await chooseLanguage(to);
+    await navigate(page,origin+(from==='zh-CN'?'':from+'/')+'#methods');await chooseLanguage(to);
     await page.waitForFunction(language=>document.documentElement.lang===language&&!location.hash&&scrollY<2,to);assert.equal(new URL(page.url()).hash,'');
    }
    report.checks.push('All six directed language switches clear the old section and start at the top');
-   await page.goto(origin+'ja/');await page.setViewportSize({width:1600,height:1000});
+   await navigate(page,origin+'ja/');await page.setViewportSize({width:1600,height:1000});
    const japaneseFonts=await page.locator('#next .next-comparison-heading p,#next .next-comparison-heading strong,.author-note p,.author-note strong').evaluateAll(elements=>elements.map(element=>getComputedStyle(element).fontFamily));
    assert(japaneseFonts.length>5);assert(japaneseFonts.every(font=>font.includes('Yu Gothic')&&!/Whisper|Playful|KuaiLe/.test(font)),JSON.stringify(japaneseFonts));
    await page.waitForFunction(()=>document.querySelector('[data-stat="views"]').textContent==='1,234');
@@ -163,11 +171,11 @@ async function main(){
    await page.locator('[data-release-tab]').nth(1).click();assert((await page.locator('[role=tabpanel]:visible').innerText()).includes('言語地図'));
    for(const width of [1600,390]){await page.setViewportSize({width,height:1000});for(const section of ['tutorials','lab','next','feedback','a-small-note']){await page.locator('#'+section).scrollIntoViewIfNeeded();await page.locator('#'+section).screenshot({path:path.join(out,'ja-'+section+'-'+width+'.png'),animations:'disabled'});}await page.locator('.next-comparison-heading').screenshot({path:path.join(out,'ja-comparison-copy-'+width+'.png'),animations:'disabled'});}
    report.checks.push('Japanese live interaction: statistics, citation empty state, feedback error/attachment controls, tutorial title, WAV pause state and release notes');
-   const context=await browser.browser().newContext({javaScriptEnabled:false,viewport:{width:390,height:844}}),jp=await context.newPage();await jp.goto(origin+'ja/');assert((await jp.locator('#faq').innerText()).includes('ポータブル版とインストーラー'));await jp.locator('.language-switch').click();assert(await jp.locator('.language-option[hreflang="en"]').isVisible());await context.close();
+   const context=await browser.browser().newContext({javaScriptEnabled:false,viewport:{width:390,height:844}}),jp=await context.newPage();await navigate(jp,origin+'ja/');assert((await jp.locator('#faq').innerText()).includes('ポータブル版とインストーラー'));await jp.locator('.language-switch').click();assert(await jp.locator('.language-option[hreflang="en"]').isVisible());await context.close();
    report.checks.push('Without JavaScript: Japanese content and native language dropdown remain usable');
   }
   assert.deepEqual(report.errors,[]);assert.deepEqual(report.requests,[]);report.success=true;
- }catch(error){report.failure=String(error);await page?.screenshot({path:path.join(out,'failure.png')}).catch(()=>{});throw error;}
+ }catch(error){report.failure=String(error);report.pendingRequests=[...pendingRequests];report.readyState=await page?.evaluate(()=>document.readyState).catch(()=>undefined);await page?.screenshot({path:path.join(out,'failure.png')}).catch(()=>{});throw error;}
  finally{
   await browser?.close();if(server)await new Promise(resolve=>server.close(resolve));await write('report.json',report);
   const files=[];async function inventory(dir){for(const entry of await fs.readdir(dir,{withFileTypes:true})){assert(!entry.isSymbolicLink());const file=path.join(dir,entry.name);if(entry.isDirectory())await inventory(file);else{const data=await fs.readFile(file);files.push({path:path.relative(scratch,file),bytes:data.length,sha256:createHash('sha256').update(data).digest('hex')});}}}await inventory(scratch);
