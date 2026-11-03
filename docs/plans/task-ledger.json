@@ -67,6 +67,22 @@
         "exe_sha256": "eca5a452c20920958b49f7d034ab43afe99871c31b122f81cd8f5d7ee45b674b",
         "application_launched": false,
         "receipt": "output/validation/release-313-20261103/local-install.json"
+      },
+      "website_full_notes": {
+        "status": "verified",
+        "scope": "官网三语3.1.3更新小记完整内联正文，中文沿用批准文本，英日逐条翻译",
+        "files": [
+          "temporary-site/content/home.zh-CN.html",
+          "temporary-site/locales/en.json",
+          "temporary-site/locales/ja.json",
+          "temporary-site/index.html",
+          "temporary-site/en/index.html",
+          "temporary-site/ja/index.html"
+        ],
+        "verification": "本地三语57布局及12组全文/版本切换检查通过，中文19块与批准正文逐项一致，四章节13条更新齐全；1007条翻译覆盖与生成幂等通过；公网三语12组全文/窄宽屏/版本切换检查通过，三页面完整服务器SHA一致，仅三页HTML变化，配置/论文索引/反馈服务保持。",
+        "remaining": [],
+        "release": "r6efd0ddd633b64b8",
+        "evidence": "output/validation/website-313-full-notes"
       }
     },
     {
